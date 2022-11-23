@@ -1,0 +1,2 @@
+pip3.9 install python-telegram-bot -U --pre
+pip3.9 install telethon
