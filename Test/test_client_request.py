@@ -1,26 +1,14 @@
-from configparser import ConfigParser
-import logging
+from imports import *
 
-from telethon.sync import TelegramClient, events
 
-logger_test_client_request = logging.getLogger(__name__)
-
-CONSTANTS = ConfigParser()
-CONSTANTS.read("../constants.ini")
-
-api_id = int(CONSTANTS.get("API", "ID"))
-api_hash = CONSTANTS.get("API", "HASH")
-token = CONSTANTS.get("ORDER_DISPATCHER_BOT", "TOKEN")
-chat_id = CONSTANTS.get("TELEGRAM_ID", "MAIN")
+@client.on(events.NewMessage(from_users=bot_id, pattern="Contacting customer service, please share your contact details"))
+async def select_os(event):
+    logger.info("select_os()")
+    await event.click(0, share_phone=True)
 
 
 if __name__ == "__main__":
-    with TelegramClient('name', api_id, api_hash) as client:
-        client.send_message('me', 'Hello, myself!')
-        # print(client.download_profile_photo('me'))
-
-        @client.on(events.NewMessage(pattern='(?i).*Hello'))
-        async def handler(event):
-            await event.reply('Hey!')
-
+    with client:
+        client.start()
+        client.send_message(bot_id, "/request")
         client.run_until_disconnected()

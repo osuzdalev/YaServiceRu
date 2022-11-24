@@ -140,7 +140,7 @@ async def computer_screen(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
 
-    await query.edit_message_text(text="Select a component", reply_markup=inline_markup)
+    await query.edit_message_text(text="Select a problem", reply_markup=inline_markup)
 
     return DEVICE_COMPUTER_SCREEN
 

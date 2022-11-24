@@ -131,8 +131,8 @@ async def forward(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.bot_data["Current Order"] = context.args[0]
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "FR"))],
         [InlineKeyboardButton(text="NEXT >>", callback_data=FORWARD_PAGE_2)],
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
@@ -150,8 +150,8 @@ async def forward_page_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     await query.answer()
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "FR"))],
         [InlineKeyboardButton(text="NEXT >>", callback_data=FORWARD_PAGE_2)],
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
@@ -169,8 +169,8 @@ async def forward_page_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     await query.answer()
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "FR"))],
         [InlineKeyboardButton(text="<< PREVIOUS", callback_data=FORWARD_PAGE_1),
          InlineKeyboardButton(text="NEXT >>", callback_data=FORWARD_PAGE_3)],
     ]
@@ -189,8 +189,8 @@ async def forward_page_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     await query.answer()
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=CONSTANTS.get("TELEGRAM_ID", "MAIN")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=CONSTANTS.get("TELEGRAM_ID", "FR"))],
         [InlineKeyboardButton(text="<< PREVIOUS", callback_data=FORWARD_PAGE_2)],
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
