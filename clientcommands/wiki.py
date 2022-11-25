@@ -1,34 +1,18 @@
-from configparser import ConfigParser
 import logging
 from pprint import pformat
 
-from telegram import (
-    ReplyKeyboardMarkup,
-    ReplyKeyboardRemove,
-    Update,
-    InlineKeyboardMarkup,
-    InlineKeyboardButton,
-    CallbackQuery,
-    KeyboardButton
-)
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
-    Application,
     CommandHandler,
     ContextTypes,
     ConversationHandler,
-    MessageHandler,
-    filters,
-    PicklePersistence,
     CallbackQueryHandler
 )
 
-CONSTANTS = ConfigParser()
-CONSTANTS.read("../constants.ini")
-
-logger_qa = logging.getLogger(__name__)
+logger_wiki = logging.getLogger(__name__)
 
 
-# States for /faq Conversation
+# States for /wiki Conversation
 DEVICE_OS, DEVICE, DEVICE_COMPUTER, DEVICE_COMPUTER_SCREEN, DEVICE_PHONE = range(5)
 APPLE, ANDROID_LINUX, WINDOWS = range(3)
 DEVICE_START_OVER, COMPUTER, PHONE = range(3)
@@ -42,11 +26,52 @@ PHONE_START_OVER, PHONE_SCREEN, PHONE_KEYBOARD, PHONE_PROCESSOR, PHONE_GRAPHIC_C
 FORWARD_PAGE_1, FORWARD_PAGE_2, FORWARD_PAGE_3 = range(3)
 
 
+async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Stuff"""
+    logger_wiki.info("wiki()")
+    device_context = {"Device_OS_Brand": '', "Device": '', "Part": '', "Problem": ''}
+    context.user_data["Device_Context"] = device_context
+
+    keyboard = [
+        [InlineKeyboardButton(text="Apple/iOS", callback_data=APPLE)],
+        [InlineKeyboardButton(text="Android / Linux", callback_data=ANDROID_LINUX),
+         InlineKeyboardButton(text="Windows", callback_data=WINDOWS)]
+    ]
+    inline_markup = InlineKeyboardMarkup(keyboard)
+
+    await update.message.reply_text("Select a Brand/OS", reply_markup=inline_markup)
+
+    return DEVICE_OS
+
+
+async def wiki_start_over(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Prompt same text & keyboard as `wiki` does but not as new message"""
+    logger_wiki.info("faq_start_over()")
+    device_context = {"Device_OS_Brand": '', "Device": '', "Part": '', "Problem": ''}
+    context.user_data["Device_Context"] = device_context
+
+    # Get CallbackQuery from Update
+    query = update.callback_query
+    # CallbackQueries need to be answered, even if no notification to the user is needed
+    # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton(text="Apple/iOS", callback_data=APPLE)],
+        [InlineKeyboardButton(text="Android / Linux", callback_data=ANDROID_LINUX),
+         InlineKeyboardButton(text="Windows", callback_data=WINDOWS)]
+    ]
+    inline_markup = InlineKeyboardMarkup(keyboard)
+
+    await query.edit_message_text("Select a Brand/OS", reply_markup=inline_markup)
+
+    return DEVICE_OS
+
+
 async def apple(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Prompt same text & keyboard as `faq` does but not as new message"""
-    logger_qa.info("apple()")
+    """Prompt same text & keyboard as `wiki` does but not as new message"""
+    logger_wiki.info("apple()")
     context.user_data["Device_Context"]["Device_OS_Brand"] = "Apple / iOS"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
     query = update.callback_query
     await query.answer()
@@ -62,10 +87,10 @@ async def apple(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 async def android_linux(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Prompt same text & keyboard as `faq` does but not as new message"""
-    logger_qa.info("android_linux()")
+    """Prompt same text & keyboard as `wiki` does but not as new message"""
+    logger_wiki.info("android_linux()")
     context.user_data["Device_Context"]["Device_OS_Brand"] = "Android / Linux"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
     query = update.callback_query
     await query.answer()
@@ -82,9 +107,9 @@ async def android_linux(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
 
 async def windows(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """WINDOWS"""
-    logger_qa.info("windows()")
+    logger_wiki.info("windows()")
     context.user_data["Device_Context"]["Device_OS_Brand"] = "Windows"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
     query = update.callback_query
     await query.answer()
@@ -101,9 +126,9 @@ async def windows(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 async def computer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Stuff"""
-    logger_qa.info("computer()")
+    logger_wiki.info("computer()")
     context.user_data["Device_Context"]["Device"] = "Computer"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
     query = update.callback_query
     await query.answer()
@@ -124,9 +149,9 @@ async def computer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 async def computer_screen(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Show new choice of buttons. This is the end point of the conversation."""
-    logger_qa.info("computer_screen()")
+    logger_wiki.info("computer_screen()")
     context.user_data["Device_Context"]["Part"] = "Screen"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
     query = update.callback_query
     await query.answer()
@@ -147,9 +172,9 @@ async def computer_screen(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 async def computer_screen_p1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """STUFF"""
-    logger_qa.info("computer_screen_p1()")
+    logger_wiki.info("computer_screen_p1()")
     context.user_data["Device_Context"]["Problem"] = "Broken Screen"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
     query = update.callback_query
     await query.answer()
 
@@ -169,9 +194,9 @@ async def computer_screen_p1(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 async def phone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Stuff"""
-    logger_qa.info("phone()")
+    logger_wiki.info("phone()")
     context.user_data["Device_Context"]["Device"] = "Phone"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
     query = update.callback_query
     await query.answer()
@@ -192,9 +217,9 @@ async def phone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 async def phone_screen(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Show new choice of buttons. This is the end point of the conversation."""
-    logger_qa.info("phone_screen()")
+    logger_wiki.info("phone_screen()")
     context.user_data["Device_Context"]["Part"] = "Screen"
-    logger_qa.info("context.user_data: {}".format(pformat(context.user_data)))
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
     query = update.callback_query
     await query.answer()
@@ -211,3 +236,34 @@ async def phone_screen(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
     await context.bot.send_photo(query.message.chat_id,
                                  "AgACAgQAAxkBAAEaA5pjdOcrgVo49SOVfjOGoKWDQU5ejAACLa8xG_6apVMGam1ZdlbEYwEAAwIAA3MAAysE")
     return ConversationHandler.END
+
+
+wiki_conversation_handler = ConversationHandler(
+    entry_points=[CommandHandler("wiki", wiki)],
+    states={
+        DEVICE_OS: [
+            CallbackQueryHandler(apple, "^" + str(APPLE) + "$"),
+            CallbackQueryHandler(android_linux, "^" + str(ANDROID_LINUX) + "$"),
+            CallbackQueryHandler(windows, "^" + str(WINDOWS) + "$")
+        ],
+        DEVICE: [
+            CallbackQueryHandler(wiki_start_over, "^" + str(DEVICE_START_OVER) + "$"),
+            CallbackQueryHandler(computer, "^" + str(COMPUTER) + "$"),
+            CallbackQueryHandler(phone, "^" + str(PHONE) + "$")
+        ],
+        DEVICE_COMPUTER: [
+            CallbackQueryHandler(wiki_start_over, "^" + str(COMPUTER_START_OVER) + "$"),
+            CallbackQueryHandler(computer_screen, "^" + str(COMPUTER_SCREEN) + "$")
+        ],
+        DEVICE_COMPUTER_SCREEN: [
+            CallbackQueryHandler(wiki_start_over, "^" + str(COMPUTER_SCREEN_START_OVER) + "$"),
+            CallbackQueryHandler(computer_screen_p1, "^" + str(COMPUTER_SCREEN_P1) + "$")
+        ],
+        DEVICE_PHONE: [
+            CallbackQueryHandler(wiki_start_over, "^" + str(PHONE_START_OVER) + "$"),
+            CallbackQueryHandler(phone_screen, "^" + str(PHONE_SCREEN) + "$")
+        ]
+    },
+    fallbacks=[],
+    allow_reentry=True,
+)

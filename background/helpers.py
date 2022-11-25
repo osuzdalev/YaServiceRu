@@ -1,9 +1,4 @@
-from configparser import ConfigParser
 import logging
-from pprint import pformat
-
-CONSTANTS = ConfigParser()
-CONSTANTS.read("../constants.ini")
 
 logger_helpers = logging.getLogger(__name__)
 
