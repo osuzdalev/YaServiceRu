@@ -5,7 +5,7 @@ from telegram.ext import ContextTypes, MessageHandler, filters
 
 logger_global_fallback = logging.getLogger(__name__)
 
-commands_re = r"^(\/start|\/request|\/wiki|\/pay)$"
+commands_re = r"^(\/start|\/request|\/wiki|\/pay|\/forward \d*)$"
 
 
 async def unknown_command(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:

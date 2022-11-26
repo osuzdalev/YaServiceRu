@@ -16,5 +16,5 @@ async def select_contractor_2(event):
 if __name__ == "__main__":
     with client:
         client.start()
-        client.send_message(bot_id, "/forward 22")
+        client.send_message(bot_id, "/forward 20")
         client.run_until_disconnected()

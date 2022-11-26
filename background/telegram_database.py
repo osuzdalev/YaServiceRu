@@ -85,9 +85,27 @@ def get_contractor_data(user_id: int) -> list:
     return result.fetchone()
 
 
-def update_order_ContractID(OrderID: int, new_ContractorID: int):
+def update_order_ContractID(OrderID: int, new_ContractorID: int) -> None:
     logger_tl_db.info("update_order_ContractID()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
     cursor.execute("update Orders set ContractorID = ? where OrderID = ?;",
                    (new_ContractorID, OrderID))
     conn.commit()
+
+
+def insert_forward(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> None:
+    logger_tl_db.info("insert_forward")
+    conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
+    cursor.execute("insert into Forward (old_ContractorID, OrderID, new_ContractorID) "
+                   "values (?, ?, ?);",
+                   (old_ContractorID, OrderID, new_ContractorID))
+    conn.commit()
+
+
+def check_forward(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> bool:
+    logger_tl_db.info("check_forward()")
+    conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
+    result = cursor.execute("select * from Forward where old_ContractorID = ? and OrderID = ? and new_ContractorID = ?",
+                            (old_ContractorID, OrderID, new_ContractorID))
+
+    return True if result.fetchone() else False
