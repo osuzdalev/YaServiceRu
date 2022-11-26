@@ -19,5 +19,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     context.user_data["Device_Context"] = None
 
     await update.message.reply_text("Welcome!\n"
-                                    "/faq - find an easy fix\n"
-                                    "/request - contact customer service")
+                                    "/wiki - find an easy fix\n"
+                                    "/request - contact customer service\n"
+                                    "/pay - send a payment")

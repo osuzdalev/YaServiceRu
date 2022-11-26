@@ -70,7 +70,7 @@ async def wiki_back(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def cancel(update: Update, _: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text("Canceled")
+    await query.delete_message()
     return ConversationHandler.END
 
 

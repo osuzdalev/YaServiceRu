@@ -85,7 +85,16 @@ def get_contractor_data(user_id: int) -> list:
     return result.fetchone()
 
 
-def update_order_ContractID(OrderID: int, new_ContractorID: int) -> None:
+def get_all_ContractorID() -> list:
+    logger_tl_db.info("get_all_contractor_ids()")
+    conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
+    result = cursor.execute("select ContractorID from Contractors")
+    ContractorIDs = [i[0] for i in result.fetchall()]
+
+    return ContractorIDs
+
+
+def update_order_ContractorID(OrderID: int, new_ContractorID: int) -> None:
     logger_tl_db.info("update_order_ContractID()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
     cursor.execute("update Orders set ContractorID = ? where OrderID = ?;",
@@ -93,19 +102,19 @@ def update_order_ContractID(OrderID: int, new_ContractorID: int) -> None:
     conn.commit()
 
 
-def insert_forward(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> None:
-    logger_tl_db.info("insert_forward")
+def insert_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> None:
+    logger_tl_db.info("insert_assign")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    cursor.execute("insert into Forward (old_ContractorID, OrderID, new_ContractorID) "
+    cursor.execute("insert into Assign (old_ContractorID, OrderID, new_ContractorID) "
                    "values (?, ?, ?);",
                    (old_ContractorID, OrderID, new_ContractorID))
     conn.commit()
 
 
-def check_forward(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> bool:
-    logger_tl_db.info("check_forward()")
+def check_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> bool:
+    logger_tl_db.info("check_assign()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    result = cursor.execute("select * from Forward where old_ContractorID = ? and OrderID = ? and new_ContractorID = ?",
+    result = cursor.execute("select * from Assign where old_ContractorID = ? and OrderID = ? and new_ContractorID = ?",
                             (old_ContractorID, OrderID, new_ContractorID))
 
     return True if result.fetchone() else False
