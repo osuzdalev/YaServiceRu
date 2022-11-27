@@ -48,7 +48,17 @@ def get_customer_data(user_id: int) -> list:
     return result.fetchone()
 
 
-def insert_new_order(user_id: int, device_context: dict, default_contractor_id: int = int(constants.get("ID", "FR"))) -> None:
+def get_customer_last_OrderID(user_id: int, default_contractor_id: int = int(constants.get("ID", "FR"))) -> int:
+    logger_tl_db.info("get_customer_last_OrderID()")
+    conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
+    result = cursor.execute("select * from Orders where (CustomerID = ? and ContractorID = ?)",
+                            (user_id, default_contractor_id))
+    orders = result.fetchall()
+
+    return orders[-1][0]
+
+
+def insert_new_order(user_id: int, device_context: dict, default_contractor_id: int = None) -> None:
     logger_tl_db.info("insert_new_order()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
     cursor.execute("insert into Orders (CustomerID, ContractorID, Device_OS, Device, Part, Problem) "
@@ -67,14 +77,26 @@ def get_order_data(OrderID: int) -> list:
     return result.fetchone()
 
 
-def get_customer_last_OrderID(user_id: int, default_contractor_id: int = int(constants.get("ID", "FR"))) -> int:
-    logger_tl_db.info("get_customer_last_OrderID()")
+def get_open_orders() -> list[tuple]:
+    logger_tl_db.info("get_open_orders()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    result = cursor.execute("select * from Orders where (CustomerID = ? and ContractorID = ?)",
-                            (user_id, default_contractor_id))
-    orders = result.fetchall()
+    result = cursor.execute("select * from Orders where Completed = 0 and ContractorID is null")
+    return result.fetchall()
 
-    return orders[-1][0]
+
+def get_assigned_orders() -> list[tuple]:
+    logger_tl_db.info("get_incomplete_orders()")
+    conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
+    result = cursor.execute("select * from Orders where Completed = 0 and ContractorID is not null")
+    return result.fetchall()
+
+
+def update_order_Complete(OrderID: int, timestamp: str) -> None:
+    logger_tl_db.info("update_order_Complete()")
+    conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
+    cursor.execute("update Orders set Completed = ?, CompletedDate = ? where OrderID = ?",
+                   (1, timestamp, OrderID))
+    conn.commit()
 
 
 def get_contractor_data(user_id: int) -> list:
@@ -97,7 +119,7 @@ def get_all_ContractorID() -> list:
 def update_order_ContractorID(OrderID: int, new_ContractorID: int) -> None:
     logger_tl_db.info("update_order_ContractID()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    cursor.execute("update Orders set ContractorID = ? where OrderID = ?;",
+    cursor.execute("update Orders set ContractorID = ? where OrderID = ?",
                    (new_ContractorID, OrderID))
     conn.commit()
 

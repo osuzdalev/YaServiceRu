@@ -5,7 +5,8 @@ import sys
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, PreCheckoutQueryHandler
 
 from clientcommands import request as req, start, wiki, payment
-from contractorcommand import assign
+from contractorcommand import assign, complete, commands
+from centercommand import orders
 from background import global_fallback
 
 # Enable logging
@@ -20,7 +21,7 @@ constants = ConfigParser()
 constants.read("constants.ini")
 
 # Group Handlers
-CLIENT_BASIC, CLIENT_WIKI, CLIENT_PAY, CONTRACT_ASSIGN, GLOBAL_FALLBACK = range(1, 6)
+CLIENT_BASIC, CLIENT_WIKI, CLIENT_PAY, CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, GLOBAL_FALLBACK = range(1, 7)
 
 if __name__ == "__main__":
     application = Application.builder() \
@@ -45,8 +46,13 @@ if __name__ == "__main__":
     application.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, payment.successful_payment_callback), CLIENT_PAY)
 
     # Contractor Handlers
-    application.add_handler(assign.assign_conversation_handler, CONTRACT_ASSIGN)
+    application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)
     application.add_handler(assign.assignment_response_handler)
+    application.add_handler(complete.complete_handler, CONTRACTOR_BASIC)
+    application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
+
+    # Center Handlers
+    application.add_handler(orders.orders_handler)
 
     # Global fallback Handler stopping every ConversationHandlers
     application.add_handler(global_fallback.global_fallback_handler, GLOBAL_FALLBACK)
