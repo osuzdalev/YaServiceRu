@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, P
 from clientcommands import request as req, start, wiki, payment
 from contractorcommand import assign, complete, commands
 from centercommand import orders
-from background import global_fallback
+from background import global_fallback, data_collector
 
 # Enable logging
 logging.basicConfig(
@@ -21,17 +21,23 @@ constants = ConfigParser()
 constants.read("constants.ini")
 
 # Group Handlers
-CLIENT_BASIC, CLIENT_WIKI, CLIENT_PAY, CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, GLOBAL_FALLBACK = range(1, 7)
+MESSAGE_COLLECTION, PHONE_COLLECTION, \
+CLIENT_BASIC, CLIENT_WIKI, CLIENT_PAY, \
+CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
+GLOBAL_FALLBACK = range(-2, 6)
 
 if __name__ == "__main__":
     application = Application.builder() \
-        .token(constants.get("TOKEN", "TOKEN"))\
+        .token(constants.get("TOKEN", "TOKEN")) \
         .build()
 
+    # Data Collection
+    application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
+    application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
+
     # Client Handlers
-    application.add_handler(CommandHandler("start", start.start), CLIENT_BASIC)
-    application.add_handler(CommandHandler("request", req.request), CLIENT_BASIC)
-    application.add_handler(MessageHandler(filters.CONTACT, req.reach_customer_service), CLIENT_BASIC)
+    application.add_handler(start.start_handler, CLIENT_BASIC)
+    application.add_handler(req.request_handler, CLIENT_BASIC)
 
     application.add_handler(wiki.wiki_conversation_handler, CLIENT_WIKI)
 

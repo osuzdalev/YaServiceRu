@@ -21,9 +21,18 @@ ASSIGN_PAGE_3_BACK = 0
 async def assign(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Contractor command: opens Converstation to select which ContractorID to send current Order to"""
     logger_assign.info("assign()")
-    # Save current OrderID in the user_data
-    logger_assign.info("context.args")
-    context.bot_data["Current Order"] = context.args[0]
+    # Check if user entered an OrderID and save it in the user_data
+    try:
+        context.bot_data["Current Order"] = context.args[0]
+        OrderID = int(context.args[0])
+    except IndexError:
+        await update.message.reply_text("Please indicate the Order number:\n /assign #")
+        return
+
+    # Check if OrderID exists
+    check_order, order_data = await helpers.check_OrderID_exists(update, context, OrderID)
+    if not check_order:
+        return
 
     keyboard = [
         [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
@@ -33,7 +42,6 @@ async def assign(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     inline_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text("Select Contractor", reply_markup=inline_markup)
-    logger_assign.info("assign()")
 
     return ASSIGN_PAGE_1
 
@@ -136,7 +144,7 @@ async def assign_to_contractor(update: Update, context: ContextTypes.DEFAULT_TYP
                                                                  "new_ContractorID": new_ContractorID}
 
         # Assignment proposed to new_Contractor with Order data
-        customer_data = tldb.get_customer_data(order_data[1])
+        customer_data = tldb.get_customer_data(order_data[1])[:5]
         customer_phone_number = customer_data[-1]
         order_message_str = helpers.get_order_message_str(OrderID, customer_data, order_data, customer_phone_number)
 

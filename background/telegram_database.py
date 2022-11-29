@@ -14,36 +14,42 @@ def connect(db_filepath) -> tuple:
     return conn, cursor
 
 
-def insert_new_customer(user_id: int, username: str, first_name: str, last_name: str) -> None:
+def insert_new_user(user_id: int, username: str, first_name: str, last_name: str) -> None:
     """Stuff"""
     logger_tl_db.info("insert_new_customer()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    result = cursor.execute("select * from Customers where CustomerID = ?", (user_id,))
+    result = cursor.execute("select * from Users where UserID = ?", (user_id,))
     if result.fetchone() is None:
-        cursor.execute("insert into Customers (CustomerID, UserName, FirstName, LastName) values (?, ?, ?, ?);",
+        cursor.execute("insert into Users (UserID, UserName, FirstName, LastName) values (?, ?, ?, ?);",
                        (user_id, username, first_name, last_name))
         conn.commit()
     else:
         logger_tl_db.info("Customer already in Database")
 
 
-def insert_customer_phone_number(user_id: int, phone_number: int) -> None:
+def get_user_data(user_id: int) -> None:
+    """Stuff"""
+    logger_tl_db.info("get_user_data()")
+    conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
+    result = cursor.execute("select * from Users where UserID = ?", (user_id,))
+    return result.fetchone()
+
+
+def insert_user_phone_number(user_id: int, phone_number: int) -> None:
     logger_tl_db.info("insert_customer_phone_number()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    result = cursor.execute("select * from Customers where CustomerID = ?", (user_id,))
-    if result.fetchone() is not None:
-        cursor.execute("update Customers set PhoneNumber = ? where CustomerID = ?;",
-                       (phone_number, user_id))
-        conn.commit()
-        logger_tl_db.info("Phone number added into Database")
-    else:
-        logger_tl_db.info("Customer not in Database")
+    cursor.execute("update Users set PhoneNumber = ? where UserID = ?;", (phone_number, user_id))
+    conn.commit()
+    logger_tl_db.info("Phone number added into Database")
 
 
 def get_customer_data(user_id: int) -> list:
     logger_tl_db.info("get_customer_data()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    result = cursor.execute("select * from Customers where CustomerID = ?", (user_id,))
+    result = cursor.execute("select Users.UserID, Users.UserName, Users.FirstName, Users.LastName, Users.PhoneNumber, Users.JoinDate, "
+                            "Customers.Warning "
+                            "from Users, Customers "
+                            "where UserID = ?1 and CustomerID = ?1", (user_id,))
 
     return result.fetchone()
 
@@ -102,7 +108,11 @@ def update_order_Complete(OrderID: int, timestamp: str) -> None:
 def get_contractor_data(user_id: int) -> list:
     logger_tl_db.info("get_contractor_data()")
     conn, cursor = connect(constants.get("FILEPATH", "DATABASE"))
-    result = cursor.execute("select * from Contractors where ContractorID = ?", (user_id,))
+    result = cursor.execute(
+        "select Users.UserID, Users.UserName, Users.FirstName, Users.LastName, Users.PhoneNumber, Users.JoinDate, "
+        "Contractors.Warning "
+        "from Users, Contractors "
+        "where UserID = ?1 and ContractorID = ?1", (user_id,))
 
     return result.fetchone()
 

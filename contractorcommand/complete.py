@@ -1,8 +1,8 @@
 from configparser import ConfigParser
 import logging
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
-from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
+from telegram import Update
+from telegram.ext import ContextTypes, CommandHandler
 
 from background import helpers, telegram_database as tldb
 
