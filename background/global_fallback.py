@@ -1,7 +1,7 @@
 import logging
 
 from telegram import Update
-from telegram.ext import ContextTypes, MessageHandler, filters
+from telegram.ext import ContextTypes, MessageHandler, filters, CommandHandler, ConversationHandler
 
 logger_global_fallback = logging.getLogger(__name__)
 
@@ -10,8 +10,9 @@ start = "/start"
 request = "/request"
 wiki = "/wiki"
 pay = "/pay"
+cancel = "/cancel"
 
-customer_commands = [start, request, wiki, pay]
+customer_commands = [start, request, wiki, pay, cancel]
 
 # Contractor commands
 assign = "/assign \d*"
@@ -34,5 +35,6 @@ commands_re = r"^(" + commands_re + ")$"
 async def unknown_command(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     logger_global_fallback.info("unknown_command()")
     await update.message.reply_text("Incorrect command")
+
 
 global_fallback_handler = MessageHandler(filters.COMMAND & (~ filters.Regex(commands_re)), unknown_command)

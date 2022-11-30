@@ -4,7 +4,7 @@ from configparser import ConfigParser
 import logging
 
 from telegram import LabeledPrice, ShippingOption, Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, CommandHandler, PreCheckoutQueryHandler, MessageHandler, filters
 
 logger_qa = logging.getLogger(__name__)
 
@@ -67,7 +67,7 @@ async def start_without_shipping_callback(update: Update, context: ContextTypes.
     )
 
 
-async def shipping_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def shipping_callback(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Answers the ShippingQuery with ShippingOptions"""
     query = update.shipping_query
     # check the payload, is this from your bot?
@@ -85,7 +85,7 @@ async def shipping_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 
 # after (optional) shipping, it's the pre-checkout
-async def precheckout_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def precheckout_callback(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Answers the PreQecheckoutQuery"""
     logger_qa.info("precheckout_callback()")
     query = update.pre_checkout_query
@@ -97,8 +97,12 @@ async def precheckout_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         await query.answer(ok=True)
 
 
-# finally, after contacting the payment provider...
-async def successful_payment_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def successful_payment_callback(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Confirms the successful payment."""
     logger_qa.info("successful_payment_callback()")
     await update.message.reply_text("Thank you for your payment!")
+
+
+pay_handler = CommandHandler("pay", start_without_shipping_callback)
+precheckout_handler = PreCheckoutQueryHandler(precheckout_callback)
+successful_payment_handler = MessageHandler(filters.SUCCESSFUL_PAYMENT, successful_payment_callback)

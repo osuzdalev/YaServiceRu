@@ -2,7 +2,7 @@ from configparser import ConfigParser
 import logging
 import sys
 
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, PreCheckoutQueryHandler
+from telegram.ext import Application
 
 from clientcommands import request as req, start, wiki, payment
 from contractorcommand import assign, complete, commands
@@ -21,10 +21,10 @@ constants = ConfigParser()
 constants.read("constants.ini")
 
 # Group Handlers
-MESSAGE_COLLECTION, PHONE_COLLECTION, \
+MESSAGE_COLLECTION, USER_STATUS_COLLECTION, PHONE_COLLECTION, \
 CLIENT_BASIC, CLIENT_WIKI, CLIENT_PAY, \
 CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
-GLOBAL_FALLBACK = range(-2, 6)
+GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
     application = Application.builder() \
@@ -33,6 +33,8 @@ if __name__ == "__main__":
 
     # Data Collection
     application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
+    # TODO
+    application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
     application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
 
     # Client Handlers
@@ -40,16 +42,17 @@ if __name__ == "__main__":
     application.add_handler(req.request_handler, CLIENT_BASIC)
 
     application.add_handler(wiki.wiki_conversation_handler, CLIENT_WIKI)
+    application.add_handler(wiki.share_inline_query_handler, CLIENT_WIKI)
 
     # Payment
-    application.add_handler(CommandHandler("pay", payment.start_without_shipping_callback), CLIENT_PAY)
+    application.add_handler(payment.pay_handler, CLIENT_PAY)
     # application.add_handler(CommandHandler("shipping", start_with_shipping_callback))
     # Optional handler if your product requires shipping
     # application.add_handler(ShippingQueryHandler(shipping_callback))
     # Pre-checkout handler to final check
-    application.add_handler(PreCheckoutQueryHandler(payment.precheckout_callback), CLIENT_PAY)
+    application.add_handler(payment.precheckout_handler, CLIENT_PAY)
     # Notify user of successful payment
-    application.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, payment.successful_payment_callback), CLIENT_PAY)
+    application.add_handler(payment.successful_payment_handler, CLIENT_PAY)
 
     # Contractor Handlers
     application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)

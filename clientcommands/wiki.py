@@ -1,13 +1,18 @@
 import logging
 from pprint import pformat
+from uuid import uuid4
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, InlineQueryResultArticle, InputTextMessageContent
+from telegram.constants import ParseMode
 from telegram.ext import (
     CommandHandler,
     ContextTypes,
     ConversationHandler,
-    CallbackQueryHandler
+    CallbackQueryHandler,
+    InlineQueryHandler
 )
+
+from background import global_fallback, helpers
 
 logger_wiki = logging.getLogger(__name__)
 
@@ -30,10 +35,21 @@ PHONE_BACK, PHONE_CANCEL, PHONE_SCREEN, PHONE_KEYBOARD, PHONE_PROCESSOR, PHONE_G
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stuff"""
+    """Customer command: Opens an Inline Menu to search for some information. As Buttons are pressed and going
+    through the decision tree, the user_data 'device_context' is updated.
+    This Conversation first needs to check the user 'in_conversation flag' before it can start, otherwise it will ask
+    the customer to first close the previous one."""
     logger_wiki.info("wiki()")
     device_context = {"Device_OS_Brand": '', "Device": '', "Part": '', "Problem": ''}
     context.user_data["Device_Context"] = device_context
+    in_conversation = context.user_data['in_conversation']
+
+    # Check if user already in Conversation
+    if not (in_conversation == '' or in_conversation == 'wiki'):
+        await update.message.reply_text("Please press /cancel\n"
+                                        "or push the 'CANCEL' button in the previous menu before proceeding")
+        return ConversationHandler.END
+    context.user_data["in_conversation"] = "wiki"
 
     keyboard = [
         [InlineKeyboardButton(text="Apple/iOS", callback_data=APPLE)],
@@ -67,10 +83,47 @@ async def wiki_back(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return DEVICE_OS
 
 
-async def cancel(update: Update, _: ContextTypes.DEFAULT_TYPE) -> int:
+async def share(update: Update, _: ContextTypes.DEFAULT_TYPE) -> int:
+    """Handle the inline query. This is run when you type: @OsuzOrderDispatcherBot <query>"""
+    inline_query = update.inline_query.query
+
+    if inline_query == "":
+        return
+
+    results = [
+        InlineQueryResultArticle(
+            id=str(uuid4()),
+            title="TEST",
+            input_message_content=InputTextMessageContent("<b>ТУДА -> СЮДА -> ТУДА -> СЮДА -> ТУТ</b>\n"
+                                                          "Here is the answer to your question:\n"
+                                       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+                                       "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, "
+                                       "when an unknown printer took a galley of type and scrambled it to make a"
+                                       "type specimen book. It has survived not only five centuries, but also the leap "
+                                       "into electronic typesetting, remaining essentially unchanged. "
+                                       "It was popularised in the 1960s with the release of Letraset sheets containing "
+                                       "Lorem Ipsum passages, and more recently with desktop publishing software "
+                                       "like Aldus PageMaker including versions of Lorem Ipsum.",
+                                        parse_mode=ParseMode.HTML),
+        )
+    ]
+
+    await update.inline_query.answer(results)
+    return ConversationHandler.END
+
+
+async def cancel_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    logger_wiki.info("cancel_callback()")
     query = update.callback_query
     await query.answer()
     await query.delete_message()
+    context.user_data["in_conversation"] = ""
+    return ConversationHandler.END
+
+
+async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    logger_wiki.info("cancel_command()")
+    context.user_data["in_conversation"] = ""
     return ConversationHandler.END
 
 
@@ -202,6 +255,7 @@ async def computer_screen_p1(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await query.answer()
 
     keyboard = [
+        [InlineKeyboardButton(text="SHARE 🔗", switch_inline_query="TEST")],
         [InlineKeyboardButton(text="<< BACK", callback_data=COMPUTER_SCREEN_P1_BACK),
          InlineKeyboardButton(text="Cancel", callback_data=COMPUTER_SCREEN_P1_CANCEL)]
     ]
@@ -216,8 +270,6 @@ async def computer_screen_p1(update: Update, context: ContextTypes.DEFAULT_TYPE)
                                        "It was popularised in the 1960s with the release of Letraset sheets containing "
                                        "Lorem Ipsum passages, and more recently with desktop publishing software "
                                        "like Aldus PageMaker including versions of Lorem Ipsum.", reply_markup=inline_markup)
-    # await context.bot.send_photo(query.message.chat_id,
-    # "https://i.pcmag.com/imagery/roundups/05ersXu1oMXozYJa66i9GEo-38..v1657319390.jpg")
 
     return DEVICE_COMPUTER_SCREEN_P1
 
@@ -276,37 +328,39 @@ wiki_conversation_handler = ConversationHandler(
             CallbackQueryHandler(apple, "^" + str(APPLE) + "$"),
             CallbackQueryHandler(android, "^" + str(ANDROID_LINUX) + "$"),
             CallbackQueryHandler(windows, "^" + str(WINDOWS) + "$"),
-            CallbackQueryHandler(cancel, "^" + str(DEVICE_OS_CANCEL) + "$")
+            CallbackQueryHandler(cancel_callback, "^" + str(DEVICE_OS_CANCEL) + "$")
         ],
         DEVICE: [
             CallbackQueryHandler(wiki_back, "^" + str(DEVICE_BACK) + "$"),
             CallbackQueryHandler(computer, "^" + str(COMPUTER) + "$"),
             CallbackQueryHandler(phone, "^" + str(PHONE) + "$"),
-            CallbackQueryHandler(cancel, "^" + str(DEVICE_CANCEL) + "$")
+            CallbackQueryHandler(cancel_callback, "^" + str(DEVICE_CANCEL) + "$")
         ],
         DEVICE_COMPUTER: [
             CallbackQueryHandler(apple, "^" + str(COMPUTER_BACK_APPLE) + "$"),
             CallbackQueryHandler(android, "^" + str(COMPUTER_BACK_ANDROID) + "$"),
             CallbackQueryHandler(windows, "^" + str(COMPUTER_BACK_WINDOWS) + "$"),
             CallbackQueryHandler(computer_screen, "^" + str(COMPUTER_SCREEN) + "$"),
-            CallbackQueryHandler(cancel, "^" + str(COMPUTER_CANCEL) + "$")
+            CallbackQueryHandler(cancel_callback, "^" + str(COMPUTER_CANCEL) + "$")
         ],
         DEVICE_COMPUTER_SCREEN: [
             CallbackQueryHandler(computer, "^" + str(COMPUTER_SCREEN_BACK) + "$"),
             CallbackQueryHandler(computer_screen_p1, "^" + str(COMPUTER_SCREEN_P1) + "$"),
-            CallbackQueryHandler(cancel, "^" + str(COMPUTER_SCREEN_CANCEL) + "$")
+            CallbackQueryHandler(cancel_callback, "^" + str(COMPUTER_SCREEN_CANCEL) + "$")
         ],
         DEVICE_COMPUTER_SCREEN_P1: [
             CallbackQueryHandler(computer_screen, "^" + str(COMPUTER_SCREEN_P1_BACK) + "$"),
-            CallbackQueryHandler(cancel, "^" + str(COMPUTER_SCREEN_P1_CANCEL) + "$")
+            CallbackQueryHandler(cancel_callback, "^" + str(COMPUTER_SCREEN_P1_CANCEL) + "$")
         ],
         DEVICE_PHONE: [
             CallbackQueryHandler(phone, "^" + str(PHONE_BACK) + "$"),
             CallbackQueryHandler(phone_screen, "^" + str(PHONE_SCREEN) + "$"),
-            CallbackQueryHandler(cancel, "^" + str(PHONE_CANCEL) + "$")
+            CallbackQueryHandler(cancel_callback, "^" + str(PHONE_CANCEL) + "$")
         ]
     },
-    fallbacks=[],
+    fallbacks=[CommandHandler("cancel", cancel_command)],
     allow_reentry=True,
     conversation_timeout=15
 )
+
+share_inline_query_handler = InlineQueryHandler(share)

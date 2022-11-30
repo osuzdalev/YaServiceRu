@@ -14,8 +14,7 @@ constants.read("constants.ini")
 
 
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Checks if Customer's PhoneNumber is in Database before sending request to Customer Service
-        if not asks for contact details permission and then sends a CONTACT message to bot"""
+    """sends request to Customer Service"""
     logger_req.info("request()")
     user = update.message.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]

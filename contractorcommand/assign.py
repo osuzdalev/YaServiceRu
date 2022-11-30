@@ -13,14 +13,25 @@ constants.read("constants.ini")
 
 # States for /assign Conversation
 ASSIGN_PAGE_1, ASSIGN_PAGE_2, ASSIGN_PAGE_3 = range(3)
-ASSIGN_PAGE_1_NEXT = 0
-ASSIGN_PAGE_2_BACK, ASSIGN_PAGE_2_NEXT = range(2)
-ASSIGN_PAGE_3_BACK = 0
+ASSIGN_PAGE_1_CANCEL, ASSIGN_PAGE_1_NEXT = range(2)
+ASSIGN_PAGE_2_CANCEL, ASSIGN_PAGE_2_BACK, ASSIGN_PAGE_2_NEXT = range(3)
+ASSIGN_PAGE_3_CANCEL, ASSIGN_PAGE_3_BACK = range(2)
 
 
 async def assign(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Contractor command: opens Converstation to select which ContractorID to send current Order to"""
+    """Contractor command: opens Inline Menu to select which ContractorID to send current Order to.
+    This particular Conversation does not need to check the 'in_conversation' flag since it works on a
+    per_message setting (see ConversationHandler below)"""
     logger_assign.info("assign()")
+    in_conversation = context.user_data['in_conversation']
+
+    # Check if user already in Conversation
+    if not (in_conversation == '' or in_conversation == 'assign'):
+        await update.message.reply_text("Please press /cancel\n"
+                                        "or push the 'CANCEL' button in the previous menu before proceeding")
+        return ConversationHandler.END
+    context.user_data["in_conversation"] = "assign"
+
     # Check if user entered an OrderID and save it in the user_data
     try:
         context.bot_data["Current Order"] = context.args[0]
@@ -37,7 +48,8 @@ async def assign(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     keyboard = [
         [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
          InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
-        [InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)],
+        [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_1_CANCEL),
+         InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)],
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
 
@@ -46,19 +58,35 @@ async def assign(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return ASSIGN_PAGE_1
 
 
-async def assign_start_over(update: Update, context: ContextTypes.DEFAULT_TYPE, query) -> int:
+async def assign_start_over(update: Update, _: ContextTypes.DEFAULT_TYPE, query) -> int:
     logger_assign.info("assign_start_over()")
     keyboard = [
         [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
          InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
-        [InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)]
+        [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_1_CANCEL),
+         InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)]
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text("Already assigned to this person, choose someone else or cancel.", reply_markup=inline_markup)
     return ASSIGN_PAGE_1
 
 
-async def assign_page_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def cancel_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    logger_assign.info("cancel_callback()")
+    query = update.callback_query
+    await query.answer()
+    await query.delete_message()
+    context.user_data["in_conversation"] = ""
+    return ConversationHandler.END
+
+
+async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    logger_assign.info("cancel_command()")
+    context.user_data["in_conversation"] = ""
+    return ConversationHandler.END
+
+
+async def assign_page_1(update: Update, _: ContextTypes.DEFAULT_TYPE) -> int:
     """First page of the /assign Inline Menu as a Callback Query"""
     logger_assign.info("assign_page_1()")
 
@@ -68,7 +96,8 @@ async def assign_page_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     keyboard = [
         [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
          InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
-        [InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)],
+        [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_1_CANCEL),
+         InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)],
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
 
@@ -77,7 +106,7 @@ async def assign_page_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     return ASSIGN_PAGE_1
 
 
-async def assign_page_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def assign_page_2(update: Update, _: ContextTypes.DEFAULT_TYPE) -> int:
     """Second page of the /assign Inline Menu"""
     logger_assign.info("assign_page_2()")
 
@@ -89,6 +118,7 @@ async def assign_page_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
          InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
         [InlineKeyboardButton(text="<< PREVIOUS", callback_data=ASSIGN_PAGE_2_BACK),
          InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_2_NEXT)],
+        [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_2_CANCEL)]
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
 
@@ -107,7 +137,8 @@ async def assign_page_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     keyboard = [
         [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
          InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
-        [InlineKeyboardButton(text="<< PREVIOUS", callback_data=ASSIGN_PAGE_3_BACK)],
+        [InlineKeyboardButton(text="<< PREVIOUS", callback_data=ASSIGN_PAGE_3_BACK),
+         InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_3_CANCEL)],
     ]
     inline_markup = InlineKeyboardMarkup(keyboard)
 
@@ -192,19 +223,22 @@ assign_conversation_handler = ConversationHandler(
     states={
         ASSIGN_PAGE_1: [
             CallbackQueryHandler(assign_to_contractor, r"\d{8,10}"),
+            CallbackQueryHandler(cancel_callback, "^" + str(ASSIGN_PAGE_1_CANCEL) + "$"),
             CallbackQueryHandler(assign_page_2, "^" + str(ASSIGN_PAGE_1_NEXT) + "$")
         ],
         ASSIGN_PAGE_2: [
             CallbackQueryHandler(assign_to_contractor, r"\d{8,10}"),
+            CallbackQueryHandler(cancel_callback, "^" + str(ASSIGN_PAGE_2_CANCEL) + "$"),
             CallbackQueryHandler(assign_page_1, "^" + str(ASSIGN_PAGE_2_BACK) + "$"),
             CallbackQueryHandler(assign_page_3, "^" + str(ASSIGN_PAGE_2_NEXT) + "$")
         ],
         ASSIGN_PAGE_3: [
             CallbackQueryHandler(assign_to_contractor, r"\d{8,10}"),
+            CallbackQueryHandler(cancel_callback, "^" + str(ASSIGN_PAGE_3_CANCEL) + "$"),
             CallbackQueryHandler(assign_page_2, "^" + str(ASSIGN_PAGE_3_BACK) + "$")
         ],
     },
-    fallbacks=[],
+    fallbacks=[CommandHandler("cancel", cancel_command)],
     allow_reentry=True,
     conversation_timeout=15
 )
