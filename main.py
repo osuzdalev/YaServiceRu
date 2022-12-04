@@ -4,7 +4,8 @@ import sys
 
 from telegram.ext import Application
 
-from clientcommands import request as req, start, wiki, payment
+from clientcommands import request as req, start, payment
+from clientcommands.wiki_module import wiki_command
 from contractorcommand import assign, complete, commands
 from centercommand import orders
 from background import global_fallback, data_collector
@@ -34,15 +35,15 @@ if __name__ == "__main__":
     # Data Collection
     application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
     # TODO
-    application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
+    # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
     application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
 
     # Client Handlers
     application.add_handler(start.start_handler, CLIENT_BASIC)
     application.add_handler(req.request_handler, CLIENT_BASIC)
 
-    application.add_handler(wiki.wiki_conversation_handler, CLIENT_WIKI)
-    application.add_handler(wiki.share_inline_query_handler, CLIENT_WIKI)
+    application.add_handler(wiki_command.conversation_handler, CLIENT_WIKI)
+    application.add_handler(wiki_command.share_inline_query_handler, CLIENT_WIKI)
 
     # Payment
     application.add_handler(payment.pay_handler, CLIENT_PAY)

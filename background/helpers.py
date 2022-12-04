@@ -1,6 +1,7 @@
 from configparser import ConfigParser
 import datetime
 import logging
+from typing import Tuple, List, Dict, Any
 
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -13,40 +14,39 @@ constants = ConfigParser()
 constants.read("constants.ini")
 
 
-def get_order_message_str(OrderID: int, user_data: any, device_context: any, phone_number: int = None) -> str:
+def get_order_message_str(OrderID: int, user_data: Any, device_context: Any, phone_number: int = None) -> str:
     """Creates a nice string with all the relevant data of an Order to be sent as a message to Contractor"""
     logger_helpers.info("get_order_message_str()")
     user_info = ""
-    if type(user_data) == list:
+    if isinstance(user_data, List):
         user_info = user_data[1] + '\n' + \
                     user_data[2] + '\n' + user_data[3] + '\n' + str(phone_number) + '\n' + \
                     "id:" + str(user_data[0])
-    elif type(user_data) == tuple:
+    elif isinstance(user_data, Tuple):
         user_info = '@' + user_data[1] + '\n' + \
                     user_data[2] + '\n' + user_data[3] + '\n' + str(phone_number) + '\n' + \
                     "id:" + str(user_data[0])
 
     device_info = ""
     logger_helpers.info("device_context: {}".format(device_context))
-    if type(device_context) == dict:
-        if device_context == {"Device_OS_Brand": None, "Device": None, "Part": None, "Problem": None}:
-            device_info = "Device_OS: " + "-" + '\n' + \
+    if isinstance(device_context, Dict):
+        if device_context == {"OS": None, "Device": None, "Category": None, "Problem": None}:
+            device_info = "OS: " + "-" + '\n' + \
                           "Device: " + "-" + '\n' + \
-                          "Part: " + "-" + '\n' + \
+                          "Category: " + "-" + '\n' + \
                           "Problem: " + "-"
         else:
-            device_info = "Device_OS: " + device_context["Device_OS_Brand"] + '\n' + \
+            device_info = "OS: " + device_context["OS"] + '\n' + \
                           "Device: " + device_context["Device"] + '\n' + \
-                          "Part: " + device_context["Part"] + '\n' + \
+                          "Category: " + device_context["Category"] + '\n' + \
                           "Problem: " + device_context["Problem"]
-    elif type(device_context) == tuple:
-        device_info = "Device_OS: " + device_context[4] + '\n' + \
+    elif isinstance(device_context, Tuple):
+        device_info = "OS: " + device_context[4] + '\n' + \
                       "Device: " + device_context[5] + '\n' + \
-                      "Part: " + device_context[6] + '\n' + \
+                      "Category: " + device_context[6] + '\n' + \
                       "Problem: " + device_context[7]
 
-    order_message_str = "Customer service required\n\n" \
-                        "Order# {}\n\n{}\n\n{}".format(str(OrderID), user_info, device_info)
+    order_message_str = "\n\n".join(["Customer service required", "Order# {}".format(str(OrderID)), user_info, device_info])
 
     return order_message_str
 
@@ -54,7 +54,8 @@ def get_order_message_str(OrderID: int, user_data: any, device_context: any, pho
 def get_timestamp_str() -> str:
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-async def check_OrderID_exists(update: Update, _: ContextTypes.DEFAULT_TYPE, OrderID: int) -> tuple:
+
+async def check_OrderID_exists(update: Update, _: ContextTypes.DEFAULT_TYPE, OrderID: int) -> Tuple:
     """Checks if Order given exists"""
     logger_helpers.info("check_OrderID_exists()")
     order = tldb.get_order_data(OrderID)

@@ -2,6 +2,7 @@ import logging
 
 from telegram import Update, PhotoSize
 from telegram.ext import ContextTypes, CommandHandler
+from telegram.constants import ParseMode
 
 from background import telegram_database as tldb
 
@@ -24,5 +25,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                     "/wiki - find an easy fix\n"
                                     "/request - contact customer service\n"
                                     "/pay - send a payment")
+    # await update.message.reply_text("*text*\n"
+    #                                 "_text_\n"
+    #                                 "__text__\n"
+    #                                 "~text~\n"
+    #                                 "||__text__||\n"
+    #                                 "*_~||italic bold strikethrough spoiler||~"
+    #                                 "__underline italic bold__ _* text \n"
+    #                                 "[text](http://www.example.com/)\n"
+    #                                 "[text](tg://user?id=5278871996)\n"
+    #                                 "`inline fixed-width code`\n"
+    #                                 "```"
+    #                                 "del pre-formated fixed width code block"
+    #                                 "```\n",
+    #                                 parse_mode=ParseMode.MARKDOWN_V2)
 
 start_handler = CommandHandler("start", start)

@@ -17,21 +17,21 @@ constants.read("constants.ini")
 async def collect_data(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Add user data and message data to DB"""
     logger_data_collector.info("collect_data()")
-    logger_data_collector.info(
+    logger_data_collector.debug(
         "update.chat_member: {}".format(update.chat_member))
     user = None
     # logger_data_collector.info("update.effective_user: {}".format(update.effective_user))
     message = None
     # logger_data_collector.info("update.effective_message: {}".format(update.effective_message))
     try:
-        logger_data_collector.info("try 1")
+        logger_data_collector.debug("try 1")
         user = update.message.from_user
         # logger_data_collector.info("update.message.from_user: {}".format(update.message.from_user))
         message = update.effective_message
         # logger_data_collector.info("update.effective_message: {}".format(update.effective_message))
     except AttributeError:
         try:
-            logger_data_collector.info("try 2")
+            logger_data_collector.debug("try 2")
             user = update.callback_query.from_user
             # logger_data_collector.info("update.callback_query.from_user: {}".format(update.callback_query.from_user))
             message = update.callback_query.message

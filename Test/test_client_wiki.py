@@ -4,7 +4,7 @@ from imports import *
 @client.on(events.NewMessage(from_users=bot_id, pattern="Select a Brand/OS"))
 async def select_os(event):
     logger.info("select_os()")
-    await event.click(0)
+    await event.click(0, 1)
 
 
 @client.on(events.MessageEdited(from_users=bot_id, pattern="Select a device"))
@@ -13,7 +13,7 @@ async def select_device(event):
     await event.click(0)
 
 
-@client.on(events.MessageEdited(from_users=bot_id, pattern="Select a component"))
+@client.on(events.MessageEdited(from_users=bot_id, pattern="Select a category"))
 async def select_component(event):
     logger.info("select_component()")
     await event.click(0)
@@ -28,5 +28,6 @@ async def select_problem(event):
 if __name__ == "__main__":
     with client:
         client.start()
-        client.send_message(bot_id, "/faq")
+        client.send_message(bot_id, "/start")
+        client.send_message(bot_id, "/wiki")
         client.run_until_disconnected()
