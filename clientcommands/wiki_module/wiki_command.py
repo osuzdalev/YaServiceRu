@@ -1,4 +1,3 @@
-from enum import Enum
 import logging
 from pprint import pformat
 from typing import Union
@@ -6,6 +5,8 @@ from typing import Union
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
     CommandHandler,
+    MessageHandler,
+    filters,
     ContextTypes,
     ConversationHandler,
     CallbackQueryHandler,
@@ -25,11 +26,14 @@ CANCEL = "CANCEL"
 BACK = "BACK"
 OTHER = "OTHER"
 
-
+# Omnipresent buttons
 BUTTON_TEXT_CANCEL = "CANCEL"
 BUTTON_TEXT_BACK = "<< BACK"
 BUTTON_TEXT_OTHER = "Другие/Иное"
 BUTTON_TEXT_SHARE = "SHARE 🔗"
+
+# Ultra repeated keys
+WINDOWS_COMPUTER = WIKI_DATA_DICT["Windows"]["Computer"]
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
@@ -88,7 +92,7 @@ async def cancel_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     return ConversationHandler.END
 
 
-async def cancel_command(_: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     logger_wiki.info("cancel_command()")
     context.user_data["in_conversation"] = ""
     return ConversationHandler.END
@@ -124,8 +128,8 @@ async def windows(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     query = update.callback_query
     await query.answer()
     keyboard = [
-        [InlineKeyboardButton(text=WIKI_DATA_DICT["Windows"]["Computer"]["0_RU"],
-                              callback_data=WIKI_DATA_DICT["Windows"]["Computer"]["0_EN"])],
+        [InlineKeyboardButton(text=WINDOWS_COMPUTER["0_RU"],
+                              callback_data=WINDOWS_COMPUTER["0_EN"])],
         [InlineKeyboardButton(text=BUTTON_TEXT_BACK, callback_data=BACK),
          InlineKeyboardButton(text=BUTTON_TEXT_CANCEL, callback_data=CANCEL)]
     ]
@@ -136,10 +140,10 @@ async def windows(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     return WIKI_DATA_DICT["Windows"]["0_EN"]
 
 
-async def windows_computer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def w_computer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """Stuff"""
-    logger_wiki.info("windows_computer()")
-    COMPUTER_DICT = WIKI_DATA_DICT["Windows"]["Computer"]
+    logger_wiki.info("w_computer()")
+    COMPUTER_DICT = WINDOWS_COMPUTER
     context.user_data["Device_Context"]["Device"] = COMPUTER_DICT["0_RU"]
     logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
@@ -178,10 +182,10 @@ async def windows_computer(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     return COMPUTER_DICT["0_EN"]
 
 
-async def windows_computer_bios(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def w_c_BIOS(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """STUFF"""
-    logger_wiki.info("windows_computer_bios()")
-    BIOS_DICT = WIKI_DATA_DICT["Windows"]["Computer"]["BIOS"]
+    logger_wiki.info("w_c_BIOS()")
+    BIOS_DICT = WINDOWS_COMPUTER["BIOS"]
     context.user_data["Device_Context"]["Category"] = BIOS_DICT["0_RU"]
     logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
@@ -202,10 +206,10 @@ async def windows_computer_bios(update: Update, context: ContextTypes.DEFAULT_TY
     return BIOS_DICT["0_EN"]
 
 
-async def windows_computer_bios_changeLoadingPriority(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def w_c_BIOS_ChangeLoadingPriority(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """STUFF"""
-    logger_wiki.info("windows_computer_bios_ChangeLoadingPriority()")
-    CHANGE_LOADING_PRIORITY_DICT = WIKI_DATA_DICT["Windows"]["Computer"]["BIOS"][
+    logger_wiki.info("w_c_BIOS_ChangeLoadingPriority()")
+    CHANGE_LOADING_PRIORITY_DICT = WINDOWS_COMPUTER["BIOS"][
         "Change_Loading_Priority"]
     context.user_data["Device_Context"]["Problem"] = CHANGE_LOADING_PRIORITY_DICT["0_RU"]
     logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
@@ -226,10 +230,58 @@ async def windows_computer_bios_changeLoadingPriority(update: Update, context: C
     return CHANGE_LOADING_PRIORITY_DICT["0_EN"]
 
 
-async def windows_computer_slowingBugging(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def w_c_InstallationRecovery(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """STUFF"""
-    logger_wiki.info("windows_computer_slowingBugging()")
-    SLOWING_BUGGING_DICT = WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]
+    logger_wiki.info("w_c_InstallationRecovery()")
+    INSTALLATION_RECOVERY_DICT = WINDOWS_COMPUTER["Installation_Recovery"]
+    context.user_data["Device_Context"]["Category"] = INSTALLATION_RECOVERY_DICT["0_RU"]
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
+
+    query = update.callback_query
+    await query.answer()
+
+    keyboard = [
+        [InlineKeyboardButton(text=INSTALLATION_RECOVERY_DICT["Missing_Disk_Partitions_When_Installing_OS"]["0_RU"],
+                              callback_data=INSTALLATION_RECOVERY_DICT["Missing_Disk_Partitions_When_Installing_OS"]["0_EN"])],
+        [InlineKeyboardButton(text=BUTTON_TEXT_OTHER, callback_data=OTHER)],
+        [InlineKeyboardButton(text=BUTTON_TEXT_BACK, callback_data=BACK),
+         InlineKeyboardButton(text=BUTTON_TEXT_CANCEL, callback_data=CANCEL)]
+    ]
+    inline_markup = InlineKeyboardMarkup(keyboard)
+
+    await query.edit_message_text(text="Select a problem", reply_markup=inline_markup)
+
+    return INSTALLATION_RECOVERY_DICT["0_EN"]
+
+
+async def w_c_InstallationRecovery_MissingDiskPartitionsWhenInstallingOS(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """STUFF"""
+    logger_wiki.info("w_c_InstallationRecovery_MissingDiskPartitionsWhenInstallingOS()")
+    MISSING_DISK_PARTITIONS_WHEN_INSTALLING_OS_DICT = WINDOWS_COMPUTER["Installation_Recovery"][
+        "Missing_Disk_Partitions_When_Installing_OS"]
+    context.user_data["Device_Context"]["Problem"] = MISSING_DISK_PARTITIONS_WHEN_INSTALLING_OS_DICT["0_RU"]
+    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
+    query = update.callback_query
+    await query.answer()
+
+    keyboard = [
+        [InlineKeyboardButton(text=BUTTON_TEXT_SHARE,
+                              switch_inline_query=MISSING_DISK_PARTITIONS_WHEN_INSTALLING_OS_DICT["0_EN"])],
+        [InlineKeyboardButton(text=BUTTON_TEXT_BACK, callback_data=BACK),
+         InlineKeyboardButton(text=BUTTON_TEXT_CANCEL, callback_data=CANCEL)]
+    ]
+    inline_markup = InlineKeyboardMarkup(keyboard)
+
+    await query.edit_message_text(text=MISSING_DISK_PARTITIONS_WHEN_INSTALLING_OS_DICT["Text"],
+                                  reply_markup=inline_markup, parse_mode=ParseMode.MARKDOWN)
+
+    return MISSING_DISK_PARTITIONS_WHEN_INSTALLING_OS_DICT["0_EN"]
+
+
+async def w_c_SlowingBugging(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """STUFF"""
+    logger_wiki.info("w_c_SlowingBugging()")
+    SLOWING_BUGGING_DICT = WINDOWS_COMPUTER["Slowing_Bugging"]
     context.user_data["Device_Context"]["Category"] = SLOWING_BUGGING_DICT["0_RU"]
     logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
 
@@ -254,10 +306,10 @@ async def windows_computer_slowingBugging(update: Update, context: ContextTypes.
     return SLOWING_BUGGING_DICT["0_EN"]
 
 
-async def windows_computer_slowingBugging_Booting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def w_c_SlowingBugging_Booting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """STUFF"""
-    logger_wiki.info("windows_computer_slowingBugging_Booting()")
-    BOOTING_DICT = WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Booting"]
+    logger_wiki.info("w_c_SlowingBugging_Booting()")
+    BOOTING_DICT = WINDOWS_COMPUTER["Slowing_Bugging"]["Booting"]
     context.user_data["Device_Context"]["Problem"] = BOOTING_DICT["0_RU"]
     logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
     query = update.callback_query
@@ -277,10 +329,10 @@ async def windows_computer_slowingBugging_Booting(update: Update, context: Conte
     return BOOTING_DICT["0_EN"]
 
 
-async def windows_computer_slowingBugging_hardDiskSSD(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def w_c_SlowingBugging_HardDiskSSD(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """STUFF"""
-    logger_wiki.info("windows_computer_slowingBugging_Booting()")
-    HARD_DISK_SSD_DICT = WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Hard_Disk_SSD"]
+    logger_wiki.info("w_c_SlowingBugging_Booting()")
+    HARD_DISK_SSD_DICT = WINDOWS_COMPUTER["Slowing_Bugging"]["Hard_Disk_SSD"]
     context.user_data["Device_Context"]["Problem"] = HARD_DISK_SSD_DICT["0_RU"]
     logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
     query = update.callback_query
@@ -300,10 +352,10 @@ async def windows_computer_slowingBugging_hardDiskSSD(update: Update, context: C
     return HARD_DISK_SSD_DICT["0_EN"]
 
 
-async def windows_computer_slowingBugging_Heating(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def w_c_SlowingBugging_Heating(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """STUFF"""
-    logger_wiki.info("windows_computer_slowingBugging_Heating()")
-    HEATING_DICT = WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Heating"]
+    logger_wiki.info("w_c_SlowingBugging_Heating()")
+    HEATING_DICT = WINDOWS_COMPUTER["Slowing_Bugging"]["Heating"]
     context.user_data["Device_Context"]["Problem"] = HEATING_DICT["0_RU"]
     logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
     query = update.callback_query
@@ -324,7 +376,7 @@ async def windows_computer_slowingBugging_Heating(update: Update, context: Conte
 
 
 conversation_handler = ConversationHandler(
-    entry_points=[CommandHandler("wiki", wiki)],
+    entry_points=[CommandHandler("wiki", wiki), MessageHandler(filters.Regex(r"^(📖Вики)$"), wiki)],
     states={
         WIKI_DATA_DICT["0_EN"]: [
             CallbackQueryHandler(apple, WIKI_DATA_DICT["Apple"]["0_EN"]),
@@ -333,49 +385,65 @@ conversation_handler = ConversationHandler(
         ],
         WIKI_DATA_DICT["Windows"]["0_EN"]: [
             CallbackQueryHandler(wiki_back,  BACK),
-            CallbackQueryHandler(windows_computer, WIKI_DATA_DICT["Windows"]["Computer"]["0_EN"]),
+            CallbackQueryHandler(w_computer, WINDOWS_COMPUTER["0_EN"]),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
-        WIKI_DATA_DICT["Windows"]["Computer"]["0_EN"]: [
+        WINDOWS_COMPUTER["0_EN"]: [
             CallbackQueryHandler(windows,  BACK),
-            CallbackQueryHandler(windows_computer_bios, WIKI_DATA_DICT["Windows"]["Computer"]["BIOS"]["0_EN"]),
-            CallbackQueryHandler(windows_computer_slowingBugging,
-                                 WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["0_EN"]),
+            CallbackQueryHandler(w_c_BIOS, WINDOWS_COMPUTER["BIOS"]["0_EN"]),
+            CallbackQueryHandler(w_c_InstallationRecovery, WINDOWS_COMPUTER["Installation_Recovery"]["0_EN"]),
+            CallbackQueryHandler(w_c_SlowingBugging,
+                                 WINDOWS_COMPUTER["Slowing_Bugging"]["0_EN"]),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
-        WIKI_DATA_DICT["Windows"]["Computer"]["BIOS"]["0_EN"]: [
-            CallbackQueryHandler(windows_computer,  BACK),
-            CallbackQueryHandler(windows_computer_bios_changeLoadingPriority,
-                                 WIKI_DATA_DICT["Windows"]["Computer"]["BIOS"]["Change_Loading_Priority"]["0_EN"]),
+        WINDOWS_COMPUTER["BIOS"]["0_EN"]: [
+            CallbackQueryHandler(w_computer,  BACK),
+            CallbackQueryHandler(w_c_BIOS_ChangeLoadingPriority,
+                                 WINDOWS_COMPUTER["BIOS"]["Change_Loading_Priority"]["0_EN"]),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
-        WIKI_DATA_DICT["Windows"]["Computer"]["BIOS"]["Change_Loading_Priority"]["0_EN"]: [
-            CallbackQueryHandler(windows_computer_bios,  BACK),
+        WINDOWS_COMPUTER["BIOS"]["Change_Loading_Priority"]["0_EN"]: [
+            CallbackQueryHandler(w_c_BIOS,  BACK),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
-        WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["0_EN"]: [
-            CallbackQueryHandler(windows_computer,  BACK),
-            CallbackQueryHandler(windows_computer_slowingBugging_Booting,
-                                 WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Booting"][
+        WINDOWS_COMPUTER["Installation_Recovery"]["0_EN"]: [
+            CallbackQueryHandler(w_computer,  BACK),
+            CallbackQueryHandler(w_c_InstallationRecovery_MissingDiskPartitionsWhenInstallingOS,
+                                 WINDOWS_COMPUTER["Installation_Recovery"]["Missing_Disk_Partitions_When_Installing_OS"]["0_EN"]),
+            CallbackQueryHandler(cancel_callback, CANCEL)
+        ],
+        WINDOWS_COMPUTER["Installation_Recovery"]["Missing_Disk_Partitions_When_Installing_OS"]["0_EN"]: [
+            CallbackQueryHandler(w_c_InstallationRecovery, BACK),
+            CallbackQueryHandler(cancel_callback, CANCEL)
+        ],
+        WINDOWS_COMPUTER["Slowing_Bugging"]["0_EN"]: [
+            CallbackQueryHandler(w_computer,  BACK),
+            CallbackQueryHandler(w_c_SlowingBugging_Booting,
+                                 WINDOWS_COMPUTER["Slowing_Bugging"]["Booting"][
                                                "0_EN"]),
-            CallbackQueryHandler(windows_computer_slowingBugging_hardDiskSSD,
-                                 WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Hard_Disk_SSD"][
+            CallbackQueryHandler(w_c_SlowingBugging_HardDiskSSD,
+                                 WINDOWS_COMPUTER["Slowing_Bugging"]["Hard_Disk_SSD"][
                                                "0_EN"]),
-            CallbackQueryHandler(windows_computer_slowingBugging_Heating,
-                                 WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Heating"][
+            CallbackQueryHandler(w_c_SlowingBugging_Heating,
+                                 WINDOWS_COMPUTER["Slowing_Bugging"]["Heating"][
                                                "0_EN"]),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
-        WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Booting"]["0_EN"]: [
-            CallbackQueryHandler(windows_computer_slowingBugging,  BACK),
+        WINDOWS_COMPUTER["Slowing_Bugging"]["Booting"]["0_EN"]: [
+            CallbackQueryHandler(w_c_SlowingBugging,  BACK),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
-        WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Heating"]["0_EN"]: [
-            CallbackQueryHandler(windows_computer_slowingBugging,  BACK),
+        WINDOWS_COMPUTER["Slowing_Bugging"]["Hard_Disk_SSD"]["0_EN"]: [
+            CallbackQueryHandler(w_c_SlowingBugging, BACK),
+            CallbackQueryHandler(cancel_callback, CANCEL)
+        ],
+        WINDOWS_COMPUTER["Slowing_Bugging"]["Heating"]["0_EN"]: [
+            CallbackQueryHandler(w_c_SlowingBugging,  BACK),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
     },
-    fallbacks=[CommandHandler("cancel", cancel_command)],
+    fallbacks=[CommandHandler("cancel", cancel_command),
+               MessageHandler(filters.Regex(r"^(❌Отменить)$"), cancel_command)],
     allow_reentry=True,
     conversation_timeout=15
 )

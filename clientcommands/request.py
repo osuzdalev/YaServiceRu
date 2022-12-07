@@ -1,10 +1,11 @@
 from configparser import ConfigParser
 import logging
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, KeyboardButton
-from telegram.ext import ContextTypes, CommandHandler
+from telegram import ReplyKeyboardRemove, Update
+from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters
 
 from background import helpers, telegram_database_utils as tldb
+from markups.default import default_client_markup
 
 
 logger_req = logging.getLogger(__name__)
@@ -14,7 +15,7 @@ constants.read("constants.ini")
 
 
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """sends request to Customer Service"""
+    """sends a request (a message with all relevant/context information) to Customer Service"""
     logger_req.info("request()")
     user = update.message.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
@@ -31,6 +32,7 @@ async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     order_message_str = helpers.get_order_message_str(OrderID, user_data, device_context)
 
     await context.bot.sendMessage(constants.get("ID", "FR"), order_message_str)
-    await update.message.reply_text("Customer service will contact you", reply_markup=ReplyKeyboardRemove())
+    await update.message.reply_text("Customer service will contact you", reply_markup=default_client_markup)
 
 request_handler = CommandHandler("request", request)
+request_replykeyboard_handler = MessageHandler(filters.Regex(r"^(🤓Специалист)$"), request)

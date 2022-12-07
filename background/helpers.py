@@ -28,7 +28,7 @@ def get_order_message_str(OrderID: int, user_data: Any, device_context: Any, pho
                     "id:" + str(user_data[0])
 
     device_info = ""
-    logger_helpers.info("device_context: {}".format(device_context))
+    logger_helpers.debug("device_context: {}".format(device_context))
     if isinstance(device_context, Dict):
         if device_context == {"OS": None, "Device": None, "Category": None, "Problem": None}:
             device_info = "OS: " + "-" + '\n' + \

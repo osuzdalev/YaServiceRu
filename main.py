@@ -41,6 +41,7 @@ if __name__ == "__main__":
     # Client Handlers
     application.add_handler(start.start_handler, CLIENT_BASIC)
     application.add_handler(req.request_handler, CLIENT_BASIC)
+    application.add_handler(req.request_replykeyboard_handler, CLIENT_BASIC)
 
     application.add_handler(wiki_command.conversation_handler, CLIENT_WIKI)
     application.add_handler(wiki_command.share_inline_query_handler, CLIENT_WIKI)

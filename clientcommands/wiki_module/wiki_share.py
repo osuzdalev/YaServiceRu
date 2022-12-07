@@ -35,6 +35,20 @@ async def share(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Union[int, None
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
+    # ============================================= INSTALLATION_RECOVERY ==============================================
+    # -------------------------------------- MISSING_DISK_PARTITIONS_WHEN_INSTALLING_OS --------------------------------
+    if query_text == WIKI_DATA_DICT["Windows"]["Computer"]["Installation_Recovery"]["Missing_Disk_Partitions_When_Installing_OS"]["0_EN"]:
+        results = [
+            InlineQueryResultArticle(
+                id=str(uuid4()),
+                title=WIKI_DATA_DICT["Windows"]["Computer"]["Installation_Recovery"]["Missing_Disk_Partitions_When_Installing_OS"]["0_EN"],
+                input_message_content=InputTextMessageContent(
+                    get_answer_path(
+                        WIKI_DATA_DICT["Windows"]["Computer"]["Installation_Recovery"]["Missing_Disk_Partitions_When_Installing_OS"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Computer"]["Installation_Recovery"]["Missing_Disk_Partitions_When_Installing_OS"]["Text"],
+                    parse_mode=ParseMode.MARKDOWN)
+            )
+        ]
     # ============================================= SLOWING_BUGGING ====================================================
     # --------------------------------------------- BOOTING ------------------------------------------------------------
     elif query_text == WIKI_DATA_DICT["Windows"]["Computer"]["Slowing_Bugging"]["Booting"]["0_EN"]:

@@ -51,7 +51,8 @@ def get_customer_data(user_id: int) -> list:
     logger_tl_db.info("get_customer_data()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
-        result = cursor.execute("select Users.UserID, Users.UserName, Users.FirstName, Users.LastName, Users.PhoneNumber, Users.JoinDate, "
+        result = cursor.execute("select Users.UserID, Users.UserName, Users.FirstName, Users.LastName,"
+                                "Users.PhoneNumber, Users.JoinDate, "
                                 "Customers.Warning "
                                 "from Users, Customers "
                                 "where UserID = ?1 and CustomerID = ?1", (user_id,))
@@ -73,13 +74,19 @@ def get_customer_last_OrderID(user_id: int, contractor_id: int = None) -> int:
 
 def insert_new_order(user_id: int, device_context: dict, default_contractor_id: int = None) -> None:
     logger_tl_db.info("insert_new_order()")
+
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
-        cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
-                       "values (?, ?, ?, ?, ?, ?);",
-                       (user_id, default_contractor_id,
-                        device_context["OS"], device_context["Device"],
-                        device_context["Category"], device_context["Problem"]))
+        try:
+            cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
+                           "values (?, ?, ?, ?, ?, ?);",
+                           (user_id, default_contractor_id,
+                            device_context["OS"], device_context["Device"],
+                            device_context["Category"], device_context["Problem"]))
+        except TypeError:
+            logger_tl_db.info("device_context == NoneType")
+            cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
+                           "values (?, ?, ?, ?, ?, ?);", (user_id, default_contractor_id, None, None, None, None))
         conn.commit()
 
 

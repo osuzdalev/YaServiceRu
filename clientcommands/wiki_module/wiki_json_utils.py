@@ -13,8 +13,10 @@ def backup(current_file: dict, backup_file: str = 'wiki_data_backup.json') -> No
     logger_wiki_json_utils.info("backup()")
     with open(backup_file, "w") as back_file_handle:
         json.dump(current_file, back_file_handle, indent=4, sort_keys=True, ensure_ascii=False)
-        
 
+
+# TODO figure out how to not use the absolute path
+#  yet make this file available to both those in this directory and main.py
 def get_wiki_json_dict(dict_path: str = '/Users/osuz/PycharmProjects/YaServiceRu/clientcommands/wiki_module/wiki_data.json') -> dict:
     """Get a copy of the current JSON file to access data"""
     logger_wiki_json_utils.info("get_wiki_json_dict()")
