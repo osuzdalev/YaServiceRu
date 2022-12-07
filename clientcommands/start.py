@@ -4,7 +4,7 @@ from telegram import Update, PhotoSize
 from telegram.ext import ContextTypes, CommandHandler
 from telegram.constants import ParseMode
 
-from background import telegram_database as tldb
+from background import telegram_database_utils as tldb
 
 logger_start = logging.getLogger(__name__)
 

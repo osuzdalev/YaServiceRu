@@ -6,7 +6,7 @@ import logging
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, KeyboardButton
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler
 
-from background import helpers, telegram_database as tldb
+from background import helpers, telegram_database_utils as tldb
 
 
 logger_send_all = logging.getLogger(__name__)

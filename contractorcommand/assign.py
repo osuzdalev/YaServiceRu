@@ -4,7 +4,7 @@ import logging
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ContextTypes, ConversationHandler, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
-from background import helpers, telegram_database as tldb
+from background import helpers, telegram_database_utils as tldb
 
 logger_assign = logging.getLogger(__name__)
 

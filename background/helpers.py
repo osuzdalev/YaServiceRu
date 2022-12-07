@@ -6,7 +6,7 @@ from typing import Tuple, List, Dict, Any
 from telegram import Update
 from telegram.ext import ContextTypes
 
-import background.telegram_database as tldb
+import background.telegram_database_utils as tldb
 
 logger_helpers = logging.getLogger(__name__)
 

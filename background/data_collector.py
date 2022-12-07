@@ -6,7 +6,7 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes, TypeHandler, MessageHandler, filters, ChatMemberHandler
 
-import background.telegram_database as tldb
+import background.telegram_database_utils as tldb
 
 logger_data_collector = logging.getLogger(__name__)
 
