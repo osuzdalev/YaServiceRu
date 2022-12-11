@@ -92,7 +92,7 @@ async def cancel_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     return ConversationHandler.END
 
 
-async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+async def cancel_command(_: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     logger_wiki.info("cancel_command()")
     context.user_data["in_conversation"] = ""
     return ConversationHandler.END

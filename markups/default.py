@@ -4,4 +4,4 @@ keyboard = [
     [KeyboardButton("📖Вики"), KeyboardButton("🤓Специалист")],
     [KeyboardButton("❌Отменить")]
 ]
-default_client_markup = ReplyKeyboardMarkup(keyboard)
+default_client_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)

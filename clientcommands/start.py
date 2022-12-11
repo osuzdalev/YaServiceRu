@@ -1,6 +1,6 @@
 import logging
 
-from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
+from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler
 
 from markups.default import default_client_markup

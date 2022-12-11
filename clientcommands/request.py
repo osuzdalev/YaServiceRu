@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 import logging
 
-from telegram import ReplyKeyboardRemove, Update
+from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters
 
 from background import helpers, telegram_database_utils as tldb

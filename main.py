@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-import logging
+import logging.handlers
 import sys
 
 from telegram.ext import Application
@@ -8,18 +8,21 @@ from clientcommands import request as req, start, payment
 from clientcommands.wiki_module import wiki_command
 from contractorcommand import assign, complete, commands
 from centercommand import orders
-from background import global_fallback, data_collector
+from background import global_fallback, data_collector, error_logging
+
+constants = ConfigParser()
+constants.read("constants.ini")
 
 # Enable logging
 logging.basicConfig(
     format="[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s",
+    # Needs to be changed to ERROR
     level=logging.INFO,
+    # Write logs to terminal
     stream=sys.stdout,
 )
 logger = logging.getLogger(__name__)
 
-constants = ConfigParser()
-constants.read("constants.ini")
 
 # Group Handlers
 MESSAGE_COLLECTION, USER_STATUS_COLLECTION, PHONE_COLLECTION, \
@@ -37,6 +40,9 @@ if __name__ == "__main__":
     # TODO
     # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
     application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
+
+    # Error handler
+    application.add_error_handler(error_logging.error_handler)
 
     # Client Handlers
     application.add_handler(start.start_handler, CLIENT_BASIC)
