@@ -5,7 +5,7 @@ import sys
 from telegram.ext import Application
 
 from clientcommands import request as req, start, payment
-from clientcommands.wiki_module import wiki_command
+from clientcommands.wiki_module import wiki_command, wiki_share
 from contractorcommand import assign, complete, commands
 from centercommand import orders
 from background import global_fallback, data_collector, error_logging
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     application.add_handler(req.request_replykeyboard_handler, CLIENT_BASIC)
 
     application.add_handler(wiki_command.conversation_handler, CLIENT_WIKI)
-    application.add_handler(wiki_command.share_inline_query_handler, CLIENT_WIKI)
+    application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
 
     # Payment
     application.add_handler(payment.pay_handler, CLIENT_PAY)
