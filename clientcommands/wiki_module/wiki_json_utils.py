@@ -1,6 +1,5 @@
 """Python script defining dedicated functions to interact with the wiki JSON file"""
 import logging
-import glob
 import json
 from typing import Union
 
