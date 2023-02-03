@@ -1,5 +1,4 @@
 import logging
-from pprint import pformat
 from typing import Union
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
@@ -10,6 +9,16 @@ from telegram.ext import (
     ContextTypes,
     ConversationHandler,
     CallbackQueryHandler
+)
+
+from clientcommands.wiki_module.wiki_apple_computer import (
+    apple,
+    a_computer,
+    a_c_InstallationRecovery,
+    a_c_SavingData,
+    a_c_SlowingBugging,
+    a_c_SlowingBugging_ResetCmosNvram,
+    a_c_SystemSettings
 )
 
 from clientcommands.wiki_module.wiki_windows_computer import (
@@ -51,6 +60,7 @@ BUTTON_TEXT_OTHER = "Другие/Иное"
 BUTTON_TEXT_SHARE = "SHARE 🔗"
 
 # Ultra repeated keys
+APPLE_COMPUTER = WIKI_DATA_DICT["Apple"]["Computer"]
 WINDOWS_COMPUTER = WIKI_DATA_DICT["Windows"]["Computer"]
 
 
@@ -116,27 +126,6 @@ async def cancel_command(_: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return ConversationHandler.END
 
 
-async def apple(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    """Prompt same text & keyboard as `wiki_module` does but not as new message"""
-    logger_wiki.info("apple()")
-    context.user_data["Device_Context"]["OS"] = WIKI_DATA_DICT["Apple"]["0_RU"]
-    logger_wiki.info("context.user_data: {}".format(pformat(context.user_data)))
-
-    query = update.callback_query
-    await query.answer()
-    keyboard = [
-        [InlineKeyboardButton(text=WIKI_DATA_DICT["Apple"]["Computer"]["0_RU"],
-                              callback_data=WIKI_DATA_DICT["Apple"]["Computer"]["0_EN"])],
-        [InlineKeyboardButton(text=BUTTON_TEXT_BACK, callback_data=BACK),
-         InlineKeyboardButton(text=BUTTON_TEXT_CANCEL, callback_data=CANCEL)]
-    ]
-    inline_markup = InlineKeyboardMarkup(keyboard)
-
-    await query.edit_message_text("Select a device", reply_markup=inline_markup)
-
-    return WIKI_DATA_DICT["Apple"]["0_EN"]
-
-
 conversation_handler = ConversationHandler(
     entry_points=[CommandHandler("wiki", wiki), MessageHandler(filters.Regex(r"^(📖Вики)$"), wiki)],
     states={
@@ -145,11 +134,43 @@ conversation_handler = ConversationHandler(
             CallbackQueryHandler(windows, WIKI_DATA_DICT["Windows"]["0_EN"]),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
+        # ############################################# APPLE ##########################################################
+        WIKI_DATA_DICT["Apple"]["0_EN"]: [
+            CallbackQueryHandler(wiki_back, BACK),
+            CallbackQueryHandler(a_computer, APPLE_COMPUTER["0_EN"]),
+            CallbackQueryHandler(cancel_callback, CANCEL)
+        ],
+        # ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡ COMPUTER ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+        APPLE_COMPUTER["0_EN"]: [
+            CallbackQueryHandler(apple, BACK),
+            # CallbackQueryHandler(a_c_BIOS, APPLE_COMPUTER["BIOS"]["0_EN"]),
+            # CallbackQueryHandler(a_c_DevicesPeriphery, APPLE_COMPUTER["Devices_Periphery"]["0_EN"]),
+            CallbackQueryHandler(a_c_InstallationRecovery, APPLE_COMPUTER["Installation_Recovery"]["0_EN"]),
+            # CallbackQueryHandler(a_c_NetworkInternet, APPLE_COMPUTER["Network_Internet"]["0_EN"]),
+            CallbackQueryHandler(a_c_SavingData, APPLE_COMPUTER["Saving_Data"]["0_EN"]),
+            CallbackQueryHandler(a_c_SlowingBugging, APPLE_COMPUTER["Slowing_Bugging"]["0_EN"]),
+            CallbackQueryHandler(a_c_SystemSettings, APPLE_COMPUTER["System_Settings"]["0_EN"]),
+            # CallbackQueryHandler(a_c_UpdateDriver, APPLE_COMPUTER["Update_Driver"]["0_EN"]),
+            CallbackQueryHandler(cancel_callback, CANCEL)
+        ],
+        # ============================================= SLOWING_BUGGING ================================================
+        APPLE_COMPUTER["Slowing_Bugging"]["0_EN"]: [
+            CallbackQueryHandler(w_computer, BACK),
+            CallbackQueryHandler(a_c_SlowingBugging_ResetCmosNvram,
+                                 APPLE_COMPUTER["Slowing_Bugging"]["Reset_CMOS_NVRAM"]["0_EN"]),
+            CallbackQueryHandler(cancel_callback, CANCEL)
+        ],
+        APPLE_COMPUTER["Slowing_Bugging"]["Reset_CMOS_NVRAM"]["0_EN"]: [
+            CallbackQueryHandler(a_c_SlowingBugging, BACK),
+            CallbackQueryHandler(cancel_callback, CANCEL)
+        ],
+        # ############################################# WINDOWS ########################################################
         WIKI_DATA_DICT["Windows"]["0_EN"]: [
             CallbackQueryHandler(wiki_back, BACK),
             CallbackQueryHandler(w_computer, WINDOWS_COMPUTER["0_EN"]),
             CallbackQueryHandler(cancel_callback, CANCEL)
         ],
+        # ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡ COMPUTER ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
         WINDOWS_COMPUTER["0_EN"]: [
             CallbackQueryHandler(windows, BACK),
             CallbackQueryHandler(w_c_BIOS, WINDOWS_COMPUTER["BIOS"]["0_EN"]),

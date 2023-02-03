@@ -2,7 +2,7 @@ from configparser import ConfigParser
 import logging
 import sqlite3
 
-from typing import Tuple
+from typing import List, Tuple
 
 constants = ConfigParser()
 constants.read("constants.ini")
@@ -47,7 +47,7 @@ def insert_user_phone_number(user_id: int, phone_number: int) -> None:
         logger_tl_db.info("Phone number added into Database")
 
 
-def get_customer_data(user_id: int) -> list:
+def get_customer_data(user_id: int) -> List:
     logger_tl_db.info("get_customer_data()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
@@ -90,7 +90,7 @@ def insert_new_order(user_id: int, device_context: dict, default_contractor_id: 
         conn.commit()
 
 
-def get_order_data(OrderID: int) -> list:
+def get_order_data(OrderID: int) -> List:
     logger_tl_db.info("get_order_data()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
@@ -99,7 +99,7 @@ def get_order_data(OrderID: int) -> list:
         return result.fetchone()
 
 
-def get_open_orders() -> list[Tuple]:
+def get_open_orders() -> List[Tuple]:
     logger_tl_db.info("get_open_orders()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
@@ -107,7 +107,7 @@ def get_open_orders() -> list[Tuple]:
         return result.fetchall()
 
 
-def get_assigned_orders() -> list[Tuple]:
+def get_assigned_orders() -> List[Tuple]:
     logger_tl_db.info("get_incomplete_orders()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
@@ -124,7 +124,7 @@ def update_order_Complete(OrderID: int, timestamp: str) -> None:
         conn.commit()
 
 
-def get_contractor_data(user_id: int) -> list:
+def get_contractor_data(user_id: int) -> List:
     logger_tl_db.info("get_contractor_data()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
@@ -137,7 +137,7 @@ def get_contractor_data(user_id: int) -> list:
         return result.fetchone()
 
 
-def get_all_ContractorID() -> list:
+def get_all_ContractorID() -> List:
     logger_tl_db.info("get_all_contractor_ids()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
