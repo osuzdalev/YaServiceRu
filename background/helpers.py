@@ -6,12 +6,12 @@ from typing import Tuple, List, Dict, Any
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from resources.constants_loader import load_constants
 import background.telegram_database_utils as tldb
 
 logger_helpers = logging.getLogger(__name__)
 
-constants = ConfigParser()
-constants.read("constants.ini")
+constants = load_constants()
 
 
 def get_order_message_str(OrderID: int, user_data: Any, device_context: Any, phone_number: int = None) -> str:
@@ -76,4 +76,4 @@ def clearance_Contractor(user_id: int) -> bool:
 def clearance_Center(user_id: int) -> bool:
     """Verify if the user sending the command is an owner of a CenterID and has clearance"""
     logger_helpers.info("check_CenterID()")
-    return True if user_id == int(constants.get("ID", "MAIN")) else False
+    return True if user_id == int(constants.get("ID", "OLEG_RU")) else False

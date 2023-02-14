@@ -57,13 +57,13 @@ async def start_without_shipping_callback(update: Update, context: ContextTypes.
     payload = "Custom-Payload"
     currency = "USD"
     price = 1
-    # price * 100 so as to include 2 decimal points
+    # price * 100 to include 2 decimal points
     prices = [LabeledPrice("Test", price * 100)]
 
     # optionally pass need_name=True, need_phone_number=True,
     # need_email=True, need_shipping_address=True, is_flexible=True
     await context.bot.send_invoice(
-        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_TOKEN"), currency, prices
+        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER"), currency, prices
     )
 
 
@@ -86,7 +86,7 @@ async def shipping_callback(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Non
 
 # after (optional) shipping, it's the pre-checkout
 async def precheckout_callback(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
-    """Answers the PreQecheckoutQuery"""
+    """Answers the PreCheckoutQuery"""
     logger_qa.info("precheckout_callback()")
     query = update.pre_checkout_query
     # check the payload, is this from your bot?

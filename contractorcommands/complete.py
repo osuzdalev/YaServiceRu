@@ -18,7 +18,7 @@ async def complete(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger_assign.info("complete()")
     OrderID = int(context.args[0])
     user_id = update.effective_user.id
-    CenterID = constants.get("ID", "MAIN")
+    CenterID = constants.get("ID", "OLEG_RU")
 
     if not helpers.clearance_Contractor(user_id):
         await update.effective_message.reply_text("You cannot use this command")

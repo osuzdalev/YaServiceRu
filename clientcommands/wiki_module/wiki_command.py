@@ -72,7 +72,10 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     logger_wiki.info("wiki_module()")
     device_context = {"OS": '', "Device": '', "Category": '', "Problem": ''}
     context.user_data["Device_Context"] = device_context
-    in_conversation = context.user_data['in_conversation']
+    try:
+        in_conversation = context.user_data['in_conversation']
+    except KeyError:
+        raise KeyError("Command '/start' not yet used by User.")
 
     # Check if user already in Conversation
     if not (in_conversation == '' or in_conversation == 'wiki_module'):

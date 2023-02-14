@@ -17,8 +17,8 @@ CONSTANTS.read("../constants.ini")
 
 api_id = int(CONSTANTS.get("API", "ID"))
 api_hash = CONSTANTS.get("API", "HASH")
-token = CONSTANTS.get("TOKEN", "TOKEN")
-main_id = chat_id = int(CONSTANTS.get("ID", "MAIN"))
-bot_id = CONSTANTS.get("USERNAME", "BOT")
+token = CONSTANTS.get("TOKEN", "MAIN_BOT")
+main_id = chat_id = int(CONSTANTS.get("ID", "OLEG_RU"))
+bot_id = CONSTANTS.get("USERNAME", "YaServiceRuDevBot")
 
 client = TelegramClient('test', api_id, api_hash)

@@ -9,7 +9,7 @@ logger_start = logging.getLogger(__name__)
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Stuff"""
+    """Needs to be used first after every reboot of the Bot."""
     logger_start.info("start()")
 
     context.user_data['in_conversation'] = ''

@@ -1,4 +1,3 @@
-from configparser import ConfigParser
 import html
 import json
 import logging
@@ -9,20 +8,23 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
+from resources.constants_loader import load_constants
+
 logger_error = logging.getLogger(__name__)
 
-constants = ConfigParser()
-constants.read("constants.ini")
+constants = load_constants()
 
 
 def send_email(content: str) -> None:
     """Sends an email with the logs to the developer"""
-    email = constants.get("EMAIL", "YANDEX")
-    password = constants.get("PASSWORD", "YANDEX_APP")
+    yaserviceru_email = constants.get("EMAIL", "YASERVICERU_YANDEX")
+    password = constants.get("PASSWORD", "YASERVICERU_YANDEX_APP")
+
+    # oleg_email = constants.get("EMAIL", "OLEG_YANDEX")
 
     message = "\r\n".join([
-        f"From: {email}",
-        "To: {}".format(constants.get("EMAIL", "YANDEX")),
+        f"From: {yaserviceru_email}",
+        "To: {}".format(yaserviceru_email),
         "Subject: YaServiceRu ERROR",
         "",
         content
@@ -31,8 +33,8 @@ def send_email(content: str) -> None:
     server = smtp.SMTP('smtp.yandex.ru', 587)
     server.set_debuglevel(1)
     server.starttls()
-    server.login(email, password)
-    server.sendmail(email, email, message.encode('utf-8'))
+    server.login(yaserviceru_email, password)
+    server.sendmail(yaserviceru_email, yaserviceru_email, message.encode('utf-8'))
     server.quit()
 
 
@@ -66,6 +68,11 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
         f"{tb_string}"
     )
 
-    # Finally, send the message
-    await context.bot.send_message(chat_id=constants.get("ID", "MAIN"), text=tg_message, parse_mode=ParseMode.HTML)
+    # Finally, send the message via telegram
+    await context.bot.send_message(chat_id=constants.get("ID", "OLEG_FR"), text=tg_message, parse_mode=ParseMode.HTML)
+    # and to the email
     send_email(mail_message)
+
+
+if __name__ == "__main__":
+    send_email("TEST")

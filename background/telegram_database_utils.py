@@ -4,9 +4,10 @@ import sqlite3
 
 from typing import List, Tuple
 
-constants = ConfigParser()
-constants.read("constants.ini")
-DB_FILEPATH = constants.get("FILEPATH", "DATABASE")
+from resources.constants_loader import load_constants
+
+constants = load_constants()
+DB_FILEPATH = constants.get("FILEPATH", "LOCAL_DATABASE")
 
 logger_tl_db = logging.getLogger(__name__)
 
@@ -185,3 +186,7 @@ def insert_message(MessageID: int, UserID: int, text: str) -> None:
         cursor.execute("insert into Messages (MessageID, UserID, MessageText) values (?, ?, ?)",
                        (MessageID, UserID, text))
         conn.commit()
+
+
+if __name__ == "__main__":
+    print(DB_FILEPATH)

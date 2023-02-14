@@ -46,8 +46,8 @@ async def assign(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         return
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "OLEG_RU")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "OLEG_FR"))],
         [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_1_CANCEL),
          InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)],
     ]
@@ -61,8 +61,8 @@ async def assign(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def assign_start_over(update: Update, _: ContextTypes.DEFAULT_TYPE, query) -> int:
     logger_assign.info("assign_start_over()")
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "OLEG_RU")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "OLEG_FR"))],
         [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_1_CANCEL),
          InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)]
     ]
@@ -94,8 +94,8 @@ async def assign_page_1(update: Update, _: ContextTypes.DEFAULT_TYPE) -> int:
     await query.answer()
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "OLEG_RU")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "OLEG_FR"))],
         [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_1_CANCEL),
          InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_1_NEXT)],
     ]
@@ -114,8 +114,8 @@ async def assign_page_2(update: Update, _: ContextTypes.DEFAULT_TYPE) -> int:
     await query.answer()
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "OLEG_RU")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "OLEG_FR"))],
         [InlineKeyboardButton(text="<< PREVIOUS", callback_data=ASSIGN_PAGE_2_BACK),
          InlineKeyboardButton(text="NEXT >>", callback_data=ASSIGN_PAGE_2_NEXT)],
         [InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_2_CANCEL)]
@@ -135,8 +135,8 @@ async def assign_page_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     await query.answer()
 
     keyboard = [
-        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "MAIN")),
-         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "FR"))],
+        [InlineKeyboardButton(text="Oleg (Ru)", callback_data=constants.get("ID", "OLEG_RU")),
+         InlineKeyboardButton(text="Oleg (Fr)", callback_data=constants.get("ID", "OLEG_FR"))],
         [InlineKeyboardButton(text="<< PREVIOUS", callback_data=ASSIGN_PAGE_3_BACK),
          InlineKeyboardButton(text="CANCEL", callback_data=ASSIGN_PAGE_3_CANCEL)],
     ]

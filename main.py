@@ -1,17 +1,18 @@
-from configparser import ConfigParser
 import logging.handlers
+import pickle
+import pprint
 import sys
 
-from telegram.ext import Application
+from telegram.ext import Application, PicklePersistence
 
+from resources.constants_loader import load_constants
 from clientcommands import request as req, start, payment
 from clientcommands.wiki_module import wiki_command, wiki_share
-from contractorcommand import assign, complete, commands
-from centercommand import orders
+from contractorcommands import assign, complete, commands
+from centercommands import orders
 from background import global_fallback, data_collector, error_logging
 
-constants = ConfigParser()
-constants.read("constants.ini")
+constants = load_constants()
 
 # Enable logging
 logging.basicConfig(
@@ -31,8 +32,11 @@ CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
 GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
+    persistence = PicklePersistence(filepath="./resources/persistence")
     application = Application.builder() \
-        .token(constants.get("TOKEN", "TOKEN")) \
+        .token(constants.get("TOKEN", "DEV_BOT")) \
+        .persistence(persistence) \
+        .arbitrary_callback_data(True) \
         .build()
 
     # Data Collection
@@ -75,3 +79,7 @@ if __name__ == "__main__":
     application.add_handler(global_fallback.global_fallback_handler, GLOBAL_FALLBACK)
 
     application.run_polling()
+
+    with open("./resources/persistence", "rb") as f:
+        data = pickle.load(f)
+        pprint.pprint(data)
