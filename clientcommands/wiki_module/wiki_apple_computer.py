@@ -5,7 +5,7 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
-from clientcommands.wiki_module.wiki_json_utils import WIKI_DATA_DICT
+from clientcommands.wiki_module.wiki_json_utils import get_wiki_json_dict
 
 logger_wiki_apple_computer = logging.getLogger(__name__)
 
@@ -20,6 +20,7 @@ BUTTON_TEXT_BACK = "<< BACK"
 BUTTON_TEXT_OTHER = "Другие/Иное"
 BUTTON_TEXT_SHARE = "SHARE 🔗"
 
+WIKI_DATA_DICT = get_wiki_json_dict()
 APPLE_COMPUTER = WIKI_DATA_DICT["Apple"]["Computer"]
 
 

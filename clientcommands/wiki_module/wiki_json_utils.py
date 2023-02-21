@@ -2,6 +2,7 @@
 import logging
 import json
 from typing import Union
+import os
 
 logger_wiki_json_utils = logging.getLogger(__name__)
 
@@ -14,9 +15,7 @@ def backup(current_file: dict, backup_file: str = 'wiki_data_backup.json') -> No
         json.dump(current_file, back_file_handle, indent=4, sort_keys=True, ensure_ascii=False)
 
 
-# TODO figure out how to not use the absolute path
-#  yet make this file available to both those in this directory and main.py
-def get_wiki_json_dict(dict_path: str = '/Users/osuz/PycharmProjects/YaServiceRu/clientcommands/wiki_module/wiki_data.json') -> dict:
+def get_wiki_json_dict(dict_path: str = os.path.join(os.path.dirname(os.path.abspath(__file__)), "wiki_data.json")) -> dict:
     """Get a copy of the current JSON file to access data"""
     logger_wiki_json_utils.info("get_wiki_json_dict()")
     with open(dict_path, "r") as json_file:
@@ -26,7 +25,6 @@ def get_wiki_json_dict(dict_path: str = '/Users/osuz/PycharmProjects/YaServiceRu
     return data_dict
 
 
-WIKI_DATA_DICT = get_wiki_json_dict()
 
 
 def get_answer_path(value: str, data_dict: dict = None, path: str = "") -> Union[str, None]:

@@ -44,7 +44,7 @@ from clientcommands.wiki_module.wiki_windows_computer import (
     w_c_UpdateDriver_UpdateWindows1011,
     w_c_UpdateDriver_TurnOffAutomaticUpdates
 )
-from clientcommands.wiki_module.wiki_json_utils import WIKI_DATA_DICT
+from clientcommands.wiki_module.wiki_json_utils import get_wiki_json_dict
 
 logger_wiki = logging.getLogger(__name__)
 
@@ -60,6 +60,7 @@ BUTTON_TEXT_OTHER = "Другие/Иное"
 BUTTON_TEXT_SHARE = "SHARE 🔗"
 
 # Ultra repeated keys
+WIKI_DATA_DICT = get_wiki_json_dict()
 APPLE_COMPUTER = WIKI_DATA_DICT["Apple"]["Computer"]
 WINDOWS_COMPUTER = WIKI_DATA_DICT["Windows"]["Computer"]
 
@@ -131,7 +132,8 @@ async def cancel_command(_: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 conversation_handler = ConversationHandler(
     entry_points=[CommandHandler("wiki", wiki), MessageHandler(filters.Regex(r"^(📖Вики)$"), wiki)],
-    states={
+    states=
+    {
         WIKI_DATA_DICT["0_EN"]: [
             CallbackQueryHandler(apple, WIKI_DATA_DICT["Apple"]["0_EN"]),
             CallbackQueryHandler(windows, WIKI_DATA_DICT["Windows"]["0_EN"]),

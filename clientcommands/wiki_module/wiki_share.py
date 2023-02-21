@@ -6,9 +6,11 @@ from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, InlineQueryHandler
 
-from clientcommands.wiki_module.wiki_json_utils import WIKI_DATA_DICT, get_answer_path
+from clientcommands.wiki_module.wiki_json_utils import get_wiki_json_dict, get_answer_path
 
 logger_wiki_share = logging.getLogger(__name__)
+
+WIKI_DATA_DICT = get_wiki_json_dict()
 
 
 async def share(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Union[int, None]:
