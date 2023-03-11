@@ -1,0 +1,5 @@
+text: Apple
+
+buttons:
+- - - Computer # Text on Button
+    - A_Computer # Link ID / URL

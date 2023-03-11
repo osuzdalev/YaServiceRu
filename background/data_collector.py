@@ -17,8 +17,14 @@ constants.read("constants.ini")
 async def collect_data(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Add user data and message data to DB"""
     logger_data_collector.info("collect_data()")
-    logger_data_collector.debug(
-        "update.chat_member: {}".format(update.chat_member))
+    logger_data_collector.debug("update.chat_member: {}".format(update.chat_member))
+
+    try:
+        logger_data_collector.info("CALLBACK_DATA: {}".format(update.callback_query.data))
+    except AttributeError:
+        logger_data_collector.info("NO CALLBACK DATA")
+    except TypeError:
+        pass
     user = None
     # logger_data_collector.info("update.effective_user: {}".format(update.effective_user))
     message = None
@@ -45,7 +51,7 @@ async def collect_data(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def collect_phone_number(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Checks if Phone# in DB and adds it to appropriate UserID"""
-    logger_data_collector.info("collect_phone_number()")
+    logger_data_collector.debug("collect_phone_number()")
     user = update.effective_user
     phone_number = update.message.contact.phone_number
 

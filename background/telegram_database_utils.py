@@ -14,7 +14,7 @@ logger_tl_db = logging.getLogger(__name__)
 
 def insert_new_user(user_id: int, username: str, first_name: str, last_name: str) -> None:
     """Stuff"""
-    logger_tl_db.info("insert_new_customer()")
+    logger_tl_db.debug("insert_new_customer()")
     try:
         with sqlite3.connect(DB_FILEPATH) as conn:
             cursor = conn.cursor()
@@ -40,7 +40,7 @@ def get_user_data(user_id: int) -> None:
 
 
 def insert_user_phone_number(user_id: int, phone_number: int) -> None:
-    logger_tl_db.info("insert_customer_phone_number()")
+    logger_tl_db.debug("insert_customer_phone_number()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         cursor.execute("update Users set PhoneNumber = ? where UserID = ?;", (phone_number, user_id))
@@ -49,7 +49,7 @@ def insert_user_phone_number(user_id: int, phone_number: int) -> None:
 
 
 def get_customer_data(user_id: int) -> List:
-    logger_tl_db.info("get_customer_data()")
+    logger_tl_db.debug("get_customer_data()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select Users.UserID, Users.UserName, Users.FirstName, Users.LastName,"
@@ -62,7 +62,7 @@ def get_customer_data(user_id: int) -> List:
 
 
 def get_customer_last_OrderID(user_id: int, contractor_id: int = None) -> int:
-    logger_tl_db.info("get_customer_last_OrderID()")
+    logger_tl_db.debug("get_customer_last_OrderID()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from Orders where (CustomerID = ? and ContractorID is ?)",
@@ -74,7 +74,7 @@ def get_customer_last_OrderID(user_id: int, contractor_id: int = None) -> int:
 
 
 def insert_new_order(user_id: int, device_context: dict, default_contractor_id: int = None) -> None:
-    logger_tl_db.info("insert_new_order()")
+    logger_tl_db.debug("insert_new_order()")
 
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
@@ -92,7 +92,7 @@ def insert_new_order(user_id: int, device_context: dict, default_contractor_id: 
 
 
 def get_order_data(OrderID: int) -> List:
-    logger_tl_db.info("get_order_data()")
+    logger_tl_db.debug("get_order_data()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from Orders where OrderID = ?", (OrderID,))
@@ -101,7 +101,7 @@ def get_order_data(OrderID: int) -> List:
 
 
 def get_open_orders() -> List[Tuple]:
-    logger_tl_db.info("get_open_orders()")
+    logger_tl_db.debug("get_open_orders()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from Orders where Completed = 0 and ContractorID is null")
@@ -109,7 +109,7 @@ def get_open_orders() -> List[Tuple]:
 
 
 def get_assigned_orders() -> List[Tuple]:
-    logger_tl_db.info("get_incomplete_orders()")
+    logger_tl_db.debug("get_incomplete_orders()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from Orders where Completed = 0 and ContractorID is not null")
@@ -117,7 +117,7 @@ def get_assigned_orders() -> List[Tuple]:
 
 
 def update_order_Complete(OrderID: int, timestamp: str) -> None:
-    logger_tl_db.info("update_order_Complete()")
+    logger_tl_db.debug("update_order_Complete()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         cursor.execute("update Orders set Completed = ?, CompletedDate = ? where OrderID = ?",
@@ -126,7 +126,7 @@ def update_order_Complete(OrderID: int, timestamp: str) -> None:
 
 
 def get_contractor_data(user_id: int) -> List:
-    logger_tl_db.info("get_contractor_data()")
+    logger_tl_db.debug("get_contractor_data()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -139,7 +139,7 @@ def get_contractor_data(user_id: int) -> List:
 
 
 def get_all_ContractorID() -> List:
-    logger_tl_db.info("get_all_contractor_ids()")
+    logger_tl_db.debug("get_all_contractor_ids()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select ContractorID from Contractors")
@@ -149,7 +149,7 @@ def get_all_ContractorID() -> List:
 
 
 def update_order_ContractorID(OrderID: int, new_ContractorID: int) -> None:
-    logger_tl_db.info("update_order_ContractID()")
+    logger_tl_db.debug("update_order_ContractID()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         cursor.execute("update Orders set ContractorID = ? where OrderID = ?",
@@ -158,7 +158,7 @@ def update_order_ContractorID(OrderID: int, new_ContractorID: int) -> None:
 
 
 def insert_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> None:
-    logger_tl_db.info("insert_assign")
+    logger_tl_db.debug("insert_assign")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         cursor.execute("insert into Assign (old_ContractorID, OrderID, new_ContractorID) "
@@ -168,7 +168,7 @@ def insert_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) ->
 
 
 def check_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> bool:
-    logger_tl_db.info("check_assign()")
+    logger_tl_db.debug("check_assign()")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from Assign where old_ContractorID = ? and OrderID = ? and new_ContractorID = ?",
@@ -179,8 +179,8 @@ def check_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> 
 
 def insert_message(MessageID: int, UserID: int, text: str) -> None:
     """Data collection"""
-    logger_tl_db.info("insert_message()")
-    logger_tl_db.info("inserting: {}, {}, {}".format(MessageID, UserID, text))
+    logger_tl_db.debug("insert_message()")
+    logger_tl_db.debug("inserting: {}, {}, {}".format(MessageID, UserID, text))
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         cursor.execute("insert into Messages (MessageID, UserID, MessageText) values (?, ?, ?)",

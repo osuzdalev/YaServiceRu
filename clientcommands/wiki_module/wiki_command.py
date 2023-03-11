@@ -1,7 +1,9 @@
 import logging
 from typing import Union
+import os
+import pprint
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from telegram.ext import (
     CommandHandler,
     MessageHandler,
@@ -11,58 +13,26 @@ from telegram.ext import (
     CallbackQueryHandler
 )
 
-from clientcommands.wiki_module.wiki_apple_computer import (
-    apple,
-    a_computer,
-    a_c_InstallationRecovery,
-    a_c_SavingData,
-    a_c_SlowingBugging,
-    a_c_SlowingBugging_ResetCmosNvram,
-    a_c_SystemSettings
-)
-
-from clientcommands.wiki_module.wiki_windows_computer import (
-    windows,
-    w_computer,
-    w_c_BIOS,
-    w_c_BIOS_ChangeLoadingPriority,
-    w_c_DevicesPeriphery,
-    w_c_DevicesPeriphery_NoSound,
-    w_c_InstallationRecovery,
-    w_c_InstallationRecovery_MissingDiskPartitionsWhenInstallingOS,
-    w_c_NetworkInternet,
-    w_c_NetworkInternet_NoAvailableWifi,
-    w_c_NetworkInternet_NoInternetConnection,
-    w_c_SavingData,
-    w_c_SavingData_RemovingTempFiles,
-    w_c_SlowingBugging,
-    w_c_SlowingBugging_Booting,
-    w_c_SlowingBugging_HardDiskSSD,
-    w_c_SlowingBugging_Heating,
-    w_c_UpdateDriver,
-    w_c_UpdateDriver_DriverInstallationUpdate,
-    w_c_UpdateDriver_UpdateWindows1011,
-    w_c_UpdateDriver_TurnOffAutomaticUpdates
-)
-from clientcommands.wiki_module.wiki_json_utils import get_wiki_json_dict
+from clientcommands.wiki_module.telegram_website import Website, Page
 
 logger_wiki = logging.getLogger(__name__)
 
-# Basic callback_data
-CANCEL = "CANCEL"
+DATA_PATH = "wiki_data/wiki_data.yaml"
+FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), DATA_PATH)
+
 BACK = "BACK"
-OTHER = "OTHER"
+CANCEL = "CANCEL"
 
-# Omnipresent buttons
-BUTTON_TEXT_CANCEL = "CANCEL"
-BUTTON_TEXT_BACK = "<< BACK"
-BUTTON_TEXT_OTHER = "Другие/Иное"
-BUTTON_TEXT_SHARE = "SHARE 🔗"
-
-# Ultra repeated keys
-WIKI_DATA_DICT = get_wiki_json_dict()
-APPLE_COMPUTER = WIKI_DATA_DICT["Apple"]["Computer"]
-WINDOWS_COMPUTER = WIKI_DATA_DICT["Windows"]["Computer"]
+STATE = "WIKI"
+BROWSER_HISTORY_NAME = "WIKI_HISTORY"
+ENTRY_PAGE_NAME = "Wiki"
+ENTRY_PAGE_TEXT = "Select a Brand/OS"
+ENTRY_PAGE_KEYBOARD = [
+    [InlineKeyboardButton(text="Apple", callback_data="Apple")],
+    [InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)]
+]
+ENTRY_PAGE_MARKUP = InlineKeyboardMarkup(ENTRY_PAGE_KEYBOARD)
+entry_page = Page(ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_KEYBOARD)
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
@@ -71,8 +41,13 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     This Conversation first needs to check the user 'in_conversation flag' before it can start, otherwise it will ask
     the customer to first close the previous one."""
     logger_wiki.info("wiki_module()")
+    # Context history for the user's session
     device_context = {"OS": '', "Device": '', "Category": '', "Problem": ''}
     context.user_data["Device_Context"] = device_context
+
+    # Create a browser history for the user's session
+    context.user_data[BROWSER_HISTORY_NAME] = [ENTRY_PAGE_NAME]
+
     try:
         in_conversation = context.user_data['in_conversation']
     except KeyError:
@@ -85,43 +60,23 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
         return ConversationHandler.END
     context.user_data["in_conversation"] = "wiki_module"
 
-    keyboard = [
-        [InlineKeyboardButton(text=WIKI_DATA_DICT["Apple"]["0_RU"], callback_data=WIKI_DATA_DICT["Apple"]["0_EN"]),
-         InlineKeyboardButton(text=WIKI_DATA_DICT["Windows"]["0_RU"], callback_data=WIKI_DATA_DICT["Windows"]["0_EN"])],
-        [InlineKeyboardButton(text=BUTTON_TEXT_CANCEL, callback_data=CANCEL)]
-    ]
-    inline_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text(ENTRY_PAGE_TEXT, reply_markup=ENTRY_PAGE_MARKUP)
 
-    await update.message.reply_text("Select a Brand/OS", reply_markup=inline_markup)
-
-    return WIKI_DATA_DICT["0_EN"]
+    return STATE
 
 
-async def wiki_back(update: Update, _: ContextTypes.DEFAULT_TYPE) -> str:
-    """Stuff"""
+async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    """A callback function which has the same output as the wiki command. Necessary if the client wants to browse back
+    to the first page of the wiki"""
     logger_wiki.info("wiki_module()")
+    context.user_data[BROWSER_HISTORY_NAME].append(ENTRY_PAGE_NAME)
+
     query = update.callback_query
     await query.answer()
 
-    keyboard = [
-        [InlineKeyboardButton(text=WIKI_DATA_DICT["Apple"]["0_EN"], callback_data=WIKI_DATA_DICT["Apple"]["0_EN"]),
-         InlineKeyboardButton(text=WIKI_DATA_DICT["Windows"]["0_RU"], callback_data=WIKI_DATA_DICT["Windows"]["0_EN"])],
-        [InlineKeyboardButton(text=BUTTON_TEXT_CANCEL, callback_data=CANCEL)]
-    ]
-    inline_markup = InlineKeyboardMarkup(keyboard)
+    await query.edit_message_text(ENTRY_PAGE_TEXT, reply_markup=ENTRY_PAGE_MARKUP)
 
-    await query.edit_message_text("Select a Brand/OS", reply_markup=inline_markup)
-
-    return WIKI_DATA_DICT["0_EN"]
-
-
-async def cancel_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    logger_wiki.info("cancel_callback()")
-    query = update.callback_query
-    await query.answer()
-    await query.delete_message()
-    context.user_data["in_conversation"] = ""
-    return ConversationHandler.END
+    return STATE
 
 
 async def cancel_command(_: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -129,176 +84,18 @@ async def cancel_command(_: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.user_data["in_conversation"] = ""
     return ConversationHandler.END
 
+# Generating the telegram_website object from yaml data file
+website = Website(STATE, BROWSER_HISTORY_NAME)
+# TODO Can this be done at init()?
+website.set_standard_handler_callbacks()
+# Parse the yaml file
+website.parse(FULL_PATH)
+# Adding the first page to website
+website.add_page(ENTRY_PAGE_NAME, entry_page, wiki_callback)
 
 conversation_handler = ConversationHandler(
     entry_points=[CommandHandler("wiki", wiki), MessageHandler(filters.Regex(r"^(📖Вики)$"), wiki)],
-    states=
-    {
-        WIKI_DATA_DICT["0_EN"]: [
-            CallbackQueryHandler(apple, WIKI_DATA_DICT["Apple"]["0_EN"]),
-            CallbackQueryHandler(windows, WIKI_DATA_DICT["Windows"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # ############################################# APPLE ##########################################################
-        WIKI_DATA_DICT["Apple"]["0_EN"]: [
-            CallbackQueryHandler(wiki_back, BACK),
-            CallbackQueryHandler(a_computer, APPLE_COMPUTER["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡ COMPUTER ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-        APPLE_COMPUTER["0_EN"]: [
-            CallbackQueryHandler(apple, BACK),
-            # CallbackQueryHandler(a_c_BIOS, APPLE_COMPUTER["BIOS"]["0_EN"]),
-            # CallbackQueryHandler(a_c_DevicesPeriphery, APPLE_COMPUTER["Devices_Periphery"]["0_EN"]),
-            CallbackQueryHandler(a_c_InstallationRecovery, APPLE_COMPUTER["Installation_Recovery"]["0_EN"]),
-            # CallbackQueryHandler(a_c_NetworkInternet, APPLE_COMPUTER["Network_Internet"]["0_EN"]),
-            CallbackQueryHandler(a_c_SavingData, APPLE_COMPUTER["Saving_Data"]["0_EN"]),
-            CallbackQueryHandler(a_c_SlowingBugging, APPLE_COMPUTER["Slowing_Bugging"]["0_EN"]),
-            CallbackQueryHandler(a_c_SystemSettings, APPLE_COMPUTER["System_Settings"]["0_EN"]),
-            # CallbackQueryHandler(a_c_UpdateDriver, APPLE_COMPUTER["Update_Driver"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # ============================================= SLOWING_BUGGING ================================================
-        APPLE_COMPUTER["Slowing_Bugging"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(a_c_SlowingBugging_ResetCmosNvram,
-                                 APPLE_COMPUTER["Slowing_Bugging"]["Reset_CMOS_NVRAM"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        APPLE_COMPUTER["Slowing_Bugging"]["Reset_CMOS_NVRAM"]["0_EN"]: [
-            CallbackQueryHandler(a_c_SlowingBugging, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # ############################################# WINDOWS ########################################################
-        WIKI_DATA_DICT["Windows"]["0_EN"]: [
-            CallbackQueryHandler(wiki_back, BACK),
-            CallbackQueryHandler(w_computer, WINDOWS_COMPUTER["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡ COMPUTER ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-        WINDOWS_COMPUTER["0_EN"]: [
-            CallbackQueryHandler(windows, BACK),
-            CallbackQueryHandler(w_c_BIOS, WINDOWS_COMPUTER["BIOS"]["0_EN"]),
-            CallbackQueryHandler(w_c_DevicesPeriphery, WINDOWS_COMPUTER["Devices_Periphery"]["0_EN"]),
-            CallbackQueryHandler(w_c_InstallationRecovery, WINDOWS_COMPUTER["Installation_Recovery"]["0_EN"]),
-            CallbackQueryHandler(w_c_NetworkInternet, WINDOWS_COMPUTER["Network_Internet"]["0_EN"]),
-            CallbackQueryHandler(w_c_SavingData, WINDOWS_COMPUTER["Saving_Data"]["0_EN"]),
-            CallbackQueryHandler(w_c_SlowingBugging, WINDOWS_COMPUTER["Slowing_Bugging"]["0_EN"]),
-            CallbackQueryHandler(w_c_UpdateDriver, WINDOWS_COMPUTER["Update_Driver"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # --------------------------------------------------------------------------------------------------------------
-        WINDOWS_COMPUTER["BIOS"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(w_c_BIOS_ChangeLoadingPriority,
-                                 WINDOWS_COMPUTER["BIOS"]["Change_Loading_Priority"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["BIOS"]["Change_Loading_Priority"]["0_EN"]: [
-            CallbackQueryHandler(w_c_BIOS, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # --------------------------------------------------------------------------------------------------------------
-        WINDOWS_COMPUTER["Devices_Periphery"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(w_c_DevicesPeriphery_NoSound,
-                                 WINDOWS_COMPUTER["Devices_Periphery"]["No_Sound"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Devices_Periphery"]["No_Sound"]["0_EN"]: [
-            CallbackQueryHandler(w_c_DevicesPeriphery, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # --------------------------------------------------------------------------------------------------------------
-        WINDOWS_COMPUTER["Installation_Recovery"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(w_c_InstallationRecovery_MissingDiskPartitionsWhenInstallingOS,
-                                 WINDOWS_COMPUTER["Installation_Recovery"][
-                                     "Missing_Disk_Partitions_When_Installing_OS"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Installation_Recovery"]["Missing_Disk_Partitions_When_Installing_OS"]["0_EN"]: [
-            CallbackQueryHandler(w_c_InstallationRecovery, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # --------------------------------------------------------------------------------------------------------------
-        WINDOWS_COMPUTER["Network_Internet"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(w_c_NetworkInternet_NoAvailableWifi,
-                                 WINDOWS_COMPUTER["Network_Internet"]["No_Available_Wifi"]["0_EN"]),
-            CallbackQueryHandler(w_c_NetworkInternet_NoInternetConnection,
-                                 WINDOWS_COMPUTER["Network_Internet"]["No_Internet_Connection"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Network_Internet"]["No_Available_Wifi"]["0_EN"]: [
-            CallbackQueryHandler(w_c_NetworkInternet, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Network_Internet"]["No_Internet_Connection"]["0_EN"]: [
-            CallbackQueryHandler(w_c_NetworkInternet, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # --------------------------------------------------------------------------------------------------------------
-        WINDOWS_COMPUTER["Saving_Data"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(w_c_SavingData_RemovingTempFiles,
-                                 WINDOWS_COMPUTER["Saving_Data"]["Removing_Temp_Files"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Saving_Data"]["Removing_Temp_Files"]["0_EN"]: [
-            CallbackQueryHandler(w_c_SavingData, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # --------------------------------------------------------------------------------------------------------------
-        WINDOWS_COMPUTER["Slowing_Bugging"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(w_c_SlowingBugging_Booting,
-                                 WINDOWS_COMPUTER["Slowing_Bugging"]["Booting"][
-                                     "0_EN"]),
-            CallbackQueryHandler(w_c_SlowingBugging_HardDiskSSD,
-                                 WINDOWS_COMPUTER["Slowing_Bugging"]["Hard_Disk_SSD"][
-                                     "0_EN"]),
-            CallbackQueryHandler(w_c_SlowingBugging_Heating,
-                                 WINDOWS_COMPUTER["Slowing_Bugging"]["Heating"][
-                                     "0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Slowing_Bugging"]["Booting"]["0_EN"]: [
-            CallbackQueryHandler(w_c_SlowingBugging, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Slowing_Bugging"]["Hard_Disk_SSD"]["0_EN"]: [
-            CallbackQueryHandler(w_c_SlowingBugging, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Slowing_Bugging"]["Heating"]["0_EN"]: [
-            CallbackQueryHandler(w_c_SlowingBugging, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        # --------------------------------------------------------------------------------------------------------------
-        WINDOWS_COMPUTER["Update_Driver"]["0_EN"]: [
-            CallbackQueryHandler(w_computer, BACK),
-            CallbackQueryHandler(w_c_UpdateDriver_DriverInstallationUpdate, WINDOWS_COMPUTER["Update_Driver"][
-                "Driver_Installation_Update"]["0_EN"]),
-            CallbackQueryHandler(w_c_UpdateDriver_UpdateWindows1011,
-                                 WINDOWS_COMPUTER["Update_Driver"]["Update_Windows_10_11"]["0_EN"]),
-            CallbackQueryHandler(w_c_UpdateDriver_TurnOffAutomaticUpdates, WINDOWS_COMPUTER["Update_Driver"][
-                "Turn_Off_Automatic_Updates"]["0_EN"]),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Update_Driver"]["Driver_Installation_Update"]["0_EN"]: [
-            CallbackQueryHandler(w_c_UpdateDriver, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Update_Driver"]["Update_Windows_10_11"]["0_EN"]: [
-            CallbackQueryHandler(w_c_UpdateDriver, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-        WINDOWS_COMPUTER["Update_Driver"]["Turn_Off_Automatic_Updates"]["0_EN"]: [
-            CallbackQueryHandler(w_c_UpdateDriver, BACK),
-            CallbackQueryHandler(cancel_callback, CANCEL)
-        ],
-    },
+    states=website.state,
     fallbacks=[CommandHandler("cancel", cancel_command),
                MessageHandler(filters.Regex(r"^(❌Отменить)$"), cancel_command)],
     allow_reentry=True,

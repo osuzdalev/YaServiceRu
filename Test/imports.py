@@ -2,6 +2,7 @@ import logging
 import sys
 
 from telethon.sync import TelegramClient
+from telethon import events
 
 from resources.constants_loader import load_constants
 

@@ -1,0 +1,11 @@
+# All the different addresses / URL
+
+Apple: !include Apple/Apple.yaml
+
+A_Computer: !include Apple/Computer/Computer.yaml
+
+A_C_BIOS: !include Apple/Computer/BIOS/BIOS.yaml
+
+A_C_Slowing_Bugging: !include Apple/Computer/Slowing_Bugging/Slowing_Bugging.yaml
+
+A_C_SB_Reset_CMOS_NVRAM: !include Apple/Computer/Slowing_Bugging/Reset_CMOS_NVRAM/Reset_CMOS_NVRAM.yaml

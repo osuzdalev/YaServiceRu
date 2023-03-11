@@ -7,7 +7,7 @@ from telegram.ext import Application, PicklePersistence
 
 from resources.constants_loader import load_constants
 from clientcommands import request as req, start, payment
-from clientcommands.wiki_module import wiki_command, wiki_share
+from clientcommands.wiki_module import wiki_command
 from contractorcommands import assign, complete, commands
 from centercommands import orders
 from background import global_fallback, data_collector, error_logging
@@ -39,24 +39,25 @@ if __name__ == "__main__":
         .arbitrary_callback_data(True) \
         .build()
 
-    # Data Collection
+    # DATA COLLECTION
     application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
     # TODO
     # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
     application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
 
-    # Error handler
+    # ERROR HANDLER
     application.add_error_handler(error_logging.error_handler)
 
-    # Client Handlers
+    # CLIENT HANDLERS
     application.add_handler(start.start_handler, CLIENT_BASIC)
     application.add_handler(req.request_handler, CLIENT_BASIC)
     application.add_handler(req.request_replykeyboard_handler, CLIENT_BASIC)
 
     application.add_handler(wiki_command.conversation_handler, CLIENT_WIKI)
-    application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
+    # TODO make the wiki objects compatible with inline queries
+    # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
 
-    # Payment
+    # PAYMENT
     application.add_handler(payment.pay_handler, CLIENT_PAY)
     # application.add_handler(CommandHandler("shipping", start_with_shipping_callback))
     # Optional handler if your product requires shipping
@@ -66,13 +67,13 @@ if __name__ == "__main__":
     # Notify user of successful payment
     application.add_handler(payment.successful_payment_handler, CLIENT_PAY)
 
-    # Contractor Handlers
+    # CONTRACTOR HANDLERS
     application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)
     application.add_handler(assign.assignment_response_handler)
     application.add_handler(complete.complete_handler, CONTRACTOR_BASIC)
     application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
 
-    # Center Handlers
+    # CENTER HANDLERS
     application.add_handler(orders.orders_handler)
 
     # Global fallback Handler stopping every ConversationHandlers
