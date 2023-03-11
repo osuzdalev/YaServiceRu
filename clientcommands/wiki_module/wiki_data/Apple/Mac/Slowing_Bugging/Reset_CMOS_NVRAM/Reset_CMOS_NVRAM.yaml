@@ -1,0 +1,15 @@
+text:  |-
+  TEST
+
+buttons:
+- - - Pay
+    - A_M_SB_Reset_CMOS_NVRAM_pay
+
+invoice:
+  callback_pattern: A_M_SB_Reset_CMOS_NVRAM_pay
+  title: Reset CMOS NVRAM
+  description: Payment Example using python-telegram-bot
+  payload: A_M_SB_Reset_CMOS_NVRAM_payload
+  currency: RUB
+  price: 1000
+  label: Reset CMOS NVRAM

@@ -18,7 +18,7 @@ constants = load_constants()
 logging.basicConfig(
     format="[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s",
     # Needs to be changed to ERROR
-    level=logging.INFO,
+    level=logging.DEBUG,
     # Write logs to terminal
     stream=sys.stdout,
 )
@@ -33,10 +33,10 @@ GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
     persistence = PicklePersistence(filepath="./resources/persistence")
-    application = Application.builder() \
-        .token(constants.get("TOKEN", "DEV_BOT")) \
-        .persistence(persistence) \
-        .arbitrary_callback_data(True) \
+    application = Application.builder()\
+        .token(constants.get("TOKEN", "DEV_BOT"))\
+        .persistence(persistence)\
+        .arbitrary_callback_data(True)\
         .build()
 
     # DATA COLLECTION

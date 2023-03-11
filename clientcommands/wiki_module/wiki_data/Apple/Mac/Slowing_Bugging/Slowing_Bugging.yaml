@@ -2,4 +2,4 @@ text: Slowing / Bugging
 
 buttons:
 - - - Reset CMOS NVRAM
-    - A_C_SB_Reset_CMOS_NVRAM
+    - A_M_SB_Reset_CMOS_NVRAM

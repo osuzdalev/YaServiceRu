@@ -1,7 +1,0 @@
-text: Computer
-
-buttons:
-- - - BIOS
-    - A_C_BIOS
-  - - Slowing / Bugging
-    - A_C_Slowing_Bugging

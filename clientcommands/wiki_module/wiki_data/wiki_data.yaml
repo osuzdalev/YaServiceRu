@@ -2,10 +2,28 @@
 
 Apple: !include Apple/Apple.yaml
 
-A_Computer: !include Apple/Computer/Computer.yaml
+A_Mac: !include Apple/Mac/Mac.yaml
 
-A_C_BIOS: !include Apple/Computer/BIOS/BIOS.yaml
+A_M_Slowing_Bugging: !include Apple/Mac/Slowing_Bugging/Slowing_Bugging.yaml
 
-A_C_Slowing_Bugging: !include Apple/Computer/Slowing_Bugging/Slowing_Bugging.yaml
+A_M_SB_Reset_CMOS_NVRAM: !include Apple/Mac/Slowing_Bugging/Reset_CMOS_NVRAM/Reset_CMOS_NVRAM.yaml
 
-A_C_SB_Reset_CMOS_NVRAM: !include Apple/Computer/Slowing_Bugging/Reset_CMOS_NVRAM/Reset_CMOS_NVRAM.yaml
+A_M_Installation_Recovery: !include Apple/Mac/Installation_Recovery/Installation_Recovery.yaml
+
+A_M_Bootcamp_Parallels: !include Apple/Mac/Bootcamp_Parallels/Bootcamp_Parallels.yaml
+
+A_M_Devices_Periphery: !include Apple/Mac/Devices_Periphery/Devices_Periphery.yaml
+
+A_M_System_Settings: !include Apple/Mac/System_Settings/System_Settings.yaml
+
+A_M_Saving_Data: !include Apple/Mac/Saving_Data/Saving_Data.yaml
+
+A_M_Network_Internet: !include Apple/Mac/Network_Internet/Network_Internet.yaml
+
+A_M_Security: !include Apple/Mac/Security/Security.yaml
+
+A_M_Display_Graphics: !include Apple/Mac/Display_Graphics/Display_Graphics.yaml
+
+A_M_Terminal: !include Apple/Mac/Terminal/Terminal.yaml
+
+Windows: !include Windows/Windows.yaml

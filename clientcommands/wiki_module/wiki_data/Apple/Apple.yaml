@@ -1,5 +1,5 @@
-text: Apple
+text: Select a device
 
 buttons:
-- - - Computer # Text on Button
-    - A_Computer # Link ID / URL
+- - - Mac # Text on Button
+    - A_Mac # Link ID / URL

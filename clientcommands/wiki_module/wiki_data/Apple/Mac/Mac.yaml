@@ -1,0 +1,23 @@
+text: Mac
+
+buttons:
+- - - Торможение и Зависание
+    - A_M_Slowing_Bugging
+  - - Установка, Восстановление и Обновление
+    - A_M_Installation_Recovery
+- - - Bootcamp / Parallels
+    - A_M_Bootcamp_Parallels
+  - - Устройства и Периферия
+    - A_M_Devices_Periphery
+- - - Системные Настройки
+    - A_M_System_Settings
+  - - Хранения и Данные
+    - A_M_Saving_Data
+- - - Сеть / Интернет
+    - A_M_Network_Internet
+  - - Защита и Безопастность
+    - A_M_Security
+- - - Дисплей и Графика
+    - A_M_Display_Graphics
+  - - Терминал
+    - A_M_Terminal

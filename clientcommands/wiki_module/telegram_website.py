@@ -5,13 +5,16 @@ import yaml
 import os
 import pprint
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, LabeledPrice
 from telegram.constants import ParseMode
 from telegram.ext import (
     ContextTypes,
     CallbackQueryHandler,
     ConversationHandler
 )
+
+from resources.constants_loader import load_constants
+constants = load_constants()
 
 logger_website = logging.getLogger(__name__)
 
@@ -46,63 +49,106 @@ class Website:
         self.state = {self.state_name: []}
 
     def parse(self, config_file):
-        """ Parses a YAML and generates the pages of the website from the data"""
-        # Generates the pages from the yaml file
+        """ Parses a YAML file and generates the pages of the website from the data
+        Format of Page
+        text: Text to be displayed on the page
+
+        buttons:
+        - - - Button_1_text
+           - Button_1_callback_data
+         - - Button_2_text
+           - Button_2_callback_data
+        - - - Button_3_text
+           - Button_3_callback_data
+         - - Button_4_text
+           - Button_4_callback_data
+        ...
+
+        Category names have to be abbreviated as you go down the tree because after a certain length
+        the callback_data name are troncated by PTB.
+        For example A_C_Slowing_Bugging and A_C_Slowing_Bugging_SOMETHING. When calling A_C_Slowing_Bugging_SOMETHING,
+        the picked-up callback query will actually be A_C_Slowing_Bugging.
+        This gives a "message is the same, nothing to update" error."""
         with open(config_file, mode="rb") as fp:
             config = yaml.load(fp, Loader=Loader)
 
+        # Generates the pages and handler callbacks from the yaml file
         for name, info in config.items():
             back_button = InlineKeyboardButton(text="<< BACK", callback_data="BACK")
             cancel_button = InlineKeyboardButton(text="CANCEL", callback_data="CANCEL")
             # Check if there are buttons on the page and parse them accordingly
             try:
                 buttons = info['buttons']
-                keyboard = []
-                for i in range(len(buttons)):
-                    button_row = []
-                    for j in range(len(buttons[i])):
-                        button = InlineKeyboardButton(text=buttons[i][j][0], callback_data=buttons[i][j][1])
-                        button_row.append(button)
-                    keyboard.append(button_row)
-                # Standardise the page for navigation by adding the CANCEL and BACK buttons at the end
-                keyboard.append([back_button, cancel_button])
+                keyboard = [[InlineKeyboardButton(text=buttons[i][j][0], callback_data=buttons[i][j][1]) for j in
+                             range(len(buttons[i]))] for i in range(len(buttons))]
             except KeyError:
-                keyboard = [[back_button, cancel_button]]
+                keyboard = []
+            # Standardise the page for navigation by adding the CANCEL and BACK buttons at the end
+            keyboard.append([back_button, cancel_button])
 
             self.pages[name] = Page(name, info["text"], keyboard)
 
-        # Generates the handler callback for each page
-        for page in self.pages:
-            if page == "<< BACK" or page == "CANCEL":
+            # !!! NEEDED OTHERWISE DOES NOT WORK BECAUSE PYTHON... !!!
+            page = copy.deepcopy(self.pages[name])
+
+            # Check if page has an Invoice option and generate the invoice handler callback accordingly
+            try:
+                invoice = copy.deepcopy(info["invoice"])
+
+                async def invoice_handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page, invoice=invoice) -> None:
+                    """Sends an invoice without shipping-payment."""
+                    logger_website.info("invoice_handler_callback()")
+
+                    logger_website.debug("This is the invoice_handler_callback for the page {}".format(page.name))
+                    logger_website.debug("My buttons are: {}".format(page.keyboard))
+
+                    chat_id = update.effective_chat.id
+                    title = invoice["title"]
+                    description = invoice["description"]
+                    # select a payload just for you to recognize its the donation from your bot
+                    payload = invoice["payload"]
+                    currency = invoice["currency"]
+                    price = invoice["price"]
+                    label = invoice["label"]
+                    # price * 100 to include 2 decimal points
+                    prices = [LabeledPrice(label, price * 100)]
+
+                    # optionally pass need_name=True, need_phone_number=True,
+                    # need_email=True, need_shipping_address=True, is_flexible=True
+                    await context.bot.send_invoice(
+                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA_TEST"),
+                        currency, prices
+                    )
+
+                # Add the handler callback to the state
+                self.state[self.state_name].append(CallbackQueryHandler(invoice_handler_callback, pattern=invoice["callback_pattern"]))
+            except KeyError:
                 pass
-            else:
-                page_name = copy.deepcopy(page)
 
-                async def handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE,
-                                           page_name=page_name) -> str:
+            # Generates the "Navigation" handler callback for the page
 
-                    query = update.callback_query
-                    await query.answer()
+            async def handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page) -> str:
+                query = update.callback_query
+                await query.answer()
 
-                    logger_website.debug("This is the handler callback for the page {}".format(page_name))
-                    logger_website.debug("I'm listening to the callback_data {}".format(update.callback_query.data))
-                    logger_website.debug("My buttons are: {}".format(self.pages[page_name].keyboard))
+                logger_website.debug("This is the handler callback for the page {}".format(page.name))
+                logger_website.debug("I'm listening to the callback_data {}".format(update.callback_query.data))
+                logger_website.debug("My buttons are: {}".format(page.keyboard))
 
-                    # Save the current page in browsing history
-                    browser_history = update.effective_user.id
-                    if self.browser_history_name in context.user_data:
-                        browser_history = context.user_data[self.browser_history_name]
-                    browser_history.append(page_name)
-                    logger_website.debug(browser_history)
+                # Save the current page in browsing history
+                browser_history = update.effective_user.id
+                if self.browser_history_name in context.user_data:
+                    browser_history = context.user_data[self.browser_history_name]
+                browser_history.append(page.name)
+                logger_website.debug(browser_history)
 
-                    await query.edit_message_text(text=self.pages[page_name].text,
-                                                  reply_markup=InlineKeyboardMarkup(self.pages[page_name].keyboard),
-                                                  parse_mode=ParseMode.MARKDOWN)
+                await query.edit_message_text(text=page.text,
+                                              reply_markup=InlineKeyboardMarkup(page.keyboard),
+                                              parse_mode=ParseMode.MARKDOWN)
 
-                    return self.state_name
-
-                self.state[self.state_name].append(
-                    CallbackQueryHandler(copy.deepcopy(handler_callback), pattern=page_name))
+                return self.state_name
+            # Add the handler callback to the state
+            self.state[self.state_name].append(CallbackQueryHandler(handler_callback, pattern=page.name))
 
     def set_standard_handler_callbacks(self):
         """Add the "BACK" and "CANCEL" functionality as well"""
@@ -148,7 +194,3 @@ class Website:
     def add_page(self, page_name, page, callback):
         self.pages[page_name] = page
         self.state[self.state_name].append(CallbackQueryHandler(callback, pattern=page_name))
-
-    def add_callback_query_handler(self, callback_function, callback_data):
-        """Add a partial CallbackQueryHandler to the handlers dict of the website"""
-        self.state[self.state_name].append(CallbackQueryHandler(callback_function, callback_data))
