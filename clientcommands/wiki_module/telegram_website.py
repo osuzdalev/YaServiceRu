@@ -35,9 +35,10 @@ Loader.add_constructor('!include', Loader.include)
 
 
 class Page:
-    def __init__(self, name: str, text: str, keyboard: List[List]):
+    def __init__(self, name: str, text: str, messages: dict, keyboard: List[List]):
         self.name = name
         self.text = text
+        self.messages = messages
         self.keyboard = keyboard
 
 
@@ -47,6 +48,9 @@ class Website:
         self.state_name = state_name
         self.pages = {}
         self.state = {self.state_name: []}
+
+    def format_title(self, title: str) -> str:
+        return "__*" + title + "*__"
 
     def parse(self, config_file):
         """ Parses a YAML file and generates the pages of the website from the data
@@ -72,7 +76,7 @@ class Website:
         with open(config_file, mode="rb") as fp:
             config = yaml.load(fp, Loader=Loader)
 
-        # Generates the pages and handler callbacks from the yaml file
+        # Generates the pages from the yaml file
         for name, info in config.items():
             back_button = InlineKeyboardButton(text="<< BACK", callback_data="BACK")
             cancel_button = InlineKeyboardButton(text="CANCEL", callback_data="CANCEL")
@@ -86,7 +90,16 @@ class Website:
             # Standardise the page for navigation by adding the CANCEL and BACK buttons at the end
             keyboard.append([back_button, cancel_button])
 
-            self.pages[name] = Page(name, info["text"], keyboard)
+            # Check if there are annex messages to be sent with the page
+            try:
+                messages = info["messages"]
+            except KeyError:
+                messages = {}
+
+            # Make title bold for Markdown V2
+            title = self.format_title(info["text"])
+
+            self.pages[name] = Page(name, title, messages, keyboard)
 
             # !!! NEEDED OTHERWISE DOES NOT WORK BECAUSE PYTHON... !!!
             page = copy.deepcopy(self.pages[name])
@@ -142,9 +155,22 @@ class Website:
                 browser_history.append(page.name)
                 logger_website.debug(browser_history)
 
+                # Checking if there are annex messages to be sent also
+                if page.messages:
+                    for key in page.messages:
+                        if page.messages[key][0] == "text":
+                            message = await context.bot.send_message(chat_id=update.effective_chat.id,
+                                                           text=page.messages[key][1], parse_mode=ParseMode.MARKDOWN_V2)
+                            context.user_data["Annexe_Messages"].append(message)
+                        elif page.messages[key][0] == "picture":
+                            message = await context.bot.send_photo(chat_id=update.effective_chat.id,
+                                                         photo=page.messages[key][1], parse_mode=ParseMode.MARKDOWN_V2)
+                            context.user_data["Annexe_Messages"].append(message)
+                        print("ANNEXE MESSAGES: ", context.user_data["Annexe_Messages"])
+
                 await query.edit_message_text(text=page.text,
                                               reply_markup=InlineKeyboardMarkup(page.keyboard),
-                                              parse_mode=ParseMode.MARKDOWN)
+                                              parse_mode=ParseMode.MARKDOWN_V2)
 
                 return self.state_name
             # Add the handler callback to the state
@@ -181,8 +207,13 @@ class Website:
             logger_website.debug(browser_history)
             # Determine where clients wants to go
             target_handler_callback = browser_history[-1]
+            # Delete the messages from the answer to avoid clutter
+            print("ANNEXE MESSAGES BEFORE: ", len(context.user_data["Annexe_Messages"]))
+            for message in context.user_data["Annexe_Messages"]:
+                await message.delete()
+            context.user_data["Annexe_Messages"] = []
+            print("ANNEXE MESSAGES AFTER: ", len(context.user_data["Annexe_Messages"]))
             # Generate appropriate response
-            # TODO
             await query.edit_message_text(text=self.pages[target_handler_callback].text,
                                           reply_markup=InlineKeyboardMarkup(self.pages[target_handler_callback].keyboard),
                                           parse_mode=ParseMode.MARKDOWN)

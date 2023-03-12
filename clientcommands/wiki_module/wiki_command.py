@@ -27,12 +27,13 @@ STATE = "WIKI"
 BROWSER_HISTORY_NAME = "WIKI_HISTORY"
 ENTRY_PAGE_NAME = "Wiki"
 ENTRY_PAGE_TEXT = "Select a Brand/OS"
+ENTRY_PAGE_MESSAGES = {}
 ENTRY_PAGE_KEYBOARD = [
     [InlineKeyboardButton(text="Apple", callback_data="Apple")],
     [InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)]
 ]
 ENTRY_PAGE_MARKUP = InlineKeyboardMarkup(ENTRY_PAGE_KEYBOARD)
-entry_page = Page(ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_KEYBOARD)
+entry_page = Page(ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD)
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
@@ -44,6 +45,7 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     # Context history for the user's session
     device_context = {"OS": '', "Device": '', "Category": '', "Problem": ''}
     context.user_data["Device_Context"] = device_context
+    context.user_data["Annexe_Messages"] = []
 
     # Create a browser history for the user's session
     context.user_data[BROWSER_HISTORY_NAME] = [ENTRY_PAGE_NAME]
@@ -82,6 +84,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
 async def cancel_command(_: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     logger_wiki.info("cancel_command()")
     context.user_data["in_conversation"] = ""
+    context.user_data["Annexe_Messages"] = []
     return ConversationHandler.END
 
 # Generating the telegram_website object from yaml data file
