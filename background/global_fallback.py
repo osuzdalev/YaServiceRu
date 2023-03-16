@@ -11,8 +11,17 @@ request = "/request"
 wiki = "/wiki"
 pay = "/pay"
 cancel = "/cancel"
+chat = "/chat"
+chat_stop = "/chat_stop"
 
-customer_commands = [start, request, wiki, pay, cancel]
+customer_commands = [start, request, wiki, pay, cancel, chat, chat_stop]
+
+# Customer ReplyKeyboardButtons
+wiki_button = "📖Вики"
+request_button = "🤓Специалист"
+cancel_button = "❌Отменить"
+
+customer_buttons = [wiki_button, request_button, cancel_button]
 
 # Contractor commands
 assign = "/assign \d*"
@@ -25,11 +34,8 @@ contractor_commands = [assign, complete, commands]
 orders = "/orders"
 center_commands = [orders]
 
-commands = customer_commands + contractor_commands + center_commands
-commands_re = ""
-for i in range(len(commands)):
-    commands_re += "\\" + commands[i] + "|"
-commands_re = r"^(" + commands_re + ")$"
+ignored_messages = customer_commands + customer_buttons + contractor_commands + center_commands
+ignored_messages_re = r"^(" + "|".join("\\" + message for message in ignored_messages) + ")$"
 
 
 async def unknown_command(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
@@ -37,4 +43,4 @@ async def unknown_command(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text("Incorrect command")
 
 
-global_fallback_handler = MessageHandler(filters.COMMAND & (~ filters.Regex(commands_re)), unknown_command)
+global_fallback_handler = MessageHandler(filters.COMMAND & (~ filters.Regex(ignored_messages_re)), unknown_command)

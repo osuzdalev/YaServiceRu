@@ -166,7 +166,6 @@ class Website:
                             message = await context.bot.send_photo(chat_id=update.effective_chat.id,
                                                          photo=page.messages[key][1], parse_mode=ParseMode.MARKDOWN_V2)
                             context.user_data["Annexe_Messages"].append(message)
-                        print("ANNEXE MESSAGES: ", context.user_data["Annexe_Messages"])
 
                 await query.edit_message_text(text=page.text,
                                               reply_markup=InlineKeyboardMarkup(page.keyboard),
@@ -208,11 +207,9 @@ class Website:
             # Determine where clients wants to go
             target_handler_callback = browser_history[-1]
             # Delete the messages from the answer to avoid clutter
-            print("ANNEXE MESSAGES BEFORE: ", len(context.user_data["Annexe_Messages"]))
             for message in context.user_data["Annexe_Messages"]:
                 await message.delete()
             context.user_data["Annexe_Messages"] = []
-            print("ANNEXE MESSAGES AFTER: ", len(context.user_data["Annexe_Messages"]))
             # Generate appropriate response
             await query.edit_message_text(text=self.pages[target_handler_callback].text,
                                           reply_markup=InlineKeyboardMarkup(self.pages[target_handler_callback].keyboard),

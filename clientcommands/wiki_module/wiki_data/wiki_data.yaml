@@ -10,6 +10,8 @@ A_M_SB_Reset_CMOS_NVRAM: !include Apple/Mac/Slowing_Bugging/Reset_CMOS_NVRAM/Res
 
 A_M_Installation_Recovery: !include Apple/Mac/Installation_Recovery/Installation_Recovery.yaml
 
+A_M_IR_Update_MacOS: !include Apple/Mac/Installation_Recovery/Update_MacOS/Update_MacOS.yaml
+
 A_M_Bootcamp_Parallels: !include Apple/Mac/Bootcamp_Parallels/Bootcamp_Parallels.yaml
 
 A_M_Devices_Periphery: !include Apple/Mac/Devices_Periphery/Devices_Periphery.yaml

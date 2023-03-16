@@ -6,7 +6,7 @@ import sys
 from telegram.ext import Application, PicklePersistence
 
 from resources.constants_loader import load_constants
-from clientcommands import request as req, start, payment
+from clientcommands import request as req, start, payment, chatgpt
 from clientcommands.wiki_module import wiki_command
 from contractorcommands import assign, complete, commands
 from centercommands import orders
@@ -66,6 +66,13 @@ if __name__ == "__main__":
     application.add_handler(payment.precheckout_handler, CLIENT_PAY)
     # Notify user of successful payment
     application.add_handler(payment.successful_payment_handler, CLIENT_PAY)
+
+    # CHATGPT
+    application.add_handler(chatgpt.chatgpt_handler_command, CLIENT_BASIC)
+    application.add_handler(chatgpt.chatgpt_handler_message, CLIENT_BASIC)
+    application.add_handler(chatgpt.chatgpt_request_handler, CLIENT_BASIC)
+    application.add_handler(chatgpt.chatgpt_stop_handler_command, CLIENT_BASIC)
+
 
     # CONTRACTOR HANDLERS
     application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)
