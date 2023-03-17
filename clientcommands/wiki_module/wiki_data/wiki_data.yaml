@@ -12,6 +12,8 @@ A_M_Installation_Recovery: !include Apple/Mac/Installation_Recovery/Installation
 
 A_M_IR_Update_MacOS: !include Apple/Mac/Installation_Recovery/Update_MacOS/Update_MacOS.yaml
 
+A_M_IR_Recovery_MacOS: !include Apple/Mac/Installation_Recovery/Recovery_MacOS/Recovery_MacOS.yaml
+
 A_M_Bootcamp_Parallels: !include Apple/Mac/Bootcamp_Parallels/Bootcamp_Parallels.yaml
 
 A_M_Devices_Periphery: !include Apple/Mac/Devices_Periphery/Devices_Periphery.yaml
@@ -29,3 +31,23 @@ A_M_Display_Graphics: !include Apple/Mac/Display_Graphics/Display_Graphics.yaml
 A_M_Terminal: !include Apple/Mac/Terminal/Terminal.yaml
 
 Windows: !include Windows/Windows.yaml
+
+W_Slowing_Bugging: !include Windows/Slowing_Bugging/Slowing_Bugging.yaml
+
+W_Installation_Recovery: !include Windows/Installation_Recovery/Installation_Recovery.yaml
+
+W_Update_Drivers: !include Windows/Update_Drivers/Update_Drivers.yaml
+
+W_Devices_Periphery: !include Windows/Devices_Periphery/Devices_Periphery.yaml
+
+W_System_Settings: !include Windows/System_Settings/System_Settings.yaml
+
+W_Saving_Data: !include Windows/Saving_Data/Saving_Data.yaml
+
+W_Network_Internet: !include Windows/Network_Internet/Network_Internet.yaml
+
+W_Display_Graphics: !include Windows/Display_Graphics/Display_Graphics.yaml
+
+W_Switch_Charge: !include Windows/Switch_Charge/Switch_Charge.yaml
+
+W_BIOS: !include Windows/BIOS/BIOS.yaml

@@ -1,0 +1,5 @@
+text: Дисплей и Графика
+
+buttons:
+- - - TEST # Text on Button
+    - TEST # Link ID / URL

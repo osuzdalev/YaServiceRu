@@ -1,5 +1,23 @@
 text: Windows
 
 buttons:
-- - - TEST # Text on Button
-    - TEST # Link ID / URL
+- - - Торможение и Зависание
+    - W_Slowing_Bugging
+  - - Установка, Восстановление и Обновление
+    - W_Installation_Recovery
+- - - Обновление и Драйверы
+    - W_Update_Drivers
+  - - Устройства и Периферия
+    - W_Devices_Periphery
+- - - Системные Настройки
+    - W_System_Settings
+  - - Хранения и Данные
+    - W_Saving_Data
+- - - Сеть и Интернет
+    - W_Network_Internet
+  - - Дисплей и Графика
+    - W_Display_Graphics
+- - - Включение и Заряжание
+    - W_Switch_Charge
+  - - БИОС
+    - W_BIOS

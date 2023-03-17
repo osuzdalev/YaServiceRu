@@ -1,8 +1,14 @@
 import re
 
 
-def remove_nbsp_char(s: str) -> str:
-    return s.replace(' ', '')
+def remove_random_char(s: str) -> str:
+    s = s.replace("	", '')
+    s = s.replace(' ', '')
+    return s
+
+
+def remove_trailing_newlines(s: str) -> str:
+    return s.rstrip('\n')
 
 
 def replace_dash(s: str) -> str:
@@ -19,8 +25,14 @@ def replace_arrows(s: str) -> str:
     return s.replace('->', ' ➡️')
 
 
+def escape_special_characters(s: str) -> str:
+    special_characters = r"_*[\]()~>#+=-|{}.!"
+    pattern = re.compile(f"[{re.escape(special_characters)}]")
+    return pattern.sub(lambda m: '\\\\' + m.group(0), s)
+
+
 def replace_newlines(s: str) -> str:
-    return s.replace('\n', '\\n')
+    return s.replace('\n', '\n\n\n')
 
 
 def bold_titles(s: str) -> str:
@@ -58,18 +70,20 @@ def surround_with_quotes(s: str) -> str:
 test = "*Сброс `SMC` с Т2 и без чипа (Т2 на устройствах от 2017 г.в.)*\n\n- Выключите ваш `Mac`\n- Зажмите одновременно `control` + `shift` + `option`(`alt`)и удерживайте 7 и 10 секунд\n- Не отпуская кнопок пункта 2 нажмите кнопку включения и удерживайте ещё 7 секунд\n- Включите `Mac` обычным способом \n\n*Сброс `NVRAM` на любом `Mac`*\n\n- Выключите ваш `Mac`\n- Зажмите одновременно `option`(`alt`) + `command` + `R` + `P` и удерживайте 15 секунд\n- Не отпуская кнопок пункта 2 нажмите и отпустите кнопку включения\n\n*Могу измениться пользовательские параметры.*"
 
 
-
 if __name__ == "__main__":
     # Open the file in read mode
     with open('test.txt', 'r') as file:
         # Read the contents of the file
         contents = file.read()
+    print(contents)
 
-    contents = remove_nbsp_char(contents)
+    contents = remove_random_char(contents)
+    contents = remove_trailing_newlines(contents)
     contents = replace_dash(contents)
     contents = replace_arrows(contents)
     contents = format_latin_words(contents)
-    contents = bold_titles(contents)
+    contents = escape_special_characters(contents)
+    #contents = bold_titles(contents)
     contents = replace_newlines(contents)
     contents = surround_with_quotes(contents)
 
