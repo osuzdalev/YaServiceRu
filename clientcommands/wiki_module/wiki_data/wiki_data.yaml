@@ -14,11 +14,15 @@ A_M_IR_Update_MacOS: !include Apple/Mac/Installation_Recovery/Update_MacOS/Updat
 
 A_M_IR_Recovery_MacOS: !include Apple/Mac/Installation_Recovery/Recovery_MacOS/Recovery_MacOS.yaml
 
+A_M_IR_Installation_BootUSB: !include Apple/Mac/Installation_Recovery/Installation_BootUSB/Installation_BootUSB.yaml
+
 A_M_Bootcamp_Parallels: !include Apple/Mac/Bootcamp_Parallels/Bootcamp_Parallels.yaml
 
 A_M_Devices_Periphery: !include Apple/Mac/Devices_Periphery/Devices_Periphery.yaml
 
 A_M_System_Settings: !include Apple/Mac/System_Settings/System_Settings.yaml
+
+A_M_SS_Language_Input: !include Apple/Mac/System_Settings/Language_Input/Language_Input.yaml
 
 A_M_Saving_Data: !include Apple/Mac/Saving_Data/Saving_Data.yaml
 
