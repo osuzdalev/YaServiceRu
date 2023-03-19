@@ -1,1 +1,9 @@
 text: Терминал
+
+buttons:
+- - - Дата и время
+    - A_M_T_Date_Time
+  - - Запуск Терминал
+    - A_M_T_Launch_Terminal
+- - - Повторное Создание Fusion Drive
+    - A_M_T_Fusion_Drive

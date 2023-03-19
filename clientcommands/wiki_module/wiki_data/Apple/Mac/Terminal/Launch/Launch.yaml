@@ -1,0 +1,35 @@
+text: Запуск Терминал
+
+messages:
+  1:
+    - text
+    - "1️⃣  `Программы` или `Launchpad`"
+
+  2:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Launch/1_программы.png
+
+  3:
+    - text
+    - "2️⃣ `Утилиты` или другие
+
+
+    3️⃣ `Терминал` \\(`terminal`\\)"
+
+  4:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Launch/2_утилиты.png
+
+
+buttons:
+- - - Pay
+    - A_M_T_Launch_Terminal_pay
+
+invoice:
+  callback_pattern: A_M_T_Launch_Terminal_pay
+  title: Запуск Терминал
+  description: Payment Example using python-telegram-bot
+  payload: A_M_T_Launch_Terminal_payload
+  currency: RUB
+  price: 1000
+  label: Запуск Терминал

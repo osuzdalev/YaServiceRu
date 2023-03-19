@@ -26,6 +26,8 @@ A_M_SS_Language_Input: !include Apple/Mac/System_Settings/Language_Input/Languag
 
 A_M_Saving_Data: !include Apple/Mac/Saving_Data/Saving_Data.yaml
 
+A_M_SD_Free_Storage: !include Apple/Mac/Saving_Data/Free_Storage/Free_Storage.yaml
+
 A_M_Network_Internet: !include Apple/Mac/Network_Internet/Network_Internet.yaml
 
 A_M_Security: !include Apple/Mac/Security/Security.yaml
@@ -33,6 +35,16 @@ A_M_Security: !include Apple/Mac/Security/Security.yaml
 A_M_Display_Graphics: !include Apple/Mac/Display_Graphics/Display_Graphics.yaml
 
 A_M_Terminal: !include Apple/Mac/Terminal/Terminal.yaml
+
+A_M_T_Date_Time: !include Apple/Mac/Terminal/Date_Time/Date_Time.yaml
+
+A_M_T_Launch_Terminal: !include Apple/Mac/Terminal/Launch/Launch.yaml
+
+A_M_T_Fusion_Drive: !include Apple/Mac/Terminal/Fusion_Drive/Fusion_Drive.yaml
+
+A_M_T_FD_High_Sierra_Plus: !include Apple/Mac/Terminal/Fusion_Drive/High_Sierra_Plus/High_Sierra_Plus.yaml
+
+A_M_T_FD_Mojave_Minus: !include Apple/Mac/Terminal/Fusion_Drive/Mojave_Minus/Mojave_Minus.yaml
 
 Windows: !include Windows/Windows.yaml
 

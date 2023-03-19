@@ -17,7 +17,7 @@ constants = load_constants()
 logging.basicConfig(
     format="[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s",
     # Needs to be changed to ERROR
-    level=logging.DEBUG,
+    level=logging.INFO,
     # Write logs to terminal
     stream=sys.stdout,
 )
