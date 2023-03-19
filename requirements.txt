@@ -4,3 +4,4 @@ pip3.9 install cachetools
 pip3.9 install yaml
 pip3.9 install "python-telegram-bot[callback-data]"
 pip3.9 install openai
+pip3.9 install tiktoken
