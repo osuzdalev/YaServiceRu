@@ -1,5 +1,9 @@
 text: Торможение и Зависание
 
 buttons:
-- - - TEST # Text on Button
-    - TEST # Link ID / URL
+- - - Автозагрузка
+    - W_SB_Auto_Upload
+  - - Греется
+    - W_SB_Heating
+- - - Жесткий Диск ССД
+    - W_SB_Hard_Disk_SSD

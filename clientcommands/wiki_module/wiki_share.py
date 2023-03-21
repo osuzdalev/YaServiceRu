@@ -123,14 +123,14 @@ async def share(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Union[int, None
             )
         ]
     # --------------------------------------------- HARD DISK SSD ------------------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"],
                 input_message_content=InputTextMessageContent(
-                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD"]["Text"],
+                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]

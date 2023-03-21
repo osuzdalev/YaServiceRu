@@ -46,13 +46,29 @@ A_M_T_FD_High_Sierra_Plus: !include Apple/Mac/Terminal/Fusion_Drive/High_Sierra_
 
 A_M_T_FD_Mojave_Minus: !include Apple/Mac/Terminal/Fusion_Drive/Mojave_Minus/Mojave_Minus.yaml
 
+
+# ######################################################################################################################
+
+
 Windows: !include Windows/Windows.yaml
 
 W_Slowing_Bugging: !include Windows/Slowing_Bugging/Slowing_Bugging.yaml
 
+W_SB_Auto_Upload: !include Windows/Slowing_Bugging/Auto_Upload/Auto_Upload.yaml
+
+W_SB_Heating: !include Windows/Slowing_Bugging/Heating/Heating.yaml
+
+W_SB_Hard_Disk_SSD: !include Windows/Slowing_Bugging/Hard_Disk_SSD/Hard_Disk_SSD.yaml
+
 W_Installation_Recovery: !include Windows/Installation_Recovery/Installation_Recovery.yaml
 
 W_Update_Drivers: !include Windows/Update_Drivers/Update_Drivers.yaml
+
+W_UD_Update_Windows_10_11: !include Windows/Update_Drivers/Update_Windows_10_11/Update_Windows_10_11.yaml
+
+W_UD_Disable_Update: !include Windows/Update_Drivers/Disable_Update/Disable_Update.yaml
+
+W_UD_Installing_Updating_Drivers: !include Windows/Update_Drivers/Installing_Updating_Drivers/Installing_Updating_Drivers.yaml
 
 W_Devices_Periphery: !include Windows/Devices_Periphery/Devices_Periphery.yaml
 
