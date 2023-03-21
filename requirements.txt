@@ -5,3 +5,9 @@ pip3.9 install yaml
 pip3.9 install "python-telegram-bot[callback-data]"
 pip3.9 install openai
 pip3.9 install tiktoken
+pip3.9 install matplotlib
+pip3.9 install plotly
+pip3.9 install scipy
+pip3.9 install -U scikit-learn
+pip3.9 install -U pinecone-client
+pip3.9 install datasets
