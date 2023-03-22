@@ -52,6 +52,8 @@ A_M_T_FD_Mojave_Minus: !include Apple/Mac/Terminal/Fusion_Drive/Mojave_Minus/Moj
 
 Windows: !include Windows/Windows.yaml
 
+# ======================================================================================================================
+
 W_Slowing_Bugging: !include Windows/Slowing_Bugging/Slowing_Bugging.yaml
 
 W_SB_Auto_Upload: !include Windows/Slowing_Bugging/Auto_Upload/Auto_Upload.yaml
@@ -60,7 +62,17 @@ W_SB_Heating: !include Windows/Slowing_Bugging/Heating/Heating.yaml
 
 W_SB_Hard_Disk_SSD: !include Windows/Slowing_Bugging/Hard_Disk_SSD/Hard_Disk_SSD.yaml
 
+# ======================================================================================================================
+
 W_Installation_Recovery: !include Windows/Installation_Recovery/Installation_Recovery.yaml
+
+W_IR_Bootable_USB: !include Windows/Installation_Recovery/Bootable_USB/Bootable_USB.yaml
+
+W_IR_No_Disk_Partitions: !include Windows/Installation_Recovery/No_Disk_Partitions/No_Disk_Partitions.yaml
+
+W_IR_OS_Installation: !include Windows/Installation_Recovery/OS_Installation/OS_Installation.yaml
+
+# ======================================================================================================================
 
 W_Update_Drivers: !include Windows/Update_Drivers/Update_Drivers.yaml
 
@@ -76,7 +88,11 @@ W_System_Settings: !include Windows/System_Settings/System_Settings.yaml
 
 W_Saving_Data: !include Windows/Saving_Data/Saving_Data.yaml
 
+# ======================================================================================================================
+
 W_Network_Internet: !include Windows/Network_Internet/Network_Internet.yaml
+
+W_NI_No_Internet_Access: !include Windows/Network_Internet/No_Internet_Access/No_Internet_Access.yaml
 
 W_Display_Graphics: !include Windows/Display_Graphics/Display_Graphics.yaml
 

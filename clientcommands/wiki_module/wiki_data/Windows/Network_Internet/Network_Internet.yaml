@@ -1,5 +1,5 @@
-text: Сеть и Интернет
+text: Сеть / Интернет
 
 buttons:
-- - - TEST # Text on Button
-    - TEST # Link ID / URL
+- - - Без доступа к Интернету
+    - W_NI_No_Internet_Access
