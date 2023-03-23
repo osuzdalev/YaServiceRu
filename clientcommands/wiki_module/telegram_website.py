@@ -1,3 +1,4 @@
+import re
 import logging
 from typing import List
 import copy
@@ -66,13 +67,7 @@ class Website:
            - Button_3_callback_data
          - - Button_4_text
            - Button_4_callback_data
-        ...
-
-        Category names have to be abbreviated as you go down the tree because after a certain length
-        the callback_data name are troncated by PTB.
-        For example A_C_Slowing_Bugging and A_C_Slowing_Bugging_SOMETHING. When calling A_C_Slowing_Bugging_SOMETHING,
-        the picked-up callback query will actually be A_C_Slowing_Bugging.
-        This gives a "message is the same, nothing to update" error."""
+        ..."""
         with open(config_file, mode="rb") as fp:
             config = yaml.load(fp, Loader=Loader)
 
@@ -149,11 +144,14 @@ class Website:
                 logger_website.debug("My buttons are: {}".format(page.keyboard))
 
                 # Save the current page in browsing history
-                browser_history = update.effective_user.id
-                if self.browser_history_name in context.user_data:
-                    browser_history = context.user_data[self.browser_history_name]
+                browser_history = context.user_data[self.browser_history_name]
                 browser_history.append(page.name)
                 logger_website.debug(browser_history)
+
+                # Save the context for request message to expert
+                pattern = r'[_*]+'
+                output_text = re.sub(pattern, '', page.text)
+                context.user_data["Device_Context"].append(output_text)
 
                 # Checking if there are annex messages to be sent also
                 if page.messages:
@@ -203,6 +201,7 @@ class Website:
             browser_history = context.user_data[self.browser_history_name]
             # Delete previous page in history
             browser_history.pop()
+            context.user_data["Device_Context"].pop()
             logger_website.debug(browser_history)
             # Determine where clients wants to go
             target_handler_callback = browser_history[-1]

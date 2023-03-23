@@ -44,8 +44,7 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     the customer to first close the previous one."""
     logger_wiki.info("wiki_module()")
     # Context history for the user's session
-    device_context = {"OS": '', "Device": '', "Category": '', "Problem": ''}
-    context.user_data["Device_Context"] = device_context
+    context.user_data["Device_Context"] = []
     context.user_data["Annexe_Messages"] = []
 
     # Create a browser history for the user's session
