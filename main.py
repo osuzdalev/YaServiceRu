@@ -33,7 +33,7 @@ GLOBAL_FALLBACK = range(-3, 6)
 if __name__ == "__main__":
     persistence = PicklePersistence(filepath="./resources/persistence")
     application = Application.builder()\
-        .token(constants.get("TOKEN", "DEV_BOT"))\
+        .token(constants.get("TOKEN", "MAIN_BOT"))\
         .persistence(persistence)\
         .arbitrary_callback_data(True)\
         .build()

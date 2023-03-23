@@ -69,7 +69,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
     )
 
     # Finally, send the message via telegram
-    await context.bot.send_message(chat_id=constants.get("ID", "OLEG_FR"), text=tg_message, parse_mode=ParseMode.HTML)
+    await context.bot.send_message(chat_id=constants.get("ID", "OLEG_RU"), text=tg_message, parse_mode=ParseMode.HTML)
     # and to the email
     send_email(mail_message)
 

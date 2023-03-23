@@ -1,4 +1,3 @@
-from configparser import ConfigParser
 import datetime
 import logging
 from typing import Tuple, List, Dict, Any
