@@ -18,10 +18,11 @@ customer_commands = [start, request, wiki, pay, cancel, chat, chat_stop]
 
 # Customer ReplyKeyboardButtons
 wiki_button = "📖Вики"
+chatgpt_button = "🤖YaService-GPT"
 request_button = "🤓Специалист"
 cancel_button = "❌Отменить"
 
-customer_replykeyboard_buttons = [wiki_button, request_button, cancel_button]
+customer_replykeyboard_buttons = [wiki_button, chatgpt_button, request_button, cancel_button]
 
 # Customer special messages
 chatgpt_confirm_pay_message = "CONFIRM_CHATGPT_PAYMENT"
