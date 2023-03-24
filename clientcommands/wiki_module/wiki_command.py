@@ -3,14 +3,13 @@ from typing import Union
 import os
 import pprint
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
     CommandHandler,
     MessageHandler,
     filters,
     ContextTypes,
     ConversationHandler,
-    CallbackQueryHandler
 )
 
 from clientcommands.wiki_module.telegram_website import Website, Page
