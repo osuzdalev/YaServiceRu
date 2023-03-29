@@ -19,6 +19,8 @@ constants = load_constants()
 
 logger_website = logging.getLogger(__name__)
 
+BACK = "<< НАЗАД"
+CANCEL = "OTMEНИТЬ"
 
 class Loader(yaml.SafeLoader):
     """Special class that enables parsing the '!include' tag in the yaml files"""
@@ -73,8 +75,8 @@ class Website:
 
         # Generates the pages from the yaml file
         for name, info in config.items():
-            back_button = InlineKeyboardButton(text="<< BACK", callback_data="BACK")
-            cancel_button = InlineKeyboardButton(text="CANCEL", callback_data="CANCEL")
+            back_button = InlineKeyboardButton(text=BACK, callback_data="BACK")
+            cancel_button = InlineKeyboardButton(text=CANCEL, callback_data="CANCEL")
             # Check if there are buttons on the page and parse them accordingly
             try:
                 buttons = info['buttons']

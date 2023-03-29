@@ -19,13 +19,12 @@ logger_wiki = logging.getLogger(__name__)
 DATA_PATH = "wiki_data/wiki_data.yaml"
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), DATA_PATH)
 
-BACK = "BACK"
-CANCEL = "CANCEL"
+CANCEL = "ОТМЕНИТЬ"
 
 STATE = "WIKI"
 BROWSER_HISTORY_NAME = "WIKI_HISTORY"
 ENTRY_PAGE_NAME = "Wiki"
-ENTRY_PAGE_TEXT = "Select a Brand/OS"
+ENTRY_PAGE_TEXT = "Выберите ОС"
 ENTRY_PAGE_MESSAGES = {}
 ENTRY_PAGE_KEYBOARD = [
     [InlineKeyboardButton(text="Apple", callback_data="Apple"),

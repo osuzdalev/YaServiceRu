@@ -31,7 +31,7 @@ async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     await context.bot.sendMessage(constants.get("ID", "DENIS"), order_message_str)
     await context.bot.sendMessage(constants.get("ID", "OLEG_RU"), order_message_str)
-    await update.message.reply_text("Customer service will contact you", reply_markup=default_client_markup)
+    await update.message.reply_text("Служба поддержки свяжется с вами.", reply_markup=default_client_markup)
 
 request_handler = CommandHandler("request", request)
 request_replykeyboard_handler = MessageHandler(filters.Regex(r"^(🤓Специалист)$"), request)

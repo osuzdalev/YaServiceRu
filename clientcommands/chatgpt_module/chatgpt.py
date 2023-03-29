@@ -53,29 +53,28 @@ async def chatgpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         context.user_data["chatgpt_history"] = chatgpt_history_start
         context.user_data["chatgtp_premium_history"] = chatgpt_history_start
 
-        await update.message.reply_text("ChatGPT started. You may write {} messages to the chat. "
-                                        "Please write your 1st question.\n\nTo stop ChatGPT just send /chat_stop"
+        await update.message.reply_text("Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
+                                        "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop"
                                         .format(5 - context.user_data["chatgpt_messages_sent"]))
 
     # Already previously called the chat feature
     elif context.user_data["chatgpt_level"] in (0, 1) and context.user_data["chatgpt_messages_sent"] < 5:
         context.user_data["chatgpt_active"] = True
-        await update.message.reply_text("ChatGPT started. You may write {} messages to the chat. "
-                                        "\n\nTo stop ChatGPT just send /chat_stop"
+        await update.message.reply_text("Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
+                                        "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop"
                                         .format(5 - context.user_data["chatgpt_messages_sent"]))
     # Test if user already used 5 messages
     elif context.user_data["chatgpt_level"] == 1 and context.user_data["chatgpt_messages_sent"] >= 5:
         message_text = (
-            "You've reached the limit of our free LLM interaction\. "
-            "If you'd like to continue receiving assistance from our LLM, "
-            "we offer a pay\-per\-use option that allows for an extended conversation\. "
-            "Please note that this extended conversation will have a limit of _*4096*_ tokens, "
-            "ensuring a focused and efficient interaction\.\n\n"
-            "To proceed with the pay\-per\-use option, please type `{}` "
-            "and follow the payment instructions\. "
-            "If you'd rather not continue, please type `{}` "
-            "and feel free to reach out to us in the future if you need assistance\.".format(CONFIRM_PAYMENT,
-                                                                                             DECLINE_PAYMENT)
+            "Вы достигли лимита бесплатного взаимодействия с нашим LLM. "
+            "Если вы хотите продолжить получать помощь от нашего LLM, мы предлагаем опцию оплаты за использование, "
+            "которая позволяет продлить разговор. "
+            "Пожалуйста, обратите внимание, что этот продленный разговор будет ограничен 4096 символами, "
+            "обеспечивая фокусированное и эффективное взаимодействие. "
+            "\n\nЧтобы продолжить с опцией оплаты за использование, введите {}, "
+            "а затем следуйте инструкциям для оплаты."
+            " Если вы не хотите продолжать, введите {} и не стесняйтесь обращаться к нам в будущем, "
+            "если вам потребуется помощь.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
         )
         await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
 
@@ -108,7 +107,7 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     # Check if the user activated the chat feature
     if not context.user_data.get("chatgpt_active", False):
-        await update.message.reply_text("It seems you did not start the Chat. To do so use the '/chat' command")
+        await update.message.reply_text("Похоже, вы не начали чат. Для этого используйте команду '/chat'")
         return
 
     user_level = context.user_data["chatgpt_level"]
@@ -120,7 +119,7 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                                                                               context.user_data["chatgpt_history"])
         context.user_data["chatgpt_messages_sent"] += 1
         messages_left = 5 - context.user_data["chatgpt_messages_sent"]
-        response += f"\n\n{messages_left} messages left."
+        response += f"\n\nОсталось {messages_left} сообщений"
         await update.message.reply_text(response)
     # Previously used the chat feature but still within test limit and not premium yet
     elif user_level == 1 and context.user_data["chatgpt_messages_sent"] < 5 and not context.user_data["chatgpt_premium"]:
@@ -129,29 +128,27 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                                                                               context.user_data["chatgpt_history"])
         context.user_data["chatgpt_messages_sent"] += 1
         messages_left = 5 - context.user_data["chatgpt_messages_sent"]
-        response += f"\n\n{messages_left} messages left."
+        response += f"\n\nОсталось {messages_left} сообщений"
         await update.message.reply_text(response)
 
     # Check if user sent 5 messages but did not upgrade to premium
     elif user_level == 1 and context.user_data["chatgpt_messages_sent"] >= 5 and not context.user_data["chatgpt_premium"]:
         # Propose CHATGPT extension by payment at end of 5 free messages
         message_text = (
-            "You've reached the limit of our free LLM interaction\. "
-            "If you'd like to continue receiving assistance from our LLM, "
-            "we offer a pay\-per\-use option that allows for an extended conversation\. "
-            "Please note that this extended conversation will have a limit of _*4096*_ tokens, "
-            "ensuring a focused and efficient interaction\.\n\n"
-            "To proceed with the pay\-per\-use option, please type `{}` "
-            "and follow the payment instructions\. "
-            "If you'd rather not continue, please type `{}` "
-            "and feel free to reach out to us in the future if you need assistance\.".format(CONFIRM_PAYMENT,
-                                                                                             DECLINE_PAYMENT)
+            "Вы достигли лимита бесплатного взаимодействия с нашим LLM. "
+            "Если вы хотите продолжить получать помощь от нашего LLM, мы предлагаем опцию оплаты за использование, "
+            "которая позволяет продлить разговор. "
+            "Пожалуйста, обратите внимание, что этот продленный разговор будет ограничен 4096 символами, "
+            "обеспечивая фокусированное и эффективное взаимодействие. "
+            "\n\nЧтобы продолжить с опцией оплаты за использование, введите {}, "
+            "а затем следуйте инструкциям для оплаты."
+            " Если вы не хотите продолжать, введите {} и не стесняйтесь обращаться к нам в будущем, "
+            "если вам потребуется помощь.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
         )
         await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
 
     # Check if user paid for chatgpt service
     else:
-        print("PREMIUM")
         # get the response and the updated conversation
         response, context.user_data["chatgpt_premium_history"] = get_chatgpt_response(update.effective_message.text,
                                                                               context.user_data["chatgpt_premium_history"])
@@ -161,7 +158,7 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         remaining_tokens = MAX_TOKEN - used_tokens
 
         # Update the response message to include the remaining tokens
-        response += f"\n\n{remaining_tokens} tokens left."
+        response += f"\n\nОсталось {remaining_tokens} токенов"
 
         await update.message.reply_text(response)
 
@@ -172,7 +169,7 @@ async def chatgpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     chat_id = update.message.chat_id
     title = "CHATGPT EXTENDED"
-    description = "Increase the conversation length to 4096 tokens"
+    description = "Увеличить длину разговора до 4096 токенов."
     # select a payload just for you to recognize its the donation from your bot
     payload = EXTENDED_PAYLOAD
     currency = "RUB"
@@ -202,6 +199,7 @@ async def chatgpt_successful_payment_callback(update: Update, context: ContextTy
     """Confirms the successful payment."""
     logger_chatgpt.info("successful_payment_callback()")
 
+    context.user_data["chatgpt_premium"] = True
     context.user_data["chatgtp_premium_history"] = context.user_data["chatgtp_history"]
     context.user_data["chatgtp_history"] = chatgpt_history_start
 
@@ -212,9 +210,8 @@ async def chatgpt_payment_no(update: Update, context: ContextTypes.DEFAULT_TYPE)
     """Handles user's response to not pay for more interactions."""
     logger_chatgpt.info("chatgpt_payment_no()")
 
-    context.user_data["chatgpt_premium"] = True
-
-    await update.message.reply_text("Chatgpt extended. Thank you for using our service!")
+    await update.message.reply_text("Ваш ответ был получен. Спасибо за использование нашего сервиса!"
+                                    "Пожалуйста, не стесняйтесь возвращаться в любое время!")
 
 
 async def chatgpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -223,9 +220,10 @@ async def chatgpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     logger_chatgpt.info("chatgpt_stop()")
 
     # Check if there is a chat to stop
-    if context.user_data["chatgpt_active"]:
+    if context.user_data.get("chatgpt_active", False):
         context.user_data["chatgpt_active"] = False
-        await update.message.reply_text("ChatGPT stopped. Your messages will no longer be sent to YaService-GPT.")
+        await update.message.reply_text("YaService-GPT остановлен. "
+                                        "Ваши сообщения больше не будут отправляться на YaService-GPT.")
 
 
 chatgpt_handler_command = CommandHandler("chat", chatgpt_start)
