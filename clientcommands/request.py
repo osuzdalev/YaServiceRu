@@ -30,6 +30,7 @@ async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     order_message_str = helpers.get_order_message_str(OrderID, user_data, device_context)
 
     await context.bot.sendMessage(constants.get("ID", "DENIS"), order_message_str)
+    await context.bot.sendMessage(constants.get("ID", "OLEG_RU"), order_message_str)
     await update.message.reply_text("Customer service will contact you", reply_markup=default_client_markup)
 
 request_handler = CommandHandler("request", request)

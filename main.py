@@ -9,7 +9,7 @@ from resources.constants_loader import load_constants
 from clientcommands import request as req, start
 from clientcommands.chatgpt_module import chatgpt
 from clientcommands.wiki_module import wiki_command
-from contractorcommands import assign, complete, commands
+#from contractorcommands import assign, complete, commands
 from centercommands import orders
 from background import global_fallback, data_collector, error_logging
 
@@ -33,8 +33,7 @@ CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
 GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
-
-    persistence = PicklePersistence(filepath="./resources/persistence")
+    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "LOCAL_PERSISTENCE"))
     application = Application.builder()\
         .token(constants.get("TOKEN", "MAIN_BOT"))\
         .persistence(persistence)\
@@ -71,10 +70,10 @@ if __name__ == "__main__":
     application.add_handler(chatgpt.chatgpt_stop_handler_message, CLIENT_BASIC)
 
     # CONTRACTOR HANDLERS
-    application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)
-    application.add_handler(assign.assignment_response_handler)
-    application.add_handler(complete.complete_handler, CONTRACTOR_BASIC)
-    application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
+    # application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)
+    # application.add_handler(assign.assignment_response_handler)
+    # application.add_handler(complete.complete_handler, CONTRACTOR_BASIC)
+    # application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
 
     # CENTER HANDLERS
     application.add_handler(orders.orders_handler)

@@ -7,7 +7,7 @@ from typing import List, Tuple
 from resources.constants_loader import load_constants
 
 constants = load_constants()
-DB_FILEPATH = constants.get("FILEPATH", "SERVER_DATABASE")
+DB_FILEPATH = constants.get("FILEPATH", "LOCAL_DATABASE")
 
 logger_tl_db = logging.getLogger(__name__)
 
