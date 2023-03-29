@@ -31,8 +31,8 @@ git secret reveal
 
 # 7) Move files from repo to other folder for safety
 ```bash
-mv /home/yaserviceru/Desktop/YaServiceRu/yaserviceru_persistence \
-/home/yaserviceru/Desktop/YaServiceRu/yaserviceru_db.sqlite \
+mv /home/yaserviceru/Desktop/YaServiceRu/resources/yaserviceru_persistence \
+/home/yaserviceru/Desktop/YaServiceRu/resources/yaserviceru_db.sqlite \
 /home/yaserviceru/Desktop/
 ```
 

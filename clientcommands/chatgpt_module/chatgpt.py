@@ -79,7 +79,7 @@ async def chatgpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
-def get_chatgpt_response(user_message: str, conversation_history: List) -> tuple[str, list]:
+def get_chatgpt_response(user_message: str, conversation_history: List) -> tuple[str, List]:
     """Sends the requests over the openAI API"""
     logger_chatgpt.info("get_chatgpt_response()")
 
