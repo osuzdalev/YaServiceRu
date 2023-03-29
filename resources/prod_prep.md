@@ -11,14 +11,9 @@ git secret hide
 ```
 
 # 3) Change the constants in files
-main.py -> line 36
-
-background/
-* telegram_database_utils.py -> line 10
-* error_logging.py -> line 72
-* helpers.py -> line 62
-
-clientcommands/request.py -> line 32 - 33
+* main.py -> line 36 
+* background/telegram_database_utils.py -> line 10 
+* clientcommands/request.py -> line 32 - 33
 
 # 4) Push to git
 
