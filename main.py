@@ -33,9 +33,6 @@ CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
 GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
-    with open("/Users/osuz/PycharmProjects/YaServiceRu/resources/persistence", "rb") as f:
-        data = pickle.load(f)
-        pprint.pprint(data)
 
     persistence = PicklePersistence(filepath="./resources/persistence")
     application = Application.builder()\
@@ -86,7 +83,3 @@ if __name__ == "__main__":
     application.add_handler(global_fallback.global_fallback_handler, GLOBAL_FALLBACK)
 
     application.run_polling()
-
-    with open("/Users/osuz/PycharmProjects/YaServiceRu/resources/persistence", "rb") as f:
-        data = pickle.load(f)
-        pprint.pprint(data)

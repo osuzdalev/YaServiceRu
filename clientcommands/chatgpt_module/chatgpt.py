@@ -20,13 +20,17 @@ openai.api_key = constants.get("API", "OPENAI")
 
 INSTRUCTIONS_PATH = "system_instructions.txt"
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), INSTRUCTIONS_PATH)
-
 with open(FULL_PATH, "r") as file:
     instructions = file.read()
-
 chatgpt_history_start = [{"role": "system", "content": instructions}]
 
 MODEL_NAME = "gpt-3.5-turbo"
+TEMPERATURE = 0.6
+MAX_TOKENS = 350
+TOP_P = 0.9
+FREQUENCY_PENALTY = 1.0
+PRESENCE_PENALTY = 0.3
+
 FREE_CHATGPT_LIMIT = 5
 CONFIRM_PAYMENT = "CONFIRM_CHATGPT_PAYMENT"
 DECLINE_PAYMENT = "DECLINE_CHATGPT_PAYMENT"
@@ -85,11 +89,11 @@ def get_chatgpt_response(user_message: str, conversation_history: List) -> tuple
     completion = openai.ChatCompletion.create(
         model=MODEL_NAME,
         messages=conversation_history,
-        temperature=0.6,
-        max_tokens=350,
-        top_p=0.9,
-        frequency_penalty=2.0,
-        presence_penalty=0.3
+        temperature=TEMPERATURE,
+        max_tokens=MAX_TOKENS,
+        top_p=TOP_P,
+        frequency_penalty=FREQUENCY_PENALTY,
+        presence_penalty=PRESENCE_PENALTY
     )
     conversation_history.append({"role": "assistant", "content": completion.choices[0].message["content"]})
 
