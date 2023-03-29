@@ -3,14 +3,13 @@ from typing import Union
 import os
 import pprint
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
     CommandHandler,
     MessageHandler,
     filters,
     ContextTypes,
     ConversationHandler,
-    CallbackQueryHandler
 )
 
 from clientcommands.wiki_module.telegram_website import Website, Page
@@ -44,17 +43,13 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     the customer to first close the previous one."""
     logger_wiki.info("wiki_module()")
     # Context history for the user's session
-    device_context = {"OS": '', "Device": '', "Category": '', "Problem": ''}
-    context.user_data["Device_Context"] = device_context
+    context.user_data["Device_Context"] = []
     context.user_data["Annexe_Messages"] = []
 
     # Create a browser history for the user's session
     context.user_data[BROWSER_HISTORY_NAME] = [ENTRY_PAGE_NAME]
 
-    try:
-        in_conversation = context.user_data['in_conversation']
-    except KeyError:
-        raise KeyError("Command '/start' not yet used by User.")
+    in_conversation = context.user_data.get("in_conversation", '')
 
     # Check if user already in Conversation
     if not (in_conversation == '' or in_conversation == 'wiki_module'):

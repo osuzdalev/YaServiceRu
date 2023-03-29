@@ -29,7 +29,6 @@ def insert_new_user(user_id: int, username: str, first_name: str, last_name: str
         logger_tl_db.error(e)
 
 
-
 def get_user_data(user_id: int) -> None:
     """Stuff"""
     logger_tl_db.info("get_user_data()")
@@ -68,24 +67,29 @@ def get_customer_last_OrderID(user_id: int, contractor_id: int = None) -> int:
         result = cursor.execute("select * from Orders where (CustomerID = ? and ContractorID is ?)",
                                 (user_id, contractor_id))
         orders = result.fetchall()
-        logger_tl_db.info("orders: {}".format(orders))
+        logger_tl_db.debug("orders: {}".format(orders))
 
         return orders[-1][0]
 
 
-def insert_new_order(user_id: int, device_context: dict, default_contractor_id: int = None) -> None:
+def insert_new_order(user_id: int, device_context: List, default_contractor_id: int = None) -> None:
     logger_tl_db.debug("insert_new_order()")
 
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
+
+        # Check the length of device_context and assign default values if necessary
+        os = device_context[0] if len(device_context) > 0 else None
+        device = device_context[1] if len(device_context) > 1 else None
+        category = device_context[2] if len(device_context) > 2 else None
+        problem = device_context[-1] if len(device_context) > 3 else None
+
         try:
             cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
                            "values (?, ?, ?, ?, ?, ?);",
-                           (user_id, default_contractor_id,
-                            device_context["OS"], device_context["Device"],
-                            device_context["Category"], device_context["Problem"]))
+                           (user_id, default_contractor_id, os, device, category, problem))
         except TypeError:
-            logger_tl_db.info("device_context == NoneType")
+            logger_tl_db.info("Device_Context == NoneType")
             cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
                            "values (?, ?, ?, ?, ?, ?);", (user_id, default_contractor_id, None, None, None, None))
         conn.commit()

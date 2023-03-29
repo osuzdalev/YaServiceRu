@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from typing import List
 
@@ -17,9 +18,19 @@ constants = load_constants()
 
 openai.api_key = constants.get("API", "OPENAI")
 
-chatgpt_history_start = [{"role": "system", "content": "You are a helpful assistant."}]
+INSTRUCTIONS_PATH = "system_instructions.txt"
+FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), INSTRUCTIONS_PATH)
+with open(FULL_PATH, "r") as file:
+    instructions = file.read()
+chatgpt_history_start = [{"role": "system", "content": instructions}]
 
 MODEL_NAME = "gpt-3.5-turbo"
+TEMPERATURE = 0.6
+MAX_TOKENS = 350
+TOP_P = 0.9
+FREQUENCY_PENALTY = 1.0
+PRESENCE_PENALTY = 0.3
+
 FREE_CHATGPT_LIMIT = 5
 CONFIRM_PAYMENT = "CONFIRM_CHATGPT_PAYMENT"
 DECLINE_PAYMENT = "DECLINE_CHATGPT_PAYMENT"
@@ -33,16 +44,43 @@ async def chatgpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     as a request to ChatGPT through the API"""
     logger_chatgpt.info("chatgpt_start()")
 
-    context.user_data["chatgpt"] = True
-    context.user_data["chatgpt_history"] = chatgpt_history_start
-    # context.user_data["chatgpt_premium"] = False
-    context.user_data["chatgtp_premium_history"] = chatgpt_history_start
+    # First time calling the chat feature
+    if "chatgpt_level" not in context.user_data:
+        context.user_data["chatgpt_active"] = True
+        context.user_data["chatgpt_level"] = 0
+        context.user_data["chatgpt_messages_sent"] = 0
+        context.user_data["chatgpt_premium"] = False
+        context.user_data["chatgpt_history"] = chatgpt_history_start
+        context.user_data["chatgtp_premium_history"] = chatgpt_history_start
 
-    await update.message.reply_text("ChatGPT started. You may write 5 times to the chat."
-                                    "Please write your 1st question.\n\nTo stop ChatGPT just send \\chat_stop")
+        await update.message.reply_text("ChatGPT started. You may write {} messages to the chat. "
+                                        "Please write your 1st question.\n\nTo stop ChatGPT just send /chat_stop"
+                                        .format(5 - context.user_data["chatgpt_messages_sent"]))
+
+    # Already previously called the chat feature
+    elif context.user_data["chatgpt_level"] in (0, 1) and context.user_data["chatgpt_messages_sent"] < 5:
+        context.user_data["chatgpt_active"] = True
+        await update.message.reply_text("ChatGPT started. You may write {} messages to the chat. "
+                                        "\n\nTo stop ChatGPT just send /chat_stop"
+                                        .format(5 - context.user_data["chatgpt_messages_sent"]))
+    # Test if user already used 5 messages
+    elif context.user_data["chatgpt_level"] == 1 and context.user_data["chatgpt_messages_sent"] >= 5:
+        message_text = (
+            "You've reached the limit of our free LLM interaction\. "
+            "If you'd like to continue receiving assistance from our LLM, "
+            "we offer a pay\-per\-use option that allows for an extended conversation\. "
+            "Please note that this extended conversation will have a limit of _*4096*_ tokens, "
+            "ensuring a focused and efficient interaction\.\n\n"
+            "To proceed with the pay\-per\-use option, please type `{}` "
+            "and follow the payment instructions\. "
+            "If you'd rather not continue, please type `{}` "
+            "and feel free to reach out to us in the future if you need assistance\.".format(CONFIRM_PAYMENT,
+                                                                                             DECLINE_PAYMENT)
+        )
+        await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
-def get_chatgpt_response(user_message: str, conversation_history: List) -> str:
+def get_chatgpt_response(user_message: str, conversation_history: List) -> tuple[str, list]:
     """Sends the requests over the openAI API"""
     logger_chatgpt.info("get_chatgpt_response()")
 
@@ -50,25 +88,70 @@ def get_chatgpt_response(user_message: str, conversation_history: List) -> str:
 
     completion = openai.ChatCompletion.create(
         model=MODEL_NAME,
-        messages=conversation_history
+        messages=conversation_history,
+        temperature=TEMPERATURE,
+        max_tokens=MAX_TOKENS,
+        top_p=TOP_P,
+        frequency_penalty=FREQUENCY_PENALTY,
+        presence_penalty=PRESENCE_PENALTY
     )
     conversation_history.append({"role": "assistant", "content": completion.choices[0].message["content"]})
 
     response = re.sub(r'^\n{2}', '', completion.choices[0].message["content"])
-    return response
+
+    return response, conversation_history
 
 
 async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Starts the Chatgpt service that uses the api"""
     logger_chatgpt.info("chatgpt_request()")
 
-    # Check if the user used the "/chat" command to start send API requests
-    if not context.user_data["chatgpt"]:
-        await update.message.reply_text("It seems you did not start the Chat. To do so, send the '/chat' command")
+    # Check if the user activated the chat feature
+    if not context.user_data.get("chatgpt_active", False):
+        await update.message.reply_text("It seems you did not start the Chat. To do so use the '/chat' command")
         return
 
+    user_level = context.user_data["chatgpt_level"]
+    # First time using the chat feature
+    if user_level == 0:
+        context.user_data["chatgpt_level"] = 1
+        # get the response and the updated conversation
+        response, context.user_data["chatgpt_history"] = get_chatgpt_response(update.effective_message.text,
+                                                                              context.user_data["chatgpt_history"])
+        context.user_data["chatgpt_messages_sent"] += 1
+        messages_left = 5 - context.user_data["chatgpt_messages_sent"]
+        response += f"\n\n{messages_left} messages left."
+        await update.message.reply_text(response)
+    # Previously used the chat feature but still within test limit and not premium yet
+    elif user_level == 1 and context.user_data["chatgpt_messages_sent"] < 5 and not context.user_data["chatgpt_premium"]:
+        # get the response and the updated conversation
+        response, context.user_data["chatgpt_history"] = get_chatgpt_response(update.effective_message.text,
+                                                                              context.user_data["chatgpt_history"])
+        context.user_data["chatgpt_messages_sent"] += 1
+        messages_left = 5 - context.user_data["chatgpt_messages_sent"]
+        response += f"\n\n{messages_left} messages left."
+        await update.message.reply_text(response)
+
+    # Check if user sent 5 messages but did not upgrade to premium
+    elif user_level == 1 and context.user_data["chatgpt_messages_sent"] >= 5 and not context.user_data["chatgpt_premium"]:
+        # Propose CHATGPT extension by payment at end of 5 free messages
+        message_text = (
+            "You've reached the limit of our free LLM interaction\. "
+            "If you'd like to continue receiving assistance from our LLM, "
+            "we offer a pay\-per\-use option that allows for an extended conversation\. "
+            "Please note that this extended conversation will have a limit of _*4096*_ tokens, "
+            "ensuring a focused and efficient interaction\.\n\n"
+            "To proceed with the pay\-per\-use option, please type `{}` "
+            "and follow the payment instructions\. "
+            "If you'd rather not continue, please type `{}` "
+            "and feel free to reach out to us in the future if you need assistance\.".format(CONFIRM_PAYMENT,
+                                                                                             DECLINE_PAYMENT)
+        )
+        await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
+
     # Check if user paid for chatgpt service
-    if context.user_data.get("chatgpt_premium", 0):
+    else:
+        print("PREMIUM")
         # get the response and the updated conversation
         response, context.user_data["chatgpt_premium_history"] = get_chatgpt_response(update.effective_message.text,
                                                                               context.user_data["chatgpt_premium_history"])
@@ -80,29 +163,6 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         # Update the response message to include the remaining tokens
         response += f"\n\n{remaining_tokens} tokens left."
 
-        await update.message.reply_text(response)
-    else:
-        num_requests_sent = (len(context.user_data["chatgpt_history"]) - 1) // 2
-        # Propose CHATGPT extension by payment at end of 5 free messages
-        if num_requests_sent >= FREE_CHATGPT_LIMIT:
-            message_text = (
-                "You've reached the limit of our free LLM interaction\. "
-                "If you'd like to continue receiving assistance from our LLM, "
-                "we offer a pay\-per\-use option that allows for an extended conversation\. "
-                "Please note that this extended conversation will have a limit of _*4096*_ tokens, "
-                "ensuring a focused and efficient interaction\.\n\n"
-                "To proceed with the pay\-per\-use option, please type `{}` "
-                "and follow the payment instructions\. "
-                "If you'd rather not continue, please type `{}` "
-                "and feel free to reach out to us in the future if you need assistance\.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
-            )
-
-            await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
-            context.user_data["chatgpt"] = False
-            return
-
-        # get the response and the updated conversation
-        response, context.user_data["chatgpt_history"] = get_chatgpt_response(update.effective_message.text, context.user_data["chatgpt_history"])
         await update.message.reply_text(response)
 
 
@@ -162,13 +222,14 @@ async def chatgpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     as a request to ChatGPT through the API"""
     logger_chatgpt.info("chatgpt_stop()")
 
-    context.user_data["chatgpt"] = False
-
-    await update.message.reply_text("ChatGPT stopped. Your messages will no longer be sent to ChatGPT.")
+    # Check if there is a chat to stop
+    if context.user_data["chatgpt_active"]:
+        context.user_data["chatgpt_active"] = False
+        await update.message.reply_text("ChatGPT stopped. Your messages will no longer be sent to YaService-GPT.")
 
 
 chatgpt_handler_command = CommandHandler("chat", chatgpt_start)
-chatgpt_handler_message = MessageHandler(filters.Regex(r"^chat$"), chatgpt_start)
+chatgpt_handler_message = MessageHandler(filters.Regex(r"^🤖YaService-GPT$"), chatgpt_start)
 
 chatgpt_request_handler = MessageHandler(filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND),
                                          chatgpt_request)
@@ -181,3 +242,4 @@ chatgpt_payment_no_handler = MessageHandler(filters.Regex(r"^{}$".format(DECLINE
 
 
 chatgpt_stop_handler_command = CommandHandler("chat_stop", chatgpt_stop)
+chatgpt_stop_handler_message = MessageHandler(filters.Regex(r"^❌Отменить$"), chatgpt_stop)

@@ -1,5 +1,7 @@
 import logging.handlers
+import pickle
 import sys
+import pprint
 
 from telegram.ext import Application, PicklePersistence
 
@@ -31,6 +33,7 @@ CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
 GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
+
     persistence = PicklePersistence(filepath="./resources/persistence")
     application = Application.builder()\
         .token(constants.get("TOKEN", "MAIN_BOT"))\
@@ -65,6 +68,7 @@ if __name__ == "__main__":
     application.add_handler(chatgpt.chatgpt_successful_payment_handler, CLIENT_PAY)
     application.add_handler(chatgpt.chatgpt_payment_no_handler, CLIENT_PAY)
     application.add_handler(chatgpt.chatgpt_stop_handler_command, CLIENT_BASIC)
+    application.add_handler(chatgpt.chatgpt_stop_handler_message, CLIENT_BASIC)
 
     # CONTRACTOR HANDLERS
     application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)

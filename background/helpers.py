@@ -26,24 +26,8 @@ def get_order_message_str(OrderID: int, user_data: Any, device_context: Any, pho
                     user_data[2] + '\n' + user_data[3] + '\n' + str(phone_number) + '\n' + \
                     "id:" + str(user_data[0])
 
-    device_info = ""
+    device_info = "\n".join(device_context)
     logger_helpers.debug("device_context: {}".format(device_context))
-    if isinstance(device_context, Dict):
-        if device_context == {"OS": None, "Device": None, "Category": None, "Problem": None}:
-            device_info = "OS: " + "-" + '\n' + \
-                          "Device: " + "-" + '\n' + \
-                          "Category: " + "-" + '\n' + \
-                          "Problem: " + "-"
-        else:
-            device_info = "OS: " + device_context["OS"] + '\n' + \
-                          "Device: " + device_context["Device"] + '\n' + \
-                          "Category: " + device_context["Category"] + '\n' + \
-                          "Problem: " + device_context["Problem"]
-    elif isinstance(device_context, Tuple):
-        device_info = "OS: " + device_context[4] + '\n' + \
-                      "Device: " + device_context[5] + '\n' + \
-                      "Category: " + device_context[6] + '\n' + \
-                      "Problem: " + device_context[7]
 
     order_message_str = "\n\n".join(["Customer service required", "Order# {}".format(str(OrderID)), user_info, device_info])
 
