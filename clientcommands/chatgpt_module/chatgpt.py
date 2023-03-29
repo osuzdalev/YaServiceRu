@@ -1,7 +1,7 @@
 import logging
 import os
 import re
-from typing import List
+from typing import List, Tuple, Dict
 
 import openai
 from telegram import Update, LabeledPrice
@@ -79,7 +79,7 @@ async def chatgpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
-def get_chatgpt_response(user_message: str, conversation_history: List) -> tuple[str, List]:
+def get_chatgpt_response(user_message: str, conversation_history: List[Dict]) -> Tuple[str, List[Dict]]:
     """Sends the requests over the openAI API"""
     logger_chatgpt.info("get_chatgpt_response()")
 
