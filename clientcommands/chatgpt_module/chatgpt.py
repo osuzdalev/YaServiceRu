@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from typing import List
 
@@ -17,7 +18,13 @@ constants = load_constants()
 
 openai.api_key = constants.get("API", "OPENAI")
 
-chatgpt_history_start = [{"role": "system", "content": "You are a helpful assistant."}]
+INSTRUCTIONS_PATH = "system_instructions.txt"
+FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), INSTRUCTIONS_PATH)
+
+with open(FULL_PATH, "r") as file:
+    instructions = file.read()
+
+chatgpt_history_start = [{"role": "system", "content": instructions}]
 
 MODEL_NAME = "gpt-3.5-turbo"
 FREE_CHATGPT_LIMIT = 5
@@ -77,7 +84,12 @@ def get_chatgpt_response(user_message: str, conversation_history: List) -> tuple
 
     completion = openai.ChatCompletion.create(
         model=MODEL_NAME,
-        messages=conversation_history
+        messages=conversation_history,
+        temperature=0.6,
+        max_tokens=350,
+        top_p=0.9,
+        frequency_penalty=2.0,
+        presence_penalty=0.3
     )
     conversation_history.append({"role": "assistant", "content": completion.choices[0].message["content"]})
 

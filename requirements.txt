@@ -11,3 +11,4 @@ pip3.9 install scipy
 pip3.9 install -U scikit-learn
 pip3.9 install -U pinecone-client
 pip3.9 install datasets
+pip3 install weaviate-client
