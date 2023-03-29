@@ -33,7 +33,7 @@ CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
 GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
-    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "LOCAL_PERSISTENCE"))
+    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "SERVER_PERSISTENCE"))
     application = Application.builder()\
         .token(constants.get("TOKEN", "MAIN_BOT"))\
         .persistence(persistence)\
