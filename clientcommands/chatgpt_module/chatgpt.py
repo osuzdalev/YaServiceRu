@@ -66,17 +66,17 @@ async def chatgpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     # Test if user already used 5 messages
     elif context.user_data["chatgpt_level"] == 1 and context.user_data["chatgpt_messages_sent"] >= 5:
         message_text = (
-            "Вы достигли лимита бесплатного взаимодействия с нашим LLM. "
+            "Вы достигли лимита бесплатного взаимодействия с нашим LLM\. "
             "Если вы хотите продолжить получать помощь от нашего LLM, мы предлагаем опцию оплаты за использование, "
-            "которая позволяет продлить разговор. "
+            "которая позволяет продлить разговор\. "
             "Пожалуйста, обратите внимание, что этот продленный разговор будет ограничен 4096 символами, "
-            "обеспечивая фокусированное и эффективное взаимодействие. "
+            "обеспечивая фокусированное и эффективное взаимодействие\. "
             "\n\nЧтобы продолжить с опцией оплаты за использование, введите `{}`, "
-            "а затем следуйте инструкциям для оплаты."
+            "а затем следуйте инструкциям для оплаты\."
             " Если вы не хотите продолжать, введите `{}` и не стесняйтесь обращаться к нам в будущем, "
-            "если вам потребуется помощь.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
+            "если вам потребуется помощь\.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
         )
-        await update.message.reply_text(message_text)
+        await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def get_chatgpt_response(user_message: str, conversation_history: List[Dict]) -> Tuple[str, List[Dict]]:
@@ -135,17 +135,17 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     elif user_level == 1 and context.user_data["chatgpt_messages_sent"] >= 5 and not context.user_data["chatgpt_premium"]:
         # Propose CHATGPT extension by payment at end of 5 free messages
         message_text = (
-            "Вы достигли лимита бесплатного взаимодействия с нашим LLM. "
+            "Вы достигли лимита бесплатного взаимодействия с нашим LLM\. "
             "Если вы хотите продолжить получать помощь от нашего LLM, мы предлагаем опцию оплаты за использование, "
-            "которая позволяет продлить разговор. "
+            "которая позволяет продлить разговор\. "
             "Пожалуйста, обратите внимание, что этот продленный разговор будет ограничен 4096 символами, "
-            "обеспечивая фокусированное и эффективное взаимодействие. "
-            "\n\nЧтобы продолжить с опцией оплаты за использование, введите {}, "
-            "а затем следуйте инструкциям для оплаты."
-            " Если вы не хотите продолжать, введите {} и не стесняйтесь обращаться к нам в будущем, "
-            "если вам потребуется помощь.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
+            "обеспечивая фокусированное и эффективное взаимодействие\. "
+            "\n\nЧтобы продолжить с опцией оплаты за использование, введите `{}`, "
+            "а затем следуйте инструкциям для оплаты\."
+            " Если вы не хотите продолжать, введите `{}` и не стесняйтесь обращаться к нам в будущем, "
+            "если вам потребуется помощь\.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
         )
-        await update.message.reply_text(message_text)
+        await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
 
     # Check if user paid for chatgpt service
     else:
