@@ -76,7 +76,7 @@ async def chatgpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             " Если вы не хотите продолжать, введите {} и не стесняйтесь обращаться к нам в будущем, "
             "если вам потребуется помощь.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
         )
-        await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
+        await update.message.reply_text(message_text)
 
 
 def get_chatgpt_response(user_message: str, conversation_history: List[Dict]) -> Tuple[str, List[Dict]]:
@@ -145,7 +145,7 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             " Если вы не хотите продолжать, введите {} и не стесняйтесь обращаться к нам в будущем, "
             "если вам потребуется помощь.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
         )
-        await update.message.reply_text(message_text, parse_mode=ParseMode.MARKDOWN_V2)
+        await update.message.reply_text(message_text)
 
     # Check if user paid for chatgpt service
     else:
