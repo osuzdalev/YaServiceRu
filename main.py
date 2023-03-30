@@ -22,7 +22,7 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(constants.get("FILEPATH", "SERVER_LOGGER"))
+        logging.FileHandler(constants.get("FILEPATH", "SERVER_LOGGER"), mode='a')
     ]
 )
 logger = logging.getLogger(__name__)
