@@ -1,4 +1,4 @@
-import logging.handlers
+import logging
 import pickle
 import sys
 import pprint
@@ -16,12 +16,14 @@ from background import global_fallback, data_collector, error_logging
 constants = load_constants()
 
 # Enable logging
+
 logging.basicConfig(
     format="[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s",
-    # Needs to be changed to ERROR
     level=logging.INFO,
-    # Write logs to terminal
-    stream=sys.stdout,
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler(constants.get("FILEPATH", "SERVER_LOGGER"))
+    ]
 )
 logger = logging.getLogger(__name__)
 

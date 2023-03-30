@@ -14,9 +14,9 @@ constants = load_constants()
 
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """sends a request (a message with all relevant/context information) to Customer Service"""
-    logger_req.info("request()")
     user = update.message.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
+    logger_req.info("({}, {}, {}) /request".format(user.id, user.name, user.first_name))
 
     device_context = context.user_data.get("Device_Context", [])
 

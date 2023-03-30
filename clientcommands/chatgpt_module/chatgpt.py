@@ -42,7 +42,8 @@ MAX_TOKEN = 4096
 async def chatgpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sets flag in user context that sends every incoming message from the user
     as a request to ChatGPT through the API"""
-    logger_chatgpt.info("chatgpt_start()")
+    user = update.message.from_user
+    logger_chatgpt.info("({}, {}, {}) /chatgpt_start".format(user.id, user.name, user.first_name))
 
     # First time calling the chat feature
     if "chatgpt_level" not in context.user_data:
@@ -103,7 +104,8 @@ def get_chatgpt_response(user_message: str, conversation_history: List[Dict]) ->
 
 async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Starts the Chatgpt service that uses the api"""
-    logger_chatgpt.info("chatgpt_request()")
+    user = update.message.from_user
+    logger_chatgpt.info("({}, {}, {}) /chatgpt_request".format(user.id, user.name, user.first_name))
 
     # Check if the user activated the chat feature
     if not context.user_data.get("chatgpt_active", False):
@@ -165,7 +167,8 @@ async def chatgpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 async def chatgpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles user's response to pay for more interactions."""
-    logger_chatgpt.info("chatgpt_payment_yes()")
+    user = update.message.from_user
+    logger_chatgpt.info("({}, {}, {}) /chatgpt_payment_yes".format(user.id, user.name, user.first_name))
 
     chat_id = update.message.chat_id
     title = "CHATGPT EXTENDED"
@@ -185,7 +188,8 @@ async def chatgpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 async def chatgpt_precheckout_callback(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Answers the PreCheckoutQuery"""
-    logger_chatgpt.info("chatgpt_precheckout_callback()")
+    user = update.message.from_user
+    logger_chatgpt.info("({}, {}, {}) /chatgpt_precheckout_callback".format(user.id, user.name, user.first_name))
     query = update.pre_checkout_query
     # check the payload, is this from your bot?
     if query.invoice_payload != EXTENDED_PAYLOAD:
@@ -197,7 +201,8 @@ async def chatgpt_precheckout_callback(update: Update, _: ContextTypes.DEFAULT_T
 
 async def chatgpt_successful_payment_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Confirms the successful payment."""
-    logger_chatgpt.info("successful_payment_callback()")
+    user = update.message.from_user
+    logger_chatgpt.info("({}, {}, {}) /successful_payment_callback".format(user.id, user.name, user.first_name))
 
     context.user_data["chatgpt_premium"] = True
     context.user_data["chatgtp_premium_history"] = context.user_data["chatgtp_history"]
@@ -206,9 +211,10 @@ async def chatgpt_successful_payment_callback(update: Update, context: ContextTy
     await update.message.reply_text("Thank you for your payment!")
 
 
-async def chatgpt_payment_no(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def chatgpt_payment_no(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles user's response to not pay for more interactions."""
-    logger_chatgpt.info("chatgpt_payment_no()")
+    user = update.message.from_user
+    logger_chatgpt.info("({}, {}, {}) /chatgpt_payment_no".format(user.id, user.name, user.first_name))
 
     await update.message.reply_text("Ваш ответ был получен. Спасибо за использование нашего сервиса!"
                                     "Пожалуйста, не стесняйтесь возвращаться в любое время!")
@@ -217,7 +223,8 @@ async def chatgpt_payment_no(update: Update, context: ContextTypes.DEFAULT_TYPE)
 async def chatgpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Unsets the flag in the user context that sends every incoming message from the user
     as a request to ChatGPT through the API"""
-    logger_chatgpt.info("chatgpt_stop()")
+    user = update.message.from_user
+    logger_chatgpt.info("({}, {}, {}) /chatgpt_stop".format(user.id, user.name, user.first_name))
 
     # Check if there is a chat to stop
     if context.user_data.get("chatgpt_active", False):

@@ -84,14 +84,9 @@ def insert_new_order(user_id: int, device_context: List, default_contractor_id: 
         category = device_context[2] if len(device_context) > 2 else None
         problem = device_context[-1] if len(device_context) > 3 else None
 
-        try:
-            cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
-                           "values (?, ?, ?, ?, ?, ?);",
-                           (user_id, default_contractor_id, os, device, category, problem))
-        except TypeError:
-            logger_tl_db.info("Device_Context == NoneType")
-            cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
-                           "values (?, ?, ?, ?, ?, ?);", (user_id, default_contractor_id, None, None, None, None))
+        cursor.execute("insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
+                       "values (?, ?, ?, ?, ?, ?);",
+                       (user_id, default_contractor_id, os, device, category, problem))
         conn.commit()
 
 
