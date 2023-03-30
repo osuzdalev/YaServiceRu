@@ -18,11 +18,7 @@ async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.message.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
 
-    try:
-        device_context = context.user_data["Device_Context"]
-    except KeyError:
-        logger_req.info("Empty device_context")
-        device_context = []
+    device_context = context.user_data.get("Device_Context", [])
 
     tldb.insert_new_order(user.id, device_context)
 

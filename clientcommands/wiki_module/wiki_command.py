@@ -48,9 +48,8 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     # Create a browser history for the user's session
     context.user_data[BROWSER_HISTORY_NAME] = [ENTRY_PAGE_NAME]
 
-    in_conversation = context.user_data.get("in_conversation", '')
-
     # Check if user already in Conversation
+    in_conversation = context.user_data.get("in_conversation", '')
     if not (in_conversation == '' or in_conversation == 'wiki_module'):
         await update.message.reply_text("Please press /cancel\n"
                                         "or push the 'CANCEL' button in the previous menu before proceeding")
