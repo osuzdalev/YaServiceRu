@@ -1,4 +1,4 @@
 pip3.9 install python-telegram-bot -U --pre
 pip3.9 install "python-telegram-bot[callback-data]"
 pip3.9 install -U scikit-learn
-pip3.9 install telethon cachetools yaml openai tiktoken matplotlib plotly scipy datasets weaviate-client
+pip3.9 install telethon cachetools pyyaml openai tiktoken matplotlib plotly scipy datasets weaviate-client

@@ -9,7 +9,7 @@ from resources.constants_loader import load_constants
 from clientcommands import request as req, start
 from clientcommands.chatgpt_module import chatgpt
 from clientcommands.wiki_module import wiki_command
-#from contractorcommands import assign, complete, commands
+# from contractorcommands import assign, complete, commands
 from centercommands import orders
 from background import global_fallback, data_collector, error_logging
 
