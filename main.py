@@ -22,7 +22,7 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(constants.get("FILEPATH", "SERVER_LOGGER"), mode='a')
+        logging.FileHandler(constants.get("FILEPATH", "LOCAL_LOGGER"), mode='a')
     ]
 )
 logger = logging.getLogger(__name__)
@@ -35,9 +35,9 @@ CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
 GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
-    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "SERVER_PERSISTENCE"))
+    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "LOCAL_PERSISTENCE"))
     application = Application.builder()\
-        .token(constants.get("TOKEN", "MAIN_BOT"))\
+        .token(constants.get("TOKEN", "DEV_BOT"))\
         .persistence(persistence)\
         .arbitrary_callback_data(True)\
         .build()
@@ -61,15 +61,16 @@ if __name__ == "__main__":
     # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
 
     # CHATGPT
-    application.add_handler(chatgpt.chatgpt_handler_command, CLIENT_BASIC)
-    application.add_handler(chatgpt.chatgpt_handler_message, CLIENT_BASIC)
-    application.add_handler(chatgpt.chatgpt_request_handler, CLIENT_BASIC)
-    application.add_handler(chatgpt.chatgpt_payment_yes_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.chatgpt_precheckout_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.chatgpt_successful_payment_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.chatgpt_payment_no_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.chatgpt_stop_handler_command, CLIENT_BASIC)
-    application.add_handler(chatgpt.chatgpt_stop_handler_message, CLIENT_BASIC)
+    application.add_handler(chatgpt.gpt_handler_command, CLIENT_BASIC)
+    application.add_handler(chatgpt.gpt_handler_message, CLIENT_BASIC)
+    application.add_handler(chatgpt.gpt_request_handler, CLIENT_BASIC)
+    application.add_handler(chatgpt.gpt_payment_yes_handler, CLIENT_PAY)
+    application.add_handler(chatgpt.gpt_precheckout_handler, CLIENT_PAY)
+    application.add_handler(chatgpt.gpt_successful_payment_handler, CLIENT_PAY)
+    application.add_handler(chatgpt.gpt_payment_no_handler, CLIENT_PAY)
+    application.add_handler(chatgpt.gpt_stop_handler_command, CLIENT_BASIC)
+    application.add_handler(chatgpt.gpt_stop_handler_message, CLIENT_BASIC)
+    application.add_handler(chatgpt.gpt_get_conversation_tokens_handler, CLIENT_BASIC)
 
     # CONTRACTOR HANDLERS
     # application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)
