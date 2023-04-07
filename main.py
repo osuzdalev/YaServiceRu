@@ -53,8 +53,13 @@ if __name__ == "__main__":
 
     # CLIENT HANDLERS
     application.add_handler(start.start_handler, CLIENT_BASIC)
+
+    # REQUEST
     application.add_handler(req.request_handler, CLIENT_BASIC)
     application.add_handler(req.request_replykeyboard_handler, CLIENT_BASIC)
+    application.add_handler(req.confirm_request_handler, CLIENT_BASIC)
+    application.add_handler(req.cancel_request_handler, CLIENT_BASIC)
+    application.add_handler(req.cancel_request_handler_message, CLIENT_BASIC)
 
     application.add_handler(wiki_command.conversation_handler, CLIENT_WIKI)
     # TODO make the wiki objects compatible with inline queries

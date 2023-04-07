@@ -174,7 +174,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         return
 
     # letting user know the prompt is being handled
-    loading_gif = await update.message.reply_video(open("clientcommands/chatgpt_module/loading-slow-internet.mp4", "rb"))
+    loading_gif = await update.message.reply_video(open("clientcommands/chatgpt_module/loading_gif.mp4", "rb"))
 
     # First time using the chat feature
     if user_level == 0:
@@ -247,25 +247,23 @@ async def gpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     # TODO which payment service?
     await context.bot.send_invoice(
-        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_SBERBANK_TEST"), currency, prices
+        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA_TEST"), currency, prices
     )
 
 
 async def gpt_precheckout_callback(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Answers the PreCheckoutQuery"""
-    user = update.message.from_user
-    logger_chatgpt.info("({}, {}, {}) /gpt_precheckout_callback".format(user.id, user.name, user.first_name))
     query = update.pre_checkout_query
-    # check the payload, is this from your bot?
-    if query.invoice_payload != EXTENDED_PAYLOAD:
-        # answer False pre_checkout_query
-        await query.answer(ok=False, error_message="Something went wrong...")
-    else:
+    # check the payload, is it from this bot and about this service?
+    if query.invoice_payload == EXTENDED_PAYLOAD:
+        print("EXTENDED_PAYLOAD: ", EXTENDED_PAYLOAD)
+        logger_chatgpt.info("/gpt_precheckout_callback")
         await query.answer(ok=True)
 
 
+
 async def gpt_successful_payment_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Confirms the successful payment."""
+    """Handle the successful payment. Set the user to Premium category and update conversation data"""
     user = update.message.from_user
     logger_chatgpt.info("({}, {}, {}) /successful_payment_callback".format(user.id, user.name, user.first_name))
 
