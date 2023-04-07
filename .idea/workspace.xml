@@ -3,9 +3,31 @@
   <component name="ChangeListManager">
     <list default="true" id="22dcc2e0-b986-48d4-90b9-267fe5d3f608" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/chatgpt_module/chatgpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/chatgpt_module/chatgpt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/telegram_website.py" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/telegram_website.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Installation_BootUSB/Installation_BootUSB.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Installation_BootUSB/Installation_BootUSB.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Installation_Recovery.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Installation_Recovery.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Recovery_MacOS/Recovery_MacOS.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Recovery_MacOS/Recovery_MacOS.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Update_MacOS/Update_MacOS.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Update_MacOS/Update_MacOS.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Mac.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Mac.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Saving_Data/Free_Storage/Free_Storage.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Saving_Data/Free_Storage/Free_Storage.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Slowing_Bugging/Reset_CMOS_NVRAM/Reset_CMOS_NVRAM.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Slowing_Bugging/Reset_CMOS_NVRAM/Reset_CMOS_NVRAM.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/System_Settings/Language_Input/Language_Input.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/System_Settings/Language_Input/Language_Input.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Date_Time/Date_Time.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Date_Time/Date_Time.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Fusion_Drive/High_Sierra_Plus/High_Sierra_Plus.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Fusion_Drive/High_Sierra_Plus/High_Sierra_Plus.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Fusion_Drive/Mojave_Minus/Mojave_Minus.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Fusion_Drive/Mojave_Minus/Mojave_Minus.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Launch/Launch.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Terminal/Launch/Launch.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Devices_Periphery/Devices_Periphery.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Devices_Periphery/Devices_Periphery.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Installation_Recovery/Bootable_USB/Bootable_USB.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Installation_Recovery/Bootable_USB/Bootable_USB.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Installation_Recovery/No_Disk_Partitions/No_Disk_Partitions.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Installation_Recovery/No_Disk_Partitions/No_Disk_Partitions.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Installation_Recovery/OS_Installation/OS_Installation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Installation_Recovery/OS_Installation/OS_Installation.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Network_Internet/No_Internet_Access/No_Internet_Access.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Network_Internet/No_Internet_Access/No_Internet_Access.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Slowing_Bugging/Auto_Upload/Auto_Upload.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Slowing_Bugging/Auto_Upload/Auto_Upload.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Slowing_Bugging/Hard_Disk_SSD/Hard_Disk_SSD.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Slowing_Bugging/Hard_Disk_SSD/Hard_Disk_SSD.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Slowing_Bugging/Heating/Heating.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Slowing_Bugging/Heating/Heating.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Disable_Update/Disable_Update.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Disable_Update/Disable_Update.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Installing_Updating_Drivers/Installing_Updating_Drivers.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Installing_Updating_Drivers/Installing_Updating_Drivers.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Update_Windows_10_11/Update_Windows_10_11.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Update_Windows_10_11/Update_Windows_10_11.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,18 +55,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.smartKeys"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/clientcommands/chatgpt_module" />
@@ -196,7 +219,7 @@
       <updated>1680432571230</updated>
       <workItem from="1680432572683" duration="15978000" />
       <workItem from="1680597712313" duration="22637000" />
-      <workItem from="1680863808971" duration="16047000" />
+      <workItem from="1680863808971" duration="19439000" />
     </task>
     <servers />
   </component>
@@ -223,7 +246,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/YaServiceRu$reset_persistence.coverage" NAME="reset_persistence Coverage Results" MODIFIED="1680882620518" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/resources" />
     <SUITE FILE_PATH="coverage/YaServiceRu$queries.coverage" NAME="queries Coverage Results" MODIFIED="1680441879334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/OpenAI/Weaviate" />
-    <SUITE FILE_PATH="coverage/YaServiceRu$main.coverage" NAME="main Coverage Results" MODIFIED="1680883744161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/YaServiceRu$main.coverage" NAME="main Coverage Results" MODIFIED="1680887141893" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/YaServiceRu$Weaviate.coverage" NAME="Weaviate Coverage Results" MODIFIED="1680470954939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/OpenAI/Weaviate" />
     <SUITE FILE_PATH="coverage/YaServiceRu$token_count.coverage" NAME="token_count Coverage Results" MODIFIED="1680823873745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/clientcommands/chatgpt_module" />
     <SUITE FILE_PATH="coverage/YaServiceRu$check_persistence.coverage" NAME="check_persistence Coverage Results" MODIFIED="1680864990703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/resources" />

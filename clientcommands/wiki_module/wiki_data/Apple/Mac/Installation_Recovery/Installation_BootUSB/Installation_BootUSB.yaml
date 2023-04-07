@@ -1,4 +1,4 @@
-text: Установка с загрузочной флешки macOS
+text: &title Установка с загрузочной флешки macOS
 
 messages:
   1:
@@ -38,12 +38,12 @@ messages:
 
 
 buttons:
-- - - Pay
+- - - Оплатить
     - A_M_IR_Installation_BootUSB_pay
 
 invoice:
   callback_pattern: A_M_IR_Installation_BootUSB_pay
-  title: Установка с загрузочной флешки macOS
+  title: *title
   description: Payment Example using python-telegram-bot
   payload: A_M_IR_Installation_BootUSB_payload
   currency: RUB

@@ -190,6 +190,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(response)
         else:
+            await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 "Conversation too long: {} tokens (MAX {})".format(conversation_tokens, LIMIT_CONVERSATION_TOKENS))
 
@@ -206,6 +207,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(response)
         else:
+            await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 "Conversation too long: {} tokens (MAX {})".format(conversation_tokens, LIMIT_CONVERSATION_TOKENS))
 
@@ -226,6 +228,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(response)
         else:
+            await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 "Conversation too long: {} tokens (MAX {})".format(conversation_tokens, LIMIT_CONVERSATION_TOKENS))
 
@@ -236,7 +239,7 @@ async def gpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     logger_chatgpt.info("({}, {}, {}) /gpt_payment_yes".format(user.id, user.name, user.first_name))
 
     chat_id = update.message.chat_id
-    title = "CHATGPT EXTENDED"
+    title = "YaService-GPT Premium"
     description = "Увеличить длину разговора до 4096 токенов."
     # select a payload just for you to recognize its the donation from your bot
     payload = EXTENDED_PAYLOAD
@@ -245,7 +248,6 @@ async def gpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     # price * 100 to include 2 decimal points
     prices = [LabeledPrice(LABEL, price * 100)]
 
-    # TODO which payment service?
     await context.bot.send_invoice(
         chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA_TEST"), currency, prices
     )
@@ -259,7 +261,6 @@ async def gpt_precheckout_callback(update: Update, _: ContextTypes.DEFAULT_TYPE)
         print("EXTENDED_PAYLOAD: ", EXTENDED_PAYLOAD)
         logger_chatgpt.info("/gpt_precheckout_callback")
         await query.answer(ok=True)
-
 
 
 async def gpt_successful_payment_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

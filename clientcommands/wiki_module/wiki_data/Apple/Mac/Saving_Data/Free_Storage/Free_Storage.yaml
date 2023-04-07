@@ -1,4 +1,4 @@
-text: Освободить Место в Хранилище
+text: &title Освободить Место в Хранилище
 
 messages:
   1:
@@ -55,12 +55,12 @@ messages:
 
 
 buttons:
-- - - Pay
+- - - Оплатить
     - A_M_SD_Free_Storage_pay
 
 invoice:
   callback_pattern: A_M_SD_Free_Storage_pay
-  title: Освободить Место в Хранилище
+  title: *title
   description: Payment Example using python-telegram-bot
   payload: A_M_SD_Free_Storage_payload
   currency: RUB

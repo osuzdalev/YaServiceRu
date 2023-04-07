@@ -1,4 +1,4 @@
-text: Отключение Обновлений
+text: &title Отключение Обновлений
 
 messages:
   1:
@@ -30,12 +30,12 @@ messages:
     - clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Disable_Update/1_отключение_обновлений.png
 
 buttons:
-- - - Pay
+- - - Оплатить
     - W_UD_Disable_Update_pay
 
 invoice:
   callback_pattern: W_UD_Disable_Update_pay
-  title: Отключение Обновлений
+  title: *title
   description: Payment Example using python-telegram-bot
   payload: W_UD_Disable_Update_payload
   currency: RUB

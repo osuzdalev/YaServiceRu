@@ -98,7 +98,7 @@ class Website:
 
             self.pages[name] = Page(name, title, messages, keyboard)
 
-            # !!! NEEDED OTHERWISE DOES NOT WORK BECAUSE PYTHON... !!!
+            # NOTE: NEEDED OTHERWISE DOES NOT WORK BECAUSE PYTHON...
             page = copy.deepcopy(self.pages[name])
 
             # Check if page has an Invoice option and generate the invoice handler callback accordingly
@@ -107,7 +107,10 @@ class Website:
 
                 async def invoice_handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page, invoice=invoice) -> None:
                     """Sends an invoice without shipping-payment."""
-                    logger_website.info("invoice_handler_callback()")
+                    query = update.callback_query
+                    user = query.from_user
+                    logger_website.info("({}, {}, {}) /cancel_request".format(user.id, user.name, user.first_name))
+                    await query.answer()
 
                     logger_website.debug("This is the invoice_handler_callback for the page {}".format(page.name))
                     logger_website.debug("My buttons are: {}".format(page.keyboard))
@@ -122,6 +125,12 @@ class Website:
                     label = invoice["label"]
                     # price * 100 to include 2 decimal points
                     prices = [LabeledPrice(label, price * 100)]
+
+                    # Cleaning up
+                    await query.delete_message()
+                    for message in context.user_data["Annexe_Messages"]:
+                        await message.delete()
+                    context.user_data["Annexe_Messages"] = []
 
                     # optionally pass need_name=True, need_phone_number=True,
                     # need_email=True, need_shipping_address=True, is_flexible=True

@@ -1,4 +1,4 @@
-text: Установка или восстановление `ОС`
+text: &title Установка или восстановление `ОС`
 
 messages:
   1:
@@ -68,12 +68,12 @@ messages:
     - "5️⃣  В процессе установки компьютер перезагрузится и далее первая настройка и запуск `Windows`"
 
 buttons:
-- - - Pay
+- - - Оплатить
     - W_IR_OS_Installation_pay
 
 invoice:
   callback_pattern: W_IR_OS_Installation_pay
-  title: Установка или восстановление `ОС`
+  title: *title
   description: Payment Example using python-telegram-bot
   payload: W_IR_OS_Installation_payload
   currency: RUB

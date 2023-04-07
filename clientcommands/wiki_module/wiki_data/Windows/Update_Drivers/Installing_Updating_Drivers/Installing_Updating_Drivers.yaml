@@ -1,4 +1,4 @@
-text: Установка драйверов и обновление для ноутбуков / моноблоков
+text: &title Установка драйверов и обновление для ноутбуков / моноблоков
 
 messages:
   1:
@@ -19,12 +19,12 @@ messages:
     - clientcommands/wiki_module/wiki_data/Windows/Update_Drivers/Installing_Updating_Drivers/1_обновление_драйверов.png
 
 buttons:
-- - - Pay
+- - - Оплатить
     - W_UD_Installing_Updating_Drivers_pay
 
 invoice:
   callback_pattern: W_UD_Installing_Updating_Drivers_pay
-  title: Установка и Обновление Драйверов
+  title: *title
   description: Payment Example using python-telegram-bot
   payload: W_UD_Installing_Updating_Drivers_payload
   currency: RUB

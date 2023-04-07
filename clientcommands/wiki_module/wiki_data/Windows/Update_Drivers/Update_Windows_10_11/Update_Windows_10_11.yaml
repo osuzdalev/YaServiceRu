@@ -1,4 +1,4 @@
-text: Обновление Windows 10 / 11
+text: &title Обновление Windows 10 / 11
 
 messages:
   1:
@@ -36,12 +36,12 @@ messages:
     3️⃣ Выполнить загрузку и установку"
 
 buttons:
-- - - Pay
+- - - Оплатить
     - W_UD_Update_Windows_10_11_pay
 
 invoice:
   callback_pattern: W_UD_Update_Windows_10_11_pay
-  title: Обновление Windows 10 / 11
+  title: *title
   description: Payment Example using python-telegram-bot
   payload: W_UD_Update_Windows_10_11_payload
   currency: RUB
