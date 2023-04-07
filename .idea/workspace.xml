@@ -3,10 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="22dcc2e0-b986-48d4-90b9-267fe5d3f608" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientcommands/chatgpt_module/chatgpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/chatgpt_module/chatgpt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientcommands/chatgpt_module/loading-slow-internet.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/chatgpt_module/loading_gif.mp4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientcommands/request.py" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/request.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Update_MacOS/Update_MacOS.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Apple/Mac/Installation_Recovery/Update_MacOS/Update_MacOS.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Devices_Periphery/Devices_Periphery.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Devices_Periphery/Devices_Periphery.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Network_Internet/No_Internet_Access/No_Internet_Access.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/clientcommands/wiki_module/wiki_data/Windows/Network_Internet/No_Internet_Access/No_Internet_Access.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,7 +196,7 @@
       <updated>1680432571230</updated>
       <workItem from="1680432572683" duration="15978000" />
       <workItem from="1680597712313" duration="22637000" />
-      <workItem from="1680863808971" duration="15281000" />
+      <workItem from="1680863808971" duration="16047000" />
     </task>
     <servers />
   </component>
@@ -224,7 +223,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/YaServiceRu$reset_persistence.coverage" NAME="reset_persistence Coverage Results" MODIFIED="1680882620518" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/resources" />
     <SUITE FILE_PATH="coverage/YaServiceRu$queries.coverage" NAME="queries Coverage Results" MODIFIED="1680441879334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/OpenAI/Weaviate" />
-    <SUITE FILE_PATH="coverage/YaServiceRu$main.coverage" NAME="main Coverage Results" MODIFIED="1680882976148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/YaServiceRu$main.coverage" NAME="main Coverage Results" MODIFIED="1680883744161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/YaServiceRu$Weaviate.coverage" NAME="Weaviate Coverage Results" MODIFIED="1680470954939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/OpenAI/Weaviate" />
     <SUITE FILE_PATH="coverage/YaServiceRu$token_count.coverage" NAME="token_count Coverage Results" MODIFIED="1680823873745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/clientcommands/chatgpt_module" />
     <SUITE FILE_PATH="coverage/YaServiceRu$check_persistence.coverage" NAME="check_persistence Coverage Results" MODIFIED="1680864990703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/resources" />
