@@ -4,7 +4,8 @@ git merge dev
 ```
 
 # 2) Change the constants in files
-* main.py -> line 36 **(Persistence)**
+* main.py -> line 38 **(Persistence)**
+* main.py -> line 25 **(LOGS)**
 * background/telegram_database_utils.py -> line 10 **(Database)**
 * clientcommands/request.py -> line 32 - 33 **(Phone)**
 
@@ -22,10 +23,26 @@ git reset folder-to-exclude/
 # 4) Push to git
 
 # 5) Pull from server
+```bash
+ssh yaserviceru@77.239.235.39
+pass: ********
+
+ps aux | grep main.py
+kill PID
+
+cd Desktop/YaServiceRu/
+git pull
+```
 
 # 6) Reveal Secret files
 ```bash
 git secret reveal
+```
+
+# Reset persistence if needed
+```bash
+cd resources
+python3 reset_persistence.py
 ```
 
 # 7) Move files from repo to other folder for safety
@@ -37,11 +54,6 @@ mv /home/yaserviceru/Desktop/YaServiceRu/resources/yaserviceru_persistence \
 
 # 8) restart bot on server
 ```bash
-ps aux | grep main.py
-kill PID
-
-ssh yaserviceru@77.239.235.39
-pass: ********
 cd Desktop/YaServiceRu/
 nohup python3 main.py &
 ```
