@@ -1,19 +1,23 @@
-# 1) Delete unnecessary folders
+# 1) Merge from Dev
 ```bash
-git add .
-git reset folder-to-exclude/
+git merge dev
 ```
 
+# 2) Change the constants in files
+* main.py -> line 36 **(Persistence)**
+* background/telegram_database_utils.py -> line 10 **(Database)**
+* clientcommands/request.py -> line 32 - 33 **(Phone)**
 
-# 2) Hide the constant.ini file
+# 3) Hide the constant.ini file
 ```bash
 git secret hide
 ```
 
-# 3) Change the constants in files
-* main.py -> line 36 **(Persistence)**
-* background/telegram_database_utils.py -> line 10 **(Database)**
-* clientcommands/request.py -> line 32 - 33 **(Phone)**
+# 3) Delete unnecessary folders
+```bash
+git add .
+git reset folder-to-exclude/
+```
 
 # 4) Push to git
 
@@ -37,7 +41,7 @@ ps aux | grep main.py
 kill PID
 
 ssh yaserviceru@77.239.235.39
-pass: 1313
+pass: ********
 cd Desktop/YaServiceRu/
 nohup python3 main.py &
 ```
