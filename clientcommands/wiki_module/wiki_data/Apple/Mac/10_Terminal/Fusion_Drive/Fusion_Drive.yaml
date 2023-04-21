@@ -1,0 +1,7 @@
+title: Повторное Создание Fusion Drive
+
+buttons:
+- - - High Sierra и старше
+    - A_M_T_FD_High_Sierra_Plus
+  - - Mojave и младше
+    - A_M_T_FD_Mojave_Minus

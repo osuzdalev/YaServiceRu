@@ -24,125 +24,125 @@ async def share(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Union[int, None
 
     # ############################################# WINDOWS ############################################################
     # ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡ COMPUTER ≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-    # ============================================= BIOS ===============================================================
+    # ============================================= 10_BIOS ===============================================================
     # -------------------------------------- CHANGE LOADING PRIORITY ---------------------------------------------------
-    if query_text == WIKI_DATA_DICT["Windows"]["Mac"]["BIOS"]["Change_Loading_Priority"]["0_EN"]:
+    if query_text == WIKI_DATA_DICT["Windows"]["Mac"]["10_BIOS"]["Change_Loading_Priority"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["BIOS"]["Change_Loading_Priority"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["10_BIOS"]["Change_Loading_Priority"]["0_EN"],
                 input_message_content=InputTextMessageContent(
-                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["BIOS"]["Change_Loading_Priority"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["BIOS"]["Change_Loading_Priority"]["Text"],
+                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["10_BIOS"]["Change_Loading_Priority"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["10_BIOS"]["Change_Loading_Priority"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # ============================================= DEVICES_PERIPHERY ==================================================
     # ----------------------------------------------- NO_SOUND ---------------------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Devices_Periphery"]["No_Sound"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["4_Devices_Periphery"]["No_Sound"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Devices_Periphery"]["No_Sound"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["4_Devices_Periphery"]["No_Sound"]["0_EN"],
                 input_message_content=InputTextMessageContent(
                     get_answer_path(
-                        WIKI_DATA_DICT["Windows"]["Mac"]["Devices_Periphery"]["No_Sound"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Devices_Periphery"]["No_Sound"]["Text"],
+                        WIKI_DATA_DICT["Windows"]["Mac"]["4_Devices_Periphery"]["No_Sound"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["4_Devices_Periphery"]["No_Sound"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # ============================================= INSTALLATION_RECOVERY ==============================================
     # -------------------------------------- MISSING_DISK_PARTITIONS_WHEN_INSTALLING_OS --------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Installation_Recovery"][
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["2_Installation_Recovery"][
         "Missing_Disk_Partitions_When_Installing_OS"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Installation_Recovery"][
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["2_Installation_Recovery"][
                     "Missing_Disk_Partitions_When_Installing_OS"]["0_EN"],
                 input_message_content=InputTextMessageContent(
                     get_answer_path(
-                        WIKI_DATA_DICT["Windows"]["Mac"]["Installation_Recovery"][
+                        WIKI_DATA_DICT["Windows"]["Mac"]["2_Installation_Recovery"][
                             "Missing_Disk_Partitions_When_Installing_OS"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Installation_Recovery"][
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["2_Installation_Recovery"][
                         "Missing_Disk_Partitions_When_Installing_OS"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # ============================================== NETWORK_INTERNET ==================================================
     # -------------------------------------------- NO_AVAILABLE_WIFI ---------------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Available_Wifi"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Available_Wifi"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Available_Wifi"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Available_Wifi"]["0_EN"],
                 input_message_content=InputTextMessageContent(
                     get_answer_path(
-                        WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Available_Wifi"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Available_Wifi"]["Text"],
+                        WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Available_Wifi"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Available_Wifi"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # -------------------------------------------- NO_INTERNET_CONNECTION ----------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Internet_Connection"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Internet_Connection"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Internet_Connection"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Internet_Connection"]["0_EN"],
                 input_message_content=InputTextMessageContent(
                     get_answer_path(
-                        WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Internet_Connection"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Network_Internet"]["No_Internet_Connection"]["Text"],
+                        WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Internet_Connection"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["7_Network_Internet"]["No_Internet_Connection"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # ============================================= SAVING_DATA ====================================================
     # --------------------------------------------- REMOVING_TEMP_FILES ------------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Saving_Data"]["Removing_Temp_Files"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["6_Saving_Data"]["Removing_Temp_Files"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Saving_Data"]["Removing_Temp_Files"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["6_Saving_Data"]["Removing_Temp_Files"]["0_EN"],
                 input_message_content=InputTextMessageContent(
-                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["Saving_Data"]["Removing_Temp_Files"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Saving_Data"]["Removing_Temp_Files"]["Text"],
+                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["6_Saving_Data"]["Removing_Temp_Files"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["6_Saving_Data"]["Removing_Temp_Files"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # ============================================= SLOWING_BUGGING ====================================================
     # --------------------------------------------- BOOTING ------------------------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Booting"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Booting"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Booting"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Booting"]["0_EN"],
                 input_message_content=InputTextMessageContent(
-                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Booting"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Booting"]["Text"],
+                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Booting"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Booting"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # --------------------------------------------- HARD DISK SSD ------------------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"],
                 input_message_content=InputTextMessageContent(
-                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["Text"],
+                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Hard_Disk_SSD.yaml"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]
     # --------------------------------------------- HEATING ------------------------------------------------------------
-    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Heating"]["0_EN"]:
+    elif query_text == WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Heating"]["0_EN"]:
         results = [
             InlineQueryResultArticle(
                 id=str(uuid4()),
-                title=WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Heating"]["0_EN"],
+                title=WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Heating"]["0_EN"],
                 input_message_content=InputTextMessageContent(
-                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Heating"]["0_EN"])
-                    + WIKI_DATA_DICT["Windows"]["Mac"]["Slowing_Bugging"]["Heating"]["Text"],
+                    get_answer_path(WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Heating"]["0_EN"])
+                    + WIKI_DATA_DICT["Windows"]["Mac"]["1_Slowing_Bugging"]["Heating"]["Text"],
                     parse_mode=ParseMode.MARKDOWN)
             )
         ]

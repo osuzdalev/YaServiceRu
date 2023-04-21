@@ -1,23 +1,23 @@
-text: Windows
+title: Windows
 
 buttons:
 - - - Торможение и Зависание
     - W_Slowing_Bugging
-  - - Установка, Восстановление и Обновление
-    - W_Installation_Recovery
-- - - Обновление и Драйверы
+  - - Обновление и Драйверы
     - W_Update_Drivers
-  - - Устройства и Периферия
-    - W_Devices_Periphery
-- - - Системные Настройки
-    - W_System_Settings
-  - - Хранения и Данные
-    - W_Saving_Data
+- - - Установка, Восстановление и Обновление
+    - W_Installation_Recovery
+  - - Включение и Заряжание
+    - W_Switch_Charge
 - - - Сеть и Интернет
     - W_Network_Internet
-  - - Дисплей и Графика
+  - - Устройства и Периферия
+    - W_Devices_Periphery
+- - - Дисплей и Графика
     - W_Display_Graphics
-- - - Включение и Заряжание
-    - W_Switch_Charge
+  - - Системные Настройки
+    - W_System_Settings
+- - - Хранения и Данные
+    - W_Saving_Data
   - - БИОС
     - W_BIOS

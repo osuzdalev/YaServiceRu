@@ -38,9 +38,9 @@ Loader.add_constructor('!include', Loader.include)
 
 
 class Page:
-    def __init__(self, name: str, text: str, messages: dict, keyboard: List[List]):
+    def __init__(self, name: str, title: str, messages: dict, keyboard: List[List]):
         self.name = name
-        self.text = text
+        self.title = title
         self.messages = messages
         self.keyboard = keyboard
 
@@ -58,7 +58,7 @@ class Website:
     def parse(self, config_file):
         """ Parses a YAML file and generates the pages of the website from the data
         Format of Page
-        text: Text to be displayed on the page
+        title: Text to be displayed on the page
 
         buttons:
         - - - Button_1_text
@@ -94,11 +94,11 @@ class Website:
                 messages = {}
 
             # Make title bold for Markdown V2
-            title = self.format_title(info["text"])
+            title = self.format_title(info["title"])
 
             self.pages[name] = Page(name, title, messages, keyboard)
 
-            # !!! NEEDED OTHERWISE DOES NOT WORK BECAUSE PYTHON... !!!
+            # NOTE: NEEDED OTHERWISE DOES NOT WORK BECAUSE PYTHON...
             page = copy.deepcopy(self.pages[name])
 
             # Check if page has an Invoice option and generate the invoice handler callback accordingly
@@ -107,7 +107,10 @@ class Website:
 
                 async def invoice_handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page, invoice=invoice) -> None:
                     """Sends an invoice without shipping-payment."""
-                    logger_website.info("invoice_handler_callback()")
+                    query = update.callback_query
+                    user = query.from_user
+                    logger_website.info("({}, {}, {}) /cancel_request".format(user.id, user.name, user.first_name))
+                    await query.answer()
 
                     logger_website.debug("This is the invoice_handler_callback for the page {}".format(page.name))
                     logger_website.debug("My buttons are: {}".format(page.keyboard))
@@ -122,6 +125,12 @@ class Website:
                     label = invoice["label"]
                     # price * 100 to include 2 decimal points
                     prices = [LabeledPrice(label, price * 100)]
+
+                    # Cleaning up
+                    await query.delete_message()
+                    for message in context.user_data["Annexe_Messages"]:
+                        await message.delete()
+                    context.user_data["Annexe_Messages"] = []
 
                     # optionally pass need_name=True, need_phone_number=True,
                     # need_email=True, need_shipping_address=True, is_flexible=True
@@ -152,7 +161,7 @@ class Website:
 
                 # Save the context for request message to expert
                 pattern = r'[_*]+'
-                output_text = re.sub(pattern, '', page.text)
+                output_text = re.sub(pattern, '', page.title)
                 context.user_data["Device_Context"].append(output_text)
 
                 # Checking if there are annex messages to be sent also
@@ -167,7 +176,7 @@ class Website:
                                                          photo=page.messages[key][1], parse_mode=ParseMode.MARKDOWN_V2)
                             context.user_data["Annexe_Messages"].append(message)
 
-                await query.edit_message_text(text=page.text,
+                await query.edit_message_text(text=page.title,
                                               reply_markup=InlineKeyboardMarkup(page.keyboard),
                                               parse_mode=ParseMode.MARKDOWN_V2)
 
@@ -212,7 +221,7 @@ class Website:
                 await message.delete()
             context.user_data["Annexe_Messages"] = []
             # Generate appropriate response
-            await query.edit_message_text(text=self.pages[target_handler_callback].text,
+            await query.edit_message_text(text=self.pages[target_handler_callback].title,
                                           reply_markup=InlineKeyboardMarkup(self.pages[target_handler_callback].keyboard),
                                           parse_mode=ParseMode.MARKDOWN)
 

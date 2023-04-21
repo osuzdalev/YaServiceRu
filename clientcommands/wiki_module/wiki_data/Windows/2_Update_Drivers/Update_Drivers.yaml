@@ -1,0 +1,9 @@
+title: Обновление и Драйвер
+
+buttons:
+- - - Обновление Windows 10 / 11
+    - W_UD_Update_Windows_10_11
+  - - Отключение Обновлений
+    - W_UD_Disable_Update
+- - - Установка и Обновление Драйверов
+    - W_UD_Installing_Updating_Drivers

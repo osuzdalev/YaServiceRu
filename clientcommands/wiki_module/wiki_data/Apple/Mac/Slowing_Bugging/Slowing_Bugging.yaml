@@ -1,5 +1,0 @@
-text: Торможение и Зависание
-
-buttons:
-- - - Reset CMOS NVRAM
-    - A_M_SB_Reset_CMOS_NVRAM

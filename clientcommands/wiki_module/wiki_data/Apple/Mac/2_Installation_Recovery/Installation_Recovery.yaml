@@ -1,0 +1,9 @@
+title: Установка, Восстановление и Обновление
+
+buttons:
+- - - Обновление macOS
+    - A_M_IR_Update_MacOS
+  - - Восстановление macOS
+    - A_M_IR_Recovery_MacOS
+- - - Установка с загрузочной флешки macOS
+    - A_M_IR_Installation_BootUSB
