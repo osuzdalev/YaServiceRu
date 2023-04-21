@@ -1,4 +1,4 @@
-text: &title Сброс CMOS/NVRAM
+title: &title Сброс CMOS/NVRAM
 
 messages:
   1:

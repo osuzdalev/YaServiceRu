@@ -1,0 +1,51 @@
+title: &title Флешка для Mac и Windows
+
+messages:
+  1:
+    - text
+    - "Разные файловые системы Windows \\(`NTFS`\\) и macOS \\(`APFS`\\) 
+    не позволяют использовать один внешний накопитель для двух разных устройств\\.
+
+
+    Но есть решение, очень простое\\, правда с ограничением по размеру записываемого файла в `4gb`\\.
+    Общая известная файловая система `FAT32` для `Windows` и `Mac`
+    
+    
+    Как отформатировать флешку в этой `файловой системе`\\:"
+
+  2:
+    - text
+    - "1️⃣  откройте `Дисковую утилиту` \\(программы \\- утилиты\\)"
+
+  3:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/Devices_Periphery/Flash_Drive/1_дисковая_утилита.png
+
+  4:
+    - text
+    - "2️⃣  Выберите внешний накопитель и нажмите `Стереть`"
+
+  5:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/Devices_Periphery/Flash_Drive/2_выбор_накопителя_и_стереть.png
+
+  6:
+    - text
+    - "3️⃣  В поле формат выберите `MS-DOS (FAT)`"
+
+  7:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/Devices_Periphery/Flash_Drive/3_MS_DOS_FAT.png
+
+buttons:
+- - - Оплатить
+    - A_M_DP_Flash_Drive_pay
+
+invoice:
+    callback_pattern: A_M_DP_Flash_Drive_pay
+    title: *title
+    description: Payment Example using python-telegram-bot
+    payload: A_M_DP_Flash_Drive_payload
+    currency: RUB
+    price: 1000
+    label: *title

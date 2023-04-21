@@ -38,9 +38,9 @@ Loader.add_constructor('!include', Loader.include)
 
 
 class Page:
-    def __init__(self, name: str, text: str, messages: dict, keyboard: List[List]):
+    def __init__(self, name: str, title: str, messages: dict, keyboard: List[List]):
         self.name = name
-        self.text = text
+        self.title = title
         self.messages = messages
         self.keyboard = keyboard
 
@@ -58,7 +58,7 @@ class Website:
     def parse(self, config_file):
         """ Parses a YAML file and generates the pages of the website from the data
         Format of Page
-        text: Text to be displayed on the page
+        title: Text to be displayed on the page
 
         buttons:
         - - - Button_1_text
@@ -94,7 +94,7 @@ class Website:
                 messages = {}
 
             # Make title bold for Markdown V2
-            title = self.format_title(info["text"])
+            title = self.format_title(info["title"])
 
             self.pages[name] = Page(name, title, messages, keyboard)
 
@@ -161,7 +161,7 @@ class Website:
 
                 # Save the context for request message to expert
                 pattern = r'[_*]+'
-                output_text = re.sub(pattern, '', page.text)
+                output_text = re.sub(pattern, '', page.title)
                 context.user_data["Device_Context"].append(output_text)
 
                 # Checking if there are annex messages to be sent also
@@ -176,7 +176,7 @@ class Website:
                                                          photo=page.messages[key][1], parse_mode=ParseMode.MARKDOWN_V2)
                             context.user_data["Annexe_Messages"].append(message)
 
-                await query.edit_message_text(text=page.text,
+                await query.edit_message_text(text=page.title,
                                               reply_markup=InlineKeyboardMarkup(page.keyboard),
                                               parse_mode=ParseMode.MARKDOWN_V2)
 
@@ -221,7 +221,7 @@ class Website:
                 await message.delete()
             context.user_data["Annexe_Messages"] = []
             # Generate appropriate response
-            await query.edit_message_text(text=self.pages[target_handler_callback].text,
+            await query.edit_message_text(text=self.pages[target_handler_callback].title,
                                           reply_markup=InlineKeyboardMarkup(self.pages[target_handler_callback].keyboard),
                                           parse_mode=ParseMode.MARKDOWN)
 

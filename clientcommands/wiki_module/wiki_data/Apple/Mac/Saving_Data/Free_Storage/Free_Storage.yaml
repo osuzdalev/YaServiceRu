@@ -1,4 +1,4 @@
-text: &title Освободить Место в Хранилище
+title: &title Освободить Место в Хранилище
 
 messages:
   1:
@@ -65,4 +65,4 @@ invoice:
   payload: A_M_SD_Free_Storage_payload
   currency: RUB
   price: 1000
-  label: Освободить Место в Хранилище
+  label: *title

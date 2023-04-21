@@ -18,7 +18,11 @@ A_M_IR_Installation_BootUSB: !include Apple/Mac/Installation_Recovery/Installati
 
 A_M_Bootcamp_Parallels: !include Apple/Mac/Bootcamp_Parallels/Bootcamp_Parallels.yaml
 
+A_M_BP_Bootcamp: !include Apple/Mac/Bootcamp_Parallels/Bootcamp/Bootcamp.yaml
+
 A_M_Devices_Periphery: !include Apple/Mac/Devices_Periphery/Devices_Periphery.yaml
+
+A_M_DP_Flash_Drive: !include Apple/Mac/Devices_Periphery/Flash_Drive/Flash_Drive.yaml
 
 A_M_System_Settings: !include Apple/Mac/System_Settings/System_Settings.yaml
 
@@ -30,9 +34,15 @@ A_M_SD_Free_Storage: !include Apple/Mac/Saving_Data/Free_Storage/Free_Storage.ya
 
 A_M_Network_Internet: !include Apple/Mac/Network_Internet/Network_Internet.yaml
 
+A_M_NI_Reset_Network_Settings: !include Apple/Mac/Network_Internet/Reset_Network_Settings/Reset_Network_Settings.yaml
+
 A_M_Security: !include Apple/Mac/Security/Security.yaml
 
+A_M_S_Authorize_Installation_Apps: !include Apple/Mac/Security/Authorize_Installation_Apps/Authorize_Installation_Apps.yaml
+
 A_M_Display_Graphics: !include Apple/Mac/Display_Graphics/Display_Graphics.yaml
+
+A_M_DG_Automatic_Switching: !include Apple/Mac/Display_Graphics/Automatic_Switching/Automatic_Switching.yaml
 
 A_M_Terminal: !include Apple/Mac/Terminal/Terminal.yaml
 
