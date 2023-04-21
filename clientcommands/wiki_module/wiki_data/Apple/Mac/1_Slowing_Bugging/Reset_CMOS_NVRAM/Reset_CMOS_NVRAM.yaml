@@ -1,0 +1,56 @@
+title: &title Сброс CMOS/NVRAM
+
+messages:
+  1:
+    - text
+    - "Сброс `SMC` с `Т2` и без чипа
+    \\(`Т2` на устройствах от *2017* г\\.в\\.\\):
+    
+    
+    1️⃣ Выключите ваш Mac
+    
+    
+    2️⃣ Зажмите одновременно `control` \\+ `shift` \\+ `option \\(alt\\)` и удерживайте *7* и *10* секунд
+    
+    
+    3️⃣ Не отпуская кнопок пункта *2* нажмите кнопку включения и удерживайте ещё *7* секунд
+    
+    
+    4️⃣ Включите Mac обычным способом"
+
+  2:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/CMOS.jpg
+
+  3:
+    - text
+    - "Сброс NVRAM на любом Mac
+
+
+        1️⃣ Выключите ваш Mac
+
+
+        2️⃣ Зажмите одновременно `option \\(alt\\) \\+ command + R + P` и удерживайте *15* секунд
+
+
+        3️⃣ Не отпуская кнопок пункта *2* нажмите и отпустите кнопку включения
+
+
+        ⚠️\\(Могут измениться пользовательские параметры\\)"
+
+  4:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/NVRAM.jpg
+
+buttons:
+- - - Оплатить
+    - A_M_SB_Reset_CMOS_NVRAM_pay
+
+invoice:
+  callback_pattern: A_M_SB_Reset_CMOS_NVRAM_pay
+  title: *title
+  description: Цена услуги "Помощь Специалиста"
+  payload: A_M_SB_Reset_CMOS_NVRAM_payload
+  currency: RUB
+  price: 1000
+  label: Reset CMOS NVRAM

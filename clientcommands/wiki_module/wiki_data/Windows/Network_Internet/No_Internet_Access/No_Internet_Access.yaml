@@ -25,7 +25,7 @@ messages:
 
   2:
     - picture
-    - clientcommands/wiki_module/wiki_data/Windows/Network_Internet/No_Internet_Access/1_без_доступа_к_интернету.png
+    - clientcommands/wiki_module/wiki_data/Windows/7_Network_Internet/No_Internet_Access/1_без_доступа_к_интернету.png
 
   3:
     - text

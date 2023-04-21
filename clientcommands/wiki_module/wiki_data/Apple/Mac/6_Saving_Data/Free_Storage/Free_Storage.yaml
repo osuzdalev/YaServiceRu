@@ -1,0 +1,68 @@
+title: &title Освободить Место в Хранилище
+
+messages:
+  1:
+    - text
+    - "_Удаление вручную_
+
+
+    1️⃣ Откройте `Finder` 
+
+
+    2️⃣ В разделах «загрузки\\, документы\\, файлы и др\\.» ненужные файлы переместите в корзину 
+    \\(просто перетащите ненужные файлы или двойным касанием вызвать дополнительное меню и выбрать «переместить в `корзину`»\\)
+
+
+    3️⃣ Очистите корзину \\(введите пароль `пользователя`\\)"
+
+  2:
+    - text
+    - "_Удаление через управление_
+
+
+    1️⃣ Нажмите на `яблоко` в верхнем левом углу
+
+
+    2️⃣ Об этом `мак`"
+
+  3:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/6_Saving_Data/Free_Storage/1_об_этом_мак.png
+
+  4:
+    - text
+    - "3️⃣ Выберите раздел `хранилище` и нажмите управлять"
+
+  5:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/6_Saving_Data/Free_Storage/2_хранилище.png
+
+  6:
+    - text
+    - "4️⃣ Дождитесь загрузки и в разделе «удаление мусора» посмотреть файлы и выбрать"
+
+  7:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/6_Saving_Data/Free_Storage/3_удаление_мусора.png
+
+  8:
+    - text
+    - "5️⃣ Удалите ненужные"
+
+  9:
+    - picture
+    - clientcommands/wiki_module/wiki_data/Apple/Mac/6_Saving_Data/Free_Storage/4_выбрать_и_удалить.png
+
+
+buttons:
+- - - Оплатить
+    - A_M_SD_Free_Storage_pay
+
+invoice:
+  callback_pattern: A_M_SD_Free_Storage_pay
+  title: *title
+  description: Payment Example using python-telegram-bot
+  payload: A_M_SD_Free_Storage_payload
+  currency: RUB
+  price: 1000
+  label: *title

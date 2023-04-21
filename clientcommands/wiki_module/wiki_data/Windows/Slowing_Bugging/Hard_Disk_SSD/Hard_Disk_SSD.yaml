@@ -23,7 +23,7 @@ messages:
 
   3:
     - picture
-    - clientcommands/wiki_module/wiki_data/Windows/Slowing_Bugging/Hard_Disk_SSD/1_проверка_диска_ssd.png
+    - clientcommands/wiki_module/wiki_data/Windows/1_Slowing_Bugging/Hard_Disk_SSD/1_проверка_диска_ssd.png
 
 buttons:
 - - - Оплатить
