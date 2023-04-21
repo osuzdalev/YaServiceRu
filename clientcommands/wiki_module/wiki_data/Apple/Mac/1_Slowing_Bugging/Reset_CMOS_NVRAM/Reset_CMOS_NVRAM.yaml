@@ -52,5 +52,5 @@ invoice:
   description: Цена услуги "Помощь Специалиста"
   payload: A_M_SB_Reset_CMOS_NVRAM_payload
   currency: RUB
-  price: 1000
+  price: 490
   label: Reset CMOS NVRAM

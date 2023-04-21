@@ -64,5 +64,5 @@ invoice:
   description: Payment Example using python-telegram-bot
   payload: A_M_SD_Free_Storage_payload
   currency: RUB
-  price: 1000
+  price: 500
   label: *title

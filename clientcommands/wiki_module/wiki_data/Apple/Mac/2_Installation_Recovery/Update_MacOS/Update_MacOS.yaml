@@ -76,5 +76,5 @@ invoice:
   description: Payment Example using python-telegram-bot
   payload: A_M_IR_Update_MacOS_payload
   currency: RUB
-  price: 1000
+  price: 900
   label: Обновление macOS

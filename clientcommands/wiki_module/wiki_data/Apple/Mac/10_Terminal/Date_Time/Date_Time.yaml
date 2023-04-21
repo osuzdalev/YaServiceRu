@@ -34,5 +34,5 @@ invoice:
   description: Payment Example using python-telegram-bot
   payload: A_M_T_Date_Time_payload
   currency: RUB
-  price: 1000
+  price: 100
   label: Дата и время

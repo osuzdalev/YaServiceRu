@@ -1,0 +1,38 @@
+title: &title Не видит разделы диска при установке `ОС`
+
+messages:
+  1:
+    - text
+    - "_«Не удалось найти `драйвер` диска `intel rapid storage`»_
+    
+    
+    Проблема только с `Windows 10` и новыми ноутбука с поддержкой данной технологии"
+
+  2:
+    - text
+    - "1️⃣ [Скачать драйвер](https://disk.yandex.ru/d/bDzX4tDmmvsz6w) 
+
+
+    2️⃣ Распаковать архив на `флеш` с `дистрибутивом` 
+
+
+    3️⃣ Начать установку `Windows` и дойдя до выбора раздела\\, нажимаем загрузить `драйвер`
+
+
+    4️⃣ Обзор и выбираем распакованный драйвер `RST`\\(Выбираем первый `драйвер`\\)
+
+
+    5️⃣ Нажимаем далее"
+
+buttons:
+- - - Оплатить
+    - W_IR_No_Disk_Partitions_pay
+
+invoice:
+  callback_pattern: W_IR_No_Disk_Partitions_pay
+  title: *title
+  description: Payment Example using python-telegram-bot
+  payload: W_IR_No_Disk_Partitions_payload
+  currency: RUB
+  price: 550
+  label: Не видит разделы диска при установке `ОС`
