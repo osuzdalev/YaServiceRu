@@ -19,7 +19,7 @@ logger_wiki = logging.getLogger(__name__)
 DATA_PATH = "wiki_data/wiki_data.yaml"
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), DATA_PATH)
 
-CANCEL = "ОТМЕНИТЬ"
+CANCEL = "❌ЗАКРЫТЬ"
 
 STATE = "WIKI"
 BROWSER_HISTORY_NAME = "WIKI_HISTORY"

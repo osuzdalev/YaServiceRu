@@ -20,7 +20,7 @@ constants = load_constants()
 logger_website = logging.getLogger(__name__)
 
 BACK = "<< НАЗАД"
-CANCEL = "OTMEНИТЬ"
+CANCEL = "❌ЗАКРЫТЬ"
 
 class Loader(yaml.SafeLoader):
     """Special class that enables parsing the '!include' tag in the yaml files"""
@@ -75,8 +75,8 @@ class Website:
 
         # Generates the pages from the yaml file
         for name, info in config.items():
-            back_button = InlineKeyboardButton(text=BACK, callback_data="BACK")
-            cancel_button = InlineKeyboardButton(text=CANCEL, callback_data="CANCEL")
+            back_button = InlineKeyboardButton(text=BACK, callback_data=BACK)
+            cancel_button = InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)
             # Check if there are buttons on the page and parse them accordingly
             try:
                 buttons = info['buttons']
@@ -135,7 +135,7 @@ class Website:
                     # optionally pass need_name=True, need_phone_number=True,
                     # need_email=True, need_shipping_address=True, is_flexible=True
                     await context.bot.send_invoice(
-                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA_TEST"),
+                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA"),
                         currency, prices
                     )
 
@@ -195,7 +195,7 @@ class Website:
             context.user_data["in_conversation"] = ""
             return ConversationHandler.END
 
-        self.state[self.state_name].append(CallbackQueryHandler(cancel_callback, pattern="CANCEL"))
+        self.state[self.state_name].append(CallbackQueryHandler(cancel_callback, pattern=CANCEL))
 
         async def back_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
             """
