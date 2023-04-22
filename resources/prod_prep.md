@@ -6,6 +6,7 @@ git merge dev
 # 2) Change the constants in files
 * main.py -> line 38 **(Persistence)**
 * main.py -> line 25 **(LOGS)**
+* main.py -> line 40 **(TOKEN)**
 * background/telegram_database_utils.py -> line 10 **(Database)**
 * clientcommands/request.py -> line 32 - 33 **(Phone)**
 

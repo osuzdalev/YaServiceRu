@@ -15,7 +15,7 @@ messages:
 
   2:
     - picture
-    - clientcommands/wiki_module/wiki_data/Windows/2_Installation_Recovery/OS_Installation/1_установить.jpg
+    - clientcommands/wiki_module/wiki_data/Windows/3_Installation_Recovery/OS_Installation/1_установить.jpg
 
   3:
     - text
@@ -23,7 +23,7 @@ messages:
 
   4:
     - picture
-    - clientcommands/wiki_module/wiki_data/Windows/2_Installation_Recovery/OS_Installation/2_выбор_языка.png
+    - clientcommands/wiki_module/wiki_data/Windows/3_Installation_Recovery/OS_Installation/2_выбор_языка.png
 
   5:
     - text
@@ -31,7 +31,7 @@ messages:
 
   6:
     - picture
-    - clientcommands/wiki_module/wiki_data/Windows/2_Installation_Recovery/OS_Installation/3_нет_ключа.png
+    - clientcommands/wiki_module/wiki_data/Windows/3_Installation_Recovery/OS_Installation/3_нет_ключа.png
 
   7:
     - text
@@ -39,7 +39,7 @@ messages:
 
   8:
     - picture
-    - clientcommands/wiki_module/wiki_data/Windows/2_Installation_Recovery/OS_Installation/4_принимаем_соглашение.jpg
+    - clientcommands/wiki_module/wiki_data/Windows/3_Installation_Recovery/OS_Installation/4_принимаем_соглашение.jpg
 
   9:
     - text
@@ -47,7 +47,7 @@ messages:
 
   10:
     - picture
-    - clientcommands/wiki_module/wiki_data/Windows/2_Installation_Recovery/OS_Installation/5_выбор_установки.jpeg
+    - clientcommands/wiki_module/wiki_data/Windows/3_Installation_Recovery/OS_Installation/5_выбор_установки.jpeg
 
   11:
     - text
