@@ -5,19 +5,34 @@ from typing import List, Tuple, Dict
 
 import openai
 from openai import InvalidRequestError
+
 from telegram import Update, LabeledPrice
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters, PreCheckoutQueryHandler
 from telegram.constants import ParseMode
+
+from sentence_transformers import SentenceTransformer
+import torch
 
 from resources.constants_loader import load_constants
 from background.global_fallback import ignored_texts_re
 
 from clientcommands.chatgpt_module.token_count import num_tokens_from_string
+from clientcommands.chatgpt_module.Weaviate.weaviate_client import WeaviateClient
 
 logger_chatgpt = logging.getLogger(__name__)
 constants = load_constants()
 
 openai.api_key = constants.get("API", "OPENAI")
+
+# Initialize the WeaviateClient
+weaviate_client = WeaviateClient()
+
+# Load the model to GPU if available
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# model = SentenceTransformer('sentence-transformers/msmarco-distilroberta-base-v2')
+model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
+
+model.to(device)
 
 INSTRUCTIONS_PATH = "system_instructions.txt"
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), INSTRUCTIONS_PATH)
@@ -32,7 +47,7 @@ TOP_P = 0.9
 FREQUENCY_PENALTY = 1.0
 PRESENCE_PENALTY = 0.3
 
-FREE_PROMPT_LIMIT = 3
+FREE_PROMPT_LIMIT = 100
 EXTENDED_PAYLOAD = "GPT_extended_payload"
 LABEL = "YaService-GPT extension"
 
@@ -162,7 +177,8 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     user_level = context.user_data["GPT_level"]
     prompt = update.effective_message.text
-    conversation = context.user_data["GPT_premium_conversation"] if context.user_data["GPT_premium"] else context.user_data["GPT_conversation"]
+    conversation = context.user_data["GPT_premium_conversation"] if context.user_data["GPT_premium"] else \
+    context.user_data["GPT_conversation"]
     is_premium = context.user_data["GPT_premium"]
 
     # Check if prompt is too long
@@ -297,11 +313,33 @@ async def gpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                         "Ваши сообщения больше не будут отправляться на YaService-GPT.")
 
 
+async def gpt_embeddings(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    # Vector Query
+    sentence = update.effective_message.text
+    logger_chatgpt.info("embedding: {}".format(sentence))
+    embeddings = model.encode(sentence)
+    logger_chatgpt.info("retrieving filters")
+    vector_query_result = weaviate_client.vector_query("Filters", embeddings)
+
+    if not vector_query_result:
+        # Send a message when no articles are retrieved
+        await update.message.reply_text("0%")
+    else:
+        # Calculate average certainty
+        total_certainty = sum([article['_additional']['certainty'] for article in vector_query_result])
+        average_certainty = total_certainty / len(vector_query_result)
+
+        # Prepare the message
+        message = f"Average certainty: {round(average_certainty, 3) * 100}%"
+
+        await update.message.reply_text(message)
+
+
 gpt_handler_command = CommandHandler("chat", gpt_start)
 gpt_handler_message = MessageHandler(filters.Regex(r"^🤖YaService-GPT$"), gpt_start)
 
-gpt_request_handler = MessageHandler(filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND),
-                                         gpt_request)
+# gpt_request_handler = MessageHandler(filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND), gpt_request)
+gpt_request_handler = MessageHandler(filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND), gpt_embeddings)
 
 gpt_payment_yes_handler = MessageHandler(filters.Regex(r"^{}$".format(CONFIRM_PAYMENT)), gpt_payment_yes)
 gpt_precheckout_handler = PreCheckoutQueryHandler(gpt_precheckout_callback)

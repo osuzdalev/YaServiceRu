@@ -1,5 +1,5 @@
 title: БИОС
 
 buttons:
-- - - TEST # Text on Button
-    - TEST # Link ID / URL
+- - - Изменить параметры загрузки
+    - W_B_Change_Boot_Params

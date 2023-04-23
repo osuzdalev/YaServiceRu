@@ -137,3 +137,5 @@ W_SD_Clearing_Disk: !include Windows/9_Saving_Data/Clearing_Disk/Clearing_Disk.y
 # ======================================================================================================================
 
 W_BIOS: !include Windows/10_BIOS/BIOS.yaml
+
+W_B_Change_Boot_Params: !include Windows/10_BIOS/Change_Boot_Params/Change_Boot_Params.yaml

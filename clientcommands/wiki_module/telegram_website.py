@@ -135,7 +135,7 @@ class Website:
                     # optionally pass need_name=True, need_phone_number=True,
                     # need_email=True, need_shipping_address=True, is_flexible=True
                     await context.bot.send_invoice(
-                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA"),
+                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA_TEST"),
                         currency, prices
                     )
 
@@ -227,7 +227,7 @@ class Website:
 
             return self.state_name
 
-        self.state[self.state_name].append(CallbackQueryHandler(back_callback, pattern="BACK"))
+        self.state[self.state_name].append(CallbackQueryHandler(back_callback, pattern=BACK))
 
     def add_page(self, page_name, page, callback):
         self.pages[page_name] = page
