@@ -75,7 +75,7 @@ if __name__ == "__main__":
     application.add_handler(chatgpt.gpt_payment_no_handler, CLIENT_PAY)
     application.add_handler(chatgpt.gpt_stop_handler_command, CLIENT_BASIC)
     application.add_handler(chatgpt.gpt_stop_handler_message, CLIENT_BASIC)
-    application.add_handler(chatgpt.gpt_get_conversation_tokens_handler, CLIENT_BASIC)
+    application.add_handler(chatgpt.gpt_get_remaining_tokens_handler, CLIENT_BASIC)
 
     # CONTRACTOR HANDLERS
     # application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)

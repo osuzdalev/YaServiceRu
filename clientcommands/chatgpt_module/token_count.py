@@ -9,7 +9,7 @@ def num_tokens_from_string(string: str, model_name: str = "gpt-3.5-turbo") -> in
 
 
 if __name__ == "__main__":
-    with open("/Users/osuz/PycharmProjects/YaServiceRu/clientcommands/chatgpt_module/test.txt", "r") as file:
+    with open("/clientcommands/chatgpt_module/chatgpt_data/test.txt", "r") as file:
         test_str = file.read()
     tokens = num_tokens_from_string(test_str)
     print(tokens)
