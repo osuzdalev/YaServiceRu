@@ -22,6 +22,7 @@ logger_website = logging.getLogger(__name__)
 BACK = "<< НАЗАД"
 CANCEL = "❌ЗАКРЫТЬ"
 
+
 class Loader(yaml.SafeLoader):
     """Special class that enables parsing the '!include' tag in the yaml files"""
     def __init__(self, stream):

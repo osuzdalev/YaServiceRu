@@ -22,7 +22,7 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(constants.get("FILEPATH", "SERVER_LOGGER"), mode='a')
+        logging.FileHandler(constants.get("FILEPATH", "LOCAL_LOGGER"), mode='a')
     ]
 )
 logger = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
 GLOBAL_FALLBACK = range(-3, 6)
 
 if __name__ == "__main__":
-    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "SERVER_PERSISTENCE"))
+    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "LOCAL_PERSISTENCE"))
     application = Application.builder()\
         .token(constants.get("TOKEN", "MAIN_BOT"))\
         .persistence(persistence)\

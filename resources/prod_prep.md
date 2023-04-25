@@ -10,6 +10,7 @@ git merge dev
 * clientcommands/wiki_module/telegram_website.py -> line 138 **(Payment)**
 * background/telegram_database_utils.py -> line 10 **(Database)**
 * clientcommands/request.py -> line 32 - 33 **(Phone)**
+* clientcommands/chatgpt_module/Weaviate/data -> line 17 **(Volumes)**
 
 # 3) Hide the constant.ini file
 ```bash
