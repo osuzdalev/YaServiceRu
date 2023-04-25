@@ -14,12 +14,9 @@ services:
       TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
       CLUSTER_HOSTNAME: 'node1'
     volumes:
-      - /Users/osuz/PycharmProjects/YaServiceRu/OpenAI/Weaviate/data:/data # Added shared volume
+      - /Users/osuz/PycharmProjects/YaServiceRu/clientcommands/chatgpt_module/Weaviate/data:/data # Added shared volume
+      #- /home/yaserviceru/Desktop/YaServiceRu/clientcommands/chatgpt_module/Weaviate/data:/data
   t2v-transformers:
-    # English
-    # image: semitechnologies/transformers-inference:sentence-transformers-msmarco-distilroberta-base-v2
-    # Translation
-    image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2
-    # all-mpnet-base-v2 ??
+    image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2 # Multilinguil model
     environment:
       ENABLE_CUDA: 0 # set to 1 to enable

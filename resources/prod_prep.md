@@ -9,6 +9,7 @@ git merge dev
 * main.py -> line 40 **(TOKEN)**
 * background/telegram_database_utils.py -> line 10 **(Database)**
 * clientcommands/request.py -> line 32 - 33 **(Phone)**
+* clientcommands/chatgpt_module/Weaviate/data -> line 17 **(Volumes)**
 
 # 3) Hide the constant.ini file
 ```bash
