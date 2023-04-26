@@ -75,5 +75,6 @@ class WeaviateClient:
         if "errors" in result:
             raise Exception(result["errors"][0]['message'])
 
+        print(result["data"]["Get"][collection_name])
         return result["data"]["Get"][collection_name]
 

@@ -40,15 +40,24 @@ def check_prompt_semantic(prompt: str) -> bool:
     # Vector Query
     logger_chatgpt.info("embedding: {}".format(prompt))
     embeddings = EMBEDDING_MODEL.encode(prompt)
-    logger_chatgpt.info("retrieving filters")
-    vector_query_result = weaviate_client.vector_query("Filters", embeddings)
 
-    if not vector_query_result:
+    # Retrieve English filters
+    logger_chatgpt.info("retrieving English filters")
+    english_vector_query_result = weaviate_client.vector_query("EnglishFilters", embeddings)
+
+    # Retrieve Russian filters
+    logger_chatgpt.info("retrieving Russian filters")
+    russian_vector_query_result = weaviate_client.vector_query("RussianFilters", embeddings)
+
+    # Combine both query results
+    combined_query_results = english_vector_query_result + russian_vector_query_result
+
+    if not combined_query_results:
         return False
 
     # Calculate average certainty
-    total_certainty = sum([article['_additional']['certainty'] for article in vector_query_result])
-    average_certainty = total_certainty / len(vector_query_result)
+    total_certainty = sum([article['_additional']['certainty'] for article in combined_query_results])
+    average_certainty = total_certainty / len(combined_query_results)
 
     if average_certainty >= SEMANTIC_THRESHOLD:
         return True

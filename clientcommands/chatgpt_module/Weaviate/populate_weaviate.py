@@ -10,12 +10,12 @@ weaviate_client.delete_all()
 
 # Check if the Filters class already exists in the schema
 schema = weaviate_client.get_schema()
-if "Filters" not in schema:
-    # If not, create the Filters class
-    filter_schema = {
-        "class": "Filters",
-        "description": "Sentences with which the incoming user prompt message will be compared "
-                       "to determine if the bot should respond",
+
+if "EnglishFilters" not in schema:
+    # If not, create the EnglishFilters class
+    english_filter_class = {
+        "class": "EnglishFilters",
+        "description": "Sentences in English about our theme/business/domain to compare with incoming user prompts for filtering",
         "properties": [{
             "name": "content",
             "dataType": ["text"]
@@ -29,25 +29,73 @@ if "Filters" not in schema:
         },
     }
 
-    weaviate_client.create_class(filter_schema)
+    weaviate_client.create_class(english_filter_class)
+
+if "RussianFilters" not in schema:
+    # If not, create the RussianFilters class
+    russian_filter_class = {
+        "class": "RussianFilters",
+        "description": "Sentences in Russian about our theme/business/domain to compare with incoming user prompts for filtering",
+        "properties": [{
+            "name": "content",
+            "dataType": ["text"]
+        }],
+        "vectorizer": "text2vec-transformers",
+        "moduleConfig": {
+            "text2vec-transformers": {
+                "poolingStrategy": "masked_mean",
+                "vectorizeClassName": False
+            }
+        },
+    }
+
+    weaviate_client.create_class(russian_filter_class)
+
+if "SpecialSubjectFilters" not in schema:
+    # If not, create the SpecialSubjectFilters class
+    special_subject_filter_class = {
+        "class": "SpecialSubjectFilters",
+        "description": "Sentences about particular subjects to compare with incoming user prompts, triggering a special logic/response when close enough",
+        "properties": [{
+            "name": "content",
+            "dataType": ["text"]
+        }],
+        "vectorizer": "text2vec-transformers",
+        "moduleConfig": {
+            "text2vec-transformers": {
+                "poolingStrategy": "masked_mean",
+                "vectorizeClassName": False
+            }
+        },
+    }
+
+    weaviate_client.create_class(special_subject_filter_class)
 
 # get the schema to make sure it worked
 schema = weaviate_client.get_schema()
 pprint.pp(schema)
 
-# Example filters
-filters = [
-    "I have a problem with my electronic device and need your help to fix it",
-    "My computer is not working properly, can you assist me?",
-    "My phone is acting weird, can you help me resolve the issue?",
-    "I'm having trouble with my tablet, can you guide me on how to fix it?",
-    "У меня проблема с моим электронным устройством, и мне нужна ваша помощь, чтобы исправить это",
-    "Мой компьютер не работает должным образом, вы можете мне помочь?",
-    "Мой телефон ведет себя странно, можете помочь мне решить проблему?",
-    "У меня проблемы с моим планшетом, не могли бы вы помочь мне в исправлении?"
-]
 
-# Add the filters to the Filters class in Weaviate
-for filter_text in filters:
+# Read filters from text files
+def read_filters_from_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        filters = [line.strip() for line in f.readlines()]
+    return filters
+
+
+english_filters_file = 'english_filters.txt'
+russian_filters_file = 'russian_filters.txt'
+
+english_filters = read_filters_from_file(english_filters_file)
+russian_filters = read_filters_from_file(russian_filters_file)
+
+
+# Add the filters to the corresponding classes in Weaviate
+for filter_text in english_filters:
     filter_object = {"content": filter_text}
-    weaviate_client.write_data_object(filter_object, "Filters")
+    weaviate_client.write_data_object(filter_object, "EnglishFilters")
+
+for filter_text in russian_filters:
+    filter_object = {"content": filter_text}
+    weaviate_client.write_data_object(filter_object, "RussianFilters")
+
