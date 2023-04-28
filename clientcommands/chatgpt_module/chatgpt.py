@@ -247,7 +247,7 @@ async def gpt_get_remaining_tokens(update: Update, context: ContextTypes.DEFAULT
 
 
 gpt_handler_command = CommandHandler("chat", gpt_start)
-gpt_handler_message = MessageHandler(filters.Regex(r"^🤖YaService-GPT$"), gpt_start)
+gpt_handler_message = MessageHandler(filters.Regex(r"^🤖Чат с подержкой$"), gpt_start)
 
 gpt_request_handler = MessageHandler(filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND), gpt_request)
 

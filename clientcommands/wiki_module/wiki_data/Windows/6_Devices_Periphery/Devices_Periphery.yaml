@@ -64,13 +64,13 @@ messages:
     - clientcommands/wiki_module/wiki_data/Windows/6_Devices_Periphery/2_вебкамера.png
 
 buttons:
-- - - Оплатить
+- - - Oбратиться к специалисту
     - W_Devices_Periphery_pay
 
 invoice:
   callback_pattern: W_Devices_Periphery_pay
   title: *title
-  description: Payment Example using python-telegram-bot
+  description: "Нажимая на эту кнопку, вы сможете оплатить услугу 'Помощь специалиста'. После оплаты мы свяжемся с вами, чтобы уточнить детали и оказать необходимую помощь."
   payload: W_Devices_Periphery_payload
   currency: RUB
   price: 500

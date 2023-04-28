@@ -30,13 +30,13 @@ messages:
     - clientcommands/wiki_module/wiki_data/Windows/2_Update_Drivers/Disable_Update/1_отключение_обновлений.png
 
 buttons:
-- - - Оплатить
+- - - Oбратиться к специалисту
     - W_UD_Disable_Update_pay
 
 invoice:
   callback_pattern: W_UD_Disable_Update_pay
   title: *title
-  description: Payment Example using python-telegram-bot
+  description: "Нажимая на эту кнопку, вы сможете оплатить услугу 'Помощь специалиста'. После оплаты мы свяжемся с вами, чтобы уточнить детали и оказать необходимую помощь."
   payload: W_UD_Disable_Update_payload
   currency: RUB
   price: 500

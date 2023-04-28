@@ -12,7 +12,7 @@ buttons:
 invoice:
     callback_pattern: W_IR_SC_No_Info_pay
     title: *title
-    description: Payment Example using python-telegram-bot
+    description: "Нажимая на эту кнопку, вы сможете оплатить услугу 'Помощь специалиста'. После оплаты мы свяжемся с вами, чтобы уточнить детали и оказать необходимую помощь."
     payload: W_IR_SC_No_Info_payload
     currency: RUB
     price: 1000

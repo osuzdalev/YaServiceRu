@@ -38,13 +38,13 @@ messages:
     - clientcommands/wiki_module/wiki_data/Apple/Mac/4_Devices_Periphery/Flash_Drive/3_MS_DOS_FAT.png
 
 buttons:
-- - - Оплатить
+- - - Oбратиться к специалисту
     - A_M_DP_Flash_Drive_pay
 
 invoice:
     callback_pattern: A_M_DP_Flash_Drive_pay
     title: *title
-    description: Payment Example using python-telegram-bot
+    description: "Нажимая на эту кнопку, вы сможете оплатить услугу 'Помощь специалиста'. После оплаты мы свяжемся с вами, чтобы уточнить детали и оказать необходимую помощь."
     payload: A_M_DP_Flash_Drive_payload
     currency: RUB
     price: 1000

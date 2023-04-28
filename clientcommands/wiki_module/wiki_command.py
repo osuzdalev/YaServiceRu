@@ -94,7 +94,7 @@ website.parse(FULL_PATH)
 website.add_page(ENTRY_PAGE_NAME, entry_page, wiki_callback)
 
 conversation_handler = ConversationHandler(
-    entry_points=[CommandHandler("wiki", wiki), MessageHandler(filters.Regex(r"^(📖Вики)$"), wiki)],
+    entry_points=[CommandHandler("wiki", wiki), MessageHandler(filters.Regex(r"^(📖Справочник)$"), wiki)],
     states=website.state,
     fallbacks=[CommandHandler("cancel", cancel_command),
                MessageHandler(filters.Regex(r"^(❌Отменить)$"), cancel_command)],

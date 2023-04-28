@@ -43,13 +43,13 @@ messages:
     - clientcommands/wiki_module/wiki_data/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/NVRAM.jpg
 
 buttons:
-- - - Оплатить
+- - - Oбратиться к специалисту
     - A_M_SB_Reset_CMOS_NVRAM_pay
 
 invoice:
   callback_pattern: A_M_SB_Reset_CMOS_NVRAM_pay
   title: *title
-  description: Цена услуги "Помощь Специалиста"
+  description: "Нажимая на эту кнопку, вы сможете оплатить услугу 'Помощь специалиста'. После оплаты мы свяжемся с вами, чтобы уточнить детали и оказать необходимую помощь."
   payload: A_M_SB_Reset_CMOS_NVRAM_payload
   currency: RUB
   price: 490
