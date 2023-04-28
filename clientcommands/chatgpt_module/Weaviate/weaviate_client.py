@@ -53,7 +53,7 @@ class WeaviateClient:
     def write_data_object(self, data: Dict, class_name: str) -> None:
         self.client.data_object.create(data_object=data, class_name=class_name)
 
-    def vector_query(self, collection_name: str, vector: Union[list[Tensor], ndarray, Tensor], certainty: float = 0.7, query_limit: int = 10) -> List[Dict[str, Union[str, float]]]:
+    def vector_query(self, collection_name: str, vector: Union[list[Tensor], ndarray, Tensor], certainty: float = 0.75, query_limit: int = 10) -> List[Dict[str, Union[str, float]]]:
         nearVector = {
             "vector": vector,
             "certainty": certainty

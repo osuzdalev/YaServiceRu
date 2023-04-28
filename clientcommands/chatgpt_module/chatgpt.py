@@ -5,7 +5,7 @@ from typing import List, Tuple, Dict
 import openai
 from openai import InvalidRequestError
 
-from telegram import Update, LabeledPrice
+from telegram import Update, LabeledPrice, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters, PreCheckoutQueryHandler
 from telegram.constants import ParseMode
 
@@ -22,6 +22,9 @@ openai.api_key = constants.get("API", "OPENAI")
 
 # Load the model to GPU if available
 EMBEDDING_MODEL.to(DEVICE)
+
+request_inline_keyboard = [[InlineKeyboardButton("Обратиться к специалисту", callback_data="REQUEST_COMMAND")]]
+reply_request_inline_markup = InlineKeyboardMarkup(request_inline_keyboard)
 
 
 async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -101,6 +104,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     user = update.message.from_user
     logger_chatgpt.info("({}, {}, {}) /gpt_request".format(user.id, user.name, user.first_name))
 
+    # Checking if user prompt is a valid question
     is_valid_prompt = await validate_prompt(update, context)
     if not is_valid_prompt:
         return
@@ -127,7 +131,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             context.user_data["GPT_messages_sent"] += 1
             response += f"\n\nОсталось {FREE_PROMPT_LIMIT - context.user_data['GPT_messages_sent']} сообщений"
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
-            await update.message.reply_text(response)
+            await update.message.reply_text(response, reply_markup=reply_request_inline_markup)
         else:
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
@@ -144,7 +148,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             context.user_data["GPT_messages_sent"] += 1
             response += f"\n\nОсталось {FREE_PROMPT_LIMIT - context.user_data['GPT_messages_sent']} сообщений"
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
-            await update.message.reply_text(response)
+            await update.message.reply_text(response, reply_markup=reply_request_inline_markup)
         else:
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
@@ -165,7 +169,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             # Update the response message to include the remaining tokens
             response += f"\n\nОсталось {conversation_tokens} токенов"
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
-            await update.message.reply_text(response)
+            await update.message.reply_text(response, reply_markup=reply_request_inline_markup)
         else:
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(

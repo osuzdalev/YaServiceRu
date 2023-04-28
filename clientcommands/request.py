@@ -17,19 +17,17 @@ async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     logger_req.info("({}, {}, {}) /request".format(user.id, user.name, user.first_name))
     context.user_data.setdefault("Request_temp_messages", [])
-    print("BEFORE ", len(context.user_data["Request_temp_messages"]))
     keyboard = [
         [
-            InlineKeyboardButton("Отменить", callback_data="REQUEST_CALL_CANCEL"),
-            InlineKeyboardButton("Подтвердить", callback_data="REQUEST_CALL_CONFIRM"),
+            InlineKeyboardButton("❌Отменить", callback_data="REQUEST_CALL_CANCEL"),
+            InlineKeyboardButton("✅Подтвердить", callback_data="REQUEST_CALL_CONFIRM"),
         ],
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    temp_message = await update.message.reply_text("Подтвердить вызов специалиста?", reply_markup=reply_markup)
+    temp_message = await context.bot.sendMessage(update.effective_chat.id, "Подтвердить вызов специалиста?", reply_markup=reply_markup)
     context.user_data["Request_temp_messages"].append(temp_message)
-    print("AFTER ", len(context.user_data["Request_temp_messages"]))
 
 
 async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -73,8 +71,9 @@ async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         context.user_data["Request_temp_messages"] = []
 
 
-request_handler = CommandHandler("request", request)
+request_command_handler = CommandHandler("request", request)
 request_replykeyboard_handler = MessageHandler(filters.Regex(r"^(🤓Специалист)$"), request)
+request_callback_handler = CallbackQueryHandler(request, pattern="REQUEST_COMMAND")
 confirm_request_handler = CallbackQueryHandler(confirm_request, pattern="REQUEST_CALL_CONFIRM")
 cancel_request_handler = CallbackQueryHandler(cancel_request, pattern="REQUEST_CALL_CANCEL")
 cancel_request_handler_message = MessageHandler(filters.Regex(r"^❌Отменить$"), cancel_request)

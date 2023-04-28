@@ -55,8 +55,9 @@ if __name__ == "__main__":
     application.add_handler(start.start_handler, CLIENT_BASIC)
 
     # REQUEST
-    application.add_handler(req.request_handler, CLIENT_BASIC)
+    application.add_handler(req.request_command_handler, CLIENT_BASIC)
     application.add_handler(req.request_replykeyboard_handler, CLIENT_BASIC)
+    application.add_handler(req.request_callback_handler, CLIENT_BASIC)
     application.add_handler(req.confirm_request_handler, CLIENT_BASIC)
     application.add_handler(req.cancel_request_handler, CLIENT_BASIC)
     application.add_handler(req.cancel_request_handler_message, CLIENT_BASIC)

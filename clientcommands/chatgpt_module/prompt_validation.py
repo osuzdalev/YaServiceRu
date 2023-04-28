@@ -85,7 +85,9 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return False
 
     if not check_prompt_semantic(prompt):
-        await update.message.reply_text("Пошел *****!")
+        await update.message.reply_text("Извините, но ваш вопрос выходит за рамки моей компетенции.\n"
+                                        "Пожалуйста, задайте вопрос, связанный с ПО компьютеров, смартфонов, планшетов "
+                                        "и подобных устройств.")
         return False
 
     return True

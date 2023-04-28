@@ -46,7 +46,7 @@ MAX_MESSAGES_STRING = "Вы достигли лимита бесплатного
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 EMBEDDING_MODEL = SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
-SEMANTIC_THRESHOLD = 0.70
+SEMANTIC_THRESHOLD = 0.75
 QUERY_LIMIT = 10
 
 # Initialize the WeaviateClient
