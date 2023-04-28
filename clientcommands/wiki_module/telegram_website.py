@@ -15,6 +15,7 @@ from telegram.ext import (
 )
 
 from resources.constants_loader import load_constants
+
 constants = load_constants()
 
 logger_website = logging.getLogger(__name__)
@@ -25,6 +26,7 @@ CANCEL = "❌ЗАКРЫТЬ"
 
 class Loader(yaml.SafeLoader):
     """Special class that enables parsing the '!include' tag in the yaml files"""
+
     def __init__(self, stream):
         self._root = os.path.split(stream.name)[0]
         super(Loader, self).__init__(stream)
@@ -106,7 +108,8 @@ class Website:
             try:
                 invoice = copy.deepcopy(info["invoice"])
 
-                async def invoice_handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page, invoice=invoice) -> None:
+                async def invoice_handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page,
+                                                   invoice=invoice) -> None:
                     """Sends an invoice without shipping-payment."""
                     query = update.callback_query
                     user = query.from_user
@@ -136,12 +139,13 @@ class Website:
                     # optionally pass need_name=True, need_phone_number=True,
                     # need_email=True, need_shipping_address=True, is_flexible=True
                     await context.bot.send_invoice(
-                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA"),
+                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA_TEST"),
                         currency, prices
                     )
 
                 # Add the handler callback to the state
-                self.state[self.state_name].append(CallbackQueryHandler(invoice_handler_callback, pattern=invoice["callback_pattern"]))
+                self.state[self.state_name].append(
+                    CallbackQueryHandler(invoice_handler_callback, pattern=invoice["callback_pattern"]))
             except KeyError:
                 pass
 
@@ -170,11 +174,13 @@ class Website:
                     for key in page.messages:
                         if page.messages[key][0] == "text":
                             message = await context.bot.send_message(chat_id=update.effective_chat.id,
-                                                           text=page.messages[key][1], parse_mode=ParseMode.MARKDOWN_V2)
+                                                                     text=page.messages[key][1],
+                                                                     parse_mode=ParseMode.MARKDOWN_V2)
                             context.user_data["Annexe_Messages"].append(message)
                         elif page.messages[key][0] == "picture":
-                            message = await context.bot.send_photo(chat_id=update.effective_chat.id,
-                                                         photo=page.messages[key][1], parse_mode=ParseMode.MARKDOWN_V2)
+                            with open(page.messages[key][1], 'rb') as photo:
+                                message = await context.bot.send_photo(chat_id=update.effective_chat.id,
+                                                                       photo=photo)
                             context.user_data["Annexe_Messages"].append(message)
 
                 await query.edit_message_text(text=page.title,
@@ -182,6 +188,7 @@ class Website:
                                               parse_mode=ParseMode.MARKDOWN_V2)
 
                 return self.state_name
+
             # Add the handler callback to the state
             self.state[self.state_name].append(CallbackQueryHandler(handler_callback, pattern=page.name))
 
@@ -223,7 +230,8 @@ class Website:
             context.user_data["Annexe_Messages"] = []
             # Generate appropriate response
             await query.edit_message_text(text=self.pages[target_handler_callback].title,
-                                          reply_markup=InlineKeyboardMarkup(self.pages[target_handler_callback].keyboard),
+                                          reply_markup=InlineKeyboardMarkup(
+                                              self.pages[target_handler_callback].keyboard),
                                           parse_mode=ParseMode.MARKDOWN)
 
             return self.state_name

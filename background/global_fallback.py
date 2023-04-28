@@ -17,8 +17,8 @@ chat_stop = "/chat_stop"
 customer_commands = [start, request, wiki, pay, cancel, chat, chat_stop]
 
 # Customer ReplyKeyboardButtons
-wiki_button = "📖Вики"
-chatgpt_button = "🤖YaService-GPT"
+wiki_button = "📖Справочник"
+chatgpt_button = "🤖Чат с подержкой"
 request_button = "🤓Специалист"
 cancel_button = "❌Отменить"
 

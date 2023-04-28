@@ -15,7 +15,7 @@ services:
       CLUSTER_HOSTNAME: 'node1'
     volumes:
       #- /home/yaserviceru/Desktop/YaServiceRu/clientcommands/chatgpt_module/Weaviate/data:/data # Added shared volume
-      - /Users/osuz/PycharmProjects/YaServiceRu/clientcommands/chatgpt_module/Weaviate/data:/data
+      - /home/yaserviceru/Desktop/YaServiceRu/clientcommands/chatgpt_module/Weaviate/data:/data
   t2v-transformers:
     image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2 # Multilinguil model
     environment:
