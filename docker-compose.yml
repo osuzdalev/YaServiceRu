@@ -1,0 +1,53 @@
+version: '3.4'
+services:
+  weaviate:
+    image: semitechnologies/weaviate:1.18.2
+    restart: on-failure:0
+    ports:
+     - "8080:8080"
+    environment:
+      QUERY_DEFAULTS_LIMIT: 20
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: "/data"
+      DEFAULT_VECTORIZER_MODULE: text2vec-transformers
+      ENABLE_MODULES: text2vec-transformers
+      TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
+      CLUSTER_HOSTNAME: 'node1'
+    volumes:
+      - ./data/semantic_filters_data/weaviate_data:/data
+  t2v-transformers:
+    image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2
+    environment:
+      ENABLE_CUDA: 0
+  yaserviceru:
+    environment:
+      - ID_BOT_MAIN=${ID_BOT_MAIN}
+      - ID_BOT_DEV=${ID_BOT_DEV}
+      - ID_YASERVICERU_CENTER=${ID_YASERVICERU_CENTER}
+      - ID_DEV_MAIN=${ID_DEV_MAIN}
+      - ID_DEV_TEST=${ID_DEV_TEST}
+      - ID_CONTRACTOR_MAIN=${ID_CONTRACTOR_MAIN}
+      - API_ID=${API_ID}
+      - API_HASH=${API_HASH}
+      - API_OPENAI=${API_OPENAI}
+      - API_WEAVIATE=${API_WEAVIATE}
+      - TOKEN_TG_MAIN_BOT=${TOKEN_TG_MAIN_BOT}
+      - TOKEN_TG_DEV_BOT=${TOKEN_TG_DEV_BOT}
+      - TOKEN_PAYMENT_PROVIDER_YOOKASSA=${TOKEN_PAYMENT_PROVIDER_YOOKASSA}
+      - USERNAME_BOT_MAIN=${USERNAME_BOT_MAIN}
+      - USERNAME_BOT_DEV=${USERNAME_BOT_DEV}
+      - FILEPATH_DATABASE=${FILEPATH_DATABASE}
+      - FILEPATH_PERSISTENCE=${FILEPATH_PERSISTENCE}
+      - FILEPATH_LOGGER=${FILEPATH_LOGGER}
+      - EMAIL_YANDEX_YASERVICERU=${EMAIL_YANDEX_YASERVICERU}
+      - EMAIL_YANDEX_OLEG=${EMAIL_YANDEX_OLEG}
+      - EMAIL_YANDEX_DENIS=${EMAIL_YANDEX_DENIS}
+      - PASSWORD_YANDEX_YASERVICERU=${PASSWORD_YANDEX_YASERVICERU}
+      - PASSWORD_YANDEX_YASERVICERU_APP=${PASSWORD_YANDEX_YASERVICERU_APP}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    depends_on:
+      - weaviate

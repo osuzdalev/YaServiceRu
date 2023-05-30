@@ -1,19 +1,18 @@
 import logging
 import os
-import pickle
 import sys
-import pprint
 
 from telegram.ext import Application, PicklePersistence
 
 from dotenv import load_dotenv
-from clientcommands import request as req, start
-from clientcommands.chatgpt_module import chatgpt
-from clientcommands.wiki_module import wiki_command
+from commands.client import request as req
+from commands.client import start
+from commands.client.chatgpt_module import chatgpt
+from commands.client.wiki_module import wiki_command
 
-# from contractorcommands import assign, complete, commands
-from centercommands import orders
-from background import global_fallback, data_collector, error_logging
+# from contractor import assign, complete, commands
+from commands.center import orders
+from common import global_fallback, data_collector, error_logging
 
 load_dotenv()
 
@@ -56,7 +55,7 @@ if __name__ == "__main__":
     )
 
     # DATA COLLECTION
-    application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
+    #application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
     # TODO
     # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
     application.add_handler(

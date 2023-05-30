@@ -1,0 +1,36 @@
+title: &title Установка драйверов и обновление для ноутбуков / моноблоков
+
+messages:
+  1:
+    - text
+    - "1️⃣  [Скачать AiDa64]( https://disk.yandex.ru/d/Nt0mGKTChCkcgQ)
+
+
+    2️⃣  [скачать Ассистент «быстрый старт»]( https://disk.yandex.ru/d/ckYlK16wAvGbRg) 
+
+
+    3️⃣  `Оплатить` услугу по кнопке внизу
+
+
+    4️⃣  запустить программу и предоставить данные для подключения"
+
+  2:
+    - picture
+    - client/wiki_module/wiki_data/Windows/2_Update_Drivers/Installing_Updating_Drivers/1_обновление_драйверов.png
+
+buttons:
+- - - Oбратиться к специалисту
+    - W_UD_Installing_Updating_Drivers_pay
+
+invoice:
+  callback_pattern: W_UD_Installing_Updating_Drivers_pay
+  title: *title
+  description: "Нажимая на эту кнопку, вы сможете оплатить услугу.
+  
+  После того, как мы получим оплату, мы свяжемся с вами через телеграм, чтобы уточнить детали и оказать необходимую помощь.
+  
+  ПО Входит в стоимость услуг."
+  payload: W_UD_Installing_Updating_Drivers_payload
+  currency: RUB
+  price: 1000
+  label: Установка и Обновление Драйверов
