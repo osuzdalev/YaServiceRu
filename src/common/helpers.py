@@ -1,12 +1,12 @@
 import datetime
 import logging
 import os
-from typing import Tuple, List, Dict, Any
+from typing import Tuple, List, Any
 
 from telegram import Update
 from telegram.ext import ContextTypes
 
-import common.telegram_database_utils as tldb
+from src import common as tldb
 from dotenv import load_dotenv
 
 logger_helpers = logging.getLogger(__name__)

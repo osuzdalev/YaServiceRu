@@ -15,4 +15,4 @@ COPY . /app
 EXPOSE 80
 
 # Run your application when the container launches
-CMD ["python", "main.py"]
+CMD ["python", "-m", "scripts.main"]

@@ -1,4 +1,3 @@
-import os
 import logging
 
 from telegram import (
@@ -16,7 +15,7 @@ from telegram.ext import (
     filters,
 )
 
-from common import helpers, telegram_database_utils as tldb
+from src.common import helpers, telegram_database_utils as tldb
 
 logger_assign = logging.getLogger(__name__)
 

@@ -15,7 +15,7 @@ def apply_changes(use_local: bool):
     main_py = "main.py"
     telegram_website_py = "client/wiki_module/telegram_website.py"
     telegram_database_utils_py = "common/telegram_database_utils.py"
-    docker_compose_yml = "client/chatgpt_module/Weaviate/docker-compose.yml"
+    docker_compose_yml = "client/chatgpt_module/Weaviate/test-docker-compose.yml"
 
     if use_local:
         replace_in_file(

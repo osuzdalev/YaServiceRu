@@ -6,7 +6,7 @@ from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, InlineQueryHandler
 
-from commands.client.wiki_module import (
+from src.commands.client.wiki_module import (
     get_wiki_json_dict,
     get_answer_path,
 )

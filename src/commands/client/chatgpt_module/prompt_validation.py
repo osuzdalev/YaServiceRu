@@ -6,8 +6,8 @@ from telegram.ext import ContextTypes
 
 from dotenv import load_dotenv
 
-from commands.client.chatgpt_module.config import *
-from commands.client.chatgpt_module.token_count import num_tokens_from_string
+from src.commands.client.chatgpt_module.config import *
+from src.commands.client.chatgpt_module.token_count import num_tokens_from_string
 
 logger_chatgpt = logging.getLogger(__name__)
 load_dotenv()

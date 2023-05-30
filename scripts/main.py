@@ -5,14 +5,15 @@ import sys
 from telegram.ext import Application, PicklePersistence
 
 from dotenv import load_dotenv
-from commands.client import request as req
-from commands.client import start
-from commands.client.chatgpt_module import chatgpt
-from commands.client.wiki_module import wiki_command
+from src.commands.client import request as req
+from src.commands.client import start
+from src.commands.client.chatgpt_module import chatgpt
+from src.commands.client.wiki_module import wiki_command
 
 # from contractor import assign, complete, commands
-from commands.center import orders
-from common import global_fallback, data_collector, error_logging
+from src.commands.center import orders
+from src.common import error_logging
+from src.common import global_fallback, data_collector
 
 load_dotenv()
 

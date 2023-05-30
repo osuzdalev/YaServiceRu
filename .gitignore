@@ -1,11 +1,8 @@
 .env
-.idea
-__pycache__
 data/resources/constants.ini
 data/resources/prod_prep.md
-OpenAI
-Test
-Utils
+scripts/Test
+scripts/Utils
 data/chatgpt_data/test.txt
 data/semantic_filters_data/weaviate_data
 data/resources/user_data.yaml
@@ -13,3 +10,5 @@ data/resources/yaserviceru.log
 data/resources/yaserviceru_db.sqlite
 data/resources/yaserviceru_persistence
 .DS_Store
+.idea
+__pycache__

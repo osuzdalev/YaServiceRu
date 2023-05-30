@@ -10,10 +10,8 @@ from telegram.ext import (
     filters,
 )
 
-from common import helpers, telegram_database_utils as tldb
+from src.common import helpers, telegram_database_utils as tldb
 from dotenv import load_dotenv
-from markups.default import default_client_markup
-
 
 logger_req = logging.getLogger(__name__)
 load_dotenv()
@@ -51,11 +49,11 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     device_context = context.user_data.get("Device_Context", [])
 
-    tldb.insert_new_order(user.id, device_context)
+    # tldb.insert_new_order(user.id, device_context)
 
-    OrderID = tldb.get_customer_last_OrderID(user.id)
+    # OrderID = tldb.get_customer_last_OrderID(user.id)
     order_message_str = helpers.get_order_message_str(
-        OrderID, user_data, device_context
+        "BETA", user_data, device_context
     )
 
     await context.bot.sendMessage(os.getenv("ID_DEV_MAIN"), order_message_str)

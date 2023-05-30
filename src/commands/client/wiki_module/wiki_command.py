@@ -11,11 +11,11 @@ from telegram.ext import (
     ConversationHandler,
 )
 
-from commands.client.wiki_module.telegram_website import Website, Page
+from src.commands.client.wiki_module.telegram_website import Website, Page
 
 logger_wiki = logging.getLogger(__name__)
 
-DATA_PATH = "../../../data/wiki_data/wiki_data.yaml"
+DATA_PATH = "../../../../data/wiki_data/wiki_data.yaml"
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), DATA_PATH)
 
 CANCEL = "❌ЗАКРЫТЬ"

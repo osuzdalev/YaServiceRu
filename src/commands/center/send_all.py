@@ -1,13 +1,9 @@
 """NOT A SPAM"""
 
-import os
 import logging
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, KeyboardButton
-from telegram.ext import ContextTypes, ConversationHandler, CommandHandler
-
-from common import helpers, telegram_database_utils as tldb
-
+from telegram import Update
+from telegram.ext import ContextTypes
 
 logger_send_all = logging.getLogger(__name__)
 

@@ -20,7 +20,10 @@ services:
     environment:
       ENABLE_CUDA: 0
   yaserviceru:
-    image: osuzdalev/yaserviceru:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #image: osuzdalev/yaserviceru:latest
     environment:
       - ID_BOT_MAIN=${ID_BOT_MAIN}
       - ID_BOT_DEV=${ID_BOT_DEV}

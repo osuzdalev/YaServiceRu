@@ -1,10 +1,9 @@
-import os
 import logging
 
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler
 
-from common import helpers
+from src.common import helpers
 
 logger_assign = logging.getLogger(__name__)
 

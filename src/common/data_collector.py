@@ -1,6 +1,5 @@
 """Collection of silent functions gathering data about every user that interacts with the bot"""
 
-import os
 import logging
 from typing import Tuple, Optional
 
@@ -13,7 +12,7 @@ from telegram.ext import (
     ChatMemberHandler,
 )
 
-import common.telegram_database_utils as tldb
+from src import common as tldb
 
 logger_data_collector = logging.getLogger(__name__)
 

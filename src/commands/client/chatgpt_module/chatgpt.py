@@ -16,10 +16,10 @@ from telegram.ext import (
 from telegram.constants import ParseMode
 
 from dotenv import load_dotenv
-from common.global_fallback import ignored_texts_re
-from commands.client.chatgpt_module.config import *
-from commands.client.chatgpt_module.token_count import num_tokens_from_string
-from commands.client.chatgpt_module.prompt_validation import (
+from src.common.global_fallback import ignored_texts_re
+from src.commands.client.chatgpt_module.config import *
+from src.commands.client.chatgpt_module.token_count import num_tokens_from_string
+from src.commands.client.chatgpt_module.prompt_validation import (
     validate_prompt,
     check_conversation_tokens,
 )
