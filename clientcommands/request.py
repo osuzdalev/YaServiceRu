@@ -1,4 +1,5 @@
 import logging
+import os
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -9,14 +10,13 @@ from telegram.ext import (
     filters,
 )
 
-from resources.constants_loader import load_constants
 from background import helpers, telegram_database_utils as tldb
+from dotenv import load_dotenv
 from markups.default import default_client_markup
 
 
 logger_req = logging.getLogger(__name__)
-constants = load_constants()
-
+load_dotenv()
 
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends an Inline message to confirm the call"""
@@ -58,9 +58,7 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         OrderID, user_data, device_context
     )
 
-    # await context.bot.sendMessage(constants.get("ID", "DENIS"), order_message_str)
-    await context.bot.sendMessage(constants.get("ID", "OLEG_RU"), order_message_str)
-    # await update.message.reply_text("Служба поддержки свяжется с вами.", reply_markup=default_client_markup)
+    await context.bot.sendMessage(os.getenv("ID_DEV_MAIN"), order_message_str)
     await query.answer(text="Служба поддержки свяжется с вами.", show_alert=True)
 
     # cleaning

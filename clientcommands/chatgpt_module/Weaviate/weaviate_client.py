@@ -1,4 +1,5 @@
 import logging
+import os
 import pprint
 from typing import List, Dict, Union
 
@@ -6,14 +7,14 @@ import weaviate
 from numpy import ndarray
 from torch import Tensor
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 
 logger_weaviate = logging.getLogger(__name__)
-constants = load_constants()
+load_dotenv()
 
 
 class WeaviateClient:
-    def __init__(self, api_url: str = constants.get("API", "WEAVIATE")):
+    def __init__(self, api_url: str = os.getenv("API_WEAVIATE")):
         self.client = weaviate.Client(api_url)
 
         # Ensure the Weaviate instance is ready

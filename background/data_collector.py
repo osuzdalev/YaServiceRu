@@ -1,6 +1,6 @@
 """Collection of silent functions gathering data about every user that interacts with the bot"""
 
-from configparser import ConfigParser
+import os
 import logging
 from typing import Tuple, Optional
 
@@ -16,9 +16,6 @@ from telegram.ext import (
 import background.telegram_database_utils as tldb
 
 logger_data_collector = logging.getLogger(__name__)
-
-constants = ConfigParser()
-constants.read("constants.ini")
 
 
 def extract_user_and_message(

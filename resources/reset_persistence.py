@@ -1,8 +1,8 @@
 import pickle
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 
-constants = load_constants()
+load_dotenv()
 
 base_persistence = {
     "bot_data": {},

@@ -8,11 +8,11 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 
 logger_error = logging.getLogger(__name__)
 
-constants = load_constants()
+load_dotenv()
 
 
 def send_email(content: str) -> None:

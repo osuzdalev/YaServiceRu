@@ -1,13 +1,13 @@
-from configparser import ConfigParser
+import os
 import logging
 import sqlite3
 
 from typing import List, Tuple
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 
-constants = load_constants()
-DB_FILEPATH = constants.get("FILEPATH", "LOCAL_DATABASE")
+load_dotenv()
+DB_FILEPATH = os.getenv("FILEPATH_DATABASE")
 
 logger_tl_db = logging.getLogger(__name__)
 

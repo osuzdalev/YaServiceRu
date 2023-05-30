@@ -10,9 +10,9 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, Labeled
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CallbackQueryHandler, ConversationHandler
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 
-constants = load_constants()
+load_dotenv()
 
 logger_website = logging.getLogger(__name__)
 

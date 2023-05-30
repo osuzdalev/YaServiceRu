@@ -1,6 +1,6 @@
 """NOT A SPAM"""
 
-from configparser import ConfigParser
+import os
 import logging
 
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, KeyboardButton

@@ -1,11 +1,12 @@
 import logging
+import os
 import pickle
 import sys
 import pprint
 
 from telegram.ext import Application, PicklePersistence
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 from clientcommands import request as req, start
 from clientcommands.chatgpt_module import chatgpt
 from clientcommands.wiki_module import wiki_command
@@ -14,7 +15,8 @@ from clientcommands.wiki_module import wiki_command
 from centercommands import orders
 from background import global_fallback, data_collector, error_logging
 
-constants = load_constants()
+#load_dotenv()
+load_dotenv()
 
 # Enable logging
 
@@ -23,7 +25,7 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(constants.get("FILEPATH", "LOCAL_LOGGER"), mode="a"),
+        logging.FileHandler(os.getenv("FILEPATH_LOGGER"), mode="a"),
     ],
 )
 logger = logging.getLogger(__name__)
@@ -44,11 +46,11 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     persistence = PicklePersistence(
-        filepath=constants.get("FILEPATH", "LOCAL_PERSISTENCE")
+        filepath=os.getenv("FILEPATH_PERSISTENCE")
     )
     application = (
         Application.builder()
-        .token(constants.get("TOKEN", "MAIN_BOT"))
+        .token(os.getenv("TOKEN_TG_MAIN_BOT"))
         .persistence(persistence)
         .arbitrary_callback_data(True)
         .build()

@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from typing import List, Tuple, Dict
 
@@ -15,7 +16,7 @@ from telegram.ext import (
 )
 from telegram.constants import ParseMode
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 from background.global_fallback import ignored_texts_re
 from clientcommands.chatgpt_module.chatgpt_data.config import *
 from clientcommands.chatgpt_module.token_count import num_tokens_from_string
@@ -25,9 +26,9 @@ from clientcommands.chatgpt_module.prompt_validation import (
 )
 
 logger_chatgpt = logging.getLogger(__name__)
-constants = load_constants()
+load_dotenv()
 
-openai.api_key = constants.get("API", "OPENAI")
+openai.api_key = os.getenv("API_OPENAI")
 
 # Load the model to GPU if available
 EMBEDDING_MODEL.to(DEVICE)

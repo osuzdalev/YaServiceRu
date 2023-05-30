@@ -4,13 +4,13 @@ from typing import List, Tuple, Dict
 from telegram import Update, LabeledPrice
 from telegram.ext import ContextTypes
 
-from resources.constants_loader import load_constants
+from dotenv import load_dotenv
 
 from clientcommands.chatgpt_module.chatgpt_data.config import *
 from clientcommands.chatgpt_module.token_count import num_tokens_from_string
 
 logger_chatgpt = logging.getLogger(__name__)
-constants = load_constants()
+load_dotenv()
 
 
 def check_conversation_tokens(

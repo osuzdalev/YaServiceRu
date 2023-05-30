@@ -1,4 +1,4 @@
-from configparser import ConfigParser
+import os
 import logging
 
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, KeyboardButton
@@ -8,9 +8,6 @@ from background import helpers, telegram_database_utils as tldb
 
 
 logger_orders = logging.getLogger(__name__)
-
-constants = ConfigParser()
-constants.read("constants.ini")
 
 
 async def orders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

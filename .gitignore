@@ -1,5 +1,4 @@
-.gitsecret/keys/random_seed
-!*.secret
+.env
 .idea
 __pycache__
 resources/constants.ini
