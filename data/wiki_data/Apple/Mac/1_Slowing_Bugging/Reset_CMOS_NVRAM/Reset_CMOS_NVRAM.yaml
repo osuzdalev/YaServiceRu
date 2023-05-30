@@ -20,7 +20,7 @@ messages:
 
   2:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/CMOS.jpg
+    - data/wiki_data/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/CMOS.jpg
 
   3:
     - text
@@ -40,7 +40,7 @@ messages:
 
   4:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/NVRAM.jpg
+    - data/wiki_data/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/NVRAM.jpg
 
 buttons:
 - - - Oбратиться к специалисту

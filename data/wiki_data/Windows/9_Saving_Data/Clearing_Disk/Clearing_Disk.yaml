@@ -15,7 +15,7 @@ messages:
 
   3:
     - picture
-    - client/wiki_module/wiki_data/Windows/9_Saving_Data/Clearing_Disk/1_параметры.png
+    - data/wiki_data/Windows/9_Saving_Data/Clearing_Disk/1_параметры.png
 
   4:
     - text
@@ -23,7 +23,7 @@ messages:
 
   5:
     - picture
-    - client/wiki_module/wiki_data/Windows/9_Saving_Data/Clearing_Disk/2_память.png
+    - data/wiki_data/Windows/9_Saving_Data/Clearing_Disk/2_память.png
 
   6:
     - text
@@ -32,7 +32,7 @@ messages:
 
   7:
     - picture
-    - client/wiki_module/wiki_data/Windows/9_Saving_Data/Clearing_Disk/3_удаление_файлов.png
+    - data/wiki_data/Windows/9_Saving_Data/Clearing_Disk/3_удаление_файлов.png
 
   8:
     - text

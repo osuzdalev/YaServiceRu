@@ -16,7 +16,7 @@ messages:
 
   2:
     - picture
-    - client/wiki_module/wiki_data/Windows/2_Update_Drivers/Installing_Updating_Drivers/1_обновление_драйверов.png
+    - data/wiki_data/Windows/2_Update_Drivers/Installing_Updating_Drivers/1_обновление_драйверов.png
 
 buttons:
 - - - Oбратиться к специалисту

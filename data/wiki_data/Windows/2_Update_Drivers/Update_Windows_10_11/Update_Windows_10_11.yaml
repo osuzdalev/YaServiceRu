@@ -19,7 +19,7 @@ messages:
 
   2:
     - picture
-    - client/wiki_module/wiki_data/Windows/2_Update_Drivers/Update_Windows_10_11/1_обновление_windows.png
+    - data/wiki_data/Windows/2_Update_Drivers/Update_Windows_10_11/1_обновление_windows.png
 
   3:
     - text

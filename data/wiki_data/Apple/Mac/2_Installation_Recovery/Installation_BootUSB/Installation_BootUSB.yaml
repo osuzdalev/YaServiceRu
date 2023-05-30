@@ -11,7 +11,7 @@ messages:
 
   2:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/2_Installation_Recovery/Installation_BootUSB/1_бут_меню.png
+    - data/wiki_data/Apple/Mac/2_Installation_Recovery/Installation_BootUSB/1_бут_меню.png
 
   3:
     - text
@@ -21,7 +21,7 @@ messages:
 
   4:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/2_Installation_Recovery/Installation_BootUSB/2_дисковая_утилита.png
+    - data/wiki_data/Apple/Mac/2_Installation_Recovery/Installation_BootUSB/2_дисковая_утилита.png
 
   5:
     - text
@@ -30,7 +30,7 @@ messages:
 
   6:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/2_Installation_Recovery/Installation_BootUSB/3_переустановка.png
+    - data/wiki_data/Apple/Mac/2_Installation_Recovery/Installation_BootUSB/3_переустановка.png
 
   7:
     - text

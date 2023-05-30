@@ -13,7 +13,7 @@ messages:
 
   2:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/2_Installation_Recovery/Recovery_MacOS/1_кнопка_питания.jpg
+    - data/wiki_data/Apple/Mac/2_Installation_Recovery/Recovery_MacOS/1_кнопка_питания.jpg
 
   3:
     - text
@@ -40,7 +40,7 @@ messages:
 
   5:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/2_Installation_Recovery/Recovery_MacOS/2_интел_для_рекавери.jpg
+    - data/wiki_data/Apple/Mac/2_Installation_Recovery/Recovery_MacOS/2_интел_для_рекавери.jpg
 
   6:
     - text

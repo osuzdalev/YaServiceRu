@@ -22,7 +22,7 @@ messages:
 
   4:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/1_запуск_bootcamp.png
+    - data/wiki_data/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/1_запуск_bootcamp.png
 
   5:
     - text
@@ -30,7 +30,7 @@ messages:
 
   6:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/2_продолжить_запись.png
+    - data/wiki_data/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/2_продолжить_запись.png
 
   7:
     - text
@@ -39,7 +39,7 @@ messages:
 
   8:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/3_выбрать_исо.png
+    - data/wiki_data/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/3_выбрать_исо.png
 
   9:
     - text

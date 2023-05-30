@@ -7,7 +7,7 @@ messages:
 
   2:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/10_Terminal/Launch/1_программы.png
+    - data/wiki_data/Apple/Mac/10_Terminal/Launch/1_программы.png
 
   3:
     - text
@@ -18,7 +18,7 @@ messages:
 
   4:
     - picture
-    - client/wiki_module/wiki_data/Apple/Mac/10_Terminal/Launch/2_утилиты.png
+    - data/wiki_data/Apple/Mac/10_Terminal/Launch/2_утилиты.png
 
 
 buttons:
