@@ -15,7 +15,6 @@ from clientcommands.wiki_module import wiki_command
 from centercommands import orders
 from background import global_fallback, data_collector, error_logging
 
-#load_dotenv()
 load_dotenv()
 
 # Enable logging

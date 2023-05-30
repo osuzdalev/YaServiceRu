@@ -1,4 +1,5 @@
 import pickle
+import os
 
 from dotenv import load_dotenv
 
@@ -12,5 +13,5 @@ base_persistence = {
     "user_data": {},
 }
 
-with open(constants.get("FILEPATH", "LOCAL_PERSISTENCE"), "wb") as f:
+with open(os.getenv("FILEPATH_PERSISTENCE"), "wb") as f:
     pickle.dump(base_persistence, f)

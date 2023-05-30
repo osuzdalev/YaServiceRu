@@ -1,6 +1,7 @@
 import html
 import json
 import logging
+import os
 import smtplib as smtp
 import traceback
 
@@ -17,8 +18,8 @@ load_dotenv()
 
 def send_email(content: str) -> None:
     """Sends an email with the logs to the developer"""
-    yaserviceru_email = constants.get("EMAIL", "YASERVICERU_YANDEX")
-    password = constants.get("PASSWORD", "YASERVICERU_YANDEX_APP")
+    yaserviceru_email = os.getenv("EMAIL_YANDEX_YASERVICERU")
+    password = os.getenv("PASSWORD_YANDEX_YASERVICERU_APP")
 
     # oleg_email = constants.get("EMAIL", "OLEG_YANDEX")
 
@@ -76,7 +77,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
 
     # Finally, send the message via telegram
     await context.bot.send_message(
-        chat_id=constants.get("ID", "OLEG_RU"),
+        chat_id=os.getenv("ID_DEV_MAIN"),
         text=tg_message,
         parse_mode=ParseMode.HTML,
     )
