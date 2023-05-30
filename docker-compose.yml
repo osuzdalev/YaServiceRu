@@ -20,6 +20,7 @@ services:
     environment:
       ENABLE_CUDA: 0
   yaserviceru:
+    image: osuzdalev/yaserviceru:latest
     environment:
       - ID_BOT_MAIN=${ID_BOT_MAIN}
       - ID_BOT_DEV=${ID_BOT_DEV}
@@ -44,9 +45,6 @@ services:
       - EMAIL_YANDEX_CONTRACTOR_MAIN=${EMAIL_YANDEX_CONTRACTOR_MAIN}
       - PASSWORD_YANDEX_YASERVICERU=${PASSWORD_YANDEX_YASERVICERU}
       - PASSWORD_YANDEX_YASERVICERU_APP=${PASSWORD_YANDEX_YASERVICERU_APP}
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - "8081:80"
     depends_on:
