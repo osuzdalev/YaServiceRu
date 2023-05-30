@@ -16,15 +16,12 @@ if "EnglishFilters" not in schema:
     english_filter_class = {
         "class": "EnglishFilters",
         "description": "Sentences in English about our theme/business/domain to compare with incoming user prompts for filtering",
-        "properties": [{
-            "name": "content",
-            "dataType": ["text"]
-        }],
+        "properties": [{"name": "content", "dataType": ["text"]}],
         "vectorizer": "text2vec-transformers",
         "moduleConfig": {
             "text2vec-transformers": {
                 "poolingStrategy": "masked_mean",
-                "vectorizeClassName": False
+                "vectorizeClassName": False,
             }
         },
     }
@@ -36,15 +33,12 @@ if "RussianFilters" not in schema:
     russian_filter_class = {
         "class": "RussianFilters",
         "description": "Sentences in Russian about our theme/business/domain to compare with incoming user prompts for filtering",
-        "properties": [{
-            "name": "content",
-            "dataType": ["text"]
-        }],
+        "properties": [{"name": "content", "dataType": ["text"]}],
         "vectorizer": "text2vec-transformers",
         "moduleConfig": {
             "text2vec-transformers": {
                 "poolingStrategy": "masked_mean",
-                "vectorizeClassName": False
+                "vectorizeClassName": False,
             }
         },
     }
@@ -56,15 +50,12 @@ if "SpecialSubjectFilters" not in schema:
     special_subject_filter_class = {
         "class": "SpecialSubjectFilters",
         "description": "Sentences about particular subjects to compare with incoming user prompts, triggering a special logic/response when close enough",
-        "properties": [{
-            "name": "content",
-            "dataType": ["text"]
-        }],
+        "properties": [{"name": "content", "dataType": ["text"]}],
         "vectorizer": "text2vec-transformers",
         "moduleConfig": {
             "text2vec-transformers": {
                 "poolingStrategy": "masked_mean",
-                "vectorizeClassName": False
+                "vectorizeClassName": False,
             }
         },
     }
@@ -78,13 +69,13 @@ pprint.pp(schema)
 
 # Read filters from text files
 def read_filters_from_file(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         filters = [line.strip() for line in f.readlines()]
     return filters
 
 
-english_filters_file = 'english_filters.txt'
-russian_filters_file = 'russian_filters.txt'
+english_filters_file = "english_filters.txt"
+russian_filters_file = "russian_filters.txt"
 
 english_filters = read_filters_from_file(english_filters_file)
 russian_filters = read_filters_from_file(russian_filters_file)
@@ -98,4 +89,3 @@ for filter_text in english_filters:
 for filter_text in russian_filters:
     filter_object = {"content": filter_text}
     weaviate_client.write_data_object(filter_object, "RussianFilters")
-

@@ -27,12 +27,16 @@ ENTRY_PAGE_NAME = "Wiki"
 ENTRY_PAGE_TEXT = "Выберите ОС"
 ENTRY_PAGE_MESSAGES = {}
 ENTRY_PAGE_KEYBOARD = [
-    [InlineKeyboardButton(text="Apple", callback_data="Apple"),
-     InlineKeyboardButton(text="Windows", callback_data="Windows")],
-    [InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)]
+    [
+        InlineKeyboardButton(text="Apple", callback_data="Apple"),
+        InlineKeyboardButton(text="Windows", callback_data="Windows"),
+    ],
+    [InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)],
 ]
 ENTRY_PAGE_MARKUP = InlineKeyboardMarkup(ENTRY_PAGE_KEYBOARD)
-entry_page = Page(ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD)
+entry_page = Page(
+    ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD
+)
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
@@ -50,10 +54,12 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     context.user_data[BROWSER_HISTORY_NAME] = [ENTRY_PAGE_NAME]
 
     # Check if user already in Conversation
-    in_conversation = context.user_data.get("in_conversation", '')
-    if not (in_conversation == '' or in_conversation == 'wiki_module'):
-        await update.message.reply_text("Please press /cancel\n"
-                                        "or push the 'CANCEL' button in the previous menu before proceeding")
+    in_conversation = context.user_data.get("in_conversation", "")
+    if not (in_conversation == "" or in_conversation == "wiki_module"):
+        await update.message.reply_text(
+            "Please press /cancel\n"
+            "or push the 'CANCEL' button in the previous menu before proceeding"
+        )
         return ConversationHandler.END
     context.user_data["in_conversation"] = "wiki_module"
 
@@ -66,7 +72,9 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
     """A callback function which has the same output as the wiki command. Necessary if the client wants to browse back
     to the first page of the wiki"""
     user = update.message.from_user
-    logger_wiki.info("({}, {}, {}) /wiki_callback".format(user.id, user.name, user.first_name))
+    logger_wiki.info(
+        "({}, {}, {}) /wiki_callback".format(user.id, user.name, user.first_name)
+    )
     context.user_data[BROWSER_HISTORY_NAME].append(ENTRY_PAGE_NAME)
 
     query = update.callback_query
@@ -79,10 +87,13 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
 
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    logger_wiki.info("({}, {}, {}) /wiki_cancel_command".format(user.id, user.name, user.first_name))
+    logger_wiki.info(
+        "({}, {}, {}) /wiki_cancel_command".format(user.id, user.name, user.first_name)
+    )
     context.user_data["in_conversation"] = ""
     context.user_data["Annexe_Messages"] = []
     return ConversationHandler.END
+
 
 # Generating the telegram_website object from yaml data file
 website = Website(STATE, BROWSER_HISTORY_NAME)
@@ -94,10 +105,15 @@ website.parse(FULL_PATH)
 website.add_page(ENTRY_PAGE_NAME, entry_page, wiki_callback)
 
 conversation_handler = ConversationHandler(
-    entry_points=[CommandHandler("wiki", wiki), MessageHandler(filters.Regex(r"^(📖Справочник)$"), wiki)],
+    entry_points=[
+        CommandHandler("wiki", wiki),
+        MessageHandler(filters.Regex(r"^(📖Справочник)$"), wiki),
+    ],
     states=website.state,
-    fallbacks=[CommandHandler("cancel", cancel_command),
-               MessageHandler(filters.Regex(r"^(❌Отменить)$"), cancel_command)],
+    fallbacks=[
+        CommandHandler("cancel", cancel_command),
+        MessageHandler(filters.Regex(r"^(❌Отменить)$"), cancel_command),
+    ],
     allow_reentry=True,
-    conversation_timeout=15
+    conversation_timeout=15,
 )

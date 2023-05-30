@@ -33,19 +33,23 @@ MAX_PROMPT_TOKENS = MAX_CONVERSATION_TOKENS - INSTRUCTIONS_TOKENS - MAX_RESPONSE
 
 CONFIRM_PAYMENT = "CONFIRM_CHATGPT_PAYMENT"
 DECLINE_PAYMENT = "DECLINE_CHATGPT_PAYMENT"
-MAX_MESSAGES_STRING = "Вы достигли лимита бесплатного взаимодействия с нашим LLM\. " \
-                      "Если вы хотите продолжить получать помощь от нашего LLM, " \
-                      "мы предлагаем опцию оплаты за использование, которая позволяет продлить разговор\. " \
-                      "Пожалуйста, обратите внимание, что этот продленный разговор будет ограничен 4096 символами, " \
-                      "обеспечивая фокусированное и эффективное взаимодействие\. " \
-                      "\n\nЧтобы продолжить с опцией оплаты за использование, введите `{}`, " \
-                      "а затем следуйте инструкциям для оплаты\. " \
-                      "Если вы не хотите продолжать, введите `{}` и не стесняйтесь обращаться к нам в будущем, " \
-                      "если вам потребуется помощь\.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
+MAX_MESSAGES_STRING = (
+    "Вы достигли лимита бесплатного взаимодействия с нашим LLM\. "
+    "Если вы хотите продолжить получать помощь от нашего LLM, "
+    "мы предлагаем опцию оплаты за использование, которая позволяет продлить разговор\. "
+    "Пожалуйста, обратите внимание, что этот продленный разговор будет ограничен 4096 символами, "
+    "обеспечивая фокусированное и эффективное взаимодействие\. "
+    "\n\nЧтобы продолжить с опцией оплаты за использование, введите `{}`, "
+    "а затем следуйте инструкциям для оплаты\. "
+    "Если вы не хотите продолжать, введите `{}` и не стесняйтесь обращаться к нам в будущем, "
+    "если вам потребуется помощь\.".format(CONFIRM_PAYMENT, DECLINE_PAYMENT)
+)
 
 
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-EMBEDDING_MODEL = SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+EMBEDDING_MODEL = SentenceTransformer(
+    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+)
 SEMANTIC_THRESHOLD = 0.75
 QUERY_LIMIT = 10
 

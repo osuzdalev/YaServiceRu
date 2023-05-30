@@ -5,7 +5,13 @@ import logging
 from typing import Tuple, Optional
 
 from telegram import Update, User, Message
-from telegram.ext import ContextTypes, TypeHandler, MessageHandler, filters, ChatMemberHandler
+from telegram.ext import (
+    ContextTypes,
+    TypeHandler,
+    MessageHandler,
+    filters,
+    ChatMemberHandler,
+)
 
 import background.telegram_database_utils as tldb
 
@@ -15,11 +21,25 @@ constants = ConfigParser()
 constants.read("constants.ini")
 
 
-def extract_user_and_message(update: Update) -> Tuple[Optional[User], Optional[Message]]:
+def extract_user_and_message(
+    update: Update,
+) -> Tuple[Optional[User], Optional[Message]]:
     """Extract user and message from the update."""
 
-    user = update.message.from_user if update.message else update.callback_query.from_user if update.callback_query else None
-    message = update.effective_message if update.message else update.callback_query.message if update.callback_query else None
+    user = (
+        update.message.from_user
+        if update.message
+        else update.callback_query.from_user
+        if update.callback_query
+        else None
+    )
+    message = (
+        update.effective_message
+        if update.message
+        else update.callback_query.message
+        if update.callback_query
+        else None
+    )
 
     return user, message
 
@@ -41,7 +61,9 @@ async def collect_data(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
 
     # Log user details if user exists
     if user:
-        logger_data_collector.info(f"({user.id}, {user.name}, {user.first_name}) collect_data")
+        logger_data_collector.info(
+            f"({user.id}, {user.name}, {user.first_name}) collect_data"
+        )
 
     # Log callback data if it exists
     log_callback_data(update)
@@ -71,7 +93,10 @@ async def user_status(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Keeps track of users interacting with the bot or blocking it and updates flag in DB"""
     logger_data_collector.info("user_status()")
     logger_data_collector.info(
-        "update.my_chat_member.new_chat_member.status: {}".format(update.my_chat_member.new_chat_member.status))
+        "update.my_chat_member.new_chat_member.status: {}".format(
+            update.my_chat_member.new_chat_member.status
+        )
+    )
 
 
 data_collection_handler = TypeHandler(Update, collect_data)

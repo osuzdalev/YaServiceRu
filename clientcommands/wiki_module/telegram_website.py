@@ -8,11 +8,7 @@ import pprint
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, LabeledPrice
 from telegram.constants import ParseMode
-from telegram.ext import (
-    ContextTypes,
-    CallbackQueryHandler,
-    ConversationHandler
-)
+from telegram.ext import ContextTypes, CallbackQueryHandler, ConversationHandler
 
 from resources.constants_loader import load_constants
 
@@ -33,11 +29,11 @@ class Loader(yaml.SafeLoader):
 
     def include(self, node):
         filename = os.path.join(self._root, self.construct_scalar(node))
-        with open(filename, 'r') as f:
+        with open(filename, "r") as f:
             return yaml.load(f, Loader)
 
 
-Loader.add_constructor('!include', Loader.include)
+Loader.add_constructor("!include", Loader.include)
 
 
 class Page:
@@ -59,7 +55,7 @@ class Website:
         return "__*" + title + "*__"
 
     def parse(self, config_file):
-        """ Parses a YAML file and generates the pages of the website from the data
+        """Parses a YAML file and generates the pages of the website from the data
         Format of Page
         title: Text to be displayed on the page
 
@@ -82,9 +78,16 @@ class Website:
             cancel_button = InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)
             # Check if there are buttons on the page and parse them accordingly
             try:
-                buttons = info['buttons']
-                keyboard = [[InlineKeyboardButton(text=buttons[i][j][0], callback_data=buttons[i][j][1]) for j in
-                             range(len(buttons[i]))] for i in range(len(buttons))]
+                buttons = info["buttons"]
+                keyboard = [
+                    [
+                        InlineKeyboardButton(
+                            text=buttons[i][j][0], callback_data=buttons[i][j][1]
+                        )
+                        for j in range(len(buttons[i]))
+                    ]
+                    for i in range(len(buttons))
+                ]
             except KeyError:
                 keyboard = []
             # Standardise the page for navigation by adding the CANCEL and BACK buttons at the end
@@ -108,15 +111,27 @@ class Website:
             try:
                 invoice = copy.deepcopy(info["invoice"])
 
-                async def invoice_handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page,
-                                                   invoice=invoice) -> None:
+                async def invoice_handler_callback(
+                    update: Update,
+                    context: ContextTypes.DEFAULT_TYPE,
+                    page=page,
+                    invoice=invoice,
+                ) -> None:
                     """Sends an invoice without shipping-payment."""
                     query = update.callback_query
                     user = query.from_user
-                    logger_website.info("({}, {}, {}) /cancel_request".format(user.id, user.name, user.first_name))
+                    logger_website.info(
+                        "({}, {}, {}) /cancel_request".format(
+                            user.id, user.name, user.first_name
+                        )
+                    )
                     await query.answer()
 
-                    logger_website.debug("This is the invoice_handler_callback for the page {}".format(page.name))
+                    logger_website.debug(
+                        "This is the invoice_handler_callback for the page {}".format(
+                            page.name
+                        )
+                    )
                     logger_website.debug("My buttons are: {}".format(page.keyboard))
 
                     chat_id = update.effective_chat.id
@@ -139,24 +154,40 @@ class Website:
                     # optionally pass need_name=True, need_phone_number=True,
                     # need_email=True, need_shipping_address=True, is_flexible=True
                     await context.bot.send_invoice(
-                        chat_id, title, description, payload, constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA"),
-                        currency, prices
+                        chat_id,
+                        title,
+                        description,
+                        payload,
+                        constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA"),
+                        currency,
+                        prices,
                     )
 
                 # Add the handler callback to the state
                 self.state[self.state_name].append(
-                    CallbackQueryHandler(invoice_handler_callback, pattern=invoice["callback_pattern"]))
+                    CallbackQueryHandler(
+                        invoice_handler_callback, pattern=invoice["callback_pattern"]
+                    )
+                )
             except KeyError:
                 pass
 
             # Generates the "Navigation" handler callback for the page
 
-            async def handler_callback(update: Update, context: ContextTypes.DEFAULT_TYPE, page=page) -> str:
+            async def handler_callback(
+                update: Update, context: ContextTypes.DEFAULT_TYPE, page=page
+            ) -> str:
                 query = update.callback_query
                 await query.answer()
 
-                logger_website.debug("This is the handler callback for the page {}".format(page.name))
-                logger_website.debug("I'm listening to the callback_data {}".format(update.callback_query.data))
+                logger_website.debug(
+                    "This is the handler callback for the page {}".format(page.name)
+                )
+                logger_website.debug(
+                    "I'm listening to the callback_data {}".format(
+                        update.callback_query.data
+                    )
+                )
                 logger_website.debug("My buttons are: {}".format(page.keyboard))
 
                 # Save the current page in browsing history
@@ -165,37 +196,46 @@ class Website:
                 logger_website.debug(browser_history)
 
                 # Save the context for request message to expert
-                pattern = r'[_*]+'
-                output_text = re.sub(pattern, '', page.title)
+                pattern = r"[_*]+"
+                output_text = re.sub(pattern, "", page.title)
                 context.user_data["Device_Context"].append(output_text)
 
                 # Checking if there are annex messages to be sent also
                 if page.messages:
                     for key in page.messages:
                         if page.messages[key][0] == "text":
-                            message = await context.bot.send_message(chat_id=update.effective_chat.id,
-                                                                     text=page.messages[key][1],
-                                                                     parse_mode=ParseMode.MARKDOWN_V2)
+                            message = await context.bot.send_message(
+                                chat_id=update.effective_chat.id,
+                                text=page.messages[key][1],
+                                parse_mode=ParseMode.MARKDOWN_V2,
+                            )
                             context.user_data["Annexe_Messages"].append(message)
                         elif page.messages[key][0] == "picture":
-                            with open(page.messages[key][1], 'rb') as photo:
-                                message = await context.bot.send_photo(chat_id=update.effective_chat.id,
-                                                                       photo=photo)
+                            with open(page.messages[key][1], "rb") as photo:
+                                message = await context.bot.send_photo(
+                                    chat_id=update.effective_chat.id, photo=photo
+                                )
                             context.user_data["Annexe_Messages"].append(message)
 
-                await query.edit_message_text(text=page.title,
-                                              reply_markup=InlineKeyboardMarkup(page.keyboard),
-                                              parse_mode=ParseMode.MARKDOWN_V2)
+                await query.edit_message_text(
+                    text=page.title,
+                    reply_markup=InlineKeyboardMarkup(page.keyboard),
+                    parse_mode=ParseMode.MARKDOWN_V2,
+                )
 
                 return self.state_name
 
             # Add the handler callback to the state
-            self.state[self.state_name].append(CallbackQueryHandler(handler_callback, pattern=page.name))
+            self.state[self.state_name].append(
+                CallbackQueryHandler(handler_callback, pattern=page.name)
+            )
 
     def set_standard_handler_callbacks(self):
         """Add the "BACK" and "CANCEL" functionality as well"""
 
-        async def cancel_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+        async def cancel_callback(
+            update: Update, context: ContextTypes.DEFAULT_TYPE
+        ) -> int:
             logger_website.info("cancel_callback()")
             query = update.callback_query
             await query.answer()
@@ -203,9 +243,13 @@ class Website:
             context.user_data["in_conversation"] = ""
             return ConversationHandler.END
 
-        self.state[self.state_name].append(CallbackQueryHandler(cancel_callback, pattern=CANCEL))
+        self.state[self.state_name].append(
+            CallbackQueryHandler(cancel_callback, pattern=CANCEL)
+        )
 
-        async def back_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+        async def back_callback(
+            update: Update, context: ContextTypes.DEFAULT_TYPE
+        ) -> str:
             """
             A callback function implementing the '<- go back' back arrow equivalent in internet browsers.
             Catches the 'BACK' callback data, determines what was the previous page message the client was on,
@@ -229,15 +273,22 @@ class Website:
                 await message.delete()
             context.user_data["Annexe_Messages"] = []
             # Generate appropriate response
-            await query.edit_message_text(text=self.pages[target_handler_callback].title,
-                                          reply_markup=InlineKeyboardMarkup(
-                                              self.pages[target_handler_callback].keyboard),
-                                          parse_mode=ParseMode.MARKDOWN)
+            await query.edit_message_text(
+                text=self.pages[target_handler_callback].title,
+                reply_markup=InlineKeyboardMarkup(
+                    self.pages[target_handler_callback].keyboard
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+            )
 
             return self.state_name
 
-        self.state[self.state_name].append(CallbackQueryHandler(back_callback, pattern=BACK))
+        self.state[self.state_name].append(
+            CallbackQueryHandler(back_callback, pattern=BACK)
+        )
 
     def add_page(self, page_name, page, callback):
         self.pages[page_name] = page
-        self.state[self.state_name].append(CallbackQueryHandler(callback, pattern=page_name))
+        self.state[self.state_name].append(
+            CallbackQueryHandler(callback, pattern=page_name)
+        )

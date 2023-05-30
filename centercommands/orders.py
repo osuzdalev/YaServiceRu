@@ -33,4 +33,5 @@ async def orders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     else:
         await update.effective_message.reply_text("Not allowed to use this command")
 
+
 orders_handler = CommandHandler("orders", orders)

@@ -9,6 +9,7 @@ from resources.constants_loader import load_constants
 from clientcommands import request as req, start
 from clientcommands.chatgpt_module import chatgpt
 from clientcommands.wiki_module import wiki_command
+
 # from contractorcommands import assign, complete, commands
 from centercommands import orders
 from background import global_fallback, data_collector, error_logging
@@ -22,31 +23,44 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(constants.get("FILEPATH", "LOCAL_LOGGER"), mode='a')
-    ]
+        logging.FileHandler(constants.get("FILEPATH", "LOCAL_LOGGER"), mode="a"),
+    ],
 )
 logger = logging.getLogger(__name__)
 
 
 # Group Handlers
-MESSAGE_COLLECTION, USER_STATUS_COLLECTION, PHONE_COLLECTION, \
-CLIENT_BASIC, CLIENT_WIKI, CLIENT_PAY, \
-CONTRACTOR_BASIC, CONTRACTOR_ASSIGN, \
-GLOBAL_FALLBACK = range(-3, 6)
+(
+    MESSAGE_COLLECTION,
+    USER_STATUS_COLLECTION,
+    PHONE_COLLECTION,
+    CLIENT_BASIC,
+    CLIENT_WIKI,
+    CLIENT_PAY,
+    CONTRACTOR_BASIC,
+    CONTRACTOR_ASSIGN,
+    GLOBAL_FALLBACK,
+) = range(-3, 6)
 
 if __name__ == "__main__":
-    persistence = PicklePersistence(filepath=constants.get("FILEPATH", "LOCAL_PERSISTENCE"))
-    application = Application.builder()\
-        .token(constants.get("TOKEN", "MAIN_BOT"))\
-        .persistence(persistence)\
-        .arbitrary_callback_data(True)\
+    persistence = PicklePersistence(
+        filepath=constants.get("FILEPATH", "LOCAL_PERSISTENCE")
+    )
+    application = (
+        Application.builder()
+        .token(constants.get("TOKEN", "MAIN_BOT"))
+        .persistence(persistence)
+        .arbitrary_callback_data(True)
         .build()
+    )
 
     # DATA COLLECTION
     application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
     # TODO
     # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
-    application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
+    application.add_handler(
+        data_collector.collection_phone_number_handler, PHONE_COLLECTION
+    )
 
     # ERROR HANDLER
     application.add_error_handler(error_logging.error_handler)

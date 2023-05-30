@@ -24,10 +24,12 @@ class WeaviateClient:
         return self.client.schema.get()
 
     def delete_all(self) -> None:
-        print("Are you sure you want to delete the entire schema? This action cannot be undone. (y/n)")
+        print(
+            "Are you sure you want to delete the entire schema? This action cannot be undone. (y/n)"
+        )
 
         confirmation = input().lower()
-        if confirmation == 'y':
+        if confirmation == "y":
             self.client.schema.delete_all()
             print("Entire schema deleted.")
         else:
@@ -41,10 +43,12 @@ class WeaviateClient:
             logger_weaviate.info(f"Error creating class '{class_config['class']}': {e}")
 
     def delete_class(self, class_name: str) -> None:
-        print(f"Are you sure you want to delete the '{class_name}' class? This action cannot be undone. (y/n)")
+        print(
+            f"Are you sure you want to delete the '{class_name}' class? This action cannot be undone. (y/n)"
+        )
 
         confirmation = input().lower()
-        if confirmation == 'y':
+        if confirmation == "y":
             self.client.schema.delete_class(class_name)
             logger_weaviate.info(f"Class '{class_name}' deleted.")
         else:
@@ -53,19 +57,19 @@ class WeaviateClient:
     def write_data_object(self, data: Dict, class_name: str) -> None:
         self.client.data_object.create(data_object=data, class_name=class_name)
 
-    def vector_query(self, collection_name: str, vector: Union[list[Tensor], ndarray, Tensor], certainty: float = 0.75, query_limit: int = 10) -> List[Dict[str, Union[str, float]]]:
-        nearVector = {
-            "vector": vector,
-            "certainty": certainty
-        }
+    def vector_query(
+        self,
+        collection_name: str,
+        vector: Union[list[Tensor], ndarray, Tensor],
+        certainty: float = 0.75,
+        query_limit: int = 10,
+    ) -> List[Dict[str, Union[str, float]]]:
+        nearVector = {"vector": vector, "certainty": certainty}
 
-        properties = [
-            "content"
-        ]
+        properties = ["content"]
 
         result = (
-            self.client.query
-            .get(collection_name, properties)
+            self.client.query.get(collection_name, properties)
             .with_near_vector(nearVector)
             .with_additional(["certainty"])
             .with_limit(query_limit)
@@ -73,8 +77,7 @@ class WeaviateClient:
         )
 
         if "errors" in result:
-            raise Exception(result["errors"][0]['message'])
+            raise Exception(result["errors"][0]["message"])
 
         print(result["data"]["Get"][collection_name])
         return result["data"]["Get"][collection_name]
-

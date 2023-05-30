@@ -22,7 +22,12 @@ chatgpt_button = "🤖Чат с подержкой"
 request_button = "🤓Специалист"
 cancel_button = "❌Отменить"
 
-customer_replykeyboard_buttons = [wiki_button, chatgpt_button, request_button, cancel_button]
+customer_replykeyboard_buttons = [
+    wiki_button,
+    chatgpt_button,
+    request_button,
+    cancel_button,
+]
 
 # Customer special messages
 chatgpt_confirm_pay_message = "CONFIRM_CHATGPT_PAYMENT"
@@ -42,7 +47,9 @@ orders = "/orders"
 center_commands = [orders]
 
 ignored_commands = customer_commands + contractor_commands + center_commands
-ignored_commands_re = r"^(" + "|".join("\\" + message for message in ignored_commands) + ")$"
+ignored_commands_re = (
+    r"^(" + "|".join("\\" + message for message in ignored_commands) + ")$"
+)
 
 ignored_texts = customer_replykeyboard_buttons + customer_special_messages
 ignored_texts_re = r"^(" + "|".join(message for message in ignored_texts) + ")$"
@@ -53,4 +60,6 @@ async def unknown_command(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text("Incorrect command")
 
 
-global_fallback_handler = MessageHandler(filters.COMMAND & (~ filters.Regex(ignored_commands_re)), unknown_command)
+global_fallback_handler = MessageHandler(
+    filters.COMMAND & (~filters.Regex(ignored_commands_re)), unknown_command
+)
