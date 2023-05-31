@@ -266,7 +266,7 @@ async def gpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         title,
         description,
         payload,
-        constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA_TEST"),
+        os.getenv("TOKEN_PAYMENT_PROVIDER_YOOKASSA"),
         currency,
         prices,
     )

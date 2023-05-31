@@ -7,7 +7,7 @@ from telegram.ext import Application, PicklePersistence
 from dotenv import load_dotenv
 from src.commands.client import request as req
 from src.commands.client import start
-from src.commands.client.chatgpt_module import chatgpt
+from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
 from src.commands.client.wiki_module import wiki_command
 
 # from contractor import assign, complete, commands
@@ -82,16 +82,7 @@ if __name__ == "__main__":
     # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
 
     # CHATGPT
-    application.add_handler(chatgpt.gpt_handler_command, CLIENT_BASIC)
-    application.add_handler(chatgpt.gpt_handler_message, CLIENT_BASIC)
-    application.add_handler(chatgpt.gpt_request_handler, CLIENT_BASIC)
-    application.add_handler(chatgpt.gpt_payment_yes_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.gpt_precheckout_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.gpt_successful_payment_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.gpt_payment_no_handler, CLIENT_PAY)
-    application.add_handler(chatgpt.gpt_stop_handler_command, CLIENT_BASIC)
-    application.add_handler(chatgpt.gpt_stop_handler_message, CLIENT_BASIC)
-    application.add_handler(chatgpt.gpt_get_remaining_tokens_handler, CLIENT_BASIC)
+    application.add_handlers(handlers=ChatGptHandler().get_handlers())
 
     # CONTRACTOR HANDLERS
     # application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)

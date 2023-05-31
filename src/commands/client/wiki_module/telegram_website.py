@@ -158,7 +158,7 @@ class Website:
                         title,
                         description,
                         payload,
-                        constants.get("TOKEN", "PAYMENT_PROVIDER_YOOKASSA"),
+                        os.getenv("TOKEN_PAYMENT_PROVIDER_YOOKASSA"),
                         currency,
                         prices,
                     )

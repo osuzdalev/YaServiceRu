@@ -74,8 +74,8 @@ def read_filters_from_file(file_path):
     return filters
 
 
-english_filters_file = "../../../../../data/semantic_filters_data/filters/english_filters.txt"
-russian_filters_file = "../../../../../data/semantic_filters_data/filters/russian_filters.txt"
+english_filters_file = "../data/semantic_filters_data/filters/english_filters.txt"
+russian_filters_file = "../data/semantic_filters_data/filters/russian_filters.txt"
 
 english_filters = read_filters_from_file(english_filters_file)
 russian_filters = read_filters_from_file(russian_filters_file)
