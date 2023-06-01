@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from src.commands.client.request_module.request_handler import RequestHandler
 from src.commands.client.start_module.start_handler import StartHandler
 from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
-from src.commands.client.wiki_module import wiki_command
+from src.commands.client.wiki_module.wiki_handler import WikiHandler
 
 # from contractor import assign, complete, commands
 from src.commands.center import orders
@@ -72,7 +72,8 @@ if __name__ == "__main__":
     # REQUEST
     application.add_handlers(handlers=RequestHandler().get_handlers())
 
-    application.add_handler(wiki_command.conversation_handler, CLIENT_WIKI)
+    # WIKI
+    application.add_handlers(handlers=WikiHandler().get_handlers())
     # TODO make the wiki objects compatible with inline queries
     # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
 

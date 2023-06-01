@@ -1,41 +1,17 @@
 import logging
 from typing import Union
-import os
 
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, InlineKeyboardMarkup
 from telegram.ext import (
-    CommandHandler,
-    MessageHandler,
-    filters,
     ContextTypes,
     ConversationHandler,
 )
 
-from src.commands.client.wiki_module.telegram_website import Website, Page
+from src.commands.client.wiki_module.config import *
 
 logger_wiki = logging.getLogger(__name__)
 
-DATA_PATH = "../../../../data/wiki_data/wiki_data.yaml"
-FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), DATA_PATH)
-
-CANCEL = "❌ЗАКРЫТЬ"
-
-STATE = "WIKI"
-BROWSER_HISTORY_NAME = "WIKI_HISTORY"
-ENTRY_PAGE_NAME = "Wiki"
-ENTRY_PAGE_TEXT = "Выберите ОС"
-ENTRY_PAGE_MESSAGES = {}
-ENTRY_PAGE_KEYBOARD = [
-    [
-        InlineKeyboardButton(text="Apple", callback_data="Apple"),
-        InlineKeyboardButton(text="Windows", callback_data="Windows"),
-    ],
-    [InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)],
-]
 ENTRY_PAGE_MARKUP = InlineKeyboardMarkup(ENTRY_PAGE_KEYBOARD)
-entry_page = Page(
-    ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD
-)
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
@@ -92,27 +68,3 @@ async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     context.user_data["in_conversation"] = ""
     context.user_data["Annexe_Messages"] = []
     return ConversationHandler.END
-
-
-# Generating the telegram_website object from yaml data file
-website = Website(STATE, BROWSER_HISTORY_NAME)
-# TODO Can this be done at init()?
-website.set_standard_handler_callbacks()
-# Parse the yaml file
-website.parse(FULL_PATH)
-# Adding the first page to website
-website.add_page(ENTRY_PAGE_NAME, entry_page, wiki_callback)
-
-conversation_handler = ConversationHandler(
-    entry_points=[
-        CommandHandler("wiki", wiki),
-        MessageHandler(filters.Regex(r"^(📖Справочник)$"), wiki),
-    ],
-    states=website.state,
-    fallbacks=[
-        CommandHandler("cancel", cancel_command),
-        MessageHandler(filters.Regex(r"^(❌Отменить)$"), cancel_command),
-    ],
-    allow_reentry=True,
-    conversation_timeout=15,
-)
