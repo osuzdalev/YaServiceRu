@@ -4,7 +4,7 @@ from sentence_transformers import SentenceTransformer
 import torch
 
 from src.commands.client.chatgpt_module.token_count import num_tokens_from_string
-from src.commands.client.chatgpt_module.Weaviate.weaviate_client import WeaviateClient
+from src.commands.client.prompt_filter_module.weaviate_client import WeaviateClient
 
 INSTRUCTIONS_PATH = "../../../../data/chatgpt_data/system_instructions.txt"
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), INSTRUCTIONS_PATH)
