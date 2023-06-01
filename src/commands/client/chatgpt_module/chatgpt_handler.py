@@ -54,7 +54,6 @@ class ChatGptHandler:
         )
 
     def get_handlers(self):
-        print("HandlerGroupType.CLIENT_BASIC: ", HandlerGroupType.CLIENT_BASIC.value)
         return {
             HandlerGroupType.CLIENT_BASIC.value: [self.gpt_handler_command,
                                                   self.gpt_handler_message,

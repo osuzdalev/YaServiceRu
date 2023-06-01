@@ -6,7 +6,7 @@ from telegram.ext import Application, PicklePersistence
 
 from dotenv import load_dotenv
 from src.commands.client.request_module.request_handler import RequestHandler
-from src.commands.client.start_module import start
+from src.commands.client.start_module.start_handler import StartHandler
 from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
 from src.commands.client.wiki_module import wiki_command
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     application.add_error_handler(error_logging.error_handler)
 
     # CLIENT HANDLERS
-    application.add_handler(start.start_handler, CLIENT_BASIC)
+    application.add_handlers(handlers=StartHandler().get_handlers())
 
     # REQUEST
     application.add_handlers(handlers=RequestHandler().get_handlers())

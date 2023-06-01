@@ -31,7 +31,6 @@ class RequestHandler:
         )
 
     def get_handlers(self):
-        print("HandlerGroupType.CLIENT_BASIC: ", HandlerGroupType.CLIENT_BASIC.value)
         return {
             HandlerGroupType.CLIENT_BASIC.value: [self.request_command_handler,
                                                   self.request_replykeyboard_handler,

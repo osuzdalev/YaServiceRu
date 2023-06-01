@@ -1,7 +1,7 @@
 import logging
 
 from telegram import Update
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import ContextTypes
 
 from src.common.markups_default import default_client_markup
 
@@ -25,4 +25,3 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Send introduction video
     await update.message.reply_document("BAACAgIAAxkDAAIJ1WR4pdC8CNUnYGVIfYAHM6agFN5JAAIWLwACVIfJS1b_wHklPwzKLwQ")
 
-start_handler = CommandHandler("start", start)
