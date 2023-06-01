@@ -117,7 +117,7 @@ def generate_chatbot_response(user_message: str, conversation: List[Dict]) -> st
         # Appending the context.user_data["conversation"]
         conversation[-1]["content"] = "[TOO_LONG]"
 
-        response = "An error occurred while processing your request. Please try again with shorter text."
+        response = "An error occurred while processing your request_module. Please try again with shorter text."
         conversation.append({"role": "assistant", "content": response})
         return response
 
@@ -130,7 +130,7 @@ def generate_chatbot_response(user_message: str, conversation: List[Dict]) -> st
 
 
 async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Runs the ChatGPT service that uses the API. Handles the request after it has been checked."""
+    """Runs the ChatGPT service that uses the API. Handles the request_module after it has been checked."""
     user = update.message.from_user
     logger_chatgpt.info(
         "({}, {}, {}) /gpt_request".format(user.id, user.name, user.first_name)
@@ -151,10 +151,9 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     is_premium = context.user_data["GPT_premium"]
 
     # Send a gif to let the user know the prompt is being handled
-    with open(
-        "data/chatgpt_data/loading_gif.mp4", "rb"
-    ) as gif_file:
-        loading_gif = await update.message.reply_video(gif_file)
+    with open('data/chatgpt_data/loading_gif/file_id.txt') as file:
+        file_id = file.readline().strip()
+        loading_gif = await update.message.reply_video(file_id)
 
     # First time using the chat feature
     if user_level == 0:
@@ -317,7 +316,7 @@ async def gpt_payment_no(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def gpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Unsets the flag in the user context that sends every incoming message from the user
-    as a request to ChatGPT through the API"""
+    as a request_module to ChatGPT through the API"""
     user = update.message.from_user
     logger_chatgpt.info(
         "({}, {}, {}) /gpt_stop".format(user.id, user.name, user.first_name)

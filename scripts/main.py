@@ -5,8 +5,8 @@ import sys
 from telegram.ext import Application, PicklePersistence
 
 from dotenv import load_dotenv
-from src.commands.client import request as req
-from src.commands.client import start
+from src.commands.client.request_module import request as req
+from src.commands.client.start_module import start
 from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
 from src.commands.client.wiki_module import wiki_command
 
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     )
 
     # DATA COLLECTION
-    #application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
+    # application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
     # TODO
     # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
     application.add_handler(

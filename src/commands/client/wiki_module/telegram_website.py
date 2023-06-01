@@ -195,7 +195,7 @@ class Website:
                 browser_history.append(page.name)
                 logger_website.debug(browser_history)
 
-                # Save the context for request message to expert
+                # Save the context for request_module message to expert
                 pattern = r"[_*]+"
                 output_text = re.sub(pattern, "", page.title)
                 context.user_data["Device_Context"].append(output_text)

@@ -7,7 +7,7 @@ logger_global_fallback = logging.getLogger(__name__)
 
 # Customer commands
 start = "/start"
-request = "/request"
+request = "/request_module"
 wiki = "/wiki"
 pay = "/pay"
 cancel = "/cancel"
