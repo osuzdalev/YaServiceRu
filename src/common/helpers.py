@@ -48,12 +48,12 @@ def get_order_message_str(
         )
 
     device_info = "\n".join(device_context)
-    logger_helpers.debug("device_context: {}".format(device_context))
+    logger_helpers.debug(f"device_context: {device_context}")
 
     order_message_str = "\n\n".join(
         [
             "Customer service required",
-            "Order# {}".format(str(OrderID)),
+            f"Order# {str(OrderID)}",
             user_info,
             device_info,
         ]

@@ -20,7 +20,7 @@ load_dotenv()
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends an Inline message to confirm the call"""
     user = update.effective_user
-    logger_req.info("({}, {}, {}) /request_module".format(user.id, user.name, user.first_name))
+    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /request_module")
     context.user_data.setdefault("Request_temp_messages", [])
     keyboard = [
         [
@@ -45,7 +45,7 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     user = query.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
     logger_req.info(
-        "({}, {}, {}) /confirm_request".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /confirm_request"
     )
 
     device_context = context.user_data.get("Device_Context", [])
@@ -72,12 +72,12 @@ async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     try:
         user = query.from_user
         logger_req.info(
-            "({}, {}, {}) /cancel_request".format(user.id, user.name, user.first_name)
+            f"({user.id}, {user.name}, {user.first_name}) /cancel_request"
         )
     except AttributeError:
         user = update.effective_user
         logger_req.info(
-            "({}, {}, {}) /cancel_request".format(user.id, user.name, user.first_name)
+            f"({user.id}, {user.name}, {user.first_name}) /cancel_request"
         )
 
     # cleaning

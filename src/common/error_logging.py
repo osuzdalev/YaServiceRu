@@ -26,7 +26,7 @@ def send_email(content: str) -> None:
     message = "\r\n".join(
         [
             f"From: {yaserviceru_email}",
-            "To: {}".format(yaserviceru_email),
+            f"To: {yaserviceru_email}",
             "Subject: YaServiceRu ERROR",
             "",
             content,

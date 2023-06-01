@@ -121,18 +121,14 @@ class Website:
                     query = update.callback_query
                     user = query.from_user
                     logger_website.info(
-                        "({}, {}, {}) /cancel_request".format(
-                            user.id, user.name, user.first_name
-                        )
+                        f"({user.id}, {user.name}, {user.first_name}) /cancel_request"
                     )
                     await query.answer()
 
                     logger_website.debug(
-                        "This is the invoice_handler_callback for the page {}".format(
-                            page.name
-                        )
+                        f"This is the invoice_handler_callback for the page {page.name}"
                     )
-                    logger_website.debug("My buttons are: {}".format(page.keyboard))
+                    logger_website.debug(f"My buttons are: {page.keyboard}")
 
                     chat_id = update.effective_chat.id
                     title = invoice["title"]
@@ -181,14 +177,12 @@ class Website:
                 await query.answer()
 
                 logger_website.debug(
-                    "This is the handler callback for the page {}".format(page.name)
+                    f"This is the handler callback for the page {page.name}"
                 )
                 logger_website.debug(
-                    "I'm listening to the callback_data {}".format(
-                        update.callback_query.data
-                    )
+                    f"I'm listening to the callback_data {update.callback_query.data}"
                 )
-                logger_website.debug("My buttons are: {}".format(page.keyboard))
+                logger_website.debug(f"My buttons are: {page.keyboard}")
 
                 # Save the current page in browsing history
                 browser_history = context.user_data[self.browser_history_name]

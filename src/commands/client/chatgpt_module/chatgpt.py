@@ -46,7 +46,7 @@ async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     user = update.message.from_user
     logger_chatgpt.info(
-        "({}, {}, {}) /gpt_start".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /gpt_start"
     )
 
     # First time calling the chat feature
@@ -133,7 +133,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     """Runs the ChatGPT service that uses the API. Handles the request_module after it has been checked."""
     user = update.message.from_user
     logger_chatgpt.info(
-        "({}, {}, {}) /gpt_request".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /gpt_request"
     )
 
     # Checking if user prompt is a valid question
@@ -247,7 +247,7 @@ async def gpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     """Handles user's response to pay for more interactions."""
     user = update.message.from_user
     logger_chatgpt.info(
-        "({}, {}, {}) /gpt_payment_yes".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /gpt_payment_yes"
     )
 
     chat_id = update.message.chat_id
@@ -289,9 +289,7 @@ async def gpt_successful_payment_callback(
     """Handle the successful payment. Set the user to Premium category and update conversation data"""
     user = update.message.from_user
     logger_chatgpt.info(
-        "({}, {}, {}) /successful_payment_callback".format(
-            user.id, user.name, user.first_name
-        )
+        f"({user.id}, {user.name}, {user.first_name}) /successful_payment_callback"
     )
 
     context.user_data["GPT_premium"] = True
@@ -305,7 +303,7 @@ async def gpt_payment_no(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles user's response to not pay for more interactions."""
     user = update.message.from_user
     logger_chatgpt.info(
-        "({}, {}, {}) /gpt_payment_no".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /gpt_payment_no"
     )
 
     await update.message.reply_text(
@@ -319,7 +317,7 @@ async def gpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     as a request_module to ChatGPT through the API"""
     user = update.message.from_user
     logger_chatgpt.info(
-        "({}, {}, {}) /gpt_stop".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /gpt_stop"
     )
 
     # Check if there is a chat to stop
@@ -346,7 +344,7 @@ async def gpt_get_remaining_tokens(
     remaining_tokens = LIMIT_CONVERSATION_TOKENS - conversation_tokens
 
     await update.message.reply_text(
-        "You currently have {} tokens left".format(remaining_tokens)
+        f"You currently have {remaining_tokens} tokens left"
     )
 
 

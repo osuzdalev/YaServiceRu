@@ -79,7 +79,7 @@ def get_customer_last_OrderID(user_id: int, contractor_id: int = None) -> int:
             (user_id, contractor_id),
         )
         orders = result.fetchall()
-        logger_tl_db.debug("orders: {}".format(orders))
+        logger_tl_db.debug(f"orders: {orders}")
 
         return orders[-1][0]
 
@@ -209,7 +209,7 @@ def check_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> 
 def insert_message(MessageID: int, UserID: int, text: str) -> None:
     """Data collection"""
     logger_tl_db.debug("insert_message()")
-    logger_tl_db.debug("inserting: {}, {}, {}".format(MessageID, UserID, text))
+    logger_tl_db.debug(f"inserting: {MessageID}, {UserID}, {text}")
     with sqlite3.connect(DB_FILEPATH) as conn:
         cursor = conn.cursor()
         cursor.execute(

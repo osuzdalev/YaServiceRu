@@ -20,7 +20,7 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     This Conversation first needs to check the user 'in_conversation flag' before it can start, otherwise it will ask
     the customer to first close the previous one."""
     user = update.message.from_user
-    logger_wiki.info("({}, {}, {}) /wiki".format(user.id, user.name, user.first_name))
+    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) /wiki")
     # Context history for the user's session
     context.user_data["Device_Context"] = []
     context.user_data["Annexe_Messages"] = []
@@ -48,7 +48,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
     to the first page of the wiki"""
     user = update.message.from_user
     logger_wiki.info(
-        "({}, {}, {}) /wiki_callback".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /wiki_callback"
     )
     context.user_data[BROWSER_HISTORY_NAME].append(ENTRY_PAGE_NAME)
 
@@ -63,7 +63,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     logger_wiki.info(
-        "({}, {}, {}) /wiki_cancel_command".format(user.id, user.name, user.first_name)
+        f"({user.id}, {user.name}, {user.first_name}) /wiki_cancel_command"
     )
     context.user_data["in_conversation"] = ""
     context.user_data["Annexe_Messages"] = []

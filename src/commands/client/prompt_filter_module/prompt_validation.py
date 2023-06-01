@@ -39,7 +39,7 @@ def check_prompt_tokens(prompt: str) -> Tuple[bool, int]:
     # Calculate tokens
     prompt_tokens = num_tokens_from_string(prompt)
     remaining_tokens = MAX_PROMPT_TOKENS - prompt_tokens
-    logger_chatgpt.info("prompt_size_check: {}".format(prompt_tokens))
+    logger_chatgpt.info(f"prompt_size_check: {prompt_tokens}")
 
     return (
         (True, remaining_tokens)
@@ -50,7 +50,7 @@ def check_prompt_tokens(prompt: str) -> Tuple[bool, int]:
 
 def check_prompt_semantic(prompt: str) -> bool:
     # Vector Query
-    logger_chatgpt.info("embedding: {}".format(prompt))
+    logger_chatgpt.info(f"embedding: {prompt}")
     embeddings = EMBEDDING_MODEL.encode(prompt)
 
     # Retrieve English filters
@@ -105,7 +105,7 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             )
         )
         logger_chatgpt.info(
-            "({}, {}, {}) - prompt too long".format(user.id, user.name, user.first_name)
+            f"({user.id}, {user.name}, {user.first_name}) - prompt too long"
         )
         return False
 

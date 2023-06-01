@@ -266,7 +266,7 @@ async def assign_to_contractor(
 async def assignment_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """STUFF"""
     logger_assign.info("assignment_answer()")
-    logger_assign.info("context.bot_data: {}".format(context.bot_data))
+    logger_assign.info(f"context.bot_data: {context.bot_data}")
 
     answer = True if update.message.text == "✅" else False
     assignment_data = context.bot_data["assignment_" + str(update.effective_user.id)]
@@ -287,7 +287,7 @@ async def assignment_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         )
         await context.bot.sendMessage(
             old_ContractorID,
-            "Order successfully assigned to {} ✅".format(new_Contractor_username),
+            f"Order successfully assigned to {new_Contractor_username} ✅",
         )
     else:
         context.bot_data["Current Order"] = ""
@@ -295,7 +295,7 @@ async def assignment_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         # Notify both contractors of refused assignment
         await update.effective_message.reply_text("Order refused ❌")
         await context.bot.sendMessage(
-            old_ContractorID, "Order refused by {} ❌".format(new_Contractor_username)
+            old_ContractorID, f"Order refused by {new_Contractor_username} ❌"
         )
 
 
