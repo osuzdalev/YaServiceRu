@@ -5,7 +5,7 @@ import sys
 from telegram.ext import Application, PicklePersistence
 
 from dotenv import load_dotenv
-from src.commands.client.request_module import request as req
+from src.commands.client.request_module.request_handler import RequestHandler
 from src.commands.client.start_module import start
 from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
 from src.commands.client.wiki_module import wiki_command
@@ -70,12 +70,7 @@ if __name__ == "__main__":
     application.add_handler(start.start_handler, CLIENT_BASIC)
 
     # REQUEST
-    application.add_handler(req.request_command_handler, CLIENT_BASIC)
-    application.add_handler(req.request_replykeyboard_handler, CLIENT_BASIC)
-    application.add_handler(req.request_callback_handler, CLIENT_BASIC)
-    application.add_handler(req.confirm_request_handler, CLIENT_BASIC)
-    application.add_handler(req.cancel_request_handler, CLIENT_BASIC)
-    application.add_handler(req.cancel_request_handler_message, CLIENT_BASIC)
+    application.add_handlers(handlers=RequestHandler().get_handlers())
 
     application.add_handler(wiki_command.conversation_handler, CLIENT_WIKI)
     # TODO make the wiki objects compatible with inline queries

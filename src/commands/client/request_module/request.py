@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 logger_req = logging.getLogger(__name__)
 load_dotenv()
 
+
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends an Inline message to confirm the call"""
     user = update.effective_user
@@ -83,19 +84,3 @@ async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     for message in context.user_data["Request_temp_messages"]:
         await message.delete()
         context.user_data["Request_temp_messages"] = []
-
-
-request_command_handler = CommandHandler("request_module", request)
-request_replykeyboard_handler = MessageHandler(
-    filters.Regex(r"^(🤓Специалист)$"), request
-)
-request_callback_handler = CallbackQueryHandler(request, pattern="REQUEST_COMMAND")
-confirm_request_handler = CallbackQueryHandler(
-    confirm_request, pattern="REQUEST_CALL_CONFIRM"
-)
-cancel_request_handler = CallbackQueryHandler(
-    cancel_request, pattern="REQUEST_CALL_CANCEL"
-)
-cancel_request_handler_message = MessageHandler(
-    filters.Regex(r"^❌Отменить$"), cancel_request
-)
