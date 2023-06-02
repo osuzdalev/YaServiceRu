@@ -1,0 +1,16 @@
+data/chatgpt_data/test.txt
+data/resources
+data/semantic_filters_data/weaviate_data
+data/semantic_filters_data/filters
+
+scripts/Test
+scripts/Utils
+
+venv
+
+.env
+requirements.txt
+.gitignore
+README.md
+docker-compose.yml
+Dockerfile
