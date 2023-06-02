@@ -1,6 +1,7 @@
 import logging
 import re
 from typing import List, Dict
+import os
 
 import openai
 from openai import InvalidRequestError
@@ -8,16 +9,11 @@ from openai import InvalidRequestError
 from telegram import Update, LabeledPrice, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     ContextTypes,
-    CommandHandler,
-    MessageHandler,
-    filters,
-    PreCheckoutQueryHandler,
 )
 from telegram.constants import ParseMode
 
 from dotenv import load_dotenv
-from src.common.global_fallback.global_fallback import ignored_texts_re
-from src.commands.client.chatgpt_module.config import *
+from src.commands.client.chatgpt_module.chatgpt_config import ChatGPTConfig
 from src.commands.client.chatgpt_module.token_count import num_tokens_from_string
 from src.commands.client.prompt_filter_module.prompt_validation import (
     validate_prompt,
@@ -29,13 +25,12 @@ load_dotenv()
 
 openai.api_key = os.getenv("API_OPENAI")
 
-# Load the model to GPU if available
-EMBEDDING_MODEL.to(DEVICE)
-
 request_inline_keyboard = [
     [InlineKeyboardButton("Обратиться к специалисту", callback_data="REQUEST_COMMAND")]
 ]
 reply_request_inline_markup = InlineKeyboardMarkup(request_inline_keyboard)
+
+CHATGPT_CONFIG = ChatGPTConfig()
 
 
 async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -55,35 +50,35 @@ async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         context.user_data["GPT_level"] = 0
         context.user_data["GPT_messages_sent"] = 0
         context.user_data["GPT_premium"] = False
-        context.user_data["GPT_conversation"] = GPT_CONVERSATION_START
-        context.user_data["GPT_premium_conversation"] = GPT_CONVERSATION_START
+        context.user_data["GPT_conversation"] = CHATGPT_CONFIG.gpt_conversation_start
+        context.user_data["GPT_premium_conversation"] = CHATGPT_CONFIG.gpt_conversation_start
 
         await update.message.reply_text(
             "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
             "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                FREE_PROMPT_LIMIT - context.user_data["GPT_messages_sent"]
+                CHATGPT_CONFIG.free_prompt_limit - context.user_data["GPT_messages_sent"]
             )
         )
 
     # Already previously called the chat feature
     elif (
         context.user_data["GPT_level"] in (0, 1)
-        and context.user_data["GPT_messages_sent"] < FREE_PROMPT_LIMIT
+        and context.user_data["GPT_messages_sent"] < CHATGPT_CONFIG.free_prompt_limit
     ):
         context.user_data["GPT_active"] = True
         await update.message.reply_text(
             "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
             "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                FREE_PROMPT_LIMIT - context.user_data["GPT_messages_sent"]
+                CHATGPT_CONFIG.free_prompt_limit - context.user_data["GPT_messages_sent"]
             )
         )
     # Test if user already used 5 messages
     elif (
         context.user_data["GPT_level"] == 1
-        and context.user_data["GPT_messages_sent"] >= FREE_PROMPT_LIMIT
+        and context.user_data["GPT_messages_sent"] >= CHATGPT_CONFIG.free_prompt_limit
     ):
         await update.message.reply_text(
-            MAX_MESSAGES_STRING, parse_mode=ParseMode.MARKDOWN_V2
+            CHATGPT_CONFIG.max_messages_string, parse_mode=ParseMode.MARKDOWN_V2
         )
 
 
@@ -104,13 +99,13 @@ def generate_chatbot_response(user_message: str, conversation: List[Dict]) -> st
     conversation.append({"role": "user", "content": user_message})
     try:
         completion = openai.ChatCompletion.create(
-            model=MODEL_NAME,
+            model=CHATGPT_CONFIG.model_name,
             messages=conversation,
-            temperature=TEMPERATURE,
-            max_tokens=MAX_RESPONSE_TOKENS,
-            top_p=TOP_P,
-            frequency_penalty=FREQUENCY_PENALTY,
-            presence_penalty=PRESENCE_PENALTY,
+            temperature=CHATGPT_CONFIG.temperature,
+            max_tokens=CHATGPT_CONFIG.max_response_tokens,
+            top_p=CHATGPT_CONFIG.top_p,
+            frequency_penalty=CHATGPT_CONFIG.frequency_penalty,
+            presence_penalty=CHATGPT_CONFIG.presence_penalty,
         )
     except InvalidRequestError as e:
         logger_chatgpt.error(f"InvalidRequestError: {e}")
@@ -167,7 +162,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             # get the response
             response = generate_chatbot_response(prompt, conversation)
             context.user_data["GPT_messages_sent"] += 1
-            response += f"\n\nОсталось {FREE_PROMPT_LIMIT - context.user_data['GPT_messages_sent']} сообщений"
+            response += f"\n\nОсталось {CHATGPT_CONFIG.free_prompt_limit - context.user_data['GPT_messages_sent']} сообщений"
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 response, reply_markup=reply_request_inline_markup
@@ -176,14 +171,14 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 "Conversation too long: {} tokens (MAX {})".format(
-                    conversation_tokens, LIMIT_CONVERSATION_TOKENS
+                    conversation_tokens, CHATGPT_CONFIG.limit_conversation_tokens
                 )
             )
 
     # Previously used the chat feature but still within test limit and not premium yet
     elif (
         user_level == 1
-        and context.user_data["GPT_messages_sent"] < FREE_PROMPT_LIMIT
+        and context.user_data["GPT_messages_sent"] < CHATGPT_CONFIG.free_prompt_limit
         and not is_premium
     ):
         conversation_size_check, conversation_tokens = check_conversation_tokens(
@@ -195,7 +190,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             # get the response
             response = generate_chatbot_response(prompt, conversation)
             context.user_data["GPT_messages_sent"] += 1
-            response += f"\n\nОсталось {FREE_PROMPT_LIMIT - context.user_data['GPT_messages_sent']} сообщений"
+            response += f"\n\nОсталось {CHATGPT_CONFIG.free_prompt_limit - context.user_data['GPT_messages_sent']} сообщений"
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 response, reply_markup=reply_request_inline_markup
@@ -204,19 +199,19 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 "Conversation too long: {} tokens (MAX {})".format(
-                    conversation_tokens, LIMIT_CONVERSATION_TOKENS
+                    conversation_tokens, CHATGPT_CONFIG.limit_conversation_tokens
                 )
             )
 
     # Check if user sent 5 messages but did not upgrade to premium
     elif (
         user_level == 1
-        and context.user_data["GPT_messages_sent"] >= FREE_PROMPT_LIMIT
+        and context.user_data["GPT_messages_sent"] >= CHATGPT_CONFIG.free_prompt_limit
         and not is_premium
     ):
         # Propose CHATGPT extension by payment at end of 5 free messages
         await update.message.reply_text(
-            MAX_MESSAGES_STRING, parse_mode=ParseMode.MARKDOWN_V2
+            CHATGPT_CONFIG.max_messages_string, parse_mode=ParseMode.MARKDOWN_V2
         )
 
     # Check if user paid for chatgpt service
@@ -238,7 +233,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             await context.bot.delete_message(update.effective_chat.id, loading_gif.id)
             await update.message.reply_text(
                 "Conversation too long: {} tokens (MAX {})".format(
-                    conversation_tokens, LIMIT_CONVERSATION_TOKENS
+                    conversation_tokens, CHATGPT_CONFIG.limit_conversation_tokens
                 )
             )
 
@@ -254,11 +249,11 @@ async def gpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     title = "YaService-GPT Premium"
     description = "Увеличить длину разговора до 4096 токенов."
     # select a payload just for you to recognize its the donation from your bot
-    payload = EXTENDED_PAYLOAD
+    payload = CHATGPT_CONFIG.extended_payload
     currency = "RUB"
     price = 100
     # price * 100 to include 2 decimal points
-    prices = [LabeledPrice(LABEL, price * 100)]
+    prices = [LabeledPrice(CHATGPT_CONFIG.label, price * 100)]
 
     await context.bot.send_invoice(
         chat_id,
@@ -277,8 +272,8 @@ async def gpt_precheckout_callback(
     """Answers the PreCheckoutQuery"""
     query = update.pre_checkout_query
     # check the payload, is it from this bot and about this service?
-    if query.invoice_payload == EXTENDED_PAYLOAD:
-        print("EXTENDED_PAYLOAD: ", EXTENDED_PAYLOAD)
+    if query.invoice_payload == CHATGPT_CONFIG.extended_payload:
+        print("EXTENDED_PAYLOAD: ", CHATGPT_CONFIG.extended_payload)
         logger_chatgpt.info("/gpt_precheckout_callback")
         await query.answer(ok=True)
 
@@ -294,7 +289,7 @@ async def gpt_successful_payment_callback(
 
     context.user_data["GPT_premium"] = True
     context.user_data["GPT_premium_conversation"] = context.user_data["GPT_history"]
-    context.user_data["GPT_history"] = GPT_CONVERSATION_START
+    context.user_data["GPT_history"] = CHATGPT_CONFIG.gpt_conversation_start
 
     await update.message.reply_text("Thank you for your payment!")
 
@@ -341,33 +336,8 @@ async def gpt_get_remaining_tokens(
     conversation_tokens = sum(
         num_tokens_from_string(message["content"]) for message in conversation_history
     )
-    remaining_tokens = LIMIT_CONVERSATION_TOKENS - conversation_tokens
+    remaining_tokens = CHATGPT_CONFIG.limit_conversation_tokens - conversation_tokens
 
     await update.message.reply_text(
         f"You currently have {remaining_tokens} tokens left"
     )
-
-
-gpt_handler_command = CommandHandler("chat", gpt_start)
-gpt_handler_message = MessageHandler(filters.Regex(r"^🤖Чат с подержкой$"), gpt_start)
-
-gpt_request_handler = MessageHandler(
-    filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND), gpt_request
-)
-
-gpt_payment_yes_handler = MessageHandler(
-    filters.Regex(r"^{}$".format(CONFIRM_PAYMENT)), gpt_payment_yes
-)
-gpt_precheckout_handler = PreCheckoutQueryHandler(gpt_precheckout_callback)
-# TODO add condition specific to chatgpt payment
-gpt_successful_payment_handler = MessageHandler(
-    filters.SUCCESSFUL_PAYMENT, gpt_successful_payment_callback
-)
-gpt_payment_no_handler = MessageHandler(
-    filters.Regex(r"^{}$".format(DECLINE_PAYMENT)), gpt_payment_no
-)
-
-gpt_stop_handler_command = CommandHandler("chat_stop", gpt_stop)
-gpt_stop_handler_message = MessageHandler(filters.Regex(r"^❌Отменить$"), gpt_stop)
-
-gpt_get_remaining_tokens_handler = CommandHandler("token", gpt_get_remaining_tokens)

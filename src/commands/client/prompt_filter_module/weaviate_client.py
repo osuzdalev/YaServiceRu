@@ -1,21 +1,34 @@
 import logging
 import os
-import pprint
 from typing import List, Dict, Union
 
+from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
+import torch
 import weaviate
 from numpy import ndarray
 from torch import Tensor
-
-from dotenv import load_dotenv
 
 logger_weaviate = logging.getLogger(__name__)
 load_dotenv()
 
 
+def get_available_device():
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    elif torch.backends.mps.is_available():
+        return torch.device("mps")
+    else:
+        return torch.device("cpu")
+
+
 class WeaviateClient:
     def __init__(self, api_url: str = os.getenv("API_WEAVIATE")):
         self.client = weaviate.Client(api_url)
+        self.device = get_available_device()
+        self.embedding_model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        self.semantic_threshold: float = 0.75
+        self.query_limit: int = 10
 
         # Ensure the Weaviate instance is ready
         if not self.client.is_ready():
@@ -80,5 +93,4 @@ class WeaviateClient:
         if "errors" in result:
             raise Exception(result["errors"][0]["message"])
 
-        print(result["data"]["Get"][collection_name])
         return result["data"]["Get"][collection_name]

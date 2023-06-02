@@ -6,7 +6,7 @@ from telegram.ext import (
 )
 
 from src.common.global_fallback.global_fallback import ignored_texts_re
-from src.commands.client.chatgpt_module.config import CONFIRM_PAYMENT, DECLINE_PAYMENT
+from src.commands.client.chatgpt_module.chatgpt_config import ChatGPTConfig
 from src.commands.client.chatgpt_module.chatgpt import (
     gpt_start,
     gpt_stop,
@@ -18,6 +18,8 @@ from src.commands.client.chatgpt_module.chatgpt import (
     gpt_get_remaining_tokens
 )
 from src.common.types import HandlerGroupType
+
+CHATGPT_CONFIG = ChatGPTConfig()
 
 
 class ChatGptHandler:
@@ -33,7 +35,7 @@ class ChatGptHandler:
         )
 
         self.gpt_payment_yes_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(CONFIRM_PAYMENT)), gpt_payment_yes
+            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.confirm_payment)), gpt_payment_yes
         )
         self.gpt_precheckout_handler = PreCheckoutQueryHandler(gpt_precheckout_callback)
         # TODO add condition specific to chatgpt payment
@@ -41,7 +43,7 @@ class ChatGptHandler:
             filters.SUCCESSFUL_PAYMENT, gpt_successful_payment_callback
         )
         self.gpt_payment_no_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(DECLINE_PAYMENT)), gpt_payment_no
+            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.decline_payment)), gpt_payment_no
         )
 
         self.gpt_stop_handler_command = CommandHandler("chat_stop", gpt_stop)

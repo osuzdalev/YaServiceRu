@@ -6,11 +6,16 @@ from telegram.ext import ContextTypes
 
 from dotenv import load_dotenv
 
-from src.commands.client.chatgpt_module.config import *
+from src.commands.client.chatgpt_module.chatgpt_config import ChatGPTConfig
 from src.commands.client.chatgpt_module.token_count import num_tokens_from_string
+
+from src.commands.client.prompt_filter_module.weaviate_client import WeaviateClient
 
 logger_chatgpt = logging.getLogger(__name__)
 load_dotenv()
+
+CHATGPT_CONFIG = ChatGPTConfig()
+WeaviateClient = WeaviateClient()
 
 
 def check_conversation_tokens(
@@ -24,11 +29,11 @@ def check_conversation_tokens(
     conversation_tokens = sum(
         num_tokens_from_string(message["content"]) for message in conversation
     ) + num_tokens_from_string(prompt)
-    remaining_tokens = LIMIT_CONVERSATION_TOKENS - conversation_tokens
+    remaining_tokens = CHATGPT_CONFIG.limit_conversation_tokens - conversation_tokens
 
     return (
         (True, remaining_tokens)
-        if conversation_tokens < LIMIT_CONVERSATION_TOKENS
+        if conversation_tokens < CHATGPT_CONFIG.limit_conversation_tokens
         else (False, conversation_tokens)
     )
 
@@ -38,30 +43,30 @@ def check_prompt_tokens(prompt: str) -> Tuple[bool, int]:
     Returns a tuple with a boolean and the amount of remaining tokens"""
     # Calculate tokens
     prompt_tokens = num_tokens_from_string(prompt)
-    remaining_tokens = MAX_PROMPT_TOKENS - prompt_tokens
-    logger_chatgpt.info(f"prompt_size_check: {prompt_tokens}")
+    remaining_tokens = CHATGPT_CONFIG.max_prompt_tokens - prompt_tokens
+    logger_chatgpt.info(f"PROMPT TOKEN SIZE: {prompt_tokens}")
 
     return (
         (True, remaining_tokens)
-        if prompt_tokens < MAX_PROMPT_TOKENS
+        if prompt_tokens < CHATGPT_CONFIG.max_prompt_tokens
         else (False, prompt_tokens)
     )
 
 
 def check_prompt_semantic(prompt: str) -> bool:
     # Vector Query
-    logger_chatgpt.info(f"embedding: {prompt}")
-    embeddings = EMBEDDING_MODEL.encode(prompt)
+    logger_chatgpt.info(f"ENCODING PROMPT: {prompt}")
+    embeddings = WeaviateClient.embedding_model.encode(prompt)
 
     # Retrieve English filters
-    logger_chatgpt.info("retrieving English filters")
-    english_vector_query_result = weaviate_client.vector_query(
+    logger_chatgpt.info("COMPARING TO ENGLISH FILTERS")
+    english_vector_query_result = WeaviateClient.vector_query(
         "EnglishFilters", embeddings
     )
 
     # Retrieve Russian filters
-    logger_chatgpt.info("retrieving Russian filters")
-    russian_vector_query_result = weaviate_client.vector_query(
+    logger_chatgpt.info("COMPARING TO RUSSIAN FILTERS")
+    russian_vector_query_result = WeaviateClient.vector_query(
         "RussianFilters", embeddings
     )
 
@@ -77,7 +82,7 @@ def check_prompt_semantic(prompt: str) -> bool:
     )
     average_certainty = total_certainty / len(combined_query_results)
 
-    if average_certainty >= SEMANTIC_THRESHOLD:
+    if average_certainty >= WeaviateClient.semantic_threshold:
         return True
     else:
         return False
@@ -101,7 +106,7 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     if not prompt_size_check:
         await update.message.reply_text(
             "Текст запроса слишком длинный: {} токенов (максимум {})".format(
-                prompt_tokens, MAX_PROMPT_TOKENS
+                prompt_tokens, CHATGPT_CONFIG.max_prompt_tokens
             )
         )
         logger_chatgpt.info(
