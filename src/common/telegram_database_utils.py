@@ -217,7 +217,3 @@ def insert_message(MessageID: int, UserID: int, text: str) -> None:
             (MessageID, UserID, text),
         )
         conn.commit()
-
-
-if __name__ == "__main__":
-    print(DB_FILEPATH)
