@@ -16,7 +16,7 @@ from telegram.ext import (
 from telegram.constants import ParseMode
 
 from dotenv import load_dotenv
-from src.common.global_fallback import ignored_texts_re
+from src.common.global_fallback.global_fallback import ignored_texts_re
 from src.commands.client.chatgpt_module.config import *
 from src.commands.client.chatgpt_module.token_count import num_tokens_from_string
 from src.commands.client.prompt_filter_module.prompt_validation import (

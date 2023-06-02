@@ -5,15 +5,17 @@ import sys
 from telegram.ext import Application, PicklePersistence
 
 from dotenv import load_dotenv
+
+from src.common.error_logging.error_logging_handler import ErrorHandler
+from src.common.global_fallback.global_fallback_handler import GlobalFallbackHandler
+
 from src.commands.client.request_module.request_handler import RequestHandler
 from src.commands.client.start_module.start_handler import StartHandler
 from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
 from src.commands.client.wiki_module.wiki_handler import WikiHandler
 
 # from contractor import assign, complete, commands
-from src.commands.center import orders
-from src.common import error_logging
-from src.common import global_fallback, data_collector
+# from src.commands.center import orders
 
 load_dotenv()
 
@@ -28,20 +30,6 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
-# Group Handlers
-(
-    MESSAGE_COLLECTION,
-    USER_STATUS_COLLECTION,
-    PHONE_COLLECTION,
-    CLIENT_BASIC,
-    CLIENT_WIKI,
-    CLIENT_PAY,
-    CONTRACTOR_BASIC,
-    CONTRACTOR_ASSIGN,
-    GLOBAL_FALLBACK,
-) = range(-3, 6)
 
 if __name__ == "__main__":
     persistence = PicklePersistence(
@@ -59,12 +47,10 @@ if __name__ == "__main__":
     # application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
     # TODO
     # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
-    application.add_handler(
-        data_collector.collection_phone_number_handler, PHONE_COLLECTION
-    )
+    # application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
 
     # ERROR HANDLER
-    application.add_error_handler(error_logging.error_handler)
+    application.add_error_handler(ErrorHandler().get_handler())
 
     # CLIENT HANDLERS
     application.add_handlers(handlers=StartHandler().get_handlers())
@@ -87,9 +73,9 @@ if __name__ == "__main__":
     # application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
 
     # CENTER HANDLERS
-    application.add_handler(orders.orders_handler)
+    # application.add_handler(orders.orders_handler)
 
     # Global fallback Handler stopping every ConversationHandlers
-    application.add_handler(global_fallback.global_fallback_handler, GLOBAL_FALLBACK)
+    application.add_handler(GlobalFallbackHandler().get_handler(), GlobalFallbackHandler().get_handler_group())
 
     application.run_polling()

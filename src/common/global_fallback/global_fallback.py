@@ -1,7 +1,7 @@
 import logging
 
 from telegram import Update
-from telegram.ext import ContextTypes, MessageHandler, filters
+from telegram.ext import ContextTypes
 
 logger_global_fallback = logging.getLogger(__name__)
 
@@ -58,8 +58,3 @@ ignored_texts_re = r"^(" + "|".join(message for message in ignored_texts) + ")$"
 async def unknown_command(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     logger_global_fallback.info("unknown_command()")
     await update.message.reply_text("Incorrect command")
-
-
-global_fallback_handler = MessageHandler(
-    filters.COMMAND & (~filters.Regex(ignored_commands_re)), unknown_command
-)

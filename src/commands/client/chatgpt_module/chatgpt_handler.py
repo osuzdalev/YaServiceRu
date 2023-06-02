@@ -5,7 +5,7 @@ from telegram.ext import (
     PreCheckoutQueryHandler,
 )
 
-from src.common.global_fallback import ignored_texts_re
+from src.common.global_fallback.global_fallback import ignored_texts_re
 from src.commands.client.chatgpt_module.config import CONFIRM_PAYMENT, DECLINE_PAYMENT
 from src.commands.client.chatgpt_module.chatgpt import (
     gpt_start,
