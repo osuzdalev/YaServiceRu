@@ -15,7 +15,8 @@ from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
 from src.commands.client.wiki_module.wiki_handler import WikiHandler
 
 # from contractor import assign, complete, commands
-# from src.commands.center import orders
+from src.commands.center import orders
+from src.common.data_collector import data_collection_handler
 
 load_dotenv()
 
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     )
 
     # DATA COLLECTION
-    # application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
+    application.add_handler(data_collection_handler, -3)
     # TODO
     # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
     # application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     # application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
 
     # CENTER HANDLERS
-    # application.add_handler(orders.orders_handler)
+    application.add_handler(orders.orders_handler)
 
     # Global fallback Handler stopping every ConversationHandlers
     application.add_handler(GlobalFallbackHandler().get_handler(), GlobalFallbackHandler().get_handler_group())

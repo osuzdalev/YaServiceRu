@@ -1,53 +1,60 @@
 import os
 import logging
-import sqlite3
+from pprint import pprint
+
+import psycopg
 
 from typing import List, Tuple
 
 from dotenv import load_dotenv
 
 load_dotenv()
-DB_FILEPATH = os.getenv("FILEPATH_DATABASE")
+DB_AUTH = {"dbname": os.getenv("DATABASE_POSTGRES_DB"),
+           "host": os.getenv("DATABASE_POSTGRES_HOST"),
+           "user": os.getenv("DATABASE_POSTGRES_USER"),
+           "password": os.getenv("DATABASE_POSTGRES_PASSWORD"),
+           "port": os.getenv("DATABASE_POSTGRES_PORT")}
+
 
 logger_tl_db = logging.getLogger(__name__)
 
 
 def insert_new_user(
-    user_id: int, username: str, first_name: str, last_name: str
+    user_id: int, user_name: str, first_name: str, last_name: str
 ) -> None:
     """Stuff"""
     logger_tl_db.debug("insert_new_customer()")
     try:
-        with sqlite3.connect(DB_FILEPATH) as conn:
+        with psycopg.connect(**DB_AUTH) as conn:
             cursor = conn.cursor()
-            result = cursor.execute("select * from Users where UserID = ?", (user_id,))
+            result = cursor.execute("select * from users where user_id = %s", (user_id,))
             if result.fetchone() is None:
                 cursor.execute(
-                    "insert into Users (UserID, UserName, FirstName, LastName) values (?, ?, ?, ?);",
-                    (user_id, username, first_name, last_name),
+                    "insert into users (user_id, user_name, first_name, last_name) values (%s, %s, %s, %s);",
+                    (user_id, user_name, first_name, last_name),
                 )
                 conn.commit()
             else:
                 logger_tl_db.debug("Customer already in Database")
-    except sqlite3.Error as e:
+    except psycopg.Error as e:
         logger_tl_db.error(e)
 
 
 def get_user_data(user_id: int) -> None:
     """Stuff"""
     logger_tl_db.info("get_user_data()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
-        result = cursor.execute("select * from Users where UserID = ?", (user_id,))
+        result = cursor.execute("select * from users where user_id = %s", (user_id,))
         return result.fetchone()
 
 
 def insert_user_phone_number(user_id: int, phone_number: int) -> None:
     logger_tl_db.debug("insert_customer_phone_number()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "update Users set PhoneNumber = ? where UserID = ?;",
+            "update users set phone_number = %s where user_id = %s;",
             (phone_number, user_id),
         )
         conn.commit()
@@ -56,26 +63,26 @@ def insert_user_phone_number(user_id: int, phone_number: int) -> None:
 
 def get_customer_data(user_id: int) -> List:
     logger_tl_db.debug("get_customer_data()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
-            "select Users.UserID, Users.UserName, Users.FirstName, Users.LastName,"
-            "Users.PhoneNumber, Users.JoinDate, "
-            "Customers.Warning "
-            "from Users, Customers "
-            "where UserID = ?1 and CustomerID = ?1",
-            (user_id,),
+            "select users.user_id, users.user_name, users.first_name, users.last_name,"
+            "users.phone_number, users.join_date, "
+            "customers.warning "
+            "from users, customers "
+            "where user_id = %s and customer_id = %s", # TODO: number argument pass
+            (user_id, user_id,),
         )
 
         return result.fetchone()
 
 
-def get_customer_last_OrderID(user_id: int, contractor_id: int = None) -> int:
-    logger_tl_db.debug("get_customer_last_OrderID()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+def get_customer_last_order_id(user_id: int, contractor_id: int = None) -> int:
+    logger_tl_db.debug("get_customer_last_order_id()")
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
-            "select * from Orders where (CustomerID = ? and ContractorID is ?)",
+            "select * from orders where (customer_id = %s and contractor_id = %s)",
             (user_id, contractor_id),
         )
         orders = result.fetchall()
@@ -89,7 +96,7 @@ def insert_new_order(
 ) -> None:
     logger_tl_db.debug("insert_new_order()")
 
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
 
         # Check the length of device_context and assign default values if necessary
@@ -99,121 +106,121 @@ def insert_new_order(
         problem = device_context[-1] if len(device_context) > 3 else None
 
         cursor.execute(
-            "insert into Orders (CustomerID, ContractorID, OS, Device, Category, Problem) "
-            "values (?, ?, ?, ?, ?, ?);",
+            "insert into orders (customer_id, contractor_id, os, device, category, problem) "
+            "values (%s, %s, %s, %s, %s, %s);",
             (user_id, default_contractor_id, os, device, category, problem),
         )
         conn.commit()
 
 
-def get_order_data(OrderID: int) -> List:
+def get_order_data(order_id: int) -> List:
     logger_tl_db.debug("get_order_data()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
-        result = cursor.execute("select * from Orders where OrderID = ?", (OrderID,))
+        result = cursor.execute("select * from orders where order_id = %s", (order_id,))
 
         return result.fetchone()
 
 
 def get_open_orders() -> List[Tuple]:
     logger_tl_db.debug("get_open_orders()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
-            "select * from Orders where Completed = 0 and ContractorID is null"
+            "select * from orders where completed = 0 and contractor_id is null"
         )
         return result.fetchall()
 
 
 def get_assigned_orders() -> List[Tuple]:
     logger_tl_db.debug("get_incomplete_orders()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
-            "select * from Orders where Completed = 0 and ContractorID is not null"
+            "select * from orders where completed = 0 and contractor_id is not null"
         )
         return result.fetchall()
 
 
-def update_order_Complete(OrderID: int, timestamp: str) -> None:
+def update_order_Complete(order_id: int, timestamp: str) -> None:
     logger_tl_db.debug("update_order_Complete()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "update Orders set Completed = ?, CompletedDate = ? where OrderID = ?",
-            (1, timestamp, OrderID),
+            "update orders set completed = %s, completed_date = %s where order_id = %s",
+            (1, timestamp, order_id),
         )
         conn.commit()
 
 
 def get_contractor_data(user_id: int) -> List:
     logger_tl_db.debug("get_contractor_data()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
-            "select Users.UserID, Users.UserName, Users.FirstName, Users.LastName, Users.PhoneNumber, Users.JoinDate, "
-            "Contractors.Warning "
-            "from Users, Contractors "
-            "where UserID = ?1 and ContractorID = ?1",
-            (user_id,),
+            "select users.user_id, users.user_name, users.first_name, users.last_name, users.phone_number, users.join_date, "
+            "contractors.warning "
+            "from users, contractors "
+            "where user_id = %s and contractor_id = %s", # TODO: numbered pass
+            (user_id, user_id,),
         )
 
         return result.fetchone()
 
 
-def get_all_ContractorID() -> List:
+def get_all_contractor_id() -> List:
     logger_tl_db.debug("get_all_contractor_ids()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
-        result = cursor.execute("select ContractorID from Contractors")
-        ContractorIDs = [i[0] for i in result.fetchall()]
+        result = cursor.execute("select contractor_id from contractors")
+        contractor_ids = [i[0] for i in result.fetchall()]
 
-        return ContractorIDs
+        return contractor_ids
 
 
-def update_order_ContractorID(OrderID: int, new_ContractorID: int) -> None:
+def update_order_contractor_id(order_id: int, new_contractor_id: int) -> None:
     logger_tl_db.debug("update_order_ContractID()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "update Orders set ContractorID = ? where OrderID = ?",
-            (new_ContractorID, OrderID),
+            "update orders set contractor_id = %s where order_id = %s",
+            (new_contractor_id, order_id),
         )
         conn.commit()
 
 
-def insert_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> None:
+def insert_assign(old_contractor_id: int, order_id: int, new_contractor_id: int) -> None:
     logger_tl_db.debug("insert_assign")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "insert into Assign (old_ContractorID, OrderID, new_ContractorID) "
-            "values (?, ?, ?);",
-            (old_ContractorID, OrderID, new_ContractorID),
+            "insert into assign (old_contractor_id, order_id, new_contractor_id) "
+            "values (%s, %s, %s);",
+            (old_contractor_id, order_id, new_contractor_id),
         )
         conn.commit()
 
 
-def check_assign(old_ContractorID: int, OrderID: int, new_ContractorID: int) -> bool:
+def check_assign(old_contractor_id: int, order_id: int, new_contractor_id: int) -> bool:
     logger_tl_db.debug("check_assign()")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
-            "select * from Assign where old_ContractorID = ? and OrderID = ? and new_ContractorID = ?",
-            (old_ContractorID, OrderID, new_ContractorID),
+            "select * from assign where old_contractor_id = %s and order_id = %s and new_contractor_id = %s",
+            (old_contractor_id, order_id, new_contractor_id),
         )
 
         return True if result.fetchone() else False
 
 
-def insert_message(MessageID: int, UserID: int, text: str) -> None:
+def insert_message(message_id: int, user_id: int, text: str) -> None:
     """Data collection"""
     logger_tl_db.debug("insert_message()")
-    logger_tl_db.debug(f"inserting: {MessageID}, {UserID}, {text}")
-    with sqlite3.connect(DB_FILEPATH) as conn:
+    logger_tl_db.debug(f"inserting: {message_id}, {user_id}, {text}")
+    with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "insert into Messages (MessageID, UserID, MessageText) values (?, ?, ?)",
-            (MessageID, UserID, text),
+            "insert into messages (message_id, user_id, message_text) values (%s, %s, %s)",
+            (message_id, user_id, text),
         )
         conn.commit()

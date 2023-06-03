@@ -12,7 +12,7 @@ from telegram.ext import (
     ChatMemberHandler,
 )
 
-from src import common as tldb
+from src.common import telegram_database_utils as tldb
 
 logger_data_collector = logging.getLogger(__name__)
 
