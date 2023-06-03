@@ -9,7 +9,7 @@ scripts/Utils
 venv
 
 .env
-requirements.txt
+
 .gitignore
 README.md
 docker-compose.yml

@@ -1,7 +1,21 @@
 version: '3.4'
 services:
+  postgres:
+    image: "postgres:15.3"
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD} # for the docker, in the code standard naming "DATABASE_*"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/resources/pg_data:/var/lib/postgresql/data # The data. This will increase in size with time. !!! DON'T COMMIT !!!
+      - ./data/resources/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
+    command: postgres -c config_file=/etc/postgresql/postgres.conf
+
   weaviate:
-    image: semitechnologies/weaviate:latest
+    image: semitechnologies/weaviate:1.9.1
     restart: unless-stopped
     ports:
      - "8080:8080"
@@ -27,29 +41,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #image: osuzdalev/yaserviceru:latest
+    #image: osuzdalev/yaserviceru:beta
     restart: unless-stopped
     env_file:
       - .env
     ports:
       - "8081:80"
     depends_on:
+      - postgres
       - weaviate
       - t2v-transformers
     volumes:
-      - ./data/resources:/data/resources
-      - ./data/semantic_filters_data/filters:/data/semantic_filters_data/filters
-
-  postgres:
-    image: "postgres:15.3"
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD} # for the docker, in the code standard naming "DATABASE_*"
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./data/resources/pg_data:/var/lib/postgresql/data # The data. This will increase in size with time. !!! DON'T COMMIT !!!
-      - ./data/resources/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
-    command: postgres -c config_file=/etc/postgresql/postgres.conf
+      - ./data/resources/yaserviceru.log:/app/data/resources/yaserviceru.log
+      - ./data/resources/yaserviceru_persistence:/app/data/resources/yaserviceru_persistence
