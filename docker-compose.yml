@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   weaviate:
-    image: semitechnologies/weaviate:latest
+    image: semitechnologies/weaviate:1.19.6
     restart: unless-stopped
     ports:
      - "8080:8080"
@@ -34,8 +34,21 @@ services:
     ports:
       - "8081:80"
     depends_on:
+      - postgres
       - weaviate
       - t2v-transformers
     volumes:
       - ./data/resources:/data/resources
       - ./data/semantic_filters_data/filters:/data/semantic_filters_data/filters
+
+  postgres:
+    image: "postgres:15.3"
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/resources/pg_data:/var/lib/postgresql/data # The data. This will increase in size with time. !!! DON'T COMMIT !!!
+      - ./data/resources/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
+    command: postgres -c config_file=/etc/postgresql/postgres.conf

@@ -7,7 +7,7 @@ from typing import List, Tuple
 from dotenv import load_dotenv
 
 load_dotenv()
-DB_FILEPATH = os.getenv("FILEPATH_DATABASE")
+DB_FILEPATH = "BETA"
 
 logger_tl_db = logging.getLogger(__name__)
 
