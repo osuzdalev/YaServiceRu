@@ -23,7 +23,7 @@ entry_page = Page(
 
 class WikiHandler:
     def __init__(self):
-        # Generating the telegram_website object from yaml data file
+        # Generating the telegram_website object from yaml database file
         website = Website(STATE, BROWSER_HISTORY_NAME)
         # TODO Can this be done at init()?
         website.set_standard_handler_callbacks()

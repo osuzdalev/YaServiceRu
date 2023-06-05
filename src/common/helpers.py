@@ -17,7 +17,7 @@ load_dotenv()
 def get_order_message_str(
     OrderID: int, user_data: Any, device_context: Any, phone_number: int = None
 ) -> str:
-    """Creates a nice string with all the relevant data of an Order to be sent as a message to Contractor"""
+    """Creates a nice string with all the relevant database of an Order to be sent as a message to Contractor"""
     logger_helpers.info("get_order_message_str()")
     user_info = ""
     if isinstance(user_data, List):

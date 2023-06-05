@@ -3,12 +3,12 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from src.common.markups import default_client_markup
+from src.common.markups import DEFAULT_CLIENT_MARKUP
+from src.common.data.reader import DataReader
 
 logger_start = logging.getLogger(__name__)
 
-with open("data/start/file_id.txt") as file:
-    start_video_file_id = file.readline().strip()
+DataReader = DataReader()
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -20,9 +20,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     context.user_data["Device_Context"] = []
 
     await update.message.reply_text(
-        "Добро пожаловать!", reply_markup=default_client_markup
+        "Добро пожаловать!", reply_markup=DEFAULT_CLIENT_MARKUP
     )
     # Send introduction video
-    await update.message.reply_document(
-        "BAACAgIAAxkDAAIJ1WR4pdC8CNUnYGVIfYAHM6agFN5JAAIWLwACVIfJS1b_wHklPwzKLwQ"
-    )
+    await update.message.reply_video(DataReader.start.get_introduction_video())

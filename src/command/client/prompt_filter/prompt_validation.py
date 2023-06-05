@@ -29,11 +29,11 @@ def check_conversation_tokens(
     conversation_tokens = sum(
         num_tokens_from_string(message["content"]) for message in conversation
     ) + num_tokens_from_string(prompt)
-    remaining_tokens = CHATGPT_CONFIG.limit_conversation_tokens - conversation_tokens
+    remaining_tokens = CHATGPT_CONFIG.model.limit_conversation_tokens - conversation_tokens
 
     return (
         (True, remaining_tokens)
-        if conversation_tokens < CHATGPT_CONFIG.limit_conversation_tokens
+        if conversation_tokens < CHATGPT_CONFIG.model.limit_conversation_tokens
         else (False, conversation_tokens)
     )
 
@@ -43,12 +43,12 @@ def check_prompt_tokens(prompt: str) -> Tuple[bool, int]:
     Returns a tuple with a boolean and the amount of remaining tokens"""
     # Calculate tokens
     prompt_tokens = num_tokens_from_string(prompt)
-    remaining_tokens = CHATGPT_CONFIG.max_prompt_tokens - prompt_tokens
+    remaining_tokens = CHATGPT_CONFIG.model.max_prompt_tokens - prompt_tokens
     logger_chatgpt.info(f"PROMPT TOKEN SIZE: {prompt_tokens}")
 
     return (
         (True, remaining_tokens)
-        if prompt_tokens < CHATGPT_CONFIG.max_prompt_tokens
+        if prompt_tokens < CHATGPT_CONFIG.model.max_prompt_tokens
         else (False, prompt_tokens)
     )
 
@@ -106,7 +106,7 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     if not prompt_size_check:
         await update.message.reply_text(
             "Текст запроса слишком длинный: {} токенов (максимум {})".format(
-                prompt_tokens, CHATGPT_CONFIG.max_prompt_tokens
+                prompt_tokens, CHATGPT_CONFIG.model.max_prompt_tokens
             )
         )
         logger_chatgpt.info(

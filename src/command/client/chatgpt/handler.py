@@ -35,7 +35,7 @@ class ChatGptHandler:
         )
 
         self.gpt_payment_yes_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.confirm_payment)),
+            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.messages.confirm_payment)),
             gpt_payment_yes,
         )
         self.gpt_precheckout_handler = PreCheckoutQueryHandler(gpt_precheckout_callback)
@@ -44,7 +44,7 @@ class ChatGptHandler:
             filters.SUCCESSFUL_PAYMENT, gpt_successful_payment_callback
         )
         self.gpt_payment_no_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.decline_payment)),
+            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.messages.decline_payment)),
             gpt_payment_no,
         )
 

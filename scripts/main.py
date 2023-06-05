@@ -16,7 +16,7 @@ from src.command.client.wiki.wiki_handler import WikiHandler
 
 # from contractor import assign, complete, command
 from src.command.center import orders
-from src.common.data.collector_handler import CollectorHandler
+from src.common.database.collector_handler import CollectorHandler
 
 load_dotenv()
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     )
 
     # DATA COLLECTION
-    application.add_handler(CollectorHandler().get_handlers())
+    application.add_handlers(CollectorHandler().get_handlers())
 
     # ERROR HANDLER
     application.add_error_handler(ErrorHandler().get_handler())

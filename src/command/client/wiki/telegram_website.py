@@ -55,7 +55,7 @@ class Website:
         return "__*" + title + "*__"
 
     def parse(self, config_file):
-        """Parses a YAML file and generates the pages of the website from the data
+        """Parses a YAML file and generates the pages of the website from the database
         Format of Page
         title: Text to be displayed on the page
 
@@ -246,7 +246,7 @@ class Website:
         ) -> str:
             """
             A callback function implementing the '<- go back' back arrow equivalent in internet browsers.
-            Catches the 'BACK' callback data, determines what was the previous page message the client was on,
+            Catches the 'BACK' callback database, determines what was the previous page message the client was on,
             and calls the appropriate callback function. Updates the browsing history accordingly.
             """
             logger_website.info("back_callback()")

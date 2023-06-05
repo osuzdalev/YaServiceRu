@@ -1,4 +1,4 @@
-"""Collection of silent functions gathering data about every user that interacts with the bot"""
+"""Collection of silent functions gathering database about every user that interacts with the bot"""
 
 import logging
 from typing import Tuple, Optional
@@ -8,7 +8,7 @@ from telegram.ext import (
     ContextTypes,
 )
 
-from src.common.data import db_utils as tldb
+from src.common.database import utils as tldb
 
 logger_data_collector = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ def extract_user_and_message(
 
 
 def log_callback_data(update: Update) -> None:
-    """Log callback data if it exists."""
+    """Log callback database if it exists."""
     try:
         callback_data = update.callback_query.data
         logger_data_collector.info(f"CALLBACK_DATA: {callback_data}")
@@ -46,7 +46,7 @@ def log_callback_data(update: Update) -> None:
 
 
 async def collect_data(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
-    """Add user data and message data to DB"""
+    """Add user database and message database to DB"""
 
     # Extract user and message information
     user, message = extract_user_and_message(update)
@@ -57,7 +57,7 @@ async def collect_data(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
             f"({user.id}, {user.name}, {user.first_name}) collect_data"
         )
 
-    # Log callback data if it exists
+    # Log callback database if it exists
     log_callback_data(update)
 
     # Check if user and message are extracted successfully

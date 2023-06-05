@@ -16,7 +16,7 @@ from telegram.ext import (
 )
 
 from src.common import helpers
-from src.common.data import db_utils as tldb
+from src.common.database import utils as tldb
 
 logger_assign = logging.getLogger(__name__)
 
@@ -230,14 +230,14 @@ async def assign_to_contractor(
     if assign_exists:
         await assign_start_over(update, context, query)
     else:
-        # Assign data saved in memory to be accessed during new_Contractor answer
+        # Assign database saved in memory to be accessed during new_Contractor answer
         context.bot_data["assignment_" + str(new_ContractorID)] = {
             "old_ContractorID": old_ContractorID,
             "OrderID": OrderID,
             "new_ContractorID": new_ContractorID,
         }
 
-        # Assignment proposed to new_Contractor with Order data
+        # Assignment proposed to new_Contractor with Order database
         customer_data = tldb.get_customer_data(order_data[1])[:5]
         customer_phone_number = customer_data[-1]
         order_message_str = helpers.get_order_message_str(
