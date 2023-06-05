@@ -40,9 +40,7 @@ async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     If the user has used the ChatGPT feature before, checks if they have reached the free prompts limit
     """
     user = update.message.from_user
-    logger_chatgpt.info(
-        f"({user.id}, {user.name}, {user.first_name}) /gpt_start"
-    )
+    logger_chatgpt.info(f"({user.id}, {user.name}, {user.first_name}) /gpt_start")
 
     # First time calling the chat feature
     if "GPT_level" not in context.user_data:
@@ -51,12 +49,15 @@ async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         context.user_data["GPT_messages_sent"] = 0
         context.user_data["GPT_premium"] = False
         context.user_data["GPT_conversation"] = CHATGPT_CONFIG.gpt_conversation_start
-        context.user_data["GPT_premium_conversation"] = CHATGPT_CONFIG.gpt_conversation_start
+        context.user_data[
+            "GPT_premium_conversation"
+        ] = CHATGPT_CONFIG.gpt_conversation_start
 
         await update.message.reply_text(
             "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
             "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                CHATGPT_CONFIG.free_prompt_limit - context.user_data["GPT_messages_sent"]
+                CHATGPT_CONFIG.free_prompt_limit
+                - context.user_data["GPT_messages_sent"]
             )
         )
 
@@ -69,10 +70,11 @@ async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text(
             "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
             "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                CHATGPT_CONFIG.free_prompt_limit - context.user_data["GPT_messages_sent"]
+                CHATGPT_CONFIG.free_prompt_limit
+                - context.user_data["GPT_messages_sent"]
             )
         )
-    # Test if user already used 5 messages
+    # tests if user already used 5 messages
     elif (
         context.user_data["GPT_level"] == 1
         and context.user_data["GPT_messages_sent"] >= CHATGPT_CONFIG.free_prompt_limit
@@ -127,9 +129,7 @@ def generate_chatbot_response(user_message: str, conversation: List[Dict]) -> st
 async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Runs the ChatGPT service that uses the API. Handles the request_module after it has been checked."""
     user = update.message.from_user
-    logger_chatgpt.info(
-        f"({user.id}, {user.name}, {user.first_name}) /gpt_request"
-    )
+    logger_chatgpt.info(f"({user.id}, {user.name}, {user.first_name}) /gpt_request")
 
     # Checking if user prompt is a valid question
     is_valid_prompt = await validate_prompt(update, context)
@@ -146,7 +146,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     is_premium = context.user_data["GPT_premium"]
 
     # Send a gif to let the user know the prompt is being handled
-    with open('data/chatgpt_data/loading_gif/file_id.txt') as file:
+    with open("data/chatgpt_data/loading_gif/file_id.txt") as file:
         file_id = file.readline().strip()
         loading_gif = await update.message.reply_video(file_id)
 
@@ -241,9 +241,7 @@ async def gpt_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 async def gpt_payment_yes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles user's response to pay for more interactions."""
     user = update.message.from_user
-    logger_chatgpt.info(
-        f"({user.id}, {user.name}, {user.first_name}) /gpt_payment_yes"
-    )
+    logger_chatgpt.info(f"({user.id}, {user.name}, {user.first_name}) /gpt_payment_yes")
 
     chat_id = update.message.chat_id
     title = "YaService-GPT Premium"
@@ -297,9 +295,7 @@ async def gpt_successful_payment_callback(
 async def gpt_payment_no(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Handles user's response to not pay for more interactions."""
     user = update.message.from_user
-    logger_chatgpt.info(
-        f"({user.id}, {user.name}, {user.first_name}) /gpt_payment_no"
-    )
+    logger_chatgpt.info(f"({user.id}, {user.name}, {user.first_name}) /gpt_payment_no")
 
     await update.message.reply_text(
         "Ваш ответ был получен. Спасибо за использование нашего сервиса!"
@@ -311,9 +307,7 @@ async def gpt_stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Unsets the flag in the user context that sends every incoming message from the user
     as a request_module to ChatGPT through the API"""
     user = update.message.from_user
-    logger_chatgpt.info(
-        f"({user.id}, {user.name}, {user.first_name}) /gpt_stop"
-    )
+    logger_chatgpt.info(f"({user.id}, {user.name}, {user.first_name}) /gpt_stop")
 
     # Check if there is a chat to stop
     if context.user_data.get("GPT_active", False):

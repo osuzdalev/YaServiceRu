@@ -47,9 +47,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
     """A callback function which has the same output as the wiki command. Necessary if the client wants to browse back
     to the first page of the wiki"""
     user = update.message.from_user
-    logger_wiki.info(
-        f"({user.id}, {user.name}, {user.first_name}) /wiki_callback"
-    )
+    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) /wiki_callback")
     context.user_data[BROWSER_HISTORY_NAME].append(ENTRY_PAGE_NAME)
 
     query = update.callback_query

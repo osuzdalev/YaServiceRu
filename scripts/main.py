@@ -15,11 +15,10 @@ from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
 from src.commands.client.wiki_module.wiki_handler import WikiHandler
 
 # from contractor import assign, complete, commands
-# from src.commands.center import orders
+from src.commands.center import orders
+from src.common.data.collector_handler import CollectorHandler
 
 load_dotenv()
-
-# Enable logging
 
 logging.basicConfig(
     format="[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s",
@@ -32,9 +31,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
-    persistence = PicklePersistence(
-        filepath=os.getenv("FILEPATH_PERSISTENCE")
-    )
+    persistence = PicklePersistence(filepath=os.getenv("FILEPATH_PERSISTENCE"))
     application = (
         Application.builder()
         .token(os.getenv("TOKEN_TG_MAIN_BOT"))
@@ -44,10 +41,7 @@ if __name__ == "__main__":
     )
 
     # DATA COLLECTION
-    # application.add_handler(data_collector.data_collection_handler, MESSAGE_COLLECTION)
-    # TODO
-    # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
-    # application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
+    application.add_handler(CollectorHandler().get_handlers())
 
     # ERROR HANDLER
     application.add_error_handler(ErrorHandler().get_handler())
@@ -73,9 +67,12 @@ if __name__ == "__main__":
     # application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
 
     # CENTER HANDLERS
-    # application.add_handler(orders.orders_handler)
+    application.add_handler(orders.orders_handler)
 
     # Global fallback Handler stopping every ConversationHandlers
-    application.add_handler(GlobalFallbackHandler().get_handler(), GlobalFallbackHandler().get_handler_group())
+    application.add_handler(
+        GlobalFallbackHandler().get_handler(),
+        GlobalFallbackHandler().get_handler_group(),
+    )
 
     application.run_polling()

@@ -13,6 +13,7 @@ logger_helpers = logging.getLogger(__name__)
 
 load_dotenv()
 
+
 def get_order_message_str(
     OrderID: int, user_data: Any, device_context: Any, phone_number: int = None
 ) -> str:

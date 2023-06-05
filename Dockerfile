@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Add your application's requirements.txt and install dependencies
 COPY requirements.txt /app
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && pip install "psycopg[binary]"
 
 # Add the rest of your application's source code
 COPY . /app

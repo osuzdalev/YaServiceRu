@@ -15,7 +15,8 @@ from telegram.ext import (
     filters,
 )
 
-from src.common import helpers, telegram_database_utils as tldb
+from src.common import helpers
+from src.common.data import db_utils as tldb
 
 logger_assign = logging.getLogger(__name__)
 

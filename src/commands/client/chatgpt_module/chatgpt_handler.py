@@ -15,7 +15,7 @@ from src.commands.client.chatgpt_module.chatgpt import (
     gpt_payment_no,
     gpt_precheckout_callback,
     gpt_successful_payment_callback,
-    gpt_get_remaining_tokens
+    gpt_get_remaining_tokens,
 )
 from src.common.types import HandlerGroupType
 
@@ -35,7 +35,8 @@ class ChatGptHandler:
         )
 
         self.gpt_payment_yes_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.confirm_payment)), gpt_payment_yes
+            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.confirm_payment)),
+            gpt_payment_yes,
         )
         self.gpt_precheckout_handler = PreCheckoutQueryHandler(gpt_precheckout_callback)
         # TODO add condition specific to chatgpt payment
@@ -43,7 +44,8 @@ class ChatGptHandler:
             filters.SUCCESSFUL_PAYMENT, gpt_successful_payment_callback
         )
         self.gpt_payment_no_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.decline_payment)), gpt_payment_no
+            filters.Regex(r"^{}$".format(CHATGPT_CONFIG.decline_payment)),
+            gpt_payment_no,
         )
 
         self.gpt_stop_handler_command = CommandHandler("chat_stop", gpt_stop)
@@ -57,14 +59,18 @@ class ChatGptHandler:
 
     def get_handlers(self):
         return {
-            HandlerGroupType.CLIENT_BASIC.value: [self.gpt_handler_command,
-                                                  self.gpt_handler_message,
-                                                  self.gpt_request_handler,
-                                                  self.gpt_stop_handler_command,
-                                                  self.gpt_stop_handler_message,
-                                                  self.gpt_get_remaining_tokens_handler],
-            HandlerGroupType.CLIENT_PAY.value: [self.gpt_payment_yes_handler,
-                                                self.gpt_precheckout_handler,
-                                                self.gpt_successful_payment_handler,
-                                                self.gpt_payment_no_handler],
+            HandlerGroupType.CLIENT_BASIC.value: [
+                self.gpt_handler_command,
+                self.gpt_handler_message,
+                self.gpt_request_handler,
+                self.gpt_stop_handler_command,
+                self.gpt_stop_handler_message,
+                self.gpt_get_remaining_tokens_handler,
+            ],
+            HandlerGroupType.CLIENT_PAY.value: [
+                self.gpt_payment_yes_handler,
+                self.gpt_precheckout_handler,
+                self.gpt_successful_payment_handler,
+                self.gpt_payment_no_handler,
+            ],
         }

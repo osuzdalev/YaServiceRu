@@ -24,7 +24,9 @@ class ChatGPTConfig:
     instructions_tokens: int = num_tokens_from_string(instructions)
     max_sum_response_tokens: int = free_prompt_limit * max_response_tokens
     # max size prompt to at least get one answer
-    max_prompt_tokens: int = max_conversation_tokens - instructions_tokens - max_response_tokens
+    max_prompt_tokens: int = (
+        max_conversation_tokens - instructions_tokens - max_response_tokens
+    )
     gpt_conversation_start = [{"role": "system", "content": instructions}]
     path_loading_gif: str = "data/chatgpt_data/loading_gif/file_id.txt"
 

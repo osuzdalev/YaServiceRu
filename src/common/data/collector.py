@@ -6,13 +6,9 @@ from typing import Tuple, Optional
 from telegram import Update, User, Message
 from telegram.ext import (
     ContextTypes,
-    TypeHandler,
-    MessageHandler,
-    filters,
-    ChatMemberHandler,
 )
 
-from src import common as tldb
+from src.common.data import db_utils as tldb
 
 logger_data_collector = logging.getLogger(__name__)
 
@@ -93,8 +89,3 @@ async def user_status(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
             update.my_chat_member.new_chat_member.status
         )
     )
-
-
-data_collection_handler = TypeHandler(Update, collect_data)
-collection_phone_number_handler = MessageHandler(filters.CONTACT, collect_phone_number)
-user_status_handler = ChatMemberHandler(user_status, ChatMemberHandler.CHAT_MEMBER)
