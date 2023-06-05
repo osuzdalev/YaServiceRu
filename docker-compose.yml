@@ -10,8 +10,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/resources/pg_data:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
-      - ./data/resources/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
+      - ./data/database/pg_data:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
+      - ./data/database/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
     command: postgres -c config_file=/etc/postgresql/postgres.conf
 
   weaviate:
@@ -28,7 +28,7 @@ services:
       TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
       CLUSTER_HOSTNAME: 'node1'
     volumes:
-      - ./data/semantic_filters/weaviate_data:/data
+      - ./data/semantic_filters/embeddings:/data
 
   t2v-transformers:
     image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2
