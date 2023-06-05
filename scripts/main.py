@@ -16,11 +16,9 @@ from src.commands.client.wiki_module.wiki_handler import WikiHandler
 
 # from contractor import assign, complete, commands
 from src.commands.center import orders
-from src.common.data_collector import data_collection_handler
+from src.common.data.collector_handler import CollectorHandler
 
 load_dotenv()
-
-# Enable logging
 
 logging.basicConfig(
     format="[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s",
@@ -43,10 +41,7 @@ if __name__ == "__main__":
     )
 
     # DATA COLLECTION
-    application.add_handler(data_collection_handler, -3)
-    # TODO
-    # application.add_handler(data_collector.user_status_handler, USER_STATUS_COLLECTION)
-    # application.add_handler(data_collector.collection_phone_number_handler, PHONE_COLLECTION)
+    application.add_handler(CollectorHandler().get_handlers())
 
     # ERROR HANDLER
     application.add_error_handler(ErrorHandler().get_handler())

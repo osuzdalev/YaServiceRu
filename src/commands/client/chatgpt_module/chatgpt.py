@@ -74,7 +74,7 @@ async def gpt_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 - context.user_data["GPT_messages_sent"]
             )
         )
-    # Test if user already used 5 messages
+    # tests if user already used 5 messages
     elif (
         context.user_data["GPT_level"] == 1
         and context.user_data["GPT_messages_sent"] >= CHATGPT_CONFIG.free_prompt_limit

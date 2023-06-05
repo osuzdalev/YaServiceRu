@@ -5,7 +5,7 @@ data/semantic_filters_data/weaviate_data
 
 data/resources
 
-scripts/Test
+scripts/tests
 scripts/Utils
 
 .DS_Store

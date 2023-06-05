@@ -21,13 +21,17 @@ DB_AUTH = {
 logger_tl_db = logging.getLogger(__name__)
 
 
+def create_db_connection():
+    return psycopg.connect(**DB_AUTH)
+
+
 def insert_new_user(
     user_id: int, user_name: str, first_name: str, last_name: str
 ) -> None:
     """Stuff"""
     logger_tl_db.debug("insert_new_customer()")
     try:
-        with psycopg.connect(**DB_AUTH) as conn:
+        with create_db_connection() as conn:
             cursor = conn.cursor()
             result = cursor.execute(
                 "select * from users where user_id = %s", (user_id,)
@@ -47,7 +51,7 @@ def insert_new_user(
 def get_user_data(user_id: int) -> None:
     """Stuff"""
     logger_tl_db.info("get_user_data()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from users where user_id = %s", (user_id,))
         return result.fetchone()
@@ -55,7 +59,7 @@ def get_user_data(user_id: int) -> None:
 
 def insert_user_phone_number(user_id: int, phone_number: int) -> None:
     logger_tl_db.debug("insert_customer_phone_number()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
             "update users set phone_number = %s where user_id = %s;",
@@ -67,7 +71,7 @@ def insert_user_phone_number(user_id: int, phone_number: int) -> None:
 
 def get_customer_data(user_id: int) -> List:
     logger_tl_db.debug("get_customer_data()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select users.user_id, users.user_name, users.first_name, users.last_name,"
@@ -86,7 +90,7 @@ def get_customer_data(user_id: int) -> List:
 
 def get_customer_last_order_id(user_id: int, contractor_id: int = None) -> int:
     logger_tl_db.debug("get_customer_last_order_id()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from orders where (customer_id = %s and contractor_id = %s)",
@@ -103,7 +107,7 @@ def insert_new_order(
 ) -> None:
     logger_tl_db.debug("insert_new_order()")
 
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
 
         # Check the length of device_context and assign default values if necessary
@@ -122,7 +126,7 @@ def insert_new_order(
 
 def get_order_data(order_id: int) -> List:
     logger_tl_db.debug("get_order_data()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from orders where order_id = %s", (order_id,))
 
@@ -131,7 +135,7 @@ def get_order_data(order_id: int) -> List:
 
 def get_open_orders() -> List[Tuple]:
     logger_tl_db.debug("get_open_orders()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from orders where completed = 0 and contractor_id is null"
@@ -141,7 +145,7 @@ def get_open_orders() -> List[Tuple]:
 
 def get_assigned_orders() -> List[Tuple]:
     logger_tl_db.debug("get_incomplete_orders()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from orders where completed = 0 and contractor_id is not null"
@@ -151,7 +155,7 @@ def get_assigned_orders() -> List[Tuple]:
 
 def update_order_Complete(order_id: int, timestamp: str) -> None:
     logger_tl_db.debug("update_order_Complete()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
             "update orders set completed = %s, completed_date = %s where order_id = %s",
@@ -162,7 +166,7 @@ def update_order_Complete(order_id: int, timestamp: str) -> None:
 
 def get_contractor_data(user_id: int) -> List:
     logger_tl_db.debug("get_contractor_data()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select users.user_id, users.user_name, users.first_name, users.last_name, users.phone_number, users.join_date, "
@@ -180,7 +184,7 @@ def get_contractor_data(user_id: int) -> List:
 
 def get_all_contractor_id() -> List:
     logger_tl_db.debug("get_all_contractor_ids()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute("select contractor_id from contractors")
         contractor_ids = [i[0] for i in result.fetchall()]
@@ -190,7 +194,7 @@ def get_all_contractor_id() -> List:
 
 def update_order_contractor_id(order_id: int, new_contractor_id: int) -> None:
     logger_tl_db.debug("update_order_ContractID()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
             "update orders set contractor_id = %s where order_id = %s",
@@ -203,7 +207,7 @@ def insert_assign(
     old_contractor_id: int, order_id: int, new_contractor_id: int
 ) -> None:
     logger_tl_db.debug("insert_assign")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
             "insert into assign (old_contractor_id, order_id, new_contractor_id) "
@@ -215,7 +219,7 @@ def insert_assign(
 
 def check_assign(old_contractor_id: int, order_id: int, new_contractor_id: int) -> bool:
     logger_tl_db.debug("check_assign()")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from assign where old_contractor_id = %s and order_id = %s and new_contractor_id = %s",
@@ -229,7 +233,7 @@ def insert_message(message_id: int, user_id: int, text: str) -> None:
     """Data collection"""
     logger_tl_db.debug("insert_message()")
     logger_tl_db.debug(f"inserting: {message_id}, {user_id}, {text}")
-    with psycopg.connect(**DB_AUTH) as conn:
+    with create_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
             "insert into messages (message_id, user_id, message_text) values (%s, %s, %s)",

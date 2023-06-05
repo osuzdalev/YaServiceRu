@@ -4,13 +4,9 @@ import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     ContextTypes,
-    CommandHandler,
-    MessageHandler,
-    CallbackQueryHandler,
-    filters,
 )
 
-from src.common import helpers, telegram_database_utils as tldb
+from src.common import helpers
 from dotenv import load_dotenv
 
 logger_req = logging.getLogger(__name__)

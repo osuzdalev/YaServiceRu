@@ -3,7 +3,7 @@ data/resources
 data/semantic_filters_data/weaviate_data
 data/semantic_filters_data/filters
 
-scripts/Test
+scripts/tests
 scripts/Utils
 
 venv
