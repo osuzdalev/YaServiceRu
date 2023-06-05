@@ -23,7 +23,8 @@ def get_available_device():
 
 
 class WeaviateClient:
-    def __init__(self, api_url: str = os.getenv("API_WEAVIATE")):
+    def __init__(self, api_url: str = None):
+        self.api_url = api_url or os.getenv("API_WEAVIATE")
         self.client = weaviate.Client(api_url)
         self.device = get_available_device()
         self.embedding_model = SentenceTransformer(
