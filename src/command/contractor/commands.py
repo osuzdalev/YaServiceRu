@@ -16,7 +16,7 @@ async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger_assign.info("command()")
     user_id = update.effective_user.id
 
-    if not helpers.clearance_Contractor(user_id) or not helpers.clearance_Center(
+    if not helpers.clearance_contractor(user_id) or not helpers.clearance_center(
         user_id
     ):
         await update.effective_message.reply_text("You cannot use this command")

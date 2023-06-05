@@ -13,7 +13,7 @@ async def orders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends message with all the unassigned and incomplete orders"""
     logger_orders.info("orders()")
 
-    if helpers.clearance_Center(update.effective_user.id):
+    if helpers.clearance_center(update.effective_user.id):
         open_orders = tldb.get_open_orders()
         assigned_orders = tldb.get_assigned_orders()
 

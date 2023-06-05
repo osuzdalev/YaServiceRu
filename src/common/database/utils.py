@@ -78,7 +78,7 @@ def get_customer_data(user_id: int) -> List:
             "users.phone_number, users.join_date, "
             "customers.warning "
             "from users, customers "
-            "where user_id = %s and customer_id = %s",  # TODO: number argument pass
+            "where user_id = %s and customer_id = %s",
             (
                 user_id,
                 user_id,

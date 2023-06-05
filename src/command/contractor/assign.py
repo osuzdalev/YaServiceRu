@@ -332,7 +332,7 @@ assign_conversation_handler = ConversationHandler(
 )
 
 assignment_response_handler = MessageHandler(
-    filters.User(user_id=tldb.get_all_ContractorID())
+    filters.User(user_id=tldb.get_all_contractor_id())
     & (filters.Regex(r"^(✅)$") | filters.Regex(r"^(❌)$")),
     assignment_answer,
 )
