@@ -1,7 +1,7 @@
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 
-keyboard = [
+__keyboard = [
     [KeyboardButton("📖Справочник"), KeyboardButton("🤖Чат с подержкой")],
     [KeyboardButton("🤓Специалист")],
 ]
-default_client_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+DEFAULT_CLIENT_MARKUP = ReplyKeyboardMarkup(__keyboard, resize_keyboard=True)

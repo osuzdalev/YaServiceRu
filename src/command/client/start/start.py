@@ -3,7 +3,7 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from src.common.markups_default import default_client_markup
+from src.common.markups import default_client_markup
 
 logger_start = logging.getLogger(__name__)
 
