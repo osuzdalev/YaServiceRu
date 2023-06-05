@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.command.client.chatgpt.token_count import num_tokens_from_string
+from src.command.client.chatgpt.utils import num_tokens_from_string
 
 system_instructions_path = "data/chatgpt/system_instructions.txt"
 with open(system_instructions_path, "r") as file:

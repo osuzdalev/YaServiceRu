@@ -6,8 +6,8 @@ from telegram.ext import (
 )
 
 from src.common.global_fallback.global_fallback import ignored_texts_re
-from src.command.client.chatgpt.chatgpt_config import ChatGPTConfig
-from src.command.client.chatgpt.chatgpt import (
+from src.command.client.chatgpt.config import ChatGPTConfig
+from src.command.client.chatgpt.callbacks import (
     gpt_start,
     gpt_stop,
     gpt_request,

@@ -11,7 +11,7 @@ from src.common.global_fallback.global_fallback_handler import GlobalFallbackHan
 
 from src.command.client.request.request_handler import RequestHandler
 from src.command.client.start.start_handler import StartHandler
-from src.command.client.chatgpt.chatgpt_handler import ChatGptHandler
+from src.command.client.chatgpt.handler import ChatGptHandler
 from src.command.client.wiki.wiki_handler import WikiHandler
 
 # from contractor import assign, complete, command

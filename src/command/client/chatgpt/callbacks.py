@@ -13,8 +13,8 @@ from telegram.ext import (
 from telegram.constants import ParseMode
 
 from dotenv import load_dotenv
-from src.command.client.chatgpt.chatgpt_config import ChatGPTConfig
-from src.command.client.chatgpt.token_count import num_tokens_from_string
+from src.command.client.chatgpt.config import ChatGPTConfig
+from src.command.client.chatgpt.utils import num_tokens_from_string
 from src.command.client.prompt_filter.prompt_validation import (
     validate_prompt,
     check_conversation_tokens,
