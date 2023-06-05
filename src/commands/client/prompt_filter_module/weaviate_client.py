@@ -26,7 +26,9 @@ class WeaviateClient:
     def __init__(self, api_url: str = os.getenv("API_WEAVIATE")):
         self.client = weaviate.Client(api_url)
         self.device = get_available_device()
-        self.embedding_model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        self.embedding_model = SentenceTransformer(
+            "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+        )
         self.semantic_threshold: float = 0.75
         self.query_limit: int = 10
 

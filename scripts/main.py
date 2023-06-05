@@ -33,9 +33,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
-    persistence = PicklePersistence(
-        filepath=os.getenv("FILEPATH_PERSISTENCE")
-    )
+    persistence = PicklePersistence(filepath=os.getenv("FILEPATH_PERSISTENCE"))
     application = (
         Application.builder()
         .token(os.getenv("TOKEN_TG_MAIN_BOT"))
@@ -77,6 +75,9 @@ if __name__ == "__main__":
     application.add_handler(orders.orders_handler)
 
     # Global fallback Handler stopping every ConversationHandlers
-    application.add_handler(GlobalFallbackHandler().get_handler(), GlobalFallbackHandler().get_handler_group())
+    application.add_handler(
+        GlobalFallbackHandler().get_handler(),
+        GlobalFallbackHandler().get_handler_group(),
+    )
 
     application.run_polling()

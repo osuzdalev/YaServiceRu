@@ -7,7 +7,7 @@ from src.common.markups_default import default_client_markup
 
 logger_start = logging.getLogger(__name__)
 
-with open('data/start_data/file_id.txt') as file:
+with open("data/start_data/file_id.txt") as file:
     start_video_file_id = file.readline().strip()
 
 
@@ -23,5 +23,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "Добро пожаловать!", reply_markup=default_client_markup
     )
     # Send introduction video
-    await update.message.reply_document("BAACAgIAAxkDAAIJ1WR4pdC8CNUnYGVIfYAHM6agFN5JAAIWLwACVIfJS1b_wHklPwzKLwQ")
-
+    await update.message.reply_document(
+        "BAACAgIAAxkDAAIJ1WR4pdC8CNUnYGVIfYAHM6agFN5JAAIWLwACVIfJS1b_wHklPwzKLwQ"
+    )

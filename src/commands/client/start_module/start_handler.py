@@ -2,9 +2,7 @@ from telegram.ext import (
     CommandHandler,
 )
 
-from src.commands.client.start_module.start import (
-    start
-)
+from src.commands.client.start_module.start import start
 from src.common.types import HandlerGroupType
 
 

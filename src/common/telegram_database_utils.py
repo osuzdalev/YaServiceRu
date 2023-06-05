@@ -9,11 +9,13 @@ from typing import List, Tuple
 from dotenv import load_dotenv
 
 load_dotenv()
-DB_AUTH = {"dbname": os.getenv("DATABASE_POSTGRES_DB"),
-           "host": os.getenv("DATABASE_POSTGRES_HOST"),
-           "user": os.getenv("DATABASE_POSTGRES_USER"),
-           "password": os.getenv("DATABASE_POSTGRES_PASSWORD"),
-           "port": os.getenv("DATABASE_POSTGRES_PORT")}
+DB_AUTH = {
+    "dbname": os.getenv("DATABASE_POSTGRES_DB"),
+    "host": os.getenv("DATABASE_POSTGRES_HOST"),
+    "user": os.getenv("DATABASE_POSTGRES_USER"),
+    "password": os.getenv("DATABASE_POSTGRES_PASSWORD"),
+    "port": os.getenv("DATABASE_POSTGRES_PORT"),
+}
 
 
 logger_tl_db = logging.getLogger(__name__)
@@ -27,7 +29,9 @@ def insert_new_user(
     try:
         with psycopg.connect(**DB_AUTH) as conn:
             cursor = conn.cursor()
-            result = cursor.execute("select * from users where user_id = %s", (user_id,))
+            result = cursor.execute(
+                "select * from users where user_id = %s", (user_id,)
+            )
             if result.fetchone() is None:
                 cursor.execute(
                     "insert into users (user_id, user_name, first_name, last_name) values (%s, %s, %s, %s);",
@@ -70,8 +74,11 @@ def get_customer_data(user_id: int) -> List:
             "users.phone_number, users.join_date, "
             "customers.warning "
             "from users, customers "
-            "where user_id = %s and customer_id = %s", # TODO: number argument pass
-            (user_id, user_id,),
+            "where user_id = %s and customer_id = %s",  # TODO: number argument pass
+            (
+                user_id,
+                user_id,
+            ),
         )
 
         return result.fetchone()
@@ -161,8 +168,11 @@ def get_contractor_data(user_id: int) -> List:
             "select users.user_id, users.user_name, users.first_name, users.last_name, users.phone_number, users.join_date, "
             "contractors.warning "
             "from users, contractors "
-            "where user_id = %s and contractor_id = %s", # TODO: numbered pass
-            (user_id, user_id,),
+            "where user_id = %s and contractor_id = %s",  # TODO: numbered pass
+            (
+                user_id,
+                user_id,
+            ),
         )
 
         return result.fetchone()
@@ -189,7 +199,9 @@ def update_order_contractor_id(order_id: int, new_contractor_id: int) -> None:
         conn.commit()
 
 
-def insert_assign(old_contractor_id: int, order_id: int, new_contractor_id: int) -> None:
+def insert_assign(
+    old_contractor_id: int, order_id: int, new_contractor_id: int
+) -> None:
     logger_tl_db.debug("insert_assign")
     with psycopg.connect(**DB_AUTH) as conn:
         cursor = conn.cursor()

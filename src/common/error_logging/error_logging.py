@@ -41,7 +41,9 @@ def send_email(content: str) -> None:
     server.quit()
 
 
-async def error_notification(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def error_notification(
+    update: object, context: ContextTypes.DEFAULT_TYPE
+) -> None:
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
     logger_error.error(

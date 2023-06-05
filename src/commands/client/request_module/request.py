@@ -44,18 +44,14 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     query = update.callback_query
     user = query.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
-    logger_req.info(
-        f"({user.id}, {user.name}, {user.first_name}) /confirm_request"
-    )
+    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /confirm_request")
 
     device_context = context.user_data.get("Device_Context", [])
 
     # tldb.insert_new_order(user.id, device_context)
 
     # OrderID = tldb.get_customer_last_OrderID(user.id)
-    order_message_str = helpers.get_order_message_str(
-        "BETA", user_data, device_context
-    )
+    order_message_str = helpers.get_order_message_str("BETA", user_data, device_context)
 
     await context.bot.sendMessage(os.getenv("ID_DEV_MAIN"), order_message_str)
     await query.answer(text="Служба поддержки свяжется с вами.", show_alert=True)
@@ -71,14 +67,10 @@ async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     query = update.callback_query
     try:
         user = query.from_user
-        logger_req.info(
-            f"({user.id}, {user.name}, {user.first_name}) /cancel_request"
-        )
+        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /cancel_request")
     except AttributeError:
         user = update.effective_user
-        logger_req.info(
-            f"({user.id}, {user.name}, {user.first_name}) /cancel_request"
-        )
+        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /cancel_request")
 
     # cleaning
     for message in context.user_data["Request_temp_messages"]:

@@ -19,7 +19,9 @@ class RequestHandler:
         self.request_replykeyboard_handler = MessageHandler(
             filters.Regex(r"^(🤓Специалист)$"), request
         )
-        self.request_callback_handler = CallbackQueryHandler(request, pattern="REQUEST_COMMAND")
+        self.request_callback_handler = CallbackQueryHandler(
+            request, pattern="REQUEST_COMMAND"
+        )
         self.confirm_request_handler = CallbackQueryHandler(
             confirm_request, pattern="REQUEST_CALL_CONFIRM"
         )
@@ -32,9 +34,11 @@ class RequestHandler:
 
     def get_handlers(self):
         return {
-            HandlerGroupType.CLIENT_BASIC.value: [self.request_command_handler,
-                                                  self.request_replykeyboard_handler,
-                                                  self.confirm_request_handler,
-                                                  self.cancel_request_handler,
-                                                  self.cancel_request_handler_message],
+            HandlerGroupType.CLIENT_BASIC.value: [
+                self.request_command_handler,
+                self.request_replykeyboard_handler,
+                self.confirm_request_handler,
+                self.cancel_request_handler,
+                self.cancel_request_handler_message,
+            ],
         }
