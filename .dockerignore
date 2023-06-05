@@ -1,7 +1,7 @@
-data/chatgpt_data/test.txt
+data/chatgpt/test.txt
 data/resources
-data/semantic_filters_data/weaviate_data
-data/semantic_filters_data/filters
+data/semantic_filters/weaviate_data
+data/semantic_filters/filters
 
 scripts/tests
 scripts/Utils

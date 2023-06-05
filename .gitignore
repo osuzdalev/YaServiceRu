@@ -1,7 +1,7 @@
 .env
 
-data/chatgpt_data/test.txt
-data/semantic_filters_data/weaviate_data
+data/chatgpt/test.txt
+data/semantic_filters/weaviate_data
 
 data/resources
 

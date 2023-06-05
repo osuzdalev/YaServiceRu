@@ -9,13 +9,13 @@ from dotenv import load_dotenv
 from src.common.error_logging.error_logging_handler import ErrorHandler
 from src.common.global_fallback.global_fallback_handler import GlobalFallbackHandler
 
-from src.commands.client.request_module.request_handler import RequestHandler
-from src.commands.client.start_module.start_handler import StartHandler
-from src.commands.client.chatgpt_module.chatgpt_handler import ChatGptHandler
-from src.commands.client.wiki_module.wiki_handler import WikiHandler
+from src.command.client.request.request_handler import RequestHandler
+from src.command.client.start.start_handler import StartHandler
+from src.command.client.chatgpt.chatgpt_handler import ChatGptHandler
+from src.command.client.wiki.wiki_handler import WikiHandler
 
-# from contractor import assign, complete, commands
-from src.commands.center import orders
+# from contractor import assign, complete, command
+from src.command.center import orders
 from src.common.data.collector_handler import CollectorHandler
 
 load_dotenv()
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     # application.add_handler(assign.assign_conversation_handler, CONTRACTOR_ASSIGN)
     # application.add_handler(assign.assignment_response_handler)
     # application.add_handler(complete.complete_handler, CONTRACTOR_BASIC)
-    # application.add_handler(commands.commands_handler, CONTRACTOR_BASIC)
+    # application.add_handler(command.commands_handler, CONTRACTOR_BASIC)
 
     # CENTER HANDLERS
     application.add_handler(orders.orders_handler)

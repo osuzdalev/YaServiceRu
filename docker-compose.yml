@@ -28,7 +28,7 @@ services:
       TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
       CLUSTER_HOSTNAME: 'node1'
     volumes:
-      - ./data/semantic_filters_data/weaviate_data:/data
+      - ./data/semantic_filters/weaviate_data:/data
 
   t2v-transformers:
     image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2

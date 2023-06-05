@@ -5,9 +5,9 @@ from telegram.ext import ContextTypes
 
 logger_global_fallback = logging.getLogger(__name__)
 
-# Customer commands
+# Customer command
 start = "/start"
-request = "/request_module"
+request = "/request"
 wiki = "/wiki"
 pay = "/pay"
 cancel = "/cancel"
@@ -35,14 +35,14 @@ chatgpt_decline_pay_message = "DECLINE_CHATGPT_PAYMENT"
 
 customer_special_messages = [chatgpt_confirm_pay_message, chatgpt_decline_pay_message]
 
-# Contractor commands
+# Contractor command
 assign = "/assign \d*"
 complete = "/complete \d*"
-commands = "/commands"
+commands = "/command"
 
 contractor_commands = [assign, complete, commands]
 
-# Center commands
+# Center command
 orders = "/orders"
 center_commands = [orders]
 
