@@ -2,21 +2,18 @@ import logging
 import os
 import sys
 
-from telegram.ext import Application, PicklePersistence
-
 from dotenv import load_dotenv
-
-from src.common.error_logging.error_logging_handler import ErrorHandler
-from src.common.global_fallback.global_fallback_handler import GlobalFallbackHandler
-
-from src.command.client.request.request_handler import RequestHandler
-from src.command.client.start.start_handler import StartHandler
-from src.command.client.chatgpt.handler import ChatGptHandler
-from src.command.client.wiki.wiki_handler import WikiHandler
+from telegram.ext import Application, PicklePersistence
 
 # from contractor import assign, complete, command
 from src.command.center import orders
+from src.command.client.chatgpt.handler import ChatGptHandler
+from src.command.client.request.request_handler import RequestHandler
+from src.command.client.start.start_handler import StartHandler
+from src.command.client.wiki.wiki_handler import WikiHandler
 from src.common.database.collector_handler import CollectorHandler
+from src.common.error_logging.error_logging_handler import ErrorHandler
+from src.common.global_fallback.global_fallback_handler import GlobalFallbackHandler
 
 load_dotenv()
 
@@ -30,14 +27,31 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+# Possibly it is more clear to encapsulate bot into a single instance
+class BotApp:
+    def __init__(self):
+        self._persistence = PicklePersistence(filepath=os.getenv("FILEPATH_PERSISTENCE"))
+        self._application = (
+            Application.builder()
+                .token(os.getenv("TOKEN_TG_MAIN_BOT"))
+                .persistence(self._persistence)
+                .arbitrary_callback_data(True)
+                .build()
+        )
+
+    def run(self) -> None:
+        self._application.run_polling()
+
+
 if __name__ == "__main__":
     persistence = PicklePersistence(filepath=os.getenv("FILEPATH_PERSISTENCE"))
     application = (
         Application.builder()
-        .token(os.getenv("TOKEN_TG_MAIN_BOT"))
-        .persistence(persistence)
-        .arbitrary_callback_data(True)
-        .build()
+            .token(os.getenv("TOKEN_TG_MAIN_BOT"))
+            .persistence(persistence)
+            .arbitrary_callback_data(True)
+            .build()
     )
 
     # DATA COLLECTION
