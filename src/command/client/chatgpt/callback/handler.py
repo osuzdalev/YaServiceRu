@@ -12,7 +12,7 @@ from telegram.ext import (
 )
 
 from src.command.client.chatgpt.config import ChatGPTConfig
-import src.command.client.chatgpt.callback as cbs
+import src.command.client.chatgpt.callback as callbacks
 from src.command.client.chatgpt.types import ChatGptCallbackType
 
 from src.command.client.chatgpt.utils import num_tokens_from_string
@@ -40,7 +40,8 @@ class ChatGptCallbackHandler:
             ]
         )
         self._callbacks = {
-            ChatGptCallbackType.START: cbs.StartCallback(self._logger, self._config)
+            ChatGptCallbackType.START: callbacks.StartCallback(self._logger, self._config),
+            ChatGptCallbackType.STOP: callbacks.StopCallback(self._logger)
         }
 
     def get_callback(self, cb_type: ChatGptCallbackType):
@@ -256,20 +257,6 @@ class ChatGptCallbackHandler:
             "Ваш ответ был получен. Спасибо за использование нашего сервиса!"
             "Пожалуйста, не стесняйтесь возвращаться в любое время!"
         )
-
-    async def stop(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        """Unsets the flag in the user context that sends every incoming message from the user
-        as a request to ChatGPT through the API"""
-        user = update.message.from_user
-        self._logger.info(f"({user.id}, {user.name}, {user.first_name}) {self.stop.__qualname__}")
-
-        # Check if there is a chat to stop
-        if context.user_data.get("GPT_active", False):
-            context.user_data["GPT_active"] = False
-            await update.message.reply_text(
-                "YaService-GPT остановлен. "
-                "Ваши сообщения больше не будут отправляться на YaService-GPT."
-            )
 
     async def get_remaining_tokens(
             self, update: Update, context: ContextTypes.DEFAULT_TYPE
