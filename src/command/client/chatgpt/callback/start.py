@@ -26,12 +26,12 @@ class StartCallback:
             return StartCallbackEventType.FIRST_TIME_USER
         if (
             context.user_data["GPT_level"] in (0, 1)
-            and context.user_data["GPT_messages_sent"] < self._config.free_prompt_limit
+            and context.user_data["GPT_messages_sent"] < self._config.model.free_prompt_limit
         ):
             return StartCallbackEventType.EXISTING_USER
         if (
             context.user_data["GPT_level"] == 1
-            and context.user_data["GPT_messages_sent"] >= self._config.free_prompt_limit
+            and context.user_data["GPT_messages_sent"] >= self._config.model.free_prompt_limit
         ):
             return StartCallbackEventType.MAXED_OUT_USER
         raise RuntimeError("Unknown event type StartCallbackEventType")
@@ -73,7 +73,7 @@ class StartCallback:
         await update.message.reply_text(
             "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
             "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                self._config.free_prompt_limit - context.user_data["GPT_messages_sent"]
+                self._config.model.free_prompt_limit - context.user_data["GPT_messages_sent"]
             )
         )
 

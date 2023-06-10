@@ -46,56 +46,6 @@ class ChatGptCallbackHandler:
     def get_callback(self, cb_type: ChatGptCallbackType):
         return self._callbacks[cb_type]
 
-    async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        """Activates the ChatGPT feature for the user by setting a flag in their context that sends every incoming message
-        to ChatGPT through the API. If the user has not used the ChatGPT feature before, initializes the necessary
-        context variables.
-        If the user has used the ChatGPT feature before, checks if they have reached the free prompts limit
-        """
-        user = update.message.from_user
-        self._logger.info(f"({user.id}, {user.name}, {user.first_name}) {self.start.__qualname__}")
-
-        # First time calling the chat feature
-        if "GPT_level" not in context.user_data:
-            context.user_data["GPT_active"] = True
-            context.user_data["GPT_level"] = 0
-            context.user_data["GPT_messages_sent"] = 0
-            context.user_data["GPT_premium"] = False
-            context.user_data["GPT_conversation"] = self._config.model.conversation_init
-            context.user_data[
-                "GPT_premium_conversation"
-            ] = self._config.model.conversation_init
-
-            await update.message.reply_text(
-                "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
-                "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                    self._config.model.free_prompt_limit
-                    - context.user_data["GPT_messages_sent"]
-                )
-            )
-
-        # Already previously called the chat feature
-        elif (
-                context.user_data["GPT_level"] in (0, 1)
-                and context.user_data["GPT_messages_sent"] < self._config.model.free_prompt_limit
-        ):
-            context.user_data["GPT_active"] = True
-            await update.message.reply_text(
-                "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
-                "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                    self._config.model.free_prompt_limit
-                    - context.user_data["GPT_messages_sent"]
-                )
-            )
-        # tests if user already used 5 messages
-        elif (
-                context.user_data["GPT_level"] == 1
-                and context.user_data["GPT_messages_sent"] >= self._config.model.free_prompt_limit
-        ):
-            await update.message.reply_text(
-                self._config.messages.max_messages, parse_mode=ParseMode.MARKDOWN_V2
-            )
-
     def generate_response(self, user_message: str, conversation: List[Dict]) -> str:
         """
         Generates a response from the ChatGPT model given the user's message and the conversation history.
