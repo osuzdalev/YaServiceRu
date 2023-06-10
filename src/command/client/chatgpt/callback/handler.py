@@ -12,11 +12,15 @@ from telegram.ext import (
 )
 
 from src.command.client.chatgpt.config import ChatGPTConfig
+import src.command.client.chatgpt.callback as cbs
+from src.command.client.chatgpt.types import ChatGptCallbackType
+
 from src.command.client.chatgpt.utils import num_tokens_from_string
 from src.command.client.prompt_filter.prompt_validation import (
     validate_prompt,
     check_conversation_tokens,
 )
+
 from src.common.data.reader import DataReader
 
 DataReader = DataReader()
@@ -35,6 +39,12 @@ class ChatGptCallbackHandler:
                 ]
             ]
         )
+        self._callbacks = {
+            ChatGptCallbackType.START: cbs.StartCallback(self._logger, self._config)
+        }
+
+    def get_callback(self, cb_type: ChatGptCallbackType):
+        return self._callbacks[cb_type]
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Activates the ChatGPT feature for the user by setting a flag in their context that sends every incoming message

@@ -1,0 +1,13 @@
+from enum import Enum
+
+
+class ChatGptCallbackType(Enum):
+    START = 0
+    STOP = 1
+    GENERATE_CHATBOT_RESPONSE = 2
+    REQUEST = 3
+    PAYMENT_NO = 4
+    PAYMENT_YES = 5
+    PRECHECKOUT_CALLBACK = 6
+    SUCCESSFUL_PAYMENT_CALLBACK = 7
+    GET_REMAINING_TOKENS = 8

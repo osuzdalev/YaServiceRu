@@ -5,48 +5,51 @@ from telegram.ext import (
     PreCheckoutQueryHandler,
 )
 
-from src.command.client.chatgpt.callbacks import ChatGptCallbackHandler
-from src.command.client.chatgpt.config import ChatGPTConfig
 from src.common.global_fallback.global_fallback import ignored_texts_re
+from src.command.client.chatgpt.config import ChatGPTConfig
+from src.command.client.chatgpt.callback.handler import ChatGptCallbackHandler
+
 from src.common.types import HandlerGroupType
+from .types import ChatGptCallbackType
 
 
 class ChatGptHandler:
     def __init__(self):
         config = ChatGPTConfig()
-        callback_handler = ChatGptCallbackHandler(config)
+        cb_handler = ChatGptCallbackHandler(config)
 
-        self.handler_command = CommandHandler("chat", callback_handler.start)
+        start_cb = cb_handler.get_callback(ChatGptCallbackType.START)
+        self.handler_command = CommandHandler("chat", start_cb)
         self.handler_message = MessageHandler(
-            filters.Regex(r"^🤖Чат с подержкой$"), callback_handler.start
+            filters.Regex(r"^🤖Чат с подержкой$"), start_cb
         )
 
         self.request_handler = MessageHandler(
             filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND),
-            callback_handler.request,
+            cb_handler.request,
         )
 
         self.payment_yes_handler = MessageHandler(
             filters.Regex(r"^{}$".format(config.messages.confirm_payment)),
-            callback_handler.payment_yes,
+            cb_handler.payment_yes,
         )
-        self.precheckout_handler = PreCheckoutQueryHandler(callback_handler.precheckout_callback)
+        self.precheckout_handler = PreCheckoutQueryHandler(cb_handler.precheckout_callback)
         # TODO add condition specific to chatgpt payment
         self.successful_payment_handler = MessageHandler(
-            filters.SUCCESSFUL_PAYMENT, callback_handler.successful_payment_callback
+            filters.SUCCESSFUL_PAYMENT, cb_handler.successful_payment_callback
         )
         self.payment_no_handler = MessageHandler(
             filters.Regex(r"^{}$".format(config.messages.decline_payment)),
-            callback_handler.payment_no,
+            cb_handler.payment_no,
         )
 
-        self.stop_handler_command = CommandHandler("chat_stop", callback_handler.stop)
+        self.stop_handler_command = CommandHandler("chat_stop", cb_handler.stop)
         self.stop_handler_message = MessageHandler(
-            filters.Regex(r"^❌Отменить$"), callback_handler.stop
+            filters.Regex(r"^❌Отменить$"), cb_handler.stop
         )
 
         self.get_remaining_tokens_handler = CommandHandler(
-            "token", callback_handler.get_remaining_tokens
+            "token", cb_handler.get_remaining_tokens
         )
 
     def get_handlers(self):
