@@ -43,7 +43,6 @@ HandlerType = TypeVar("HandlerType", bound=Handler)
 
 
 class Factory(Generic[HandlerType, _SelectHandlerRequest], ABC):
-
     def __init__(self):
         self._handlers: List[HandlerType] = []
 
@@ -91,12 +90,9 @@ class ChatGPTMessageHandler(MessageHadler):
 
 # Chooser of active flow message handling pipline
 class GlobalMessageHandler(Factory[MessageHadler]):
-
     def __init__(self):
         super().__init__()
-        self._handlers = [
-            ChatGPTMessageHandler()
-        ]
+        self._handlers = [ChatGPTMessageHandler()]
 
     async def process(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         # choose active flow
@@ -129,7 +125,6 @@ class FlowHandler(ABC):
 # it will be impossible to distinguish handling methods of different flows
 # so as they have equal event when telegram should call them
 class CommonHandler(FlowHandler):
-
     def __init__(self):
         self._request_handler = MessageHandler(
             filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND),
@@ -141,7 +136,7 @@ class CommonHandler(FlowHandler):
 
 
 # usage example
-if __name__ == '__main__':
+if __name__ == "__main__":
     # just to show use case
     # (one of the reason to encapsulate bot application realization instead of
     # just consequent commands in the main, it will be usefull for different tests)

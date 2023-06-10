@@ -31,13 +31,15 @@ logger = logging.getLogger(__name__)
 # Possibly it is more clear to encapsulate bot into a single instance
 class BotApp:
     def __init__(self):
-        self._persistence = PicklePersistence(filepath=os.getenv("FILEPATH_PERSISTENCE"))
+        self._persistence = PicklePersistence(
+            filepath=os.getenv("FILEPATH_PERSISTENCE")
+        )
         self._application = (
             Application.builder()
-                .token(os.getenv("TOKEN_TG_MAIN_BOT"))
-                .persistence(self._persistence)
-                .arbitrary_callback_data(True)
-                .build()
+            .token(os.getenv("TOKEN_TG_MAIN_BOT"))
+            .persistence(self._persistence)
+            .arbitrary_callback_data(True)
+            .build()
         )
 
     def run(self) -> None:
@@ -48,10 +50,10 @@ if __name__ == "__main__":
     persistence = PicklePersistence(filepath=os.getenv("FILEPATH_PERSISTENCE"))
     application = (
         Application.builder()
-            .token(os.getenv("TOKEN_TG_MAIN_BOT"))
-            .persistence(persistence)
-            .arbitrary_callback_data(True)
-            .build()
+        .token(os.getenv("TOKEN_TG_MAIN_BOT"))
+        .persistence(persistence)
+        .arbitrary_callback_data(True)
+        .build()
     )
 
     # DATA COLLECTION

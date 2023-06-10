@@ -11,6 +11,7 @@ DataReader = DataReader()
 
 openai.api_key = os.getenv("API_OPENAI")
 
+
 @dataclass
 class Model:
     name: str = "gpt-3.5-turbo"
@@ -23,13 +24,17 @@ class Model:
     max_conversation_tokens: int = 4096
     # Amount of tokens in a conversation to at least get a minimum response
     limit_conversation_tokens: int = max_conversation_tokens - max_response_tokens
-    instructions_tokens: int = num_tokens_from_string(DataReader.chatgpt.get_system_instructions())
+    instructions_tokens: int = num_tokens_from_string(
+        DataReader.chatgpt.get_system_instructions()
+    )
     max_sum_response_tokens: int = free_prompt_limit * max_response_tokens
     # max size prompt to at least get one answer
     max_prompt_tokens: int = (
-            max_conversation_tokens - instructions_tokens - max_response_tokens
+        max_conversation_tokens - instructions_tokens - max_response_tokens
     )
-    conversation_init = [{"role": "system", "content": DataReader.chatgpt.get_system_instructions()}]
+    conversation_init = [
+        {"role": "system", "content": DataReader.chatgpt.get_system_instructions()}
+    ]
 
 
 @dataclass
@@ -59,4 +64,3 @@ class ChatGPTConfig:
     model: Model = Model()
     messages: Messages = Messages()
     checkout_variables: CheckoutVariables = CheckoutVariables()
-

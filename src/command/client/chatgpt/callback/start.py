@@ -26,18 +26,20 @@ class StartCallback:
             return StartCallbackEventType.FIRST_TIME_USER
         if (
             context.user_data["GPT_level"] in (0, 1)
-            and context.user_data["GPT_messages_sent"] < self._config.model.free_prompt_limit
+            and context.user_data["GPT_messages_sent"]
+            < self._config.model.free_prompt_limit
         ):
             return StartCallbackEventType.EXISTING_USER
         if (
             context.user_data["GPT_level"] == 1
-            and context.user_data["GPT_messages_sent"] >= self._config.model.free_prompt_limit
+            and context.user_data["GPT_messages_sent"]
+            >= self._config.model.free_prompt_limit
         ):
             return StartCallbackEventType.MAXED_OUT_USER
         raise RuntimeError("Unknown event type StartCallbackEventType")
 
     async def __call__(
-            self, update: Update, context: ContextTypes.DEFAULT_TYPE
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         user = update.message.from_user
         self._logger.info(
@@ -48,7 +50,7 @@ class StartCallback:
         await self._event_callbacks[event](update, context)
 
     async def _first_time_user_cb(
-            self, update: Update, context: ContextTypes.DEFAULT_TYPE
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         context.user_data["GPT_active"] = True
         context.user_data["GPT_level"] = 0
@@ -67,19 +69,18 @@ class StartCallback:
         )
 
     async def _existing_user_cb(
-            self, update: Update, context: ContextTypes.DEFAULT_TYPE
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ):
         context.user_data["GPT_active"] = True
         await update.message.reply_text(
             "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
             "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                self._config.model.free_prompt_limit - context.user_data["GPT_messages_sent"]
+                self._config.model.free_prompt_limit
+                - context.user_data["GPT_messages_sent"]
             )
         )
 
-    async def _maxed_out_user_cb(
-            self, update: Update, _: ContextTypes.DEFAULT_TYPE
-    ):
+    async def _maxed_out_user_cb(self, update: Update, _: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             self._config.max_messages_string, parse_mode=ParseMode.MARKDOWN_V2
         )

@@ -16,13 +16,11 @@ class StopCallback:
         }
 
     @staticmethod
-    def get_event(_: Update, context: ContextTypes.DEFAULT_TYPE):
-        if context.user_data.get("GPT_active", False):
-            return StopCallbackEventType.CHATGPT_ACTIVATED
-        raise RuntimeError("Unknown event type StopCallbackEventType")
+    def get_event(_update: Update, _context: ContextTypes.DEFAULT_TYPE):
+        return StopCallbackEventType.CHATGPT_ACTIVATED
 
     async def __call__(
-            self, update: Update, context: ContextTypes.DEFAULT_TYPE
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         user = update.message.from_user
         self._logger.info(
@@ -33,7 +31,9 @@ class StopCallback:
         await self._event_callbacks[event](update, context)
 
     @staticmethod
-    async def _chatgpt_activated_callback( update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def _chatgpt_activated_callback(
+        update: Update, context: ContextTypes.DEFAULT_TYPE
+    ):
         context.user_data["GPT_active"] = False
         await update.message.reply_text(
             "YaService-GPT остановлен.\n"

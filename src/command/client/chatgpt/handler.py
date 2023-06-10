@@ -33,7 +33,9 @@ class ChatGptHandler:
             filters.Regex(r"^{}$".format(config.messages.confirm_payment)),
             callback_handler.payment_yes,
         )
-        self.precheckout_handler = PreCheckoutQueryHandler(callback_handler.precheckout_callback)
+        self.precheckout_handler = PreCheckoutQueryHandler(
+            callback_handler.precheckout_callback
+        )
         # TODO add condition specific to chatgpt payment
         self.successful_payment_handler = MessageHandler(
             filters.SUCCESSFUL_PAYMENT, callback_handler.successful_payment_callback
@@ -49,8 +51,11 @@ class ChatGptHandler:
             filters.Regex(r"^❌Отменить$"), callback_stop
         )
 
+        callback_check_remaining_tokens = callback_handler.get_callback(
+            ChatGptCallbackType.CHECK_REMAINING_TOKENS
+        )
         self.get_remaining_tokens_handler = CommandHandler(
-            "token", callback_handler.get_remaining_tokens
+            "tokens", callback_check_remaining_tokens
         )
 
     def get_handlers(self):

@@ -29,7 +29,9 @@ def check_conversation_tokens(
     conversation_tokens = sum(
         num_tokens_from_string(message["content"]) for message in conversation
     ) + num_tokens_from_string(prompt)
-    remaining_tokens = CHATGPT_CONFIG.model.limit_conversation_tokens - conversation_tokens
+    remaining_tokens = (
+        CHATGPT_CONFIG.model.limit_conversation_tokens - conversation_tokens
+    )
 
     return (
         (True, remaining_tokens)
