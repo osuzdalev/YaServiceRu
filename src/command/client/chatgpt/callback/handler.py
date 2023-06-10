@@ -1,11 +1,10 @@
 import logging
-import os
 import re
 from typing import List, Dict
 
 import openai
 from openai import InvalidRequestError
-from telegram import Update, LabeledPrice, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import (
     ContextTypes,
@@ -15,7 +14,6 @@ from src.command.client.chatgpt.config import ChatGPTConfig
 import src.command.client.chatgpt.callback as callbacks
 from src.command.client.chatgpt.types import ChatGptCallbackType
 
-from src.command.client.chatgpt.utils import num_tokens_from_string
 from src.command.client.prompt_filter.prompt_validation import (
     validate_prompt,
     check_conversation_tokens,
@@ -44,6 +42,7 @@ class ChatGptCallbackHandler:
                 self._logger, self._config
             ),
             ChatGptCallbackType.STOP: callbacks.StopCallback(self._logger),
+            ChatGptCallbackType.PAYMENT_LAUNCH: callbacks.PaymentLaunchCallback(self._logger, self._config),
             ChatGptCallbackType.CHECK_REMAINING_TOKENS: callbacks.CheckRemainingTokensCallback(
                 self._logger, self._config
             ),
@@ -223,37 +222,6 @@ class ChatGptCallbackHandler:
                     )
                 )
 
-    async def payment_yes(
-        self, update: Update, context: ContextTypes.DEFAULT_TYPE
-    ) -> None:
-        """Handles user's response to pay for more interactions."""
-        user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self.payment_yes.__qualname__}"
-        )
-
-        chat_id = update.message.chat_id
-        title = "YaService-GPT Premium"
-        description = "Увеличить длину разговора до 4096 токенов."
-        # select a payload just for you to recognize its the donation from your bot
-        payload = self._config.checkout_variables.extended_payload
-        currency = "RUB"
-        price = 100
-        # price * 100 to include 2 decimal points
-        prices = [
-            LabeledPrice(self._config.checkout_variables.extended_label, price * 100)
-        ]
-
-        await context.bot.send_invoice(
-            chat_id,
-            title,
-            description,
-            payload,
-            os.getenv("TOKEN_PAYMENT_PROVIDER_YOOKASSA"),
-            currency,
-            prices,
-        )
-
     async def precheckout_callback(
         self, update: Update, _: ContextTypes.DEFAULT_TYPE
     ) -> None:
@@ -261,9 +229,7 @@ class ChatGptCallbackHandler:
         query = update.pre_checkout_query
         # check the payload, is it from this bot and about this service?
         if query.invoice_payload == self._config.checkout_variables.extended_payload:
-            print(
-                "EXTENDED_PAYLOAD: ", self._config.checkout_variables.extended_payload
-            )
+            self._logger.info(f"EXTENDED_PAYLOAD: {self._config.checkout_variables.extended_payload}")
             self._logger.info(f"{self.precheckout_callback.__qualname__}")
             await query.answer(ok=True)
 
@@ -281,15 +247,3 @@ class ChatGptCallbackHandler:
         context.user_data["GPT_history"] = self._config.model.conversation_init
 
         await update.message.reply_text("Thank you for your payment!")
-
-    async def payment_no(self, update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
-        """Handles user's response to not pay for more interactions."""
-        user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self.payment_no.__qualname__}"
-        )
-
-        await update.message.reply_text(
-            "Ваш ответ был получен. Спасибо за использование нашего сервиса!"
-            "Пожалуйста, не стесняйтесь возвращаться в любое время!"
-        )

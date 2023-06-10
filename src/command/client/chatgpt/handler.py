@@ -29,9 +29,10 @@ class ChatGptHandler:
             callback_handler.request,
         )
 
+        callback_payment_launch = callback_handler.get_callback(ChatGptCallbackType.PAYMENT_LAUNCH)
         self.payment_yes_handler = MessageHandler(
             filters.Regex(r"^{}$".format(config.messages.confirm_payment)),
-            callback_handler.payment_yes,
+            callback_payment_launch,
         )
         self.precheckout_handler = PreCheckoutQueryHandler(
             callback_handler.precheckout_callback
@@ -39,10 +40,6 @@ class ChatGptHandler:
         # TODO add condition specific to chatgpt payment
         self.successful_payment_handler = MessageHandler(
             filters.SUCCESSFUL_PAYMENT, callback_handler.successful_payment_callback
-        )
-        self.payment_no_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(config.messages.decline_payment)),
-            callback_handler.payment_no,
         )
 
         callback_stop = callback_handler.get_callback(ChatGptCallbackType.STOP)
@@ -72,6 +69,5 @@ class ChatGptHandler:
                 self.payment_yes_handler,
                 self.precheckout_handler,
                 self.successful_payment_handler,
-                self.payment_no_handler,
             ],
         }
