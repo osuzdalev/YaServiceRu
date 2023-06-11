@@ -3,7 +3,7 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from src.common.markups import default_client_markup
+from src.common.markups import DEFAULT_CLIENT_MARKUP
 
 logger_start = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     context.user_data["Device_Context"] = []
 
     await update.message.reply_text(
-        "Добро пожаловать!", reply_markup=default_client_markup
+        "Добро пожаловать!", reply_markup=DEFAULT_CLIENT_MARKUP
     )
     # Send introduction video
     await update.message.reply_document(
