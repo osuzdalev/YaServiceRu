@@ -11,6 +11,7 @@ from src.command.client.chatgpt.handler import ChatGptHandler
 from src.command.client.request.handler import RequestHandler
 from src.command.client.start.handler import StartHandler
 from src.command.client.wiki.wiki_handler import WikiHandler
+
 from src.common.database.collector_handler import CollectorHandler
 from src.common.error_logging.error_logging_handler import ErrorHandler
 from src.common.global_fallback.global_fallback_handler import GlobalFallbackHandler

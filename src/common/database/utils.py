@@ -253,7 +253,9 @@ def insert_message(message_id: int, user_id: int, text: str) -> None:
 
             # Increment the message_id
             message_id += 1
-            print(f"UniqueViolation occurred. Retrying with incremented message_id {message_id}")
+            print(
+                f"UniqueViolation occurred. Retrying with incremented message_id {message_id}"
+            )
 
             # Try to insert the message again
             try:
@@ -271,4 +273,3 @@ def insert_message(message_id: int, user_id: int, text: str) -> None:
             # Handle or log any other exception
             print(f"An unexpected error occurred: {ex}")
             conn.rollback()
-

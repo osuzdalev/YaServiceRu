@@ -24,12 +24,15 @@ class ChatGptHandler:
             filters.Regex(r"^🤖Чат с подержкой$"), callback_start
         )
 
+        callback_request = callback_handler.get_callback(ChatGptCallbackType.REQUEST)
         self.request_handler = MessageHandler(
             filters.TEXT & ~(filters.Regex(ignored_texts_re) | filters.COMMAND),
-            callback_handler.request,
+            callback_request,
         )
 
-        callback_payment_launch = callback_handler.get_callback(ChatGptCallbackType.PAYMENT_LAUNCH)
+        callback_payment_launch = callback_handler.get_callback(
+            ChatGptCallbackType.PAYMENT_LAUNCH
+        )
         self.payment_yes_handler = MessageHandler(
             filters.Regex(r"^{}$".format(config.messages.confirm_payment)),
             callback_payment_launch,

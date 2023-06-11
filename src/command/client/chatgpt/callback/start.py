@@ -21,7 +21,7 @@ class StartCallback:
             StartCallbackEventType.MAXED_OUT_USER: self._maxed_out_user_cb,
         }
 
-    def get_event(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    def get_event(self, _: Update, context: ContextTypes.DEFAULT_TYPE):
         if "GPT_level" not in context.user_data:
             return StartCallbackEventType.FIRST_TIME_USER
         if (

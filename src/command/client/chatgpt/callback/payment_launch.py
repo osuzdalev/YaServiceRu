@@ -33,7 +33,7 @@ class PaymentLaunchCallback:
         await self._event_callbacks[event](update, context)
 
     async def _payment_launch_callback(
-            self, update: Update, context: ContextTypes.DEFAULT_TYPE
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         """Handles user's response to pay for more interactions."""
         user = update.message.from_user
