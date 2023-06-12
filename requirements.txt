@@ -4,6 +4,7 @@ pandas==1.5.3
 python-dotenv==1.0.0
 python-telegram-bot==20.3
 python-telegram-bot[callback-data]
+python-telegram-bot[job-queue]
 PyYAML==6.0
 sentence_transformers==2.2.2
 Telethon==1.27.0

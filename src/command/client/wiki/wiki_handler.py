@@ -44,6 +44,9 @@ class WikiHandler:
             ],
             allow_reentry=True,
             conversation_timeout=15,
+            per_message=False,
+            per_user=True,
+            per_chat=True,
         )
 
     def get_handlers(self):

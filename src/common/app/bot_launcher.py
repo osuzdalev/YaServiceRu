@@ -3,6 +3,8 @@ import os
 import sys
 
 from telegram.ext import Application, PicklePersistence
+from warnings import filterwarnings
+from telegram.warnings import PTBUserWarning
 
 from src.common.error_logging.error_logging_handler import ErrorHandler
 from src.common.global_fallback.global_fallback_handler import GlobalFallbackHandler
@@ -57,8 +59,7 @@ class BotLauncher:
         for module_handler in self.module_handlers:
             if module_handler == ErrorHandler:
                 application.add_error_handler(ErrorHandler().get_handler())
-            elif module_handler == CollectorHandler:
-                application.add_handlers(CollectorHandler().get_handlers())
+
             elif module_handler == GlobalFallbackHandler:
                 application.add_handler(
                     GlobalFallbackHandler().get_handler(),
@@ -70,6 +71,8 @@ class BotLauncher:
                 application.add_handlers(handlers=module_handler().get_handlers())
 
     def launch(self):
+        # Ignore "per_message=False" ConversationHandler warning message
+        filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
         self.setup_logging()
 
         persistence = PicklePersistence(filepath=self.filepath_persistence)
