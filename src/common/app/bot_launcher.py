@@ -6,14 +6,14 @@ from telegram.ext import Application, PicklePersistence
 from warnings import filterwarnings
 from telegram.warnings import PTBUserWarning
 
-from src.common.error_logging.error_logging_handler import ErrorHandler
-from src.common.global_fallback.global_fallback_handler import GlobalFallbackHandler
-from src.common.database.collector_handler import CollectorHandler
+from src.common.error_logging.handler import ErrorHandler
+from src.common.global_fallback.handler import GlobalFallbackHandler
+from src.common.database.handler import CollectorHandler
 
 from src.command.client.request.handler import RequestHandler
 from src.command.client.start.handler import StartHandler
 from src.command.client.chatgpt.handler import ChatGptHandler
-from src.command.client.wiki.wiki_handler import WikiHandler
+from src.command.client.wiki.handler import WikiHandler
 from src.command.center import orders
 # from contractor import assign, complete, command
 

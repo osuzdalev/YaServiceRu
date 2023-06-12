@@ -6,7 +6,7 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
-from src.command.client.wiki.wiki_command import (
+from src.command.client.wiki.wiki import (
     wiki,
     wiki_callback,
     cancel_command,

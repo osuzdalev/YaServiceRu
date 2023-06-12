@@ -15,7 +15,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, MessageHandler, filters
 
 from scripts.main import BotApp
-from src.common.global_fallback.global_fallback import ignored_texts_re
+from src.common.global_fallback.config import ignored_texts_re
 
 # TODO: It is need to think about how we are going to test such stuff,
 

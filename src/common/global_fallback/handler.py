@@ -3,7 +3,7 @@ from telegram.ext import (
     filters,
 )
 
-from src.common.global_fallback.global_fallback import (
+from src.common.global_fallback.config import (
     unknown_command,
     ignored_commands_re,
 )
