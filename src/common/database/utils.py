@@ -78,7 +78,7 @@ def get_customer_data(user_id: int) -> List:
             "users.phone_number, users.join_date, "
             "customers.warning "
             "from users, customers "
-            "where user_id = %s and customer_id = %s",  # TODO: number argument pass
+            "where user_id = %s and customer_id = %s",
             (
                 user_id,
                 user_id,
@@ -233,10 +233,43 @@ def insert_message(message_id: int, user_id: int, text: str) -> None:
     """Data collection"""
     logger_tl_db.debug("insert_message()")
     logger_tl_db.debug(f"inserting: {message_id}, {user_id}, {text}")
+
     with create_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
-            "insert into messages (message_id, user_id, message_text) values (%s, %s, %s)",
-            (message_id, user_id, text),
-        )
-        conn.commit()
+
+        try:
+            # Try to insert the message
+            cursor.execute(
+                "insert into messages (message_id, user_id, message_text) values (%s, %s, %s)",
+                (message_id, user_id, text),
+            )
+            # If successful, commit the transaction
+            conn.commit()
+        # TODO: Needs to handle InlineButton Callbacks that send a new message using the same message_id
+        # this hotfix works for now but needs to be improved
+        except psycopg.errors.UniqueViolation:
+            # Rollback the transaction
+            conn.rollback()
+
+            # Increment the message_id
+            message_id += 1
+            print(
+                f"UniqueViolation occurred. Retrying with incremented message_id {message_id}"
+            )
+
+            # Try to insert the message again
+            try:
+                cursor.execute(
+                    "insert into messages (message_id, user_id, message_text) values (%s, %s, %s)",
+                    (message_id, user_id, text),
+                )
+                # Commit the transaction
+                conn.commit()
+            except Exception as ex:
+                # Handle or log any exception that occurred in the second attempt
+                print(f"An error occurred during retry: {ex}")
+
+        except Exception as ex:
+            # Handle or log any other exception
+            print(f"An unexpected error occurred: {ex}")
+            conn.rollback()

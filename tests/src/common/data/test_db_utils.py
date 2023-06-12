@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from src.common.data import db_utils
+from src.common.database import utils
 
 
 class TestDatabaseFunctions(unittest.TestCase):

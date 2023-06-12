@@ -2,7 +2,6 @@ numpy==1.24.2
 openai==0.27.2
 pandas==1.5.3
 python-dotenv==1.0.0
-python-telegram-bot==20.3
 python-telegram-bot[callback-data]
 python-telegram-bot[job-queue]
 PyYAML==6.0

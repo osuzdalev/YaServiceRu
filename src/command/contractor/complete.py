@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler
 
 from src.common import helpers
-from src.common.data import db_utils as tldb
+from src.common.database import utils as tldb
 
 logger_assign = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ async def complete(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
     CenterID = constants.get("ID", "OLEG_RU")
 
-    if not helpers.clearance_Contractor(user_id):
+    if not helpers.clearance_contractor(user_id):
         await update.effective_message.reply_text("You cannot use this command")
         return
 
