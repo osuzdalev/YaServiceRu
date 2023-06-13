@@ -59,6 +59,8 @@ class ChatGptCallbackHandler:
             f"({user.id}, {user.name}, {user.first_name}) {self.successful_payment_callback.__qualname__}"
         )
 
+        # update.message.successful_payment.invoice_payload == ?
+
         context.user_data["GPT_premium"] = True
         context.user_data["GPT_premium_conversation"] = context.user_data["GPT_history"]
         context.user_data["GPT_history"] = self._config.model.conversation_init
