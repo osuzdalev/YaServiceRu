@@ -29,6 +29,8 @@ services:
       CLUSTER_HOSTNAME: 'node1'
     volumes:
       - ./data/semantic_filters/embeddings:/data
+    depends_on:
+      - t2v-transformers
 
   t2v-transformers:
     image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2
