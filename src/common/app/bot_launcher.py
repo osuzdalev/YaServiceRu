@@ -46,6 +46,9 @@ class BotLauncher:
             ],
         )
 
+    async def post_init(self, application: Application) -> None:
+        application.bot_data['test'] = "TEST"
+
     def launch(self):
         # Ignore "per_message=False" ConversationHandler warning message
         filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
@@ -58,6 +61,7 @@ class BotLauncher:
             .token(self.bot_config_manager.config["secret"]["token_telegram"])
             .persistence(persistence)
             .arbitrary_callback_data(True)
+            .post_init(self.post_init)
             .build()
         )
 

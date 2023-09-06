@@ -46,7 +46,7 @@ def log_callback_data(update: Update) -> None:
 
 
 async def collect_data(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
-    """Add user database and message database to DB"""
+    """Add user and message to DB"""
 
     # Extract user and message information
     user, message = extract_user_and_message(update)

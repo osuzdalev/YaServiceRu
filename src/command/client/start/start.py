@@ -24,5 +24,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
         "Добро пожаловать!", reply_markup=DEFAULT_CLIENT_MARKUP
     )
+    print("BOT DATA: ", context.bot_data["test"])
     # Send introduction video
     await update.message.reply_video(DataReader.start.get_introduction_video())

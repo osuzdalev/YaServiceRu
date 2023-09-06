@@ -6,9 +6,6 @@ import psycopg
 
 from typing import List, Tuple
 
-from dotenv import load_dotenv
-
-load_dotenv()
 DB_AUTH = {
     "dbname": os.getenv("DATABASE_POSTGRES_DB"),
     "host": os.getenv("DATABASE_POSTGRES_HOST"),
