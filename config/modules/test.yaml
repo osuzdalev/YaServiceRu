@@ -1,0 +1,14 @@
+modules:
+  client:
+    start:
+      handler_name: StartHandler
+      location: src.command.client.start.handler
+      commands:
+        - "/start"
+  common:
+    error_logging:
+      handler_name: ErrorHandler
+      location: src.common.error_logging.handler
+    global_fallback:
+      handler_name: GlobalFallbackHandler
+      location: src.common.global_fallback.handler

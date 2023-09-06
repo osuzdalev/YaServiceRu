@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class ConfigurationManager:
+class BotConfigurationManager:
     def __init__(self, config_file_path):
         self.config = None
         self.config_file_path = config_file_path

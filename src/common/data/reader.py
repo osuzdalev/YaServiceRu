@@ -14,7 +14,7 @@ class ChatGPTDataReader:
 
 class StartReader:
     def __init__(self):
-        self.path_introduction_video: str = "data/start/file_id.txt"
+        self.path_introduction_video: str = "data/start/dev_file_id.txt"
 
     def get_introduction_video(self):
         with open(self.path_introduction_video, "r") as file:

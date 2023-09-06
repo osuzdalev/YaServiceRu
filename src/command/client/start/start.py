@@ -15,6 +15,7 @@ DataReader = DataReader()
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Needs to be used first after every reboot of the Bot."""
     user = update.message.from_user
+    # TODO use passed on attribute for the logs as well "/start" = modules command name
     logger_start.info(f"({user.id}, {user.name}, {user.first_name}) /start")
 
     context.user_data["in_conversation"] = ""

@@ -5,41 +5,36 @@ from telegram.ext import Application, PicklePersistence
 from warnings import filterwarnings
 from telegram.warnings import PTBUserWarning
 
-from config.config_manager import ConfigurationManager
+from config.bot_config_manager import BotConfigurationManager
+from config.modules.module_manager import ModuleManager
 
-from src.common.error_logging.handler import ErrorHandler
-from src.common.global_fallback.handler import GlobalFallbackHandler
-from src.common.database.handler import CollectorHandler
-
-from src.command.client.request.handler import RequestHandler
-from src.command.client.start.handler import StartHandler
-from src.command.client.chatgpt.handler import ChatGptHandler
-from src.command.client.wiki.handler import WikiHandler
-from src.command.center import orders
+# from src.command.center import orders
 # from contractor import assign, complete, command
 
 
 class BotLauncher:
     def __init__(
             self,
-            config_manager: ConfigurationManager,
-            module_handlers=None,
+            bot_config_manager: BotConfigurationManager,
+            module_manager: ModuleManager,
             log_level=logging.INFO
     ):
-        if module_handlers is None:
-            module_handlers = [
-                StartHandler,
-                RequestHandler,
-                WikiHandler,
-                ChatGptHandler,
-                ErrorHandler,
-                CollectorHandler,
-                GlobalFallbackHandler,
-                "CenterOrders"  # Special keyword for center handlers
-            ]
-        self.config_manager = config_manager
-        self.module_handlers = module_handlers
+        self.bot_config_manager = bot_config_manager
+        self.module_manager = module_manager
         self.log_level = log_level
+
+    def add_module_handlers(self, application):
+        modules = self.module_manager.load_modules()
+        for module_name, module_handler in modules.items():
+            if module_name == "error_logging":
+                application.add_error_handler(module_handler().get_handler())
+            elif module_name == "global_fallback":
+                application.add_handler(
+                    module_handler().get_handler(),
+                    module_handler().get_handler_group(),
+                )
+            else:
+                application.add_handlers(handlers=module_handler().get_handlers())
 
     def setup_logging(self):
         logging.basicConfig(
@@ -47,42 +42,26 @@ class BotLauncher:
             level=self.log_level,
             handlers=[
                 logging.StreamHandler(sys.stdout),
-                logging.FileHandler(self.config_manager.config["technical"]["filepath"]["logger"], mode="a"),
+                logging.FileHandler(self.bot_config_manager.config["technical"]["filepath"]["logger"], mode="a"),
             ],
         )
-
-    def add_module_handlers(self, application):
-        # Add module handlers specified by the user
-        for module_handler in self.module_handlers:
-            if module_handler == ErrorHandler:
-                application.add_error_handler(ErrorHandler().get_handler())
-
-            elif module_handler == GlobalFallbackHandler:
-                application.add_handler(
-                    GlobalFallbackHandler().get_handler(),
-                    GlobalFallbackHandler().get_handler_group(),
-                )
-            elif module_handler == "CenterOrders":
-                application.add_handler(orders.orders_handler)
-            else:
-                application.add_handlers(handlers=module_handler().get_handlers())
 
     def launch(self):
         # Ignore "per_message=False" ConversationHandler warning message
         filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
         self.setup_logging()
 
-        persistence = PicklePersistence(filepath=self.config_manager.config["technical"]["filepath"]["persistence"])
+        persistence = PicklePersistence(filepath=self.bot_config_manager.config["technical"]["filepath"]["persistence"])
 
         application = (
             Application.builder()
-            .token(self.config_manager.config["secret"]["token_telegram"])
+            .token(self.bot_config_manager.config["secret"]["token_telegram"])
             .persistence(persistence)
             .arbitrary_callback_data(True)
             .build()
         )
 
-        # Call the method to add module handlers
+        # Call the method to add modules handlers
         self.add_module_handlers(application)
 
         # TODO make the wiki objects compatible with inline queries

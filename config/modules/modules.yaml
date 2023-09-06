@@ -1,0 +1,44 @@
+modules:
+  client:
+    start:
+      handler_name: StartHandler
+      location: src.command.client.start.handler
+      commands:
+        - "/start"
+    request:
+      handler_name: RequestHandler
+      location: src.command.client.request.handler
+      commands:
+        - "/request"
+      messages:
+        - "🤓Специалист"
+    chatgpt:
+      handler_name: ChatGptHandler
+      location: src.command.client.chatgpt.handler
+      commands:
+        - "/chat"
+        - "/chat_stop"
+        - "/pay"
+      messages:
+        - "🤖Чат с подержкой"
+        - "CONFIRM_CHATGPT_PAYMENT"
+        - "DECLINE_CHATGPT_PAYMENT"
+    wiki:
+      handler_name: WikiHandler
+      location: src.command.client.wiki.handler
+      commands:
+        - "/wiki"
+        - "/cancel"
+      messages:
+        - "📖Справочник"
+        - "❌Отменить"
+  common:
+    error_logging:
+      handler_name: ErrorHandler
+      location: src.common.error_logging.handler
+    global_fallback:
+      handler_name: GlobalFallbackHandler
+      location: src.common.global_fallback.handler
+    database:
+      handler_name: CollectorHandler
+      location: src.common.database.handler

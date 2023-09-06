@@ -4,17 +4,15 @@ from typing import List, Tuple, Dict
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from dotenv import load_dotenv
-
 from src.command.client.chatgpt.config import ChatGPTConfig
 from src.command.client.chatgpt.utils import num_tokens_from_string
 
 from src.command.client.prompt_filter.weaviate_client import WeaviateClient
 
 logger_chatgpt = logging.getLogger(__name__)
-load_dotenv()
 
 CHATGPT_CONFIG = ChatGPTConfig()
+# TODO pass the weaviate api_url as an argument from the config_manager object attribute
 WeaviateClient = WeaviateClient()
 
 

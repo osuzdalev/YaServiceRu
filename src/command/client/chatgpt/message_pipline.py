@@ -1,5 +1,5 @@
 """
-    Currently, this module has a lot of parts which
+    Currently, this modules has a lot of parts which
     should be pushed in different single python programs.
     It's just a possible prototype of how logic of global message
     handler could be organised and concrete realization of
