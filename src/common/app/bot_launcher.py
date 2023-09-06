@@ -1,10 +1,11 @@
 import logging
-import os
 import sys
 
 from telegram.ext import Application, PicklePersistence
 from warnings import filterwarnings
 from telegram.warnings import PTBUserWarning
+
+from config.config_manager import ConfigurationManager
 
 from src.common.error_logging.handler import ErrorHandler
 from src.common.global_fallback.handler import GlobalFallbackHandler
@@ -21,9 +22,7 @@ from src.command.center import orders
 class BotLauncher:
     def __init__(
             self,
-            token=os.getenv("TOKEN_TG_MAIN_BOT"),
-            filepath_logger=os.getenv("FILEPATH_LOGGER"),
-            filepath_persistence=os.getenv("FILEPATH_PERSISTENCE"),
+            config_manager: ConfigurationManager,
             module_handlers=None,
             log_level=logging.INFO
     ):
@@ -38,10 +37,8 @@ class BotLauncher:
                 GlobalFallbackHandler,
                 "CenterOrders"  # Special keyword for center handlers
             ]
+        self.config_manager = config_manager
         self.module_handlers = module_handlers
-        self.token = token
-        self.filepath_logger = filepath_logger
-        self.filepath_persistence = filepath_persistence
         self.log_level = log_level
 
     def setup_logging(self):
@@ -50,7 +47,7 @@ class BotLauncher:
             level=self.log_level,
             handlers=[
                 logging.StreamHandler(sys.stdout),
-                logging.FileHandler(self.filepath_logger, mode="a"),
+                logging.FileHandler(self.config_manager.config["technical"]["filepath"]["logger"], mode="a"),
             ],
         )
 
@@ -75,11 +72,11 @@ class BotLauncher:
         filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
         self.setup_logging()
 
-        persistence = PicklePersistence(filepath=self.filepath_persistence)
+        persistence = PicklePersistence(filepath=self.config_manager.config["technical"]["filepath"]["persistence"])
 
         application = (
             Application.builder()
-            .token(self.token)
+            .token(self.config_manager.config["secret"]["token_telegram"])
             .persistence(persistence)
             .arbitrary_callback_data(True)
             .build()

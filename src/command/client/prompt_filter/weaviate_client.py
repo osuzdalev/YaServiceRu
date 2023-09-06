@@ -2,7 +2,6 @@ import logging
 import os
 from typing import List, Dict, Union
 
-from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 import torch
 import weaviate
@@ -10,7 +9,6 @@ from numpy import ndarray
 from torch import Tensor
 
 logger_weaviate = logging.getLogger(__name__)
-load_dotenv()
 
 
 def get_available_device():
