@@ -133,7 +133,7 @@ class Website:
                     chat_id = update.effective_chat.id
                     title = invoice["title"]
                     description = invoice["description"]
-                    # select a payload just for you to recognize its the donation from your bot
+                    # select a payload just for you to recognize its the donation from your app
                     payload = invoice["payload"]
                     currency = invoice["currency"]
                     price = invoice["price"]

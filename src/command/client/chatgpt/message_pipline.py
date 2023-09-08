@@ -1,5 +1,5 @@
 """
-    Currently, this modules has a lot of parts which
+    Currently, this module has a lot of parts which
     should be pushed in different single python programs.
     It's just a possible prototype of how logic of global message
     handler could be organised and concrete realization of
@@ -14,7 +14,7 @@ from typing import List, TypeVar, Generic, Dict, Any
 from telegram import Update
 from telegram.ext import ContextTypes, MessageHandler, filters
 
-from scripts.main import BotApp
+from script.main import BotApp
 from src.common.global_fallback.config import ignored_texts_re
 
 # TODO: It is need to think about how we are going to test such stuff,
@@ -138,8 +138,8 @@ class CommonHandler(FlowHandler):
 # usage example
 if __name__ == "__main__":
     # just to show use case
-    # (one of the reason to encapsulate bot application realization instead of
-    # just consequent commands in the main, it will be usefull for different tests)
+    # (one of the reason to encapsulate app application realization instead of
+    # just consequent command in the main, it will be usefull for different test)
     class TestBot(BotApp):
         def __init__(self):
             super().__init__()

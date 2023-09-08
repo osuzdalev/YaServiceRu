@@ -10,8 +10,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/database/pg_data:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
-      - ./data/database/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
+      - ./data_reader/database/pg_data:/var/lib/postgresql/data_reader # The database. This will increase in size with time. !!! DON'T COMMIT !!!
+      - ./data_reader/database/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
     command: postgres -c config_file=/etc/postgresql/postgres.conf
 
   weaviate:
@@ -22,13 +22,13 @@ services:
     environment:
       QUERY_DEFAULTS_LIMIT: 20
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
-      PERSISTENCE_DATA_PATH: "./data"
+      PERSISTENCE_DATA_PATH: "./data_reader"
       DEFAULT_VECTORIZER_MODULE: text2vec-transformers
       ENABLE_MODULES: text2vec-transformers
       TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
       CLUSTER_HOSTNAME: 'node1'
     volumes:
-      - ./data/semantic_filters/embeddings:/data
+      - ./data_reader/semantic_filters/embeddings:/data_reader
     depends_on:
       - t2v-transformers
 
@@ -54,5 +54,5 @@ services:
       - weaviate
       - t2v-transformers
     volumes:
-      - ./data/resources/yaserviceru.log:/app/data/resources/yaserviceru.log
-      - ./data/resources/yaserviceru_persistence:/app/data/resources/yaserviceru_persistence
+      - ./data_reader/app/logs.log:/app/data_reader/app/logs.log
+      - ./data_reader/app/persistence:/app/data_reader/app/persistence

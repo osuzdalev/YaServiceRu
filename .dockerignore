@@ -1,11 +1,11 @@
-data/chatgpt/test.txt
-data/database
-data/resources
-data/semantic_filters/embeddings
-data/semantic_filters/filters
+data/command/chatgpt/test.txt
+data/common/database
+data/app
+data/command/semantic_filters/embeddings
+data/command/semantic_filters/filters
 
-scripts/tests
-scripts/Utils
+script/test
+script/util
 
 venv
 

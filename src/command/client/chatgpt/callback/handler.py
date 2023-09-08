@@ -9,7 +9,7 @@ from src.command.client.chatgpt.config import ChatGPTConfig
 import src.command.client.chatgpt.callback as callbacks
 from src.command.client.chatgpt.types import ChatGptCallbackType
 
-from src.common.data.reader import DataReader
+from src.common.data_reader.data_reader import DataReader
 
 
 class ChatGptCallbackHandler:
@@ -42,7 +42,7 @@ class ChatGptCallbackHandler:
     ) -> None:
         """Answers the PreCheckoutQuery"""
         query = update.pre_checkout_query
-        # check the payload, is it from this bot and about this service?
+        # check the payload, is it from this app and about this service?
         if query.invoice_payload == self._config.checkout_variables.extended_payload:
             self._logger.info(
                 f"EXTENDED_PAYLOAD: {self._config.checkout_variables.extended_payload}"

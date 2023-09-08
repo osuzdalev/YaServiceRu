@@ -44,7 +44,7 @@ class PaymentLaunchCallback:
         chat_id = update.message.chat_id
         title = "YaService-GPT Premium"
         description = "Увеличить длину разговора до 4096 токенов."
-        # select a payload just for you to recognize its the donation from your bot
+        # select a payload just for you to recognize its the donation from your app
         payload = self._config.checkout_variables.extended_payload
         currency = "RUB"
         price = 100

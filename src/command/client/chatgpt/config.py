@@ -4,7 +4,7 @@ import os
 import openai
 
 from src.command.client.chatgpt.utils import num_tokens_from_string
-from src.common.data.reader import DataReader
+from src.common.data_reader.data_reader import DataReader
 
 
 DataReader = DataReader()

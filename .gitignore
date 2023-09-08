@@ -1,12 +1,13 @@
 .env
 
-data/chatgpt/test.txt
+data/command/chatgpt/test.txt
+data/common/database
+data/app
+data/command/semantic_filters/embeddings
 data/database
-data/resources
-data/semantic_filters/embeddings
 
-scripts/tests
-scripts/Utils
+script/test
+script/util
 
 .DS_Store
 .idea

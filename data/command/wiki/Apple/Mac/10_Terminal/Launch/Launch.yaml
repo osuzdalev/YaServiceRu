@@ -1,0 +1,39 @@
+title: &title Запуск Терминал
+
+messages:
+  1:
+    - text
+    - "1️⃣  `Программы` или `Launchpad`"
+
+  2:
+    - picture
+    - data_reader/wiki/Apple/Mac/10_Terminal/Launch/1_программы.png
+
+  3:
+    - text
+    - "2️⃣ `Утилиты` или другие
+
+
+    3️⃣ `Терминал` \\(`terminal`\\)"
+
+  4:
+    - picture
+    - data_reader/wiki/Apple/Mac/10_Terminal/Launch/2_утилиты.png
+
+
+buttons:
+- - - Oбратиться к специалисту
+    - A_M_T_Launch_Terminal_pay
+
+invoice:
+  callback_pattern: A_M_T_Launch_Terminal_pay
+  title: *title
+  description: "Нажимая на эту кнопку, вы сможете оплатить услугу.
+  
+  После того, как мы получим оплату, мы свяжемся с вами через телеграм, чтобы уточнить детали и оказать необходимую помощь.
+  
+  ПО Входит в стоимость услуг."
+  payload: A_M_T_Launch_Terminal_payload
+  currency: RUB
+  price: 100
+  label: Запуск Терминал

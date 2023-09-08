@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardButton
 
 
-DATA_PATH = "../../../../data/wiki/wiki_data.yaml"
+DATA_PATH = "../../../../data/command/wiki/wiki_data.yaml"
 
 CANCEL = "❌ЗАКРЫТЬ"
 

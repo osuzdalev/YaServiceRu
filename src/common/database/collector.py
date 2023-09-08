@@ -1,4 +1,4 @@
-"""Collection of silent functions gathering database about every user that interacts with the bot"""
+"""Collection of silent functions gathering database about every user that interacts with the app"""
 
 import logging
 from typing import Tuple, Optional
@@ -82,7 +82,7 @@ async def collect_phone_number(update: Update, _: ContextTypes.DEFAULT_TYPE) -> 
 
 
 async def user_status(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
-    """Keeps track of users interacting with the bot or blocking it and updates flag in DB"""
+    """Keeps track of users interacting with the app or blocking it and updates flag in DB"""
     logger_data_collector.info("user_status()")
     logger_data_collector.info(
         "update.my_chat_member.new_chat_member.status: {}".format(
