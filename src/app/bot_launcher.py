@@ -42,7 +42,7 @@ class BotLauncher:
             level=self.log_level,
             handlers=[
                 logging.StreamHandler(sys.stdout),
-                logging.FileHandler(self.bot_config_manager.config["technical"]["filepath"]["logger"], mode="a"),
+                logging.FileHandler(self.bot_config_manager.config["yaserviceru"]["network"]["logs"], mode="a"),
             ],
         )
 
@@ -59,11 +59,11 @@ class BotLauncher:
         filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
         self.setup_logging()
 
-        persistence = PicklePersistence(filepath=self.bot_config_manager.config["technical"]["filepath"]["persistence"])
+        persistence = PicklePersistence(filepath=self.bot_config_manager.config["yaserviceru"]["network"]["persistence"])
 
         application = (
             Application.builder()
-            .token(self.bot_config_manager.config["secret"]["token_telegram"])
+            .token(self.bot_config_manager.config["yaserviceru"]["secret"]["token_telegram"])
             .persistence(persistence)
             .arbitrary_callback_data(True)
             .post_init(self.post_init)

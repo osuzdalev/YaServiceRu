@@ -10,10 +10,17 @@ class ModuleManager:
     def load_modules(self):
         module_handlers = {}
 
-        for category, modules in self.config['module'].items():
-            for module_name, module_info in modules.items():
+        for module_category, module_info in self.config.items():
+            if isinstance(module_info, dict) and 'handler_name' in module_info and 'location' in module_info:
+                # Top-level module like 'database'
                 module = import_module(module_info['location'])
                 handler = getattr(module, module_info['handler_name'])
-                module_handlers[module_name] = handler
+                module_handlers[module_category] = handler
+            else:
+                # Nested modules like 'command' and 'common'
+                for module_name, nested_module_info in module_info.items():
+                    module = import_module(nested_module_info['location'])
+                    handler = getattr(module, nested_module_info['handler_name'])
+                    module_handlers[module_name] = handler
 
         return module_handlers

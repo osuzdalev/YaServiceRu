@@ -1,34 +1,32 @@
 version: '3.4'
 services:
-  postgres:
+  database:
     image: "postgres:15.3"
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       - POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD} # for the docker, in the code standard naming "DATABASE_*"
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
-      - ./data_reader/database/pg_data:/var/lib/postgresql/data_reader # The database. This will increase in size with time. !!! DON'T COMMIT !!!
-      - ./data_reader/database/pg_config:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
+      - ${DATABASE_DATA}:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
+      - ${DATABASE_CONFIG}:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
     command: postgres -c config_file=/etc/postgresql/postgres.conf
 
   weaviate:
     image: semitechnologies/weaviate:1.9.1
     restart: unless-stopped
     ports:
-     - "8080:8080"
+     - "${WEAVIATE_PORT}:8080"
     environment:
       QUERY_DEFAULTS_LIMIT: 20
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
-      PERSISTENCE_DATA_PATH: "./data_reader"
+      PERSISTENCE_DATA_PATH: ${WEAVIATE_PERSISTENCE}
       DEFAULT_VECTORIZER_MODULE: text2vec-transformers
       ENABLE_MODULES: text2vec-transformers
       TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
       CLUSTER_HOSTNAME: 'node1'
     volumes:
-      - ./data_reader/semantic_filters/embeddings:/data_reader
+      - ${WEAVIATE_DATA}:/data
     depends_on:
       - t2v-transformers
 
@@ -43,16 +41,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #image: osuzdalev/yaserviceru:beta
+    #image: ${APP_IMAGE}
     restart: unless-stopped
-    env_file:
-      - .env
     ports:
-      - "8081:80"
+      - "${APP_PORT}:80"
+    volumes:
+      - ${APP_LOGS}:/app/${APP_LOGS}
+      - ${APP_PERSISTENCE}:/app/${APP_PERSISTENCE}
     depends_on:
-      - postgres
+      - database
       - weaviate
       - t2v-transformers
-    volumes:
-      - ./data_reader/app/logs.log:/app/data_reader/app/logs.log
-      - ./data_reader/app/persistence:/app/data_reader/app/persistence

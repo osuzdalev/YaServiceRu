@@ -14,7 +14,9 @@ class BotConfigurationManager:
     def _load_config_file(self):
         with open(self.config_file_path, 'r') as config_file:
             self.config = yaml.safe_load(config_file)
-            self._process_env_vars(self.config['secret'])  # Process only 'secret' section
+            for service, service_config in self.config.items():
+                if 'secret' in service_config:
+                    self._process_env_vars(service_config['secret'])
 
     def _process_env_vars(self, config_dict):
         # Replace placeholders with environment variables

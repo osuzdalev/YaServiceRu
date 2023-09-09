@@ -1,8 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from src.common.database import utils
-
 
 class TestDatabaseFunctions(unittest.TestCase):
     @patch("db_utils.create_db_connection")

@@ -6,29 +6,20 @@ import psycopg
 
 from typing import List, Tuple
 
-DB_AUTH = {
-    "dbname": os.getenv("DATABASE_POSTGRES_DB"),
-    "host": os.getenv("DATABASE_POSTGRES_HOST"),
-    "user": os.getenv("DATABASE_POSTGRES_USER"),
-    "password": os.getenv("DATABASE_POSTGRES_PASSWORD"),
-    "port": os.getenv("DATABASE_POSTGRES_PORT"),
-}
-
-
 logger_tl_db = logging.getLogger(__name__)
 
 
-def create_db_connection():
-    return psycopg.connect(**DB_AUTH)
+def create_db_connection(db_auth):
+    return psycopg.connect(**db_auth)
 
 
 def insert_new_user(
-    user_id: int, user_name: str, first_name: str, last_name: str
+    user_id: int, user_name: str, first_name: str, last_name: str, db_auth: dict
 ) -> None:
     """Stuff"""
     logger_tl_db.debug("insert_new_customer()")
     try:
-        with create_db_connection() as conn:
+        with create_db_connection(db_auth) as conn:
             cursor = conn.cursor()
             result = cursor.execute(
                 "select * from users where user_id = %s", (user_id,)
@@ -45,18 +36,18 @@ def insert_new_user(
         logger_tl_db.error(e)
 
 
-def get_user_data(user_id: int) -> None:
+def get_user_data(user_id: int, db_auth: dict) -> None:
     """Stuff"""
     logger_tl_db.info("get_user_data()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from users where user_id = %s", (user_id,))
         return result.fetchone()
 
 
-def insert_user_phone_number(user_id: int, phone_number: int) -> None:
+def insert_user_phone_number(user_id: int, phone_number: int, db_auth: dict) -> None:
     logger_tl_db.debug("insert_customer_phone_number()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
             "update users set phone_number = %s where user_id = %s;",
@@ -66,9 +57,9 @@ def insert_user_phone_number(user_id: int, phone_number: int) -> None:
         logger_tl_db.info("Phone number added into Database")
 
 
-def get_customer_data(user_id: int) -> List:
+def get_customer_data(user_id: int, db_auth: dict) -> List:
     logger_tl_db.debug("get_customer_data()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select users.user_id, users.user_name, users.first_name, users.last_name,"
@@ -85,9 +76,9 @@ def get_customer_data(user_id: int) -> List:
         return result.fetchone()
 
 
-def get_customer_last_order_id(user_id: int, contractor_id: int = None) -> int:
+def get_customer_last_order_id(user_id: int, contractor_id: int, db_auth: dict) -> int:
     logger_tl_db.debug("get_customer_last_order_id()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from orders where (customer_id = %s and contractor_id = %s)",
@@ -100,11 +91,11 @@ def get_customer_last_order_id(user_id: int, contractor_id: int = None) -> int:
 
 
 def insert_new_order(
-    user_id: int, device_context: List, default_contractor_id: int = None
+    user_id: int, device_context: List, default_contractor_id: int, db_auth: dict
 ) -> None:
     logger_tl_db.debug("insert_new_order()")
 
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
 
         # Check the length of device_context and assign default values if necessary
@@ -121,18 +112,18 @@ def insert_new_order(
         conn.commit()
 
 
-def get_order_data(order_id: int) -> List:
+def get_order_data(order_id: int, db_auth: dict) -> List:
     logger_tl_db.debug("get_order_data()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from orders where order_id = %s", (order_id,))
 
         return result.fetchone()
 
 
-def get_open_orders() -> List[Tuple]:
+def get_open_orders(db_auth: dict) -> List[Tuple]:
     logger_tl_db.debug("get_open_orders()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from orders where completed = 0 and contractor_id is null"
@@ -140,9 +131,9 @@ def get_open_orders() -> List[Tuple]:
         return result.fetchall()
 
 
-def get_assigned_orders() -> List[Tuple]:
+def get_assigned_orders(db_auth: dict) -> List[Tuple]:
     logger_tl_db.debug("get_incomplete_orders()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from orders where completed = 0 and contractor_id is not null"
@@ -150,9 +141,9 @@ def get_assigned_orders() -> List[Tuple]:
         return result.fetchall()
 
 
-def update_order_Complete(order_id: int, timestamp: str) -> None:
+def update_order_Complete(order_id: int, timestamp: str, db_auth: dict) -> None:
     logger_tl_db.debug("update_order_Complete()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
             "update orders set completed = %s, completed_date = %s where order_id = %s",
@@ -161,9 +152,9 @@ def update_order_Complete(order_id: int, timestamp: str) -> None:
         conn.commit()
 
 
-def get_contractor_data(user_id: int) -> List:
+def get_contractor_data(user_id: int, db_auth: dict) -> List:
     logger_tl_db.debug("get_contractor_data()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select users.user_id, users.user_name, users.first_name, users.last_name, users.phone_number, users.join_date, "
@@ -179,9 +170,9 @@ def get_contractor_data(user_id: int) -> List:
         return result.fetchone()
 
 
-def get_all_contractor_id() -> List:
+def get_all_contractor_id(db_auth: dict) -> List:
     logger_tl_db.debug("get_all_contractor_ids()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select contractor_id from contractors")
         contractor_ids = [i[0] for i in result.fetchall()]
@@ -189,9 +180,9 @@ def get_all_contractor_id() -> List:
         return contractor_ids
 
 
-def update_order_contractor_id(order_id: int, new_contractor_id: int) -> None:
+def update_order_contractor_id(order_id: int, new_contractor_id: int, db_auth: dict) -> None:
     logger_tl_db.debug("update_order_ContractID()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
             "update orders set contractor_id = %s where order_id = %s",
@@ -201,10 +192,10 @@ def update_order_contractor_id(order_id: int, new_contractor_id: int) -> None:
 
 
 def insert_assign(
-    old_contractor_id: int, order_id: int, new_contractor_id: int
+    old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict
 ) -> None:
     logger_tl_db.debug("insert_assign")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
             "insert into assign (old_contractor_id, order_id, new_contractor_id) "
@@ -214,9 +205,9 @@ def insert_assign(
         conn.commit()
 
 
-def check_assign(old_contractor_id: int, order_id: int, new_contractor_id: int) -> bool:
+def check_assign(old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict) -> bool:
     logger_tl_db.debug("check_assign()")
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
             "select * from assign where old_contractor_id = %s and order_id = %s and new_contractor_id = %s",
@@ -226,12 +217,12 @@ def check_assign(old_contractor_id: int, order_id: int, new_contractor_id: int) 
         return True if result.fetchone() else False
 
 
-def insert_message(message_id: int, user_id: int, text: str) -> None:
+def insert_message(message_id: int, user_id: int, text: str, db_auth: dict) -> None:
     """Data collection"""
     logger_tl_db.debug("insert_message()")
     logger_tl_db.debug(f"inserting: {message_id}, {user_id}, {text}")
 
-    with create_db_connection() as conn:
+    with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
 
         try:

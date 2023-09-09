@@ -1,7 +1,7 @@
 .env
 
 data/command/chatgpt/test.txt
-data/common/database
+data/database
 data/app
 data/command/semantic_filters/embeddings
 data/database

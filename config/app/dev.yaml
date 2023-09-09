@@ -1,32 +1,41 @@
 name: dev
 
-common:
-  telegram_id:
-    bot: 6083336654
-    yaserviceru_center: 6211181238
-    dev: 5278871996
-    contractor: 247648076
-  telegram_username:
-    bot: YaServiceRuDevBot
-  email:
-    yaserviceru: ruyaservice@yandex.ru
-    dev: odsuzdalev@yandex.ru
-    contractor: yanisbrothers@yandex.ru
+yaserviceru:
+  app:
+    telegram_id:
+      bot: 6083336654
+      call_center: 6211181238
+      dev: 5278871996
+      contractor: 247648076
+    telegram_username:
+      bot: YaServiceRuDevBot
+    email:
+      contact: ruyaservice@yandex.ru
+      dev: odsuzdalev@yandex.ru
+      contractor: yanisbrothers@yandex.ru
+  network:
+    images: osuzdalev/yaserviceru:beta
+    port: 8081
+    persistence: ./data/app/persistence
+    logs: ./data/app/logs.log
+  secret:
+    api_openai: API_OPENAI
+    token_telegram: TOKEN_TG_DEV_BOT
+    token_payment_provider: TOKEN_PAYMENT_PROVIDER_YOOKASSA_TEST
+    password_app: PASSWORD_YANDEX_YASERVICERU_APP
 
-technical:
-  filepath:
-    persistence: data/app/persistence
-    logger: data/app/logs.log
-  api_weaviate: http://localhost:8080 # local or docker
-  database_postgres:
-    host: localhost # local or docker
-    db: postgres
-    user: postgres
-    post: 5432
+database:
+  host: localhost # local or docker
+  dbname: postgres
+  user: postgres
+  port: 5432
+  data: ./data/database/pg_data
+  config: ./data/database/pg_config
+  secret:
+    password: DATABASE_POSTGRES_PASSWORD
 
-secret:
-  api_openai: API_OPENAI
-  token_telegram: TOKEN_TG_DEV_BOT
-  token_payment_provider: TOKEN_PAYMENT_PROVIDER_YOOKASSA_TEST
-  database_password: DATABASE_POSTGRES_PASSWORD
-  password_yaserviceru_app: PASSWORD_YANDEX_YASERVICERU_APP
+weaviate:
+  api: http://localhost:8080 # local or docker
+  port: 8080
+  data: ./data/command/semantic_filters/embeddings
+  persistence: ./data/command/semantic_filters_data
