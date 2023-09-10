@@ -4,6 +4,15 @@ command:
     location: src.command.client.start.handler
     command:
       - "/start"
+  wiki:
+    handler_name: WikiHandler
+    location: src.command.client.wiki.handler
+    command:
+      - "/wiki"
+      - "/cancel"
+    message:
+      - "📖Справочник"
+      - "❌Отменить"
 
 common:
   error_logging:

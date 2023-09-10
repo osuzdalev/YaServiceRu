@@ -17,7 +17,7 @@ from src.common.types import HandlerGroupType
 
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), DATA_PATH)
 entry_page = Page(
-    ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD
+    ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD, None, STATE, BROWSER_HISTORY_NAME
 )
 
 
@@ -25,8 +25,6 @@ class WikiHandler:
     def __init__(self):
         # Generating the telegram_website object from yaml database file
         website = Website(STATE, BROWSER_HISTORY_NAME)
-        # TODO Can this be done at init()?
-        website.set_standard_handler_callbacks()
         # Parse the yaml file
         website.parse(FULL_PATH)
         # Adding the first page to website

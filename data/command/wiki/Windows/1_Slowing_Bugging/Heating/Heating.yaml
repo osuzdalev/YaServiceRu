@@ -20,7 +20,7 @@ messages:
 
   3:
     - picture
-    - data_reader/wiki/Windows/1_Slowing_Bugging/Heating/1_греется.png
+    - data/command/wiki/Windows/1_Slowing_Bugging/Heating/1_греется.png
 
   4:
     - text

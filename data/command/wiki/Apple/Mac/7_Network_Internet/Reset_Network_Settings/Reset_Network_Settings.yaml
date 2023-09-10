@@ -19,7 +19,7 @@ messages:
 
   3:
     - picture
-    - data_reader/wiki/Apple/Mac/7_Network_Internet/Reset_Network_Settings/1_сеть.png
+    - data/command/wiki/Apple/Mac/7_Network_Internet/Reset_Network_Settings/1_сеть.png
 
   4:
     - text
@@ -28,7 +28,7 @@ messages:
 
   5:
     - picture
-    - data_reader/wiki/Apple/Mac/7_Network_Internet/Reset_Network_Settings/2_удалить_wifi.png
+    - data/command/wiki/Apple/Mac/7_Network_Internet/Reset_Network_Settings/2_удалить_wifi.png
 
   6:
     - text
@@ -37,7 +37,7 @@ messages:
 
   7:
     - picture
-    - data_reader/wiki/Apple/Mac/7_Network_Internet/Reset_Network_Settings/3_добавление_wifi.png
+    - data/command/wiki/Apple/Mac/7_Network_Internet/Reset_Network_Settings/3_добавление_wifi.png
 
   8:
     - text

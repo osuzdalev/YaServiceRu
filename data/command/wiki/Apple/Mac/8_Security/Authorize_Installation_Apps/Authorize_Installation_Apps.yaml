@@ -17,7 +17,7 @@ messages:
 
   3:
     - picture
-    - data_reader/wiki/Apple/Mac/8_Security/Authorize_Installation_Apps/1_защита_и_безопастность.png
+    - data/command/wiki/Apple/Mac/8_Security/Authorize_Installation_Apps/1_защита_и_безопастность.png
 
   4:
     - text
@@ -26,7 +26,7 @@ messages:
 
   5:
     - picture
-    - data_reader/wiki/Apple/Mac/8_Security/Authorize_Installation_Apps/2_разрешения_приложений.png
+    - data/command/wiki/Apple/Mac/8_Security/Authorize_Installation_Apps/2_разрешения_приложений.png
 
   6:
     - text

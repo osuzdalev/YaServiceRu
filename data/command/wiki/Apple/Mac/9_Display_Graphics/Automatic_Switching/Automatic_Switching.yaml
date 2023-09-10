@@ -16,7 +16,7 @@ messages:
 
   3:
     - picture
-    - data_reader/wiki/Apple/Mac/9_Display_Graphics/Automatic_Switching/1_аккумулятор.png
+    - data/command/wiki/Apple/Mac/9_Display_Graphics/Automatic_Switching/1_аккумулятор.png
 
   4:
     - text
@@ -25,7 +25,7 @@ messages:
 
   5:
     - picture
-    - data_reader/wiki/Apple/Mac/9_Display_Graphics/Automatic_Switching/2_переключение_графики.png
+    - data/command/wiki/Apple/Mac/9_Display_Graphics/Automatic_Switching/2_переключение_графики.png
 
   6:
     - text
@@ -33,7 +33,7 @@ messages:
 
   7:
     - picture
-    - data_reader/wiki/Apple/Mac/9_Display_Graphics/Automatic_Switching/3_сетевой_адаптер.png
+    - data/command/wiki/Apple/Mac/9_Display_Graphics/Automatic_Switching/3_сетевой_адаптер.png
 
 buttons:
 - - - Oбратиться к специалисту

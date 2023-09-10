@@ -13,7 +13,7 @@ messages:
 
   2:
     - picture
-    - data_reader/wiki/Apple/Mac/5_System_Settings/Language_Input/1_настройки.png
+    - data/command/wiki/Apple/Mac/5_System_Settings/Language_Input/1_настройки.png
 
   3:
     - text
@@ -27,7 +27,7 @@ messages:
 
   4:
     - picture
-    - data_reader/wiki/Apple/Mac/5_System_Settings/Language_Input/2_источник_ввода.png
+    - data/command/wiki/Apple/Mac/5_System_Settings/Language_Input/2_источник_ввода.png
 
   5:
     - text
@@ -48,7 +48,7 @@ messages:
 
   7:
     - picture
-    - data_reader/wiki/Apple/Mac/5_System_Settings/Language_Input/1_настройки.png
+    - data/command/wiki/Apple/Mac/5_System_Settings/Language_Input/1_настройки.png
 
   8:
     - text
@@ -59,7 +59,7 @@ messages:
 
   9:
     - picture
-    - data_reader/wiki/Apple/Mac/5_System_Settings/Language_Input/3_сочетание_клавиш.png
+    - data/command/wiki/Apple/Mac/5_System_Settings/Language_Input/3_сочетание_клавиш.png
 
   10:
     - text

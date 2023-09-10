@@ -27,7 +27,7 @@ messages:
 
   3:
     - picture
-    - data_reader/wiki/Windows/2_Update_Drivers/Disable_Update/1_отключение_обновлений.png
+    - data/command/wiki/Windows/2_Update_Drivers/Disable_Update/1_отключение_обновлений.png
 
 buttons:
 - - - Oбратиться к специалисту

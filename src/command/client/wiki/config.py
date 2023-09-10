@@ -4,6 +4,7 @@ from telegram import InlineKeyboardButton
 DATA_PATH = "../../../../data/command/wiki/wiki_data.yaml"
 
 CANCEL = "❌ЗАКРЫТЬ"
+BACK = "<< НАЗАД"
 
 STATE = "WIKI"
 BROWSER_HISTORY_NAME = "WIKI_HISTORY"

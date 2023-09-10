@@ -22,7 +22,7 @@ messages:
 
   4:
     - picture
-    - data_reader/wiki/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/1_запуск_bootcamp.png
+    - data/command/wiki/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/1_запуск_bootcamp.png
 
   5:
     - text
@@ -30,7 +30,7 @@ messages:
 
   6:
     - picture
-    - data_reader/wiki/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/2_продолжить_запись.png
+    - data/command/wiki/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/2_продолжить_запись.png
 
   7:
     - text
@@ -39,7 +39,7 @@ messages:
 
   8:
     - picture
-    - data_reader/wiki/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/3_выбрать_исо.png
+    - data/command/wiki/Apple/Mac/3_Bootcamp_Parallels/Bootcamp/3_выбрать_исо.png
 
   9:
     - text
@@ -85,7 +85,7 @@ buttons:
         - A_M_BP_Bootcamp_pay
 
 invoice:
-    callback_data: A_M_BP_Bootcamp_pay
+    callback_pattern: A_M_BP_Bootcamp_pay
     title: *title
     description: "Нажимая на эту кнопку, вы сможете оплатить услугу.
   

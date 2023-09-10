@@ -33,7 +33,7 @@ messages:
 
   3:
     - picture
-    - data_reader/wiki/Windows/1_Slowing_Bugging/Auto_Upload/1_автозагрузка.png
+    - data/command/wiki/Windows/1_Slowing_Bugging/Auto_Upload/1_автозагрузка.png
 
   4:
     - text

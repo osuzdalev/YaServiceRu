@@ -26,7 +26,7 @@ messages:
 
   3:
     - picture
-    - data_reader/wiki/Windows/3_Installation_Recovery/Bootable_USB/1_записать_флешку.png
+    - data/command/wiki/Windows/3_Installation_Recovery/Bootable_USB/1_записать_флешку.png
 
   4:
     - text

@@ -4,7 +4,6 @@ data/command/chatgpt/test.txt
 data/database
 data/app
 data/command/semantic_filters/embeddings
-data/database
 
 script/test
 script/util
