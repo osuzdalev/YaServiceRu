@@ -1,15 +1,10 @@
 from dataclasses import dataclass
-import os
 
-import openai
-
-from src.command.client.chatgpt.utils import num_tokens_from_string
 from src.common.data_reader.data_reader import DataReader
+from src.command.client.semantic_filters.prompt_validator import PromptValidator
 
 
-DataReader = DataReader()
-
-openai.api_key = os.getenv("API_OPENAI")
+data_reader = DataReader()
 
 
 @dataclass
@@ -24,16 +19,15 @@ class Model:
     max_conversation_tokens: int = 4096
     # Amount of tokens in a conversation to at least get a minimum response
     limit_conversation_tokens: int = max_conversation_tokens - max_response_tokens
-    instructions_tokens: int = num_tokens_from_string(
-        DataReader.chatgpt.get_system_instructions()
-    )
+    # TODO automatically count using prompt validator?
+    instructions_tokens: int = 1500
     max_sum_response_tokens: int = free_prompt_limit * max_response_tokens
     # max size prompt to at least get one answer
     max_prompt_tokens: int = (
         max_conversation_tokens - instructions_tokens - max_response_tokens
     )
     conversation_init = [
-        {"role": "system", "content": DataReader.chatgpt.get_system_instructions()}
+        {"role": "system", "content": data_reader.chatgpt.get_system_instructions()}
     ]
 
 

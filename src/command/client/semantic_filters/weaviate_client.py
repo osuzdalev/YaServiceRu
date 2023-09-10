@@ -20,7 +20,7 @@ def get_available_device():
 
 
 class WeaviateClient:
-    def __init__(self, api_url: str = None):
+    def __init__(self, api_url: str = "http://localhost:8080"):
         self.api_url = api_url
         self.client = weaviate.Client(self.api_url)
         self.device = get_available_device()
