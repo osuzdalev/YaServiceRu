@@ -12,9 +12,9 @@ logger_start = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Needs to be used first after every reboot of the Bot."""
+    # Get the name of the current function
     user = update.message.from_user
-    # TODO use passed on attribute for the logs as well "/start" = module command name
-    logger_start.info(f"({user.id}, {user.name}, {user.first_name}) /start")
+    logger_start.info(f"({user.id}, {user.name}, {user.first_name})")
 
     context.user_data["in_conversation"] = ""
     context.user_data["Device_Context"] = []

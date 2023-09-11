@@ -7,8 +7,11 @@ from src.common.types import HandlerGroupType
 
 
 class StartHandler:
-    def __init__(self):
-        self.start_handler = CommandHandler("start", start)
+    def __init__(self, commands=None, messages=None):
+        self.commands = commands if commands else []
+        self.messages = messages if messages else []
+
+        self.start_handler = CommandHandler(self.commands[0], start)
 
     def get_handlers(self):
         return {

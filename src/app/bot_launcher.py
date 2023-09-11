@@ -27,14 +27,9 @@ class BotLauncher:
         modules = self.module_manager.load_modules()
         for module_name, module_handler in modules.items():
             if module_name == "error_logging":
-                application.add_error_handler(module_handler().get_handler())
-            elif module_name == "global_fallback":
-                application.add_handler(
-                    module_handler().get_handler(),
-                    module_handler().get_handler_group(),
-                )
+                application.add_error_handler(module_handler.get_handler())
             else:
-                application.add_handlers(handlers=module_handler().get_handlers())
+                application.add_handlers(handlers=module_handler.get_handlers())
 
     def setup_logging(self):
         logging.basicConfig(
