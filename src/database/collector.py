@@ -1,5 +1,6 @@
 """Collection of silent functions gathering database about every user that interacts with the app"""
 
+import inspect
 import logging
 from typing import Tuple, Optional
 
@@ -34,7 +35,7 @@ async def collect_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     # Log user details if user exists
     if user:
         logger_data_collector.info(
-            f"({user.id}, {user.name}, {user.first_name}) collect_data"
+            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
         )
 
     # Log the callback data if it exists
@@ -83,7 +84,7 @@ def extract_user_and_message(
 
 async def collect_phone_number(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Checks if Phone# in DB and adds it to appropriate UserID"""
-    logger_data_collector.debug("collect_phone_number()")
+    logger_data_collector.debug({inspect.currentframe().f_code.co_name})
     user = update.effective_user
     phone_number = update.message.contact.phone_number
 
@@ -96,7 +97,7 @@ async def collect_phone_number(update: Update, _: ContextTypes.DEFAULT_TYPE) -> 
 
 async def user_status(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Keeps track of users interacting with the app or blocking it and updates flag in DB"""
-    logger_data_collector.info("user_status()")
+    logger_data_collector.info({inspect.currentframe().f_code.co_name})
     logger_data_collector.info(
         "update.my_chat_member.new_chat_member.status: {}".format(
             update.my_chat_member.new_chat_member.status

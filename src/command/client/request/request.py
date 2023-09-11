@@ -1,3 +1,4 @@
+import inspect
 import logging
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -13,7 +14,7 @@ logger_req = logging.getLogger(__name__)
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends an Inline message to confirm the call"""
     user = update.effective_user
-    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /request")
+    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
     context.user_data.setdefault("Request_temp_messages", [])
     keyboard = [
         [
@@ -37,7 +38,7 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     query = update.callback_query
     user = query.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
-    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /confirm_request")
+    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
 
     device_context = context.user_data.get("Device_Context", [])
 
@@ -60,10 +61,10 @@ async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     query = update.callback_query
     try:
         user = query.from_user
-        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /cancel_request")
+        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
     except AttributeError:
         user = update.effective_user
-        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) /cancel_request")
+        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
 
     # cleaning
     for message in context.user_data["Request_temp_messages"]:

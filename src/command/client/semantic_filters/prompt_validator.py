@@ -1,3 +1,4 @@
+import inspect
 import logging
 from typing import List, Tuple, Dict
 
@@ -18,7 +19,8 @@ class PromptValidator:
         1. Check if the user is in a conversation
         2. Check if the prompt is within the token limit
         3. Check if the prompt is semantically close enough to the app's purpose"""
-        user = update.message.from_user
+        user = update.effective_user
+        logger_chatgpt.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
 
         if not context.user_data.get("GPT_active", False):
             await update.message.reply_text(
@@ -51,6 +53,7 @@ class PromptValidator:
 
     def num_tokens_from_string(self, string: str) -> int:
         """Returns the number of tokens in a text string."""
+        logger_chatgpt.info(f"{inspect.currentframe().f_code.co_name}")
 
         encoding = tiktoken.encoding_for_model(self.chatgpt_config.model.name)
         num_tokens = len(encoding.encode(string))
@@ -60,6 +63,7 @@ class PromptValidator:
         """Checks if the conversation size, including the provided prompt, is within the token limit.
         Accounts for the minimum response token size that needs to be left after processing the user's message.
         """
+        logger_chatgpt.info(f"{inspect.currentframe().f_code.co_name}")
 
         # Calculate tokens
         conversation_tokens = sum(
@@ -78,6 +82,8 @@ class PromptValidator:
     def check_prompt_tokens(self, prompt: str) -> Tuple[bool, int]:
         """Check if the message sent size is within bounds.
         Returns a tuple with a boolean and the amount of remaining tokens"""
+        logger_chatgpt.info(f"{inspect.currentframe().f_code.co_name}")
+
         # Calculate tokens
         prompt_tokens = self.num_tokens_from_string(prompt)
         remaining_tokens = self.chatgpt_config.model.max_prompt_tokens - prompt_tokens
@@ -90,6 +96,8 @@ class PromptValidator:
         )
 
     def check_prompt_semantic(self, prompt: str) -> bool:
+        logger_chatgpt.info(f"{inspect.currentframe().f_code.co_name}")
+
         # Vector Query
         logger_chatgpt.info(f"ENCODING PROMPT: {prompt}")
         embeddings = self.weaviate_client.embedding_model.encode(prompt)

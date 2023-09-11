@@ -22,7 +22,10 @@ entry_page = Page(
 
 
 class WikiHandler:
-    def __init__(self):
+    def __init__(self, commands=None, messages=None):
+        self.commands = commands if commands else []
+        self.messages = messages if messages else []
+
         # Generating the telegram_website object from yaml database file
         website = Website(STATE, BROWSER_HISTORY_NAME)
         # Parse the yaml file
@@ -32,13 +35,13 @@ class WikiHandler:
 
         self.conversation_handler = ConversationHandler(
             entry_points=[
-                CommandHandler("wiki", wiki),
-                MessageHandler(filters.Regex(r"^(📖Справочник)$"), wiki),
+                CommandHandler(self.commands[0], wiki),
+                MessageHandler(filters.Regex(fr"^({self.messages[0]})$"), wiki),
             ],
             states=website.state,
             fallbacks=[
-                CommandHandler("cancel", cancel_command),
-                MessageHandler(filters.Regex(r"^(❌Отменить)$"), cancel_command),
+                CommandHandler(self.commands[1], cancel_command),
+                MessageHandler(filters.Regex(fr"^({self.messages[1]})$"), cancel_command),
             ],
             allow_reentry=True,
             conversation_timeout=15,

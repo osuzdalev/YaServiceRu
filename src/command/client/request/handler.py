@@ -14,14 +14,18 @@ from src.common.types import HandlerGroupType
 
 
 class RequestHandler:
-    def __init__(self):
-        self.request_command_handler = CommandHandler("request", request)
+    def __init__(self, commands=None, messages=None):
+        self.commands = commands if commands else []
+        self.messages = messages if messages else []
+
+        self.request_command_handler = CommandHandler(self.commands[0], request)
         self.request_replykeyboard_handler = MessageHandler(
-            filters.Regex(r"^(🤓Специалист)$"), request
+            filters.Regex(fr"^({self.messages[0]})$"), request
         )
         self.request_callback_handler = CallbackQueryHandler(
             request, pattern="REQUEST_COMMAND"
         )
+
         self.confirm_request_handler = CallbackQueryHandler(
             confirm_request, pattern="REQUEST_CALL_CONFIRM"
         )
@@ -29,7 +33,7 @@ class RequestHandler:
             cancel_request, pattern="REQUEST_CALL_CANCEL"
         )
         self.cancel_request_handler_message = MessageHandler(
-            filters.Regex(r"^❌Отменить$"), cancel_request
+            filters.Regex(fr"^({self.messages[1]})$"), cancel_request
         )
 
     def get_handlers(self):

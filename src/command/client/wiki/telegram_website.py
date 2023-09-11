@@ -1,3 +1,4 @@
+import inspect
 import re
 import logging
 from typing import List
@@ -102,7 +103,7 @@ class Page:
         query = update.callback_query
         user = query.from_user
         logger_website.info(
-            f"({user.id}, {user.name}, {user.first_name}) /cancel_request"
+            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
         )
         await query.answer()
 
@@ -198,7 +199,9 @@ class Website:
             self.state[self.state_name].extend(self.pages[name].handlers)
 
     async def cancel_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-        logger_website.info("cancel_callback()")
+        user = update.effective_user
+        logger_website.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+
         query = update.callback_query
         await query.answer()
         await query.delete_message()
@@ -216,7 +219,8 @@ class Website:
         Catches the 'BACK' callback data, determines what was the previous page message the client was on,
         and calls the appropriate callback function. Updates the browsing history accordingly.
         """
-        logger_website.info("back_callback()")
+        user = update.effective_user
+        logger_website.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
 
         query = update.callback_query
         await query.answer()

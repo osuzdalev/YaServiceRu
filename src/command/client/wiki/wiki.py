@@ -1,3 +1,4 @@
+import inspect
 import logging
 from typing import Union
 
@@ -20,7 +21,7 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     This Conversation first needs to check the user 'in_conversation flag' before it can start, otherwise it will ask
     the customer to first close the previous one."""
     user = update.message.from_user
-    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) /wiki")
+    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
     # Context history for the user's session
     context.user_data["Device_Context"] = []
     context.user_data["Annexe_Messages"] = []
@@ -47,7 +48,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
     """A callback function which has the same output as the wiki command. Necessary if the client wants to browse back
     to the first page of the wiki"""
     user = update.message.from_user
-    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) /wiki_callback")
+    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
     context.user_data[BROWSER_HISTORY_NAME].append(ENTRY_PAGE_NAME)
 
     query = update.callback_query
@@ -61,7 +62,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     logger_wiki.info(
-        f"({user.id}, {user.name}, {user.first_name}) /wiki_cancel_command"
+        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
     )
     context.user_data["in_conversation"] = ""
     context.user_data["Annexe_Messages"] = []

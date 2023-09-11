@@ -5,15 +5,24 @@ start:
   command:
     - "start"
 
-#wiki:
-#  handler_name: WikiHandler
-#  location: src.command.client.wiki.handler
-#  command:
-#    - "wiki"
-#    - "cancel"
-#  message:
-#    - "📖Справочник"
-#    - "❌Отменить"
+wiki:
+  handler_name: WikiHandler
+  location: src.command.client.wiki.handler
+  command:
+    - "wiki"
+    - "cancel"
+  message:
+    - "📖Справочник"
+    - "❌Отменить"
+
+request:
+  handler_name: RequestHandler
+  location: src.command.client.request.handler
+  command:
+    - "request"
+  message:
+    - "🤓Специалист"
+    - "❌Отменить"
 
 # common
 error_logging:
