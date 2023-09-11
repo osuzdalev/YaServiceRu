@@ -1,5 +1,4 @@
 import logging
-import os
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -7,10 +6,8 @@ from telegram.ext import (
 )
 
 from src.common import helpers
-from dotenv import load_dotenv
 
 logger_req = logging.getLogger(__name__)
-load_dotenv()
 
 
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -49,7 +46,7 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     # OrderID = tldb.get_customer_last_OrderID(user.id)
     order_message_str = helpers.get_order_message_str("BETA", user_data, device_context)
 
-    await context.bot.sendMessage(os.getenv("ID_DEV_MAIN"), order_message_str)
+    await context.bot.sendMessage(context.bot_data["config"]["yaserviceru"]["app"]["tg_id"]["dev"], order_message_str)
     await query.answer(text="Служба поддержки свяжется с вами.", show_alert=True)
 
     # cleaning

@@ -1,7 +1,6 @@
 import html
 import json
 import logging
-import os
 import smtplib as smtp
 import traceback
 
@@ -9,19 +8,13 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
-from dotenv import load_dotenv
-
 logger_error = logging.getLogger(__name__)
 
-load_dotenv()
 
-
-def send_email(content: str) -> None:
+async def send_email(_: Update, context: ContextTypes.DEFAULT_TYPE, content: str) -> None:
     """Sends an email with the logs to the developer"""
-    yaserviceru_email = os.getenv("EMAIL_YANDEX_YASERVICERU")
-    password = os.getenv("PASSWORD_YANDEX_YASERVICERU_APP")
-
-    # oleg_email = constants.get("EMAIL", "OLEG_YANDEX")
+    yaserviceru_email = context.bot_data["config"]["yaserviceru"]["app"]["email"]["call_center"]
+    password = context.bot_data["config"]["yaserviceru"]["secret"]["password_smtp"]
 
     message = "\r\n".join(
         [
@@ -33,7 +26,8 @@ def send_email(content: str) -> None:
         ]
     )
 
-    server = smtp.SMTP("smtp.yandex.ru", 587)
+    server = smtp.SMTP(context.bot_data["config"]["yaserviceru"]["app"]["email"]["smtp"]["url"],
+                       context.bot_data["config"]["yaserviceru"]["app"]["email"]["smtp"]["port"])
     server.set_debuglevel(1)
     server.starttls()
     server.login(yaserviceru_email, password)
@@ -58,7 +52,7 @@ async def error_notification(
     tb_string = "".join(tb_list)
 
     # Build the message with some markup and additional information about what happened.
-    # You might need to add some logic to deal with messages longer than the 4096-character limit.
+    # Might need to add some logic to deal with messages longer than the 4096-character limit.
     update_str = update.to_dict() if isinstance(update, Update) else str(update)
     tg_message = (
         f"An exception was raised while handling an update\n"
@@ -79,9 +73,9 @@ async def error_notification(
 
     # Finally, send the message via telegram
     await context.bot.send_message(
-        chat_id=os.getenv("ID_DEV_MAIN"),
+        chat_id=context.bot_data["config"]["yaserviceru"]["app"]["tg_id"]["dev"],
         text=tg_message,
         parse_mode=ParseMode.HTML,
     )
     # and to the email
-    send_email(mail_message)
+    await send_email(update, context, mail_message)

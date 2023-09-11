@@ -2,17 +2,20 @@ name: dev
 
 yaserviceru:
   app:
-    telegram_id:
+    tg_id:
       bot: 6083336654
       call_center: 6211181238
       dev: 5278871996
       contractor: 247648076
-    telegram_username:
+    tg_username:
       bot: YaServiceRuDevBot
     email:
-      contact: ruyaservice@yandex.ru
+      call_center: ruyaservice@yandex.ru
       dev: odsuzdalev@yandex.ru
       contractor: yanisbrothers@yandex.ru
+      smtp:
+        url: smtp.yandex.ru
+        port: 587
   network:
     images: osuzdalev/yaserviceru:beta
     port: 8081
@@ -22,7 +25,7 @@ yaserviceru:
     api_openai: API_OPENAI
     token_telegram: TOKEN_TG_DEV_BOT
     token_payment_provider: TOKEN_PAYMENT_PROVIDER_YOOKASSA_TEST
-    password_app: PASSWORD_YANDEX_YASERVICERU_APP
+    password_smtp: PASSWORD_YANDEX_YASERVICERU_APP
 
 database:
   host: localhost # local or docker
