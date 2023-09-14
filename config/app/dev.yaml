@@ -40,5 +40,5 @@ database:
 weaviate:
   api: http://localhost:8080 # local or docker
   port: 8080
-  data: ./data/command/semantic_filters/embeddings
-  persistence: ./data/command/semantic_filters_data
+  data: ./data/vector_database/embeddings
+  persistence: ./data/vector_database/persistence

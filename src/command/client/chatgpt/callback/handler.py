@@ -9,7 +9,7 @@ from src.command.client.chatgpt.config import ChatGPTConfig
 import src.command.client.chatgpt.callback as callbacks
 from src.command.client.chatgpt.types import ChatGptCallbackType
 
-from src.common.data_reader.data_reader import DataReader
+from src.app.data_reader import DataReader
 
 
 class ChatGptCallbackHandler:

@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import yaml
 
 
@@ -32,3 +34,16 @@ class StartReader:
     def get_introduction_video(self):
         # Fetch the video ID based on the config value
         return self.data.get("video", {}).get(self.config, "").strip()
+
+
+class VectorDatabaseReader:
+    def __init__(self):
+        self.file_path: str = "data/vector_database/data.yaml"
+        with open(self.file_path, "r") as file:
+            self.data = yaml.safe_load(file)
+
+    def get_filters(self):
+        return self.data.get("filters", {})
+
+    def get_classes(self):
+        return self.data.get("classes", {})

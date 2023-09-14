@@ -1,8 +1,8 @@
 data/command/chatgpt/test.txt
 data/database
 data/app
-data/command/semantic_filters/embeddings
-data/command/semantic_filters/filters
+data/vector_database/embeddings
+data/vector_database/filters
 
 script/test
 script/util

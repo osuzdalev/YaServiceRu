@@ -4,7 +4,8 @@ from typing import List, Tuple, Dict
 
 from telegram import Update
 from telegram.ext import ContextTypes
-import tiktoken
+
+from src.common.helpers import num_tokens_from_string
 
 logger_chatgpt = logging.getLogger(__name__)
 
@@ -51,14 +52,6 @@ class PromptValidator:
 
         return True
 
-    def num_tokens_from_string(self, string: str) -> int:
-        """Returns the number of tokens in a text string."""
-        logger_chatgpt.info(f"{inspect.currentframe().f_code.co_name}")
-
-        encoding = tiktoken.encoding_for_model(self.chatgpt_config.model.name)
-        num_tokens = len(encoding.encode(string))
-        return num_tokens
-
     def check_conversation_tokens(self, prompt: str, conversation: List[Dict]) -> Tuple[bool, int]:
         """Checks if the conversation size, including the provided prompt, is within the token limit.
         Accounts for the minimum response token size that needs to be left after processing the user's message.
@@ -67,8 +60,8 @@ class PromptValidator:
 
         # Calculate tokens
         conversation_tokens = sum(
-            self.num_tokens_from_string(message["content"]) for message in conversation
-        ) + self.num_tokens_from_string(prompt)
+            num_tokens_from_string(message["content"], self.chatgpt_config.model.name) for message in conversation
+        ) + num_tokens_from_string(prompt, self.chatgpt_config.model.name)
         remaining_tokens = (
                 self.chatgpt_config.model.limit_conversation_tokens - conversation_tokens
         )
@@ -85,7 +78,7 @@ class PromptValidator:
         logger_chatgpt.info(f"{inspect.currentframe().f_code.co_name}")
 
         # Calculate tokens
-        prompt_tokens = self.num_tokens_from_string(prompt)
+        prompt_tokens = num_tokens_from_string(prompt, self.chatgpt_config.model.name)
         remaining_tokens = self.chatgpt_config.model.max_prompt_tokens - prompt_tokens
         logger_chatgpt.info(f"PROMPT TOKEN SIZE: {prompt_tokens}")
 

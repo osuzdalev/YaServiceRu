@@ -1,4 +1,5 @@
 import logging
+import pprint
 from typing import List, Dict, Union
 
 from sentence_transformers import SentenceTransformer
@@ -7,7 +8,7 @@ import weaviate
 from numpy import ndarray
 from torch import Tensor
 
-logger_weaviate = logging.getLogger(__name__)
+logger_vector_db = logging.getLogger(__name__)
 
 
 def get_available_device():
@@ -19,16 +20,17 @@ def get_available_device():
         return torch.device("cpu")
 
 
-class WeaviateClient:
-    def __init__(self, api_url: str = "http://localhost:8080"):
-        self.api_url = api_url
-        self.client = weaviate.Client(self.api_url)
+class VectorDatabase:
+    def __init__(self,
+                 api_url: str,
+                 sentence_transformer: str,
+                 semantic_threshold: float,
+                 query_limit: int):
+        self.client = weaviate.Client(api_url)
+        self.embedding_model = SentenceTransformer(sentence_transformer)
+        self.semantic_threshold = semantic_threshold
+        self.query_limit = query_limit
         self.device = get_available_device()
-        self.embedding_model = SentenceTransformer(
-            "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-        )
-        self.semantic_threshold: float = 0.75
-        self.query_limit: int = 10
 
         # Ensure the Weaviate instance is ready
         if not self.client.is_ready():
@@ -52,9 +54,9 @@ class WeaviateClient:
     def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
         try:
             self.client.schema.create_class(class_config)
-            logger_weaviate.info(f"Class '{class_config['class']}' created.")
+            logger_vector_db.info(f"Class '{class_config['class']}' created.")
         except Exception as e:
-            logger_weaviate.info(f"Error creating class '{class_config['class']}': {e}")
+            logger_vector_db.info(f"Error creating class '{class_config['class']}': {e}")
 
     def delete_class(self, class_name: str) -> None:
         print(
@@ -64,9 +66,9 @@ class WeaviateClient:
         confirmation = input().lower()
         if confirmation == "y":
             self.client.schema.delete_class(class_name)
-            logger_weaviate.info(f"Class '{class_name}' deleted.")
+            logger_vector_db.info(f"Class '{class_name}' deleted.")
         else:
-            logger_weaviate.info(f"Class '{class_name}' not deleted.")
+            logger_vector_db.info(f"Class '{class_name}' not deleted.")
 
     def write_data_object(self, data: Dict, class_name: str) -> None:
         self.client.data_object.create(data_object=data, class_name=class_name)
@@ -94,3 +96,24 @@ class WeaviateClient:
             raise Exception(result["errors"][0]["message"])
 
         return result["data_reader"]["Get"][collection_name]
+
+    def populate_vector_database(
+            self,
+            classes: Dict[str, Dict],
+            filters: Dict[str, List]
+    ) -> None:
+        # Delete all
+        self.delete_all()
+
+        # Check if the classes already exist in the schema
+        schema = self.get_schema()
+
+        for class_name, class_config in classes.items():
+            if class_name not in schema:
+                self.create_class(class_config)
+
+        # Read filters from yaml and add them to Weaviate
+        for filter_name, filter_lst in filters.items():
+            for filter in filter_lst:
+                filter_object = {"content": filter}
+                self.write_data_object(filter_object, filter_name)

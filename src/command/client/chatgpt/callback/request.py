@@ -9,7 +9,7 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 
-from src.command.client.semantic_filters.prompt_validator import (
+from src.common.prompt_validator import (
     validate_prompt,
     check_conversation_tokens,
 )

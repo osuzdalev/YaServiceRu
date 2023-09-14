@@ -37,3 +37,10 @@ global_fallback:
 database:
   handler_name: CollectorHandler
   location: src.database.handler
+
+vector_database:
+  handler_name: VectorDatabase
+  location: src.vector_database.vector_database
+  sentence_transformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  semantic_threshold: 0.75
+  query_limit: 10

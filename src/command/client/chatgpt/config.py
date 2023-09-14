@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from src.common.data_reader.data_reader import DataReader
-from src.command.client.semantic_filters.prompt_validator import PromptValidator
+from src.app.data_reader import DataReader
+from src.common.helpers import num_tokens_from_string
 
 
 data_reader = DataReader()
@@ -19,8 +19,7 @@ class Model:
     max_conversation_tokens: int = 4096
     # Amount of tokens in a conversation to at least get a minimum response
     limit_conversation_tokens: int = max_conversation_tokens - max_response_tokens
-    # TODO automatically count using prompt validator?
-    instructions_tokens: int = 1500
+    instructions_tokens: int = num_tokens_from_string(data_reader.chatgpt.get_system_instructions(), name)
     max_sum_response_tokens: int = free_prompt_limit * max_response_tokens
     # max size prompt to at least get one answer
     max_prompt_tokens: int = (

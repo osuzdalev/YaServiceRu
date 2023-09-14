@@ -1,66 +1,15 @@
 import datetime
+import inspect
 import logging
-import os
-from typing import Tuple, List, Any
+from typing import Tuple
 
 from telegram import Update
 from telegram.ext import ContextTypes
+import tiktoken
 
 from src import common as tldb
-from dotenv import load_dotenv
 
 logger_helpers = logging.getLogger(__name__)
-
-load_dotenv()
-
-
-def get_order_message_str(
-    order_id: int, user_data: Any, device_context: Any, phone_number: int = None
-) -> str:
-    """Creates a nice string with all the relevant database of an Order to be sent as a message to Contractor"""
-    logger_helpers.info("get_order_message_str()")
-    user_info = ""
-    if isinstance(user_data, List):
-        user_info = (
-            user_data[1]
-            + "\n"
-            + user_data[2]
-            + "\n"
-            + user_data[3]
-            + "\n"
-            + str(phone_number)
-            + "\n"
-            + "id:"
-            + str(user_data[0])
-        )
-    elif isinstance(user_data, Tuple):
-        user_info = (
-            "@"
-            + user_data[1]
-            + "\n"
-            + user_data[2]
-            + "\n"
-            + user_data[3]
-            + "\n"
-            + str(phone_number)
-            + "\n"
-            + "id:"
-            + str(user_data[0])
-        )
-
-    device_info = "\n".join(device_context)
-    logger_helpers.debug(f"device_context: {device_context}")
-
-    order_message_str = "\n\n".join(
-        [
-            "Customer service required",
-            f"Order# {str(order_id)}",
-            user_info,
-            device_info,
-        ]
-    )
-
-    return order_message_str
 
 
 def get_timestamp_str() -> str:
@@ -71,7 +20,7 @@ async def check_order_id_exists(
     update: Update, _: ContextTypes.DEFAULT_TYPE, order_id: int
 ) -> Tuple:
     """Checks if given order exists"""
-    logger_helpers.info("check_order_id_exists()")
+    logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
     order = tldb.get_order_data(order_id)
     if order is not None:
         return True, order
@@ -82,12 +31,21 @@ async def check_order_id_exists(
 
 def clearance_contractor(user_id: int) -> bool:
     """Verify if the user sending the command is a Contractor and has clearance"""
-    logger_helpers.info("clearance_contractor()")
+    logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
     all_contractor_id = tldb.get_all_contractor_id()
     return user_id in all_contractor_id
 
 
-def clearance_center(user_id: int) -> bool:
+def clearance_center(user_id: int, tg_id_dev) -> bool:
     """Verify if the user sending the command is an owner of a CenterID and has clearance"""
-    logger_helpers.info("check_CenterID()")
-    return user_id == int(os.getenv("ID_DEV_MAIN"))
+    logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
+    return user_id == int(tg_id_dev)
+
+
+def num_tokens_from_string(string: str, model_name: str) -> int:
+    """Returns the number of tokens in a text string."""
+    logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
+
+    encoding = tiktoken.encoding_for_model(model_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens

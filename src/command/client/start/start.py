@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.common.markups import DEFAULT_CLIENT_MARKUP
-from src.common.data_reader.data_reader import DataReader
+from src.app.data_reader import DataReader
 
 
 logger_start = logging.getLogger(__name__)

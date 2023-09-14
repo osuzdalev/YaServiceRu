@@ -1,0 +1,193 @@
+classes:
+  EnglishFilters:
+    class: EnglishFilters
+    description: Sentences in English about our theme/business/domain to compare with incoming user prompts for filtering
+    properties:
+    - name: content
+      dataType:
+        - text
+    vectorizer: text2vec-transformers,
+    moduleConfig:
+      text2vec-transformers:
+        poolingStrategy: masked_mean
+        vectorizeClassName: False
+
+  RussianFilters:
+    class: RussianFilters
+    description: Sentences in Russian about our theme/business/domain to compare with incoming user prompts for filtering
+    properties:
+      - name: content
+        dataType:
+          - text
+    vectorizer: text2vec-transformers,
+    moduleConfig:
+      text2vec-transformers:
+        poolingStrategy: masked_mean
+        vectorizeClassName: False
+
+  SpecialSubjectFilters:
+    class: SpecialSubjectFilters
+    description: Sentences about particular subjects to compare with incoming user prompts, triggering a special logic/response when close enough
+    properties:
+      - name: content
+        dataType:
+          - text
+    vectorizer: text2vec-transformers,
+    moduleConfig:
+      text2vec-transformers:
+        poolingStrategy: masked_mean
+        vectorizeClassName: False
+
+filters:
+  EnglishFilters:
+    - I have a problem with my electronic device and need your help to fix it.
+    - My gadget is malfunctioning; can you help me figure out what's wrong?
+    - There's an issue with my device; how can I resolve it?
+    - Can you assist me with troubleshooting my electronic device?
+    - My tech isn't working as expected; what should I do to fix it?
+    - I'm experiencing difficulties with my device; can you guide me through the solution?
+    - My electronic equipment is acting up; how can I get it working properly again?
+    - I'm facing a challenge with my gadget; can you provide assistance?
+    - There's something off with my tech; what steps should I take to correct it?
+    - I need help with my electronic device; can you offer support?
+    - My device isn't functioning well; how can I address the problem?
+    - My computer is not working properly can you assist me?
+    - My phone is acting weird can you help me resolve the issue?
+    - I'm having trouble with my tablet can you guide me on how to fix it?
+    - Identify the reason behind my slow computer and suggest solutions.
+    - How can I update the drivers on my Windows laptop?
+    - Provide guidance on reinstalling an operating system on my Mac.
+    - My smartphone isn't charging properly; what should I do?
+    - Troubleshoot my internet connection issues on my Linux machine.
+    - What are the steps to connect a Bluetooth device to my Android phone?
+    - Assist me in setting up a printer with my computer.
+    - My tablet's screen resolution is off; how can I fix it?
+    - Help me configure the system settings on my Windows laptop for optimal performance.
+    - Explain the process of accessing and modifying the BIOS on my computer.
+    - What's the best way to set up a dual-boot system with Bootcamp on my Mac?
+    - How can I recover deleted files on my Linux computer?
+    - Recommend some security measures to protect my devices from cyber threats.
+    - Determine the cause of my device's poor Wi-Fi signal and suggest solutions.
+    - My external hard drive isn't being recognized; how do I fix this issue?
+    - Provide instructions for calibrating the touchscreen on my tablet.
+    - How do I uninstall an unwanted program on my Windows computer?
+    - My Android phone's GPS is inaccurate; how can I improve it?
+    - Explain how to change the default web browser on my Mac.
+    - Walk me through using Terminal commands to manage processes on my Linux machine.
+    - Guide me through the process of creating a backup for my Windows computer.
+    - What steps should I take to optimize my Mac's performance?
+    - Assist me in resolving software conflicts on my Linux machine.
+    - How can I fix app crashes on my Android smartphone?
+    - Help me set up a firewall on my Windows laptop for added security.
+    - What is the process for installing a new font on my Mac?
+    - Explain how to partition a hard drive on my Linux computer.
+    - How do I enable 'Do Not Disturb' mode on my Android phone?
+    - Assist me in troubleshooting audio issues on my Windows laptop.
+    - Guide me on how to create a new user account on my Mac.
+    - Explain the process of installing a package manager on my Linux machine.
+    - How can I set up a VPN on my Android smartphone?
+    - Help me identify and remove malware from my Windows computer.
+    - Walk me through the process of updating software on my Mac.
+    - Provide guidance on setting up a cron job on my Linux machine.
+    - How can I enable dark mode on my Android phone?
+    - Assist me in restoring my Windows laptop to a previous state.
+    - Explain how to reset the PRAM and SMC on my Mac.
+    - Guide me through the process of setting up a virtual machine on my Linux computer.
+    - Help me troubleshoot the syncing issues between my Android phone and computer.
+    - Help me set up multiple monitors on my Windows computer.
+    - What's the best way to transfer files between my Mac and Android phone?
+    - Explain how to create a bootable USB drive for a Linux installation.
+    - How can I configure parental controls on my Android tablet?
+    - Guide me through the process of encrypting my Windows laptop's hard drive.
+    - What are the steps to change the default file format in Microsoft Word on a Mac?
+    - Assist me in creating a custom keyboard shortcut on my Linux machine.
+    - How do I clear my Android phone's cache to free up storage space?
+    - Walk me through the process of creating a system restore point on my Windows computer.
+    - How can I set up automatic updates for macOS and its apps?
+    - Explain how to use a proxy server on my Linux machine.
+    - How do I block specific websites on my Android smartphone?
+    - Help me configure automatic backups on my Windows computer.
+    - What's the best way to uninstall multiple applications on my Mac simultaneously?
+    - Provide guidance on using SSH to connect to a remote server from my Linux machine.
+    - How can I transfer my Android phone's contacts to a new device?
+    - Assist me in resolving the "blue screen of death" issue on my Windows laptop.
+    - Explain how to merge multiple PDF files into one on a Mac.
+    - Guide me on how to set up email forwarding in Thunderbird on my Linux computer.
+    - Help me find and remove duplicate files on my Android phone to free up storage.
+  RussianFilters:
+    - У меня проблема с моим электронным устройством, и мне нужна ваша помощь, чтобы исправить это.
+    - Мое устройство работает неправильно; вы можете помочь мне выяснить, в чем проблема?
+    - У меня проблема с моим устройством; как я могу ее решить?
+    - Можете ли вы помочь мне устранить неполадки с моим электронным устройством?
+    - Моя техника не работает как ожидалось; что мне делать, чтобы исправить ее?
+    - У меня возникли сложности с моим устройством; можете ли вы направить меня к решению проблемы?
+    - Мое электронное оборудование дает сбой; как мне вернуть его в рабочее состояние?
+    - У меня проблема с моим гаджетом; можете ли вы предоставить помощь?
+    - С моей техникой что-то не так; какие шаги мне нужно предпринять, чтобы исправить ситуацию?
+    - Мне нужна помощь с моим электронным устройством; можете ли вы предоставить поддержку?
+    - Мое устройство не функционирует должным образом; как я могу решить эту проблему?
+    - Мой компьютер не работает должным образом, вы можете мне помочь?
+    - Мой телефон ведет себя странно, можете помочь мне решить проблему?
+    - У меня проблемы с моим планшетом, не могли бы вы помочь мне в исправлении?
+    - Определите причину медленной работы моего компьютера и предложите решения.
+    - Как мне обновить драйверы на моем ноутбуке с Windows?
+    - Предоставьте руководство по переустановке операционной системы на моем Mac.
+    - Мой смартфон неправильно заряжается; что мне делать?
+    - Устраните проблемы с интернет-соединением на моей Linux-машине.
+    - Какие шаги нужно предпринять, чтобы подключить устройство Bluetooth к моему Android-телефону?
+    - Помогите мне настроить принтер на компьютере.
+    - Разрешение экрана моего планшета неправильное; как мне это исправить?
+    - Помогите мне настроить системные настройки на моем ноутбуке с Windows для оптимальной производительности.
+    - Объясните процесс доступа и изменения настроек BIOS на моем компьютере.
+    - Как лучше всего настроить двойную загрузку с помощью Bootcamp на моем Mac?
+    - Как мне восстановить удаленные файлы на моем компьютере с Linux?
+    - Рекомендуйте некоторые меры безопасности для защиты моих устройств от киберугроз.
+    - Определите причину плохого Wi-Fi-сигнала на моем устройстве и предложите решения.
+    - Мой внешний жесткий диск не распознается; как мне исправить эту проблему?
+    - Предоставьте инструкции по калибровке сенсорного экрана моего планшета.
+    - Как удалить нежелательную программу на моем компьютере с Windows?
+    - GPS моего Android-телефона не точный; как мне его улучшить?
+    - Объясните, как изменить браузер по умолчанию на моем Mac.
+    - Научите меня использовать команды Терминала для управления процессами на моей Linux-машине.
+    - Направьте меня через процесс создания резервной копии для моего компьютера с Windows.
+    - Какие шаги мне нужно предпринять, чтобы оптимизировать производительность моего Mac?
+    - Помогите мне устранить конфликты программного обеспечения на моей Linux-машине.
+    - Как мне исправить сбои приложений на моем смартфоне Android?
+    - Помогите мне настроить брандмауэр на моем ноутбуке с Windows для повышения безопасности.
+    - Каков процесс установки нового шрифта на моем Mac?
+    - Объясните, как разбить жесткий диск на моем компьютере с Linux.
+    - Как включить режим 'Не беспокоить' на моем Android-телефоне?
+    - Помогите мне устранить проблемы с аудио на моем ноутбуке с Windows.
+    - Направьте меня по созданию новой учетной записи пользователя на моем Mac.
+    - Объясните процесс установки менеджера пакетов на моей Linux-машине.
+    - Как настроить VPN на моем смартфоне Android?
+    - Помогите мне определить и удалить вредоносное ПО с моего компьютера с Windows.
+    - Руководство по обновлению программного обеспечения на моем Mac.
+    - Предоставьте руководство по настройке cron-задания на моей Linux-машине.
+    - Как включить темный режим на моем Android-телефоне?
+    - Помогите мне восстановить мой ноутбук с Windows до предыдущего состояния.
+    - Объясните, как сбросить PRAM и SMC на моем Mac.
+    - Направьте меня через процесс настройки виртуальной машины на моей Linux-машине.
+    - Помогите мне устранить проблемы синхронизации между моим телефоном Android и компьютером.
+    - Помогите мне настроить несколько мониторов на моем компьютере с Windows.
+    - Как лучше всего передавать файлы между моим Mac и Android-телефоном?
+    - Объясните, как создать загрузочный USB-накопитель для установки Linux.
+    - Как я могу настроить родительский контроль на моем планшете Android?
+    - Направьте меня через процесс шифрования жесткого диска моего ноутбука с Windows.
+    - Какие шаги нужно предпринять, чтобы изменить формат файла по умолчанию в Microsoft Word на Mac?
+    - Помогите мне создать настраиваемый сочетание клавиш на моей Linux-машине.
+    - Как я могу очистить кэш моего Android-телефона, чтобы освободить место на диске?
+    - Направьте меня через процесс создания точки восстановления системы на моем компьютере с Windows.
+    - Как настроить автоматические обновления для macOS и его приложений?
+    - Объясните, как использовать прокси-сервер на моей Linux-машине.
+    - Как заблокировать определенные веб-сайты на моем смартфоне Android?
+    - Помогите мне настроить автоматические резервные копии на моем компьютере с Windows.
+    - Как лучше всего удалить несколько приложений одновременно на моем Mac?
+    - Предоставьте руководство по использованию SSH для подключения к удаленному серверу с моей Linux-машине.
+    - Как я могу перенести контакты моего Android-телефона на новое устройство?
+    - Помогите мне устранить проблему "синий экран смерти" на моем ноутбуке с Windows.
+    - Объясните, как объединить несколько файлов PDF в один на Mac.
+    - Научите меня настроить пересылку электронной почты в Thunderbird на моей Linux-машине.
+    - Помогите мне найти и удалить дубликаты файлов на моем Android-телефоне для освобождения места на диске.
+  SpecialSubjectFilters:
+    -

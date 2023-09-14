@@ -3,6 +3,8 @@ from enum import Enum
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from src.common.helpers import num_tokens_from_string
+
 
 class CheckRemainingTokensCallbackEventType(Enum):
     CHECK = 0

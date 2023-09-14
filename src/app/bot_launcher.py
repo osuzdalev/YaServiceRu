@@ -5,8 +5,8 @@ from telegram.ext import Application, PicklePersistence
 from warnings import filterwarnings
 from telegram.warnings import PTBUserWarning
 
-from config.app.bot_config_manager import BotConfigurationManager
-from config.module.module_manager import ModuleManager
+from src.app.bot_config_manager import BotConfigurationManager
+from src.app.module_manager import ModuleManager
 
 # from src.command.center import orders
 # from contractor import assign, complete, command
