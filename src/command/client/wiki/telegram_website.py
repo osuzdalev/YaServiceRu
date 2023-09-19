@@ -9,7 +9,7 @@ from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CallbackQueryHandler, ConversationHandler
 
 from src.common.yaml_loader import YamlLoader
-from . import BACK, CANCEL
+from .constants import BACK, CANCEL
 
 logger_website = logging.getLogger(__name__)
 
@@ -157,7 +157,7 @@ class Website:
     def parse(self, config_file):
         """Parses a YAML file and generates the pages of the website from the data"""
         with open(config_file, mode="rb") as fp:
-            config = yaml.load(fp, Loader=Loader)
+            config = yaml.load(fp, Loader=YamlLoader)
 
         # Generates the pages from the yaml file
         for name, info in config.items():

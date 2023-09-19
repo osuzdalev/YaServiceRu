@@ -5,8 +5,8 @@ from telegram.ext import Application, PicklePersistence
 from warnings import filterwarnings
 from telegram.warnings import PTBUserWarning
 
-from src.app.bot_config_manager import BotConfigurationManager
-from src.app.module_manager import ModuleManager
+from .bot_config_manager import BotConfigurationManager
+from .module_manager import ModuleManager
 
 # from src.command.center import orders
 # from contractor import assign, complete, command
@@ -23,13 +23,17 @@ class BotLauncher:
         self.module_manager = module_manager
         self.log_level = log_level
 
-    def add_module_handlers(self, application):
-        modules = self.module_manager.load_modules()
-        for module_name, module_handler in modules.items():
+    def add_tg_module_handlers(self, application):
+        commands, messages = self.module_manager.get_tg_commands_messages()
+        for module_name, module_handler in self.module_manager.tg_modules.items():
             if module_name == "error_logging":
-                application.add_error_handler(module_handler.get_handler())
+                application.add_error_handler(module_handler().get_handler())
+            elif module_name == "global_fallback":
+                application.add_handlers(handlers=module_handler(commands, messages).get_handlers())
+            elif module_name == "wiki":
+                application.add_handlers(handlers=module_handler(self.module_manager.wiki_folder_path).get_handlers())
             else:
-                application.add_handlers(handlers=module_handler.get_handlers())
+                application.add_handlers(handlers=module_handler().get_handlers())
 
     def setup_logging(self):
         logging.basicConfig(
@@ -66,7 +70,7 @@ class BotLauncher:
         )
 
         # Call the method to add module handlers
-        self.add_module_handlers(application)
+        self.add_tg_module_handlers(application)
 
         # TODO make the wiki objects compatible with inline queries
         # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)

@@ -2,6 +2,8 @@ from src.common.error_logging.error_logging import error_notification
 
 
 class ErrorHandler:
+    tg = True
+
     def __init__(self):
         self.error_notification = error_notification
 

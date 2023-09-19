@@ -14,12 +14,13 @@ from src.common.types import HandlerGroupType
 
 
 class RequestHandler:
-    command = ["request"]
-    message = ["🤓Специалист", "❌Отменить"]
+    tg = True
+    commands = ["request"]
+    messages = ["🤓Специалист", "❌Отменить"]
 
-    def __init__(self, commands=None, messages=None):
-        self.commands = commands if commands else []
-        self.messages = messages if messages else []
+    def __init__(self):
+        self.commands = RequestHandler.commands
+        self.messages = RequestHandler.messages
 
         self.request_command_handler = CommandHandler(self.commands[0], request)
         self.request_replykeyboard_handler = MessageHandler(

@@ -1,61 +1,18 @@
-import yaml
-from importlib import import_module
+from typing import List, Dict, Tuple
 
 
 class ModuleManager:
-    def __init__(self, yaml_path):
-        self.commands = {}
-        self.messages = {}
-        self.location = {}
-        self.handler_name = {}
-        self.config = self._load_yaml(yaml_path)
-        self._populate_dict()
+    def __init__(self, tg_modules: Dict, modules: List, wiki_folder_path: str):
+        self.modules = modules
+        self.tg_modules = tg_modules
+        self.wiki_folder_path = wiki_folder_path
 
-    def _load_yaml(self, yaml_path):
-        with open(yaml_path, 'r') as file:
-            return yaml.safe_load(file)
-
-    def _populate_dict(self):
-        for module_name, module_info in self.config.items():
-            self.location[module_name] = module_info['location']
-            self.handler_name[module_name] = module_info['handler_name']
-            if 'command' in module_info:
-                self.commands[module_name] = module_info['command']
-            if 'message' in module_info:
-                self.messages[module_name] = module_info['message']
-
-    def load_modules(self):
-        module_handlers = {}
-
-        # Accumulate all commands and messages
+    def get_tg_commands_messages(self) -> Tuple[List, List]:
         all_commands = []
         all_messages = []
-        for module_info in self.config.values():
-            all_commands.extend(module_info.get('command', []))
-            all_messages.extend(module_info.get('message', []))
+        for module_name, module_handler in self.tg_modules.items():
+            all_commands.extend(getattr(module_handler, 'commands', []))
+            all_messages.extend(getattr(module_handler, 'messages', []))
 
-        for module_name in self.config:
-            module = import_module(self.location[module_name])
-
-            # special module that needs all commands and messages
-            if module_name == 'global_fallback':
-                kwargs = {
-                    'commands': all_commands,
-                    'messages': all_messages
-                }
-            else:
-                # Prepare the kwargs for initialization for other modules
-                kwargs = {}
-                if 'command' in self.config[module_name]:
-                    kwargs['commands'] = self.config[module_name]['command']
-                if 'message' in self.config[module_name]:
-                    kwargs['messages'] = self.config[module_name]['message']
-
-            handler_class = getattr(module, self.handler_name[module_name])
-
-            # Use **kwargs to pass commands and messages if they exist
-            handler_instance = handler_class(**kwargs)
-            module_handlers[module_name] = handler_instance
-
-        return module_handlers
+        return all_commands, all_messages
 

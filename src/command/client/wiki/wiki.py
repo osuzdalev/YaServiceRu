@@ -2,17 +2,21 @@ import inspect
 import logging
 from typing import Union
 
-from telegram import Update, InlineKeyboardMarkup
+from telegram import Update
 from telegram.ext import (
     ContextTypes,
     ConversationHandler,
 )
 
-from . import *
+from .constants import (
+    ENTRY_PAGE_MARKUP,
+    BROWSER_HISTORY_NAME,
+    ENTRY_PAGE_NAME,
+    ENTRY_PAGE_TEXT,
+    STATE
+)
 
 logger_wiki = logging.getLogger(__name__)
-
-ENTRY_PAGE_MARKUP = InlineKeyboardMarkup(ENTRY_PAGE_KEYBOARD)
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
