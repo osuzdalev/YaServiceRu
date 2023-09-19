@@ -1,12 +1,15 @@
 import logging
+import os
 import sys
 
+from telegram import Update
 from telegram.ext import Application, PicklePersistence
 from warnings import filterwarnings
 from telegram.warnings import PTBUserWarning
 
 from .bot_config_manager import BotConfigurationManager
 from .module_manager import ModuleManager
+from src.command.client.chatgpt.config import Model
 
 # from src.command.center import orders
 # from contractor import assign, complete, command
@@ -29,7 +32,13 @@ class BotLauncher:
             if module_name == "error_logging":
                 application.add_error_handler(module_handler().get_handler())
             elif module_name == "global_fallback":
-                application.add_handlers(handlers=module_handler(commands, messages).get_handlers())
+                global_fallback = module_handler(commands, messages)
+                application.add_handlers(handlers=global_fallback.get_handlers())
+            elif module_name == "prompt_validator":
+                prompt_validator = module_handler(Model(),
+                                                  self.module_manager.modules["vector_database"],
+                                                  global_fallback.ignore_messages_re)
+                application.add_handlers(handlers=prompt_validator.get_handlers())
             elif module_name == "wiki":
                 application.add_handlers(handlers=module_handler(self.module_manager.wiki_folder_path).get_handlers())
             else:
@@ -52,6 +61,7 @@ class BotLauncher:
         The configs in dict form is now accessible codebase wide.
         """
         application.bot_data['config'] = self.bot_config_manager.config
+        application.bot_data["restart"] = False
 
     def launch(self):
         # Ignore "per_message=False" ConversationHandler warning message
@@ -75,4 +85,7 @@ class BotLauncher:
         # TODO make the wiki objects compatible with inline queries
         # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
 
-        application.run_polling()
+        application.run_polling(allowed_updates=Update.ALL_TYPES)
+
+        if application.bot_data["restart"]:
+            os.execl(sys.executable, sys.executable, *sys.argv)

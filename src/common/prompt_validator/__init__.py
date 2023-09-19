@@ -1,1 +1,1 @@
-from .prompt_validator import PromptValidator
+from .handler import PromptValidatorHandler

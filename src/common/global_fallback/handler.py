@@ -18,7 +18,8 @@ class GlobalFallbackHandler:
         self.ignore_messages_re = r"^(" + "|".join(message for message in self.messages) + ")$"
 
         self.global_fallback_handler = MessageHandler(
-            filters.COMMAND & (~filters.Regex(self.ignore_commands_re)), unknown_command
+            filters.COMMAND & (~filters.Regex(self.ignore_commands_re)),
+            unknown_command
         )
 
     def get_handlers(self):

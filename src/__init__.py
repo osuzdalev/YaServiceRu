@@ -11,7 +11,8 @@ from .command import (
 from .common import (
     ErrorHandler,
     GlobalFallbackHandler,
-    PromptValidator,
+    PromptValidatorHandler,
+    RestartHandler,
     YamlLoader,
     HandlerGroupType
 )

@@ -13,7 +13,7 @@ from .types import ChatGptCallbackType
 
 
 class ChatGptHandler:
-    def __init__(self):
+    def __init__(self, ignored_texts_re):
         config = ChatGPTConfig()
         callback_handler = ChatGptCallbackHandler(config)
 
