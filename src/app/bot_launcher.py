@@ -17,10 +17,10 @@ from src.command.client.chatgpt.config import Model
 
 class BotLauncher:
     def __init__(
-            self,
-            bot_config_manager: BotConfigurationManager,
-            module_manager: ModuleManager,
-            log_level=logging.INFO
+        self,
+        bot_config_manager: BotConfigurationManager,
+        module_manager: ModuleManager,
+        log_level=logging.INFO,
     ):
         self.bot_config_manager = bot_config_manager
         self.module_manager = module_manager
@@ -35,12 +35,18 @@ class BotLauncher:
                 global_fallback = module_handler(commands, messages)
                 application.add_handlers(handlers=global_fallback.get_handlers())
             elif module_name == "prompt_validator":
-                prompt_validator = module_handler(Model(),
-                                                  self.module_manager.modules["vector_database"],
-                                                  global_fallback.ignore_messages_re)
+                prompt_validator = module_handler(
+                    Model(),
+                    self.module_manager.modules["vector_database"],
+                    global_fallback.ignore_messages_re,
+                )
                 application.add_handlers(handlers=prompt_validator.get_handlers())
             elif module_name == "wiki":
-                application.add_handlers(handlers=module_handler(self.module_manager.wiki_folder_path).get_handlers())
+                application.add_handlers(
+                    handlers=module_handler(
+                        self.module_manager.wiki_folder_path
+                    ).get_handlers()
+                )
             else:
                 application.add_handlers(handlers=module_handler().get_handlers())
 
@@ -50,7 +56,10 @@ class BotLauncher:
             level=self.log_level,
             handlers=[
                 logging.StreamHandler(sys.stdout),
-                logging.FileHandler(self.bot_config_manager.config["yaserviceru"]["network"]["logs"], mode="a"),
+                logging.FileHandler(
+                    self.bot_config_manager.config["yaserviceru"]["network"]["logs"],
+                    mode="a",
+                ),
             ],
         )
 
@@ -60,19 +69,29 @@ class BotLauncher:
         of the application.
         The configs in dict form is now accessible codebase wide.
         """
-        application.bot_data['config'] = self.bot_config_manager.config
+        application.bot_data["config"] = self.bot_config_manager.config
         application.bot_data["restart"] = False
 
     def launch(self):
         # Ignore "per_message=False" ConversationHandler warning message
-        filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
+        filterwarnings(
+            action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning
+        )
         self.setup_logging()
 
-        persistence = PicklePersistence(filepath=self.bot_config_manager.config["yaserviceru"]["network"]["persistence"])
+        persistence = PicklePersistence(
+            filepath=self.bot_config_manager.config["yaserviceru"]["network"][
+                "persistence"
+            ]
+        )
 
         application = (
             Application.builder()
-            .token(self.bot_config_manager.config["yaserviceru"]["secret"]["token_telegram"])
+            .token(
+                self.bot_config_manager.config["yaserviceru"]["secret"][
+                    "token_telegram"
+                ]
+            )
             .persistence(persistence)
             .arbitrary_callback_data(True)
             .post_init(self.post_init)

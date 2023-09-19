@@ -16,8 +16,7 @@ class PromptValidatorHandler:
 
         self.ignore_messages_re = ignore_messages_re
         self.validate_prompt_handler = MessageHandler(
-            ~filters.Regex(self.ignore_messages_re),
-            validate_prompt
+            ~filters.Regex(self.ignore_messages_re), validate_prompt
         )
 
     def get_handlers(self):

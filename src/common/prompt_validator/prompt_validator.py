@@ -16,7 +16,9 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     2. Check if the prompt is within the token limit
     3. Check if the prompt is semantically close enough to the app's purpose"""
     user = update.effective_user
-    logger_prompt_validator.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+    logger_prompt_validator.info(
+        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+    )
 
     if not context.user_data.get("GPT_active", False):
         await update.message.reply_text(
@@ -48,7 +50,9 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     return True
 
 
-def check_conversation_tokens(prompt: str, conversation: List[Dict]) -> Tuple[bool, int]:
+def check_conversation_tokens(
+    prompt: str, conversation: List[Dict]
+) -> Tuple[bool, int]:
     """Checks if the conversation size, including the provided prompt, is within the token limit.
     Accounts for the minimum response token size that needs to be left after processing the user's message.
     """
@@ -56,10 +60,11 @@ def check_conversation_tokens(prompt: str, conversation: List[Dict]) -> Tuple[bo
 
     # Calculate tokens
     conversation_tokens = sum(
-        num_tokens_from_string(message["content"], chatgpt_config.model.name) for message in conversation
+        num_tokens_from_string(message["content"], chatgpt_config.model.name)
+        for message in conversation
     ) + num_tokens_from_string(prompt, chatgpt_config.model.name)
     remaining_tokens = (
-            chatgpt_config.model.limit_conversation_tokens - conversation_tokens
+        chatgpt_config.model.limit_conversation_tokens - conversation_tokens
     )
 
     return (

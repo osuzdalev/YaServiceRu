@@ -21,11 +21,13 @@ def get_available_device():
 
 
 class VectorDatabase:
-    def __init__(self,
-                 api_url: str,
-                 sentence_transformer: str,
-                 semantic_threshold: float,
-                 query_limit: int):
+    def __init__(
+        self,
+        api_url: str,
+        sentence_transformer: str,
+        semantic_threshold: float,
+        query_limit: int,
+    ):
         self.client = weaviate.Client(api_url)
         self.embedding_model = SentenceTransformer(sentence_transformer)
         self.semantic_threshold = semantic_threshold
@@ -56,7 +58,9 @@ class VectorDatabase:
             self.client.schema.create_class(class_config)
             logger_vector_db.info(f"Class '{class_config['class']}' created.")
         except Exception as e:
-            logger_vector_db.info(f"Error creating class '{class_config['class']}': {e}")
+            logger_vector_db.info(
+                f"Error creating class '{class_config['class']}': {e}"
+            )
 
     def delete_class(self, class_name: str) -> None:
         print(
@@ -98,9 +102,7 @@ class VectorDatabase:
         return result["data_reader"]["Get"][collection_name]
 
     def populate_vector_database(
-            self,
-            classes: Dict[str, Dict],
-            filters: Dict[str, List]
+        self, classes: Dict[str, Dict], filters: Dict[str, List]
     ) -> None:
         # Delete all
         self.delete_all()

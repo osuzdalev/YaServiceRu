@@ -24,7 +24,7 @@ class RequestHandler:
 
         self.request_command_handler = CommandHandler(self.commands[0], request)
         self.request_replykeyboard_handler = MessageHandler(
-            filters.Regex(fr"^({self.messages[0]})$"), request
+            filters.Regex(rf"^({self.messages[0]})$"), request
         )
         self.request_callback_handler = CallbackQueryHandler(
             request, pattern="REQUEST_COMMAND"
@@ -37,7 +37,7 @@ class RequestHandler:
             cancel_request, pattern="REQUEST_CALL_CANCEL"
         )
         self.cancel_request_handler_message = MessageHandler(
-            filters.Regex(fr"^({self.messages[1]})$"), cancel_request
+            filters.Regex(rf"^({self.messages[1]})$"), cancel_request
         )
 
     def get_handlers(self):

@@ -13,7 +13,9 @@ logger_req = logging.getLogger(__name__)
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends an Inline message to confirm the call"""
     user = update.effective_user
-    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+    logger_req.info(
+        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+    )
     context.user_data.setdefault("Request_temp_messages", [])
     keyboard = [
         [
@@ -37,7 +39,9 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     query = update.callback_query
     user = query.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
-    logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+    logger_req.info(
+        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+    )
 
     device_context = context.user_data.get("Device_Context", [])
 
@@ -46,7 +50,10 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     # OrderID = tldb.get_customer_last_OrderID(user.id)
     order_message_str = get_order_message_str(0000, user_data, device_context)
 
-    await context.bot.sendMessage(context.bot_data["config"]["yaserviceru"]["app"]["tg_id"]["dev"], order_message_str)
+    await context.bot.sendMessage(
+        context.bot_data["config"]["yaserviceru"]["app"]["tg_id"]["dev"],
+        order_message_str,
+    )
     await query.answer(text="Служба поддержки свяжется с вами.", show_alert=True)
 
     # cleaning
@@ -109,10 +116,14 @@ async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     query = update.callback_query
     try:
         user = query.from_user
-        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+        logger_req.info(
+            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+        )
     except AttributeError:
         user = update.effective_user
-        logger_req.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+        logger_req.info(
+            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+        )
 
     # cleaning
     for message in context.user_data["Request_temp_messages"]:

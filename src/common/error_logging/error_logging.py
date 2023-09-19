@@ -11,9 +11,13 @@ from telegram.constants import ParseMode
 logger_error = logging.getLogger(__name__)
 
 
-async def send_email(_: Update, context: ContextTypes.DEFAULT_TYPE, content: str) -> None:
+async def send_email(
+    _: Update, context: ContextTypes.DEFAULT_TYPE, content: str
+) -> None:
     """Sends an email with the logs to the developer"""
-    yaserviceru_email = context.bot_data["config"]["yaserviceru"]["app"]["email"]["call_center"]
+    yaserviceru_email = context.bot_data["config"]["yaserviceru"]["app"]["email"][
+        "call_center"
+    ]
     password = context.bot_data["config"]["yaserviceru"]["secret"]["password_smtp"]
 
     message = "\r\n".join(
@@ -26,8 +30,10 @@ async def send_email(_: Update, context: ContextTypes.DEFAULT_TYPE, content: str
         ]
     )
 
-    server = smtp.SMTP(context.bot_data["config"]["yaserviceru"]["app"]["email"]["smtp"]["url"],
-                       context.bot_data["config"]["yaserviceru"]["app"]["email"]["smtp"]["port"])
+    server = smtp.SMTP(
+        context.bot_data["config"]["yaserviceru"]["app"]["email"]["smtp"]["url"],
+        context.bot_data["config"]["yaserviceru"]["app"]["email"]["smtp"]["port"],
+    )
     server.set_debuglevel(1)
     server.starttls()
     server.login(yaserviceru_email, password)

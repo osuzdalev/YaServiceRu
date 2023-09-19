@@ -18,7 +18,7 @@ from .constants import (
     ENTRY_PAGE_NAME,
     ENTRY_PAGE_TEXT,
     ENTRY_PAGE_MESSAGES,
-    ENTRY_PAGE_KEYBOARD
+    ENTRY_PAGE_KEYBOARD,
 )
 from src.common.types import HandlerGroupType
 
@@ -29,7 +29,9 @@ class WikiHandler:
     messages = ["📖Справочник", "❌Отменить"]
 
     def __init__(self, folder_path: str):
-        self.folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), folder_path)
+        self.folder_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), folder_path
+        )
         self.commands = WikiHandler.commands
         self.messages = WikiHandler.messages
 
@@ -39,20 +41,27 @@ class WikiHandler:
         website.parse(folder_path)
         # Adding the first page to website
         entry_page = Page(
-            ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD, None, STATE,
-            BROWSER_HISTORY_NAME
+            ENTRY_PAGE_NAME,
+            ENTRY_PAGE_TEXT,
+            ENTRY_PAGE_MESSAGES,
+            ENTRY_PAGE_KEYBOARD,
+            None,
+            STATE,
+            BROWSER_HISTORY_NAME,
         )
         website.add_page(ENTRY_PAGE_NAME, entry_page, wiki_callback)
 
         self.conversation_handler = ConversationHandler(
             entry_points=[
                 CommandHandler(self.commands[0], wiki),
-                MessageHandler(filters.Regex(fr"^({self.messages[0]})$"), wiki),
+                MessageHandler(filters.Regex(rf"^({self.messages[0]})$"), wiki),
             ],
             states=website.state,
             fallbacks=[
                 CommandHandler(self.commands[1], cancel_command),
-                MessageHandler(filters.Regex(fr"^({self.messages[1]})$"), cancel_command),
+                MessageHandler(
+                    filters.Regex(rf"^({self.messages[1]})$"), cancel_command
+                ),
             ],
             allow_reentry=True,
             conversation_timeout=15,

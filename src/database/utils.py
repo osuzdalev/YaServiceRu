@@ -180,7 +180,9 @@ def get_all_contractor_id(db_auth: dict) -> List:
         return contractor_ids
 
 
-def update_order_contractor_id(order_id: int, new_contractor_id: int, db_auth: dict) -> None:
+def update_order_contractor_id(
+    order_id: int, new_contractor_id: int, db_auth: dict
+) -> None:
     logger_tl_db.debug("update_order_ContractID()")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
@@ -205,7 +207,9 @@ def insert_assign(
         conn.commit()
 
 
-def check_assign(old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict) -> bool:
+def check_assign(
+    old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict
+) -> bool:
     logger_tl_db.debug("check_assign()")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()

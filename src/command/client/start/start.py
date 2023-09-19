@@ -15,7 +15,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Needs to be used first after every reboot of the Bot."""
     # Get the name of the current function
     user = update.message.from_user
-    logger_start.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+    logger_start.info(
+        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+    )
 
     context.user_data["in_conversation"] = ""
     context.user_data["Device_Context"] = []
@@ -24,4 +26,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "Добро пожаловать!", reply_markup=DEFAULT_CLIENT_MARKUP
     )
     # Send introduction video
-    await update.message.reply_video(DataReader(context.bot_data["config"]["name"]).start.get_introduction_video())
+    await update.message.reply_video(
+        DataReader(context.bot_data["config"]["name"]).start.get_introduction_video()
+    )

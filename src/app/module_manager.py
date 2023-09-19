@@ -11,8 +11,7 @@ class ModuleManager:
         all_commands = []
         all_messages = []
         for module_name, module_handler in self.tg_modules.items():
-            all_commands.extend(getattr(module_handler, 'commands', []))
-            all_messages.extend(getattr(module_handler, 'messages', []))
+            all_commands.extend(getattr(module_handler, "commands", []))
+            all_messages.extend(getattr(module_handler, "messages", []))
 
         return all_commands, all_messages
-

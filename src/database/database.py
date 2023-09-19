@@ -44,7 +44,9 @@ async def collect_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     # Write to database
     if user and message:
         db_auth = await get_postgres(update, context)
-        tldb.insert_new_user(user.id, user.username, user.first_name, user.last_name, db_auth)
+        tldb.insert_new_user(
+            user.id, user.username, user.first_name, user.last_name, db_auth
+        )
         tldb.insert_message(message.message_id, user.id, message.text, db_auth)
     else:
         logger_data_collector.info("Update cannot be collected")

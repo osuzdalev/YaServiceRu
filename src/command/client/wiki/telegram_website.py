@@ -18,14 +18,14 @@ YamlLoader.add_constructor("!include", YamlLoader.include)
 
 class Page:
     def __init__(
-            self,
-            name: str,
-            title: str,
-            messages: dict,
-            keyboard: List[List],
-            invoice=None,
-            return_state=None,
-            browser_history_name=None,
+        self,
+        name: str,
+        title: str,
+        messages: dict,
+        keyboard: List[List],
+        invoice=None,
+        return_state=None,
+        browser_history_name=None,
     ):
         self.name = name
         self.title = title
@@ -48,7 +48,7 @@ class Page:
             )
 
     async def handler_callback(
-            self, update: Update, context: ContextTypes.DEFAULT_TYPE
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> str:
         query = update.callback_query
         await query.answer()
@@ -95,9 +95,9 @@ class Page:
         return self.return_state
 
     async def invoice_handler_callback(
-            self,
-            update: Update,
-            context: ContextTypes.DEFAULT_TYPE,
+        self,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
     ) -> None:
         """Sends an invoice without shipping-payment."""
         query = update.callback_query
@@ -136,7 +136,9 @@ class Page:
             title,
             description,
             payload,
-            context.bot_data["config"]["yaserviceru"]["secret"]["token_payment_provider"],
+            context.bot_data["config"]["yaserviceru"]["secret"][
+                "token_payment_provider"
+            ],
             currency,
             prices,
         )
@@ -198,9 +200,13 @@ class Website:
 
             self.state[self.state_name].extend(self.pages[name].handlers)
 
-    async def cancel_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    async def cancel_callback(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> int:
         user = update.effective_user
-        logger_website.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+        logger_website.info(
+            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+        )
 
         query = update.callback_query
         await query.answer()
@@ -213,14 +219,18 @@ class Website:
             CallbackQueryHandler(self.cancel_callback, pattern=CANCEL)
         )
 
-    async def back_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+    async def back_callback(
+        self, update: Update, context: ContextTypes.DEFAULT_TYPE
+    ) -> str:
         """
         A callback function implementing the '<- go back' back arrow equivalent in internet browsers.
         Catches the 'BACK' callback data, determines what was the previous page message the client was on,
         and calls the appropriate callback function. Updates the browsing history accordingly.
         """
         user = update.effective_user
-        logger_website.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+        logger_website.info(
+            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+        )
 
         query = update.callback_query
         await query.answer()

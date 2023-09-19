@@ -39,7 +39,9 @@ class StartReader(DataReader):
 
 
 class VectorDatabaseReader(DataReader):
-    def __init__(self, config: str = None, file_path: str = "data/vector_database/data.yaml"):
+    def __init__(
+        self, config: str = None, file_path: str = "data/vector_database/data.yaml"
+    ):
         super().__init__(config, file_path)
 
     def get_filters(self):

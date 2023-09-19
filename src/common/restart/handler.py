@@ -1,6 +1,4 @@
-from telegram.ext import (
-    CommandHandler
-)
+from telegram.ext import CommandHandler
 
 from .restart import restart
 from src.common.types import HandlerGroupType
@@ -15,6 +13,4 @@ class RestartHandler:
         self.restart_handler = CommandHandler(self.commands[0], restart)
 
     def get_handlers(self):
-        return {
-            HandlerGroupType.MESSAGE_COLLECTION.value: [self.restart_handler]
-        }
+        return {HandlerGroupType.MESSAGE_COLLECTION.value: [self.restart_handler]}

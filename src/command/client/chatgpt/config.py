@@ -19,7 +19,9 @@ class Model:
     max_conversation_tokens: int = 4096
     # Amount of tokens in a conversation to at least get a minimum response
     limit_conversation_tokens: int = max_conversation_tokens - max_response_tokens
-    instructions_tokens: int = num_tokens_from_string(data_reader.get_system_instructions(), name)
+    instructions_tokens: int = num_tokens_from_string(
+        data_reader.get_system_instructions(), name
+    )
     max_sum_response_tokens: int = free_prompt_limit * max_response_tokens
     # max size prompt to at least get one answer
     max_prompt_tokens: int = (

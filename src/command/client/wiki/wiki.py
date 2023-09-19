@@ -13,7 +13,7 @@ from .constants import (
     BROWSER_HISTORY_NAME,
     ENTRY_PAGE_NAME,
     ENTRY_PAGE_TEXT,
-    STATE
+    STATE,
 )
 
 logger_wiki = logging.getLogger(__name__)
@@ -25,7 +25,9 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     This Conversation first needs to check the user 'in_conversation flag' before it can start, otherwise it will ask
     the customer to first close the previous one."""
     user = update.message.from_user
-    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+    logger_wiki.info(
+        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+    )
     # Context history for the user's session
     context.user_data["Device_Context"] = []
     context.user_data["Annexe_Messages"] = []
@@ -52,7 +54,9 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
     """A callback function which has the same output as the wiki command. Necessary if the client wants to browse back
     to the first page of the wiki"""
     user = update.message.from_user
-    logger_wiki.info(f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}")
+    logger_wiki.info(
+        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
+    )
     context.user_data[BROWSER_HISTORY_NAME].append(ENTRY_PAGE_NAME)
 
     query = update.callback_query
