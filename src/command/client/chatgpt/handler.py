@@ -5,7 +5,6 @@ from telegram.ext import (
     PreCheckoutQueryHandler,
 )
 
-from src.common.global_fallback.config import ignored_texts_re
 from src.command.client.chatgpt.config import ChatGPTConfig
 from src.command.client.chatgpt.callback.handler import ChatGptCallbackHandler
 
