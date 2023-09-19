@@ -1,6 +1,6 @@
-from src.app.bot_launcher import BotLauncher
-from src.app.bot_config_manager import BotConfigurationManager
-from src.app.module_manager import ModuleManager
+from src import BotLauncher
+from src import BotConfigurationManager
+from src import ModuleManager
 
 
 if __name__ == "__main__":

@@ -1,46 +1,4 @@
-# command
-start:
-  handler_name: StartHandler
-  location: src.command.client.start.handler
-  command:
-    - "start"
-
-wiki:
-  handler_name: WikiHandler
-  location: src.command.client.wiki.handler
-  command:
-    - "wiki"
-    - "cancel"
-  message:
-    - "📖Справочник"
-    - "❌Отменить"
-
-request:
-  handler_name: RequestHandler
-  location: src.command.client.request.handler
-  command:
-    - "request"
-  message:
-    - "🤓Специалист"
-    - "❌Отменить"
-
-# common
-error_logging:
-  handler_name: ErrorHandler
-  location: src.common.error_logging.handler
-
-global_fallback:
-  handler_name: GlobalFallbackHandler
-  location: src.common.global_fallback.handler
-
-# database
-database:
-  handler_name: CollectorHandler
-  location: src.database.handler
-
 vector_database:
-  handler_name: VectorDatabase
-  location: src.vector_database.vector_database
   sentence_transformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
   semantic_threshold: 0.75
   query_limit: 10

@@ -7,7 +7,7 @@ from src.common.types import HandlerGroupType
 
 
 class StartHandler:
-    message = ["message"]
+    command = ["start"]
 
     def __init__(self, commands=None, messages=None):
         self.commands = commands if commands else []

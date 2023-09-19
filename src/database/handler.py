@@ -7,10 +7,10 @@ from telegram.ext import (
 )
 
 from src.common.types import HandlerGroupType
-from .collector import collect_data, collect_phone_number, user_status
+from .database import collect_data, collect_phone_number, user_status
 
 
-class CollectorHandler:
+class DatabaseHandler:
     def __init__(self):
         self.data_collection_handler = TypeHandler(Update, collect_data)
         # TODO

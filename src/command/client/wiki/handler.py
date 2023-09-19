@@ -12,17 +12,18 @@ from src.command.client.wiki.wiki import (
     cancel_command,
 )
 from src.command.client.wiki.telegram_website import Website, Page
-from src.command.client.wiki.config import *
+from . import *
 from src.common.types import HandlerGroupType
 
 FULL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), DATA_PATH)
-entry_page = Page(
-    ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD, None, STATE, BROWSER_HISTORY_NAME
-)
 
 
 class WikiHandler:
-    def __init__(self, commands=None, messages=None):
+    command = ["wiki", "cancel"]
+    message = ["📖Справочник", "❌Отменить"]
+
+    def __init__(self, folder_path: str, commands=None, messages=None):
+        self.folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), folder_path)
         self.commands = commands if commands else []
         self.messages = messages if messages else []
 
@@ -31,6 +32,10 @@ class WikiHandler:
         # Parse the yaml file
         website.parse(FULL_PATH)
         # Adding the first page to website
+        entry_page = Page(
+            ENTRY_PAGE_NAME, ENTRY_PAGE_TEXT, ENTRY_PAGE_MESSAGES, ENTRY_PAGE_KEYBOARD, None, STATE,
+            BROWSER_HISTORY_NAME
+        )
         website.add_page(ENTRY_PAGE_NAME, entry_page, wiki_callback)
 
         self.conversation_handler = ConversationHandler(

@@ -8,7 +8,7 @@ from telegram.ext import (
     ConversationHandler,
 )
 
-from src.command.client.wiki.config import *
+from . import *
 
 logger_wiki = logging.getLogger(__name__)
 

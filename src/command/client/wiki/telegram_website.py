@@ -8,12 +8,12 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, Labeled
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CallbackQueryHandler, ConversationHandler
 
-from src.common.yaml_loader import Loader
-from src.command.client.wiki.config import BACK, CANCEL
+from src.common.yaml_loader import YamlLoader
+from . import BACK, CANCEL
 
 logger_website = logging.getLogger(__name__)
 
-Loader.add_constructor("!include", Loader.include)
+YamlLoader.add_constructor("!include", YamlLoader.include)
 
 
 class Page:

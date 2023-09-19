@@ -14,6 +14,9 @@ from src.common.types import HandlerGroupType
 
 
 class RequestHandler:
+    command = ["request"]
+    message = ["🤓Специалист", "❌Отменить"]
+
     def __init__(self, commands=None, messages=None):
         self.commands = commands if commands else []
         self.messages = messages if messages else []
