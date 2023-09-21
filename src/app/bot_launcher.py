@@ -9,7 +9,6 @@ from telegram.warnings import PTBUserWarning
 
 from .bot_config_manager import BotConfigurationManager
 from .module_manager import ModuleManager
-from src.command.client.chatgpt.config import Model
 
 # from src.command.center import orders
 # from contractor import assign, complete, command
@@ -27,28 +26,24 @@ class BotLauncher:
         self.log_level = log_level
 
     def add_tg_module_handlers(self, application):
-        commands, messages = self.module_manager.get_tg_commands_messages()
-        for module_name, module_handler in self.module_manager.tg_modules.items():
-            if module_name == "error_logging":
-                application.add_error_handler(module_handler().get_handler())
-            elif module_name == "global_fallback":
-                global_fallback = module_handler(commands, messages)
-                application.add_handlers(handlers=global_fallback.get_handlers())
-            elif module_name == "prompt_validator":
-                prompt_validator = module_handler(
-                    Model(),
-                    self.module_manager.modules["vector_database"],
-                    global_fallback.ignore_messages_re,
-                )
-                application.add_handlers(handlers=prompt_validator.get_handlers())
-            elif module_name == "wiki":
-                application.add_handlers(
-                    handlers=module_handler(
-                        self.module_manager.wiki_folder_path
-                    ).get_handlers()
-                )
-            else:
-                application.add_handlers(handlers=module_handler().get_handlers())
+        """
+        Adds Telegram module handlers to the given application.
+
+        This method fetches the prepared handlers from the ModuleManager and appropriately adds
+        them to the application. It handles the addition of normal handlers as well as the special
+        error handler.
+
+        Parameters:
+        - application (object): The target application to which the handlers will be added.
+
+        Returns:
+        - None
+        """
+        handlers, error_handler = self.module_manager.get_prepped_tg_module_handlers()
+
+        application.add_error_handler(error_handler)
+        for handler in handlers:
+            application.add_handlers(handlers=handler)
 
     def setup_logging(self):
         logging.basicConfig(

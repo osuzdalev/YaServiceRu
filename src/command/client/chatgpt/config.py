@@ -8,7 +8,7 @@ data_reader = ChatGPTDataReader("test")
 
 
 @dataclass
-class Model:
+class ChatGPTModelConfig:
     name: str = "gpt-3.5-turbo"
     temperature: float = 0.6
     max_response_tokens: int = 350
@@ -33,7 +33,7 @@ class Model:
 
 
 @dataclass
-class Messages:
+class ChatGPTMessagesConfig:
     confirm_payment: str = "CONFIRM_CHATGPT_PAYMENT"
     max_messages: str = f"""Вы достигли лимита бесплатного взаимодействия с нашим LLM.
     Если вы хотите продолжить получать помощь от нашего LLM,
@@ -48,13 +48,13 @@ class Messages:
 
 
 @dataclass
-class CheckoutVariables:
+class ChatGPTCheckoutVariables:
     extended_payload: str = "GPT_extended_payload"
     extended_label: str = "YaService-GPT extension"
 
 
 @dataclass
 class ChatGPTConfig:
-    model: Model = Model()
-    messages: Messages = Messages()
-    checkout_variables: CheckoutVariables = CheckoutVariables()
+    model: ChatGPTModelConfig = ChatGPTModelConfig()
+    messages: ChatGPTMessagesConfig = ChatGPTMessagesConfig()
+    checkout_variables: ChatGPTCheckoutVariables = ChatGPTCheckoutVariables()
