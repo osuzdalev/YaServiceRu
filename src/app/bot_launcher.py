@@ -39,11 +39,11 @@ class BotLauncher:
         Returns:
         - None
         """
-        handlers, error_handler = self.module_manager.get_prepped_tg_module_handlers()
+        handlers, error_handler = self.module_manager.get_prepped_tg_module_objects()
 
-        application.add_error_handler(error_handler)
+        application.add_error_handler(error_handler.get_handler())
         for handler in handlers:
-            application.add_handlers(handlers=handler)
+            application.add_handlers(handlers=handler.get_handlers())
 
     def setup_logging(self):
         logging.basicConfig(

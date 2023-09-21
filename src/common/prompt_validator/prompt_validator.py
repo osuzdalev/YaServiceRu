@@ -3,16 +3,16 @@ import logging
 from typing import List, Tuple, Dict
 
 from telegram import Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, ApplicationHandlerStop
 
 from src.common.helpers import num_tokens_from_string
 
 logger_prompt_validator = logging.getLogger(__name__)
 
 
-async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
+async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Checks if the prompt is valid in three steps:
-    1. Check if the user is in a conversation
+    1. Check if the ChatGPT canal is open
     2. Check if the prompt is within the token limit
     3. Check if the prompt is semantically close enough to the app's purpose"""
     user = update.effective_user
@@ -22,9 +22,9 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     if not context.user_data.get("GPT_active", False):
         await update.message.reply_text(
-            "Похоже, вы не начали чат. Для этого используйте команду '/chat'"
+            "Похоже, вы не начали чат. Для этого используйте команду /chat"
         )
-        return False
+        raise ApplicationHandlerStop
 
     prompt = update.effective_message.text
     prompt_size_check, prompt_tokens = check_prompt_tokens(prompt)
@@ -37,7 +37,7 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         logger_prompt_validator.info(
             f"({user.id}, {user.name}, {user.first_name}) - prompt too long"
         )
-        return False
+        raise ApplicationHandlerStop
 
     if not check_prompt_semantic(prompt):
         await update.message.reply_text(
@@ -45,9 +45,9 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             "Пожалуйста, задайте вопрос, связанный с ПО компьютеров, смартфонов, планшетов "
             "и подобных устройств."
         )
-        return False
+        raise ApplicationHandlerStop
 
-    return True
+    return
 
 
 def check_conversation_tokens(

@@ -14,7 +14,6 @@ from src.common.types import HandlerGroupType
 
 
 class RequestHandler:
-    tg = True
     commands = ["request"]
     messages = ["🤓Специалист", "❌Отменить"]
 

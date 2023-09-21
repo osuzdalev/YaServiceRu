@@ -3,14 +3,12 @@ from telegram.ext import (
     filters,
 )
 
-from src.common.global_fallback.config import unknown_command
+from src.common.global_fallback.unknown_command import unknown_command
 
 from src.common.types import HandlerGroupType
 
 
 class GlobalFallbackHandler:
-    tg = True
-
     def __init__(self, commands=None, messages=None):
         self.commands = commands if commands else []
         self.messages = messages if messages else []

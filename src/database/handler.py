@@ -11,8 +11,6 @@ from .database import collect_data, collect_phone_number, user_status
 
 
 class DatabaseHandler:
-    tg = True
-
     def __init__(self):
         self.data_collection_handler = TypeHandler(Update, collect_data)
         # TODO
@@ -21,5 +19,5 @@ class DatabaseHandler:
 
     def get_handlers(self):
         return {
-            HandlerGroupType.MESSAGE_COLLECTION.value: [self.data_collection_handler]
+            HandlerGroupType.DB_MESSAGE_COLLECTION.value: [self.data_collection_handler]
         }

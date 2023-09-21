@@ -5,7 +5,6 @@ from src.common.types import HandlerGroupType
 
 
 class RestartHandler:
-    tg = True
     commands = ["restart"]
 
     def __init__(self):
@@ -13,4 +12,4 @@ class RestartHandler:
         self.restart_handler = CommandHandler(self.commands[0], restart)
 
     def get_handlers(self):
-        return {HandlerGroupType.MESSAGE_COLLECTION.value: [self.restart_handler]}
+        return {HandlerGroupType.RESTART.value: [self.restart_handler]}

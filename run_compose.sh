@@ -33,3 +33,5 @@ export APP_PERSISTENCE
 docker-compose up -d
 
 echo "Docker containers started successfully!"
+
+# sh run_compose.sh ./config/app/dev.yaml

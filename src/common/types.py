@@ -2,9 +2,9 @@ from enum import Enum
 
 
 class HandlerGroupType(Enum):
-    MESSAGE_COLLECTION = -3
-    USER_STATUS_COLLECTION = -2
-    PHONE_COLLECTION = -1
+    DB_MESSAGE_COLLECTION = -3
+    RESTART = -2
+    PROMPT_VALIDATION = -1
     CLIENT_BASIC = 0
     CLIENT_WIKI = 1
     CLIENT_PAY = 2

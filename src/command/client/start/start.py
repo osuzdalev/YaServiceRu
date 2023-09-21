@@ -5,7 +5,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.common.markups import DEFAULT_CLIENT_MARKUP
-from src.app.data_reader import DataReader
+from src.app.data_reader import StartReader
 
 
 logger_start = logging.getLogger(__name__)
@@ -27,5 +27,5 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
     # Send introduction video
     await update.message.reply_video(
-        DataReader(context.bot_data["config"]["name"]).start.get_introduction_video()
+        StartReader(context.bot_data["config"]["name"]).get_introduction_video()
     )

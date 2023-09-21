@@ -29,20 +29,16 @@ class ModuleManager:
 
         return all_commands, all_messages
 
-    def get_prepped_tg_module_handlers(self) -> Tuple[List, Any]:
+    def get_prepped_tg_module_objects(self) -> Tuple[List, Any]:
         """
-        Prepares and returns the handlers for Telegram modules based on their configuration.
+        Prepares and returns the instances for Telegram modules based on their configuration.
 
-        For the majority of the modules, this method instantiates the handlers and prepares them
+        For the majority of the modules, this method instantiates the instances and prepares them
         for use with the given application. Specifically, it handles special cases like the
         `error_logging` module differently from others.
 
-        Parameters:
-        - global_fallback_ignore_messages_re (str): Regular expression to ignore messages for global fallback.
-        - vector_database_model (Model): The model to be used with the `prompt_validator` module.
-
         Returns:
-        - tuple: A tuple containing a list of normal handlers and the special error handler.
+        - tuple: A tuple containing a list of normal instances and the special error handler.
         """
         handlers = []
         error_handler = None
@@ -50,20 +46,20 @@ class ModuleManager:
 
         for module_name, module_handler in self.tg_modules.items():
             if module_name == "error_logging":
-                error_handler = module_handler().get_handler()
+                error_handler = module_handler()
             elif module_name == "global_fallback":
                 global_fallback = module_handler(commands, messages)
-                handlers.extend(global_fallback.get_handlers())
+                handlers.insert(0, global_fallback)
             elif module_name == "prompt_validator":
                 prompt_validator = module_handler(
                     ChatGPTModelConfig(),
                     self.modules["vector_database"],
                     global_fallback.ignore_messages_re,
                 )
-                handlers.extend(prompt_validator.get_handlers())
+                handlers.append(prompt_validator)
             elif module_name == "wiki":
-                handlers.extend(module_handler(self.wiki_folder_path).get_handlers())
+                handlers.append(module_handler(self.wiki_folder_path))
             else:
-                handlers.extend(module_handler().get_handlers())
+                handlers.append(module_handler())
 
         return handlers, error_handler

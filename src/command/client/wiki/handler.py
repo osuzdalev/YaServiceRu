@@ -24,7 +24,6 @@ from src.common.types import HandlerGroupType
 
 
 class WikiHandler:
-    tg = True
     commands = ["wiki", "cancel"]
     messages = ["📖Справочник", "❌Отменить"]
 

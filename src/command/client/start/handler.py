@@ -7,7 +7,6 @@ from src.common.types import HandlerGroupType
 
 
 class StartHandler:
-    tg = True
     commands = ["start"]
 
     def __init__(self):
