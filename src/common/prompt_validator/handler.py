@@ -8,13 +8,16 @@ from .prompt_validator import validate_prompt
 
 
 class PromptValidatorHandler:
-    def __init__(self, chatgpt_config, weaviate_client, ignore_messages_re):
-        self.chatgpt_config = chatgpt_config
-        self.weaviate_client = weaviate_client
+    def __init__(self, chatgpt_model_config, vector_db_client, ignore_messages_re):
+        self.chatgpt_model_config = chatgpt_model_config
+        self.vector_db_client = vector_db_client
 
         self.ignore_messages_re = ignore_messages_re
         self.validate_prompt_handler = MessageHandler(
-            ~filters.COMMAND & ~filters.Regex(self.ignore_messages_re), validate_prompt
+            ~filters.COMMAND & ~filters.Regex(self.ignore_messages_re),
+            lambda u, c: validate_prompt(
+                u, c, self.chatgpt_model_config, self.vector_db_client
+            ),
         )
 
     def get_handlers(self):

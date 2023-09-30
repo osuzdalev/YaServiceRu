@@ -11,5 +11,5 @@ __all__ = [
     "ErrorHandler",
     "GlobalFallbackHandler",
     "PromptValidatorHandler",
-    "RestartHandler"
+    "RestartHandler",
 ]

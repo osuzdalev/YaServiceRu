@@ -1,5 +1,3 @@
 from .handler import StartHandler
 
-__all__ = [
-    "StartHandler"
-]
+__all__ = ["StartHandler"]

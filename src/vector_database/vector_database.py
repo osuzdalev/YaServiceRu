@@ -1,5 +1,7 @@
+import inspect
+import json
 import logging
-import pprint
+from pprint import pprint
 from typing import List, Dict, Union
 
 from sentence_transformers import SentenceTransformer
@@ -12,6 +14,9 @@ logger_vector_db = logging.getLogger(__name__)
 
 
 def get_available_device():
+    logger_vector_db.info(
+        f"{inspect.currentframe().f_code.co_name}"
+    )
     if torch.cuda.is_available():
         return torch.device("cuda")
     elif torch.backends.mps.is_available():
@@ -34,48 +39,38 @@ class VectorDatabase:
         self.query_limit = query_limit
         self.device = get_available_device()
 
-        # Ensure the Weaviate instance is ready
+        # Ensure the vector_db_client instance is ready
         if not self.vector_db_client.is_ready():
-            raise Exception("Weaviate is not ready!")
+            raise Exception("vector_db_client is not ready!")
 
-    def get_schema(self) -> Dict:
-        return self.vector_db_client.schema.get()
-
-    def delete_all(self) -> None:
-        print(
-            "Are you sure you want to delete the entire schema? This action cannot be undone. (y/n)"
+    def populate_vector_database(
+        self, classes: Dict[str, Dict], filters: Dict[str, List]
+    ) -> None:
+        logger_vector_db.info(
+            f"{inspect.currentframe().f_code.co_name}"
         )
 
-        confirmation = input().lower()
-        if confirmation == "y":
-            self.vector_db_client.schema.delete_all()
-            print("Entire schema deleted.")
-        else:
-            print("Schema not deleted.")
+        self.delete_all()
+        schema = self.get_schema()
 
-    def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
-        try:
-            self.vector_db_client.schema.create_class(class_config)
-            logger_vector_db.info(f"Class '{class_config['class']}' created.")
-        except Exception as e:
-            logger_vector_db.info(
-                f"Error creating class '{class_config['class']}': {e}"
-            )
+        print("classes to be written to vector_db")
+        pprint(classes.items())
 
-    def delete_class(self, class_name: str) -> None:
-        print(
-            f"Are you sure you want to delete the '{class_name}' class? This action cannot be undone. (y/n)"
-        )
+        for class_name, class_config in classes.items():
+            if class_name not in schema:
+                self.create_class(class_config)
 
-        confirmation = input().lower()
-        if confirmation == "y":
-            self.vector_db_client.schema.delete_class(class_name)
-            logger_vector_db.info(f"Class '{class_name}' deleted.")
-        else:
-            logger_vector_db.info(f"Class '{class_name}' not deleted.")
+        # Read filters from yaml and add them to vector_db
+        for filter_name, filter_lst in filters.items():
+            for filter_str in filter_lst:
+                filter_object = {"content": filter_str}
+                self.write_data_object(filter_object, filter_name)
 
-    def write_data_object(self, data: Dict, class_name: str) -> None:
-        self.vector_db_client.data_object.create(data_object=data, class_name=class_name)
+        # get the schema
+        schema = self.get_schema()
+
+        # print the schema
+        pprint(schema)
 
     def vector_query(
         self,
@@ -84,6 +79,10 @@ class VectorDatabase:
         certainty: float = 0.75,
         query_limit: int = 10,
     ) -> List[Dict[str, Union[str, float]]]:
+        logger_vector_db.info(
+            f"{inspect.currentframe().f_code.co_name}"
+        )
+
         nearVector = {"vector": vector, "certainty": certainty}
 
         properties = ["content"]
@@ -96,25 +95,38 @@ class VectorDatabase:
             .do()
         )
 
+        print(json.dumps(result, indent=4))
+
         if "errors" in result:
             raise Exception(result["errors"][0]["message"])
 
-        return result["data_reader"]["Get"][collection_name]
+        return result["data"]["Get"][collection_name]
 
-    def populate_vector_database(
-        self, classes: Dict[str, Dict], filters: Dict[str, List]
-    ) -> None:
-        self.delete_all()
+    def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
+        logger_vector_db.info(
+            f"{inspect.currentframe().f_code.co_name}"
+        )
 
-        # Check if the classes already exist in the schema
-        schema = self.get_schema()
+        try:
+            self.vector_db_client.schema.create_class(class_config)
+            logger_vector_db.info(f"Class '{class_config['class']}' created.")
+        except Exception as e:
+            logger_vector_db.info(
+                f"Error creating class '{class_config['class']}': {e}"
+            )
 
-        for class_name, class_config in classes.items():
-            if class_name not in schema:
-                self.create_class(class_config)
+    def get_schema(self) -> Dict:
+        return self.vector_db_client.schema.get()
 
-        # Read filters from yaml and add them to Weaviate
-        for filter_name, filter_lst in filters.items():
-            for filter in filter_lst:
-                filter_object = {"content": filter}
-                self.write_data_object(filter_object, filter_name)
+    def delete_all(self) -> None:
+        self.vector_db_client.schema.delete_all()
+        print("Entire schema deleted.")
+
+    def delete_class(self, class_name: str) -> None:
+        self.vector_db_client.schema.delete_class(class_name)
+        logger_vector_db.info(f"Class '{class_name}' deleted.")
+
+    def write_data_object(self, data: Dict, class_name: str) -> None:
+        self.vector_db_client.data_object.create(
+            data_object=data, class_name=class_name
+        )

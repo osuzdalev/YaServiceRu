@@ -1,16 +1,16 @@
 version: '3.4'
 services:
-  database:
-    image: "postgres:15.3"
-    restart: unless-stopped
-    environment:
-      - POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD} # for the docker, in the code standard naming "DATABASE_*"
-    ports:
-      - "${DATABASE_PORT}:${DATABASE_PORT}"
-    volumes:
-      - ${DATABASE_DATA}:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
-      - ${DATABASE_CONFIG}:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
-    command: postgres -c config_file=/etc/postgresql/postgres.conf
+#  database:
+#    image: "postgres:15.3"
+#    restart: unless-stopped
+#    environment:
+#      - POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD} # for the docker, in the code standard naming "DATABASE_*"
+#    ports:
+#      - "${DATABASE_PORT}:${DATABASE_PORT}"
+#    volumes:
+#      - ${DATABASE_DATA}:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
+#      - ${DATABASE_CONFIG}:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
+#    command: postgres -c config_file=/etc/postgresql/postgres.conf
 
   weaviate:
     image: semitechnologies/weaviate:1.9.1

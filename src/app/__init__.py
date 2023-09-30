@@ -2,8 +2,4 @@ from .bot_config_manager import BotConfigurationManager
 from .bot_launcher import BotLauncher
 from .module_manager import ModuleManager
 
-__all__ = [
-    "BotConfigurationManager",
-    "BotLauncher",
-    "ModuleManager"
-]
+__all__ = ["BotConfigurationManager", "BotLauncher", "ModuleManager"]

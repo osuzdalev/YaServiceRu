@@ -10,7 +10,12 @@ from src.common.helpers import num_tokens_from_string
 logger_prompt_validator = logging.getLogger(__name__)
 
 
-async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def validate_prompt(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    chatgpt_model_config,
+    vector_db_client,
+) -> None:
     """
     Checks if the prompt is valid in three steps:
     1. Check if the ChatGPT canal is open
@@ -29,11 +34,11 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         raise ApplicationHandlerStop
 
     prompt = update.effective_message.text
-    prompt_size_check, prompt_tokens = check_prompt_tokens(prompt)
+    prompt_size_check, prompt_tokens = check_prompt_tokens(prompt, chatgpt_model_config)
     if not prompt_size_check:
         await update.message.reply_text(
             "Текст запроса слишком длинный: {} токенов (максимум {})".format(
-                prompt_tokens, chatgpt_config.model.max_prompt_tokens
+                prompt_tokens, chatgpt_model_config.max_prompt_tokens
             )
         )
         logger_prompt_validator.info(
@@ -41,7 +46,7 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         )
         raise ApplicationHandlerStop
 
-    if not check_prompt_semantic(prompt):
+    if not check_prompt_semantic(prompt, vector_db_client):
         await update.message.reply_text(
             "Извините, но ваш вопрос выходит за рамки моей компетенции.\n"
             "Пожалуйста, задайте вопрос, связанный с ПО компьютеров, смартфонов, планшетов "
@@ -53,29 +58,30 @@ async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 
 def check_conversation_tokens(
-    prompt: str, conversation: List[Dict]
+    prompt: str, conversation: List[Dict], chatgpt_model_config
 ) -> Tuple[bool, int]:
-    """Checks if the conversation size, including the provided prompt, is within the token limit.
+    """
+    Checks if the conversation size, including the provided prompt, is within the token limit.
     Accounts for the minimum response token size that needs to be left after processing the user's message.
     """
     logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
 
     # Calculate tokens
     conversation_tokens = sum(
-        num_tokens_from_string(message["content"], chatgpt_config.model.name)
+        num_tokens_from_string(message["content"], chatgpt_model_config.name)
         for message in conversation
-    ) + num_tokens_from_string(prompt, chatgpt_config.model.name)
+    ) + num_tokens_from_string(prompt, chatgpt_model_config.name)
     remaining_tokens = (
-        chatgpt_config.model.limit_conversation_tokens - conversation_tokens
+        chatgpt_model_config.limit_conversation_tokens - conversation_tokens
     )
 
-    if conversation_tokens < chatgpt_config.model.limit_conversation_tokens:
+    if conversation_tokens < chatgpt_model_config.limit_conversation_tokens:
         return True, remaining_tokens
     else:
         return False, conversation_tokens
 
 
-def check_prompt_tokens(prompt: str) -> Tuple[bool, int]:
+def check_prompt_tokens(prompt: str, chatgpt_model_config) -> Tuple[bool, int]:
     """
     Check if the message sent size is within bounds.
     Returns a tuple with a boolean and the amount of remaining tokens
@@ -83,33 +89,33 @@ def check_prompt_tokens(prompt: str) -> Tuple[bool, int]:
     logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
 
     # Calculate tokens
-    prompt_tokens = num_tokens_from_string(prompt, chatgpt_config.model.name)
-    remaining_tokens = chatgpt_config.model.max_prompt_tokens - prompt_tokens
+    prompt_tokens = num_tokens_from_string(prompt, chatgpt_model_config.name)
+    remaining_tokens = chatgpt_model_config.max_prompt_tokens - prompt_tokens
     logger_prompt_validator.info(f"PROMPT TOKEN SIZE: {prompt_tokens}")
 
     return (
         (True, remaining_tokens)
-        if prompt_tokens < chatgpt_config.model.max_prompt_tokens
+        if prompt_tokens < chatgpt_model_config.max_prompt_tokens
         else (False, prompt_tokens)
     )
 
 
-def check_prompt_semantic(prompt: str) -> bool:
+def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
     logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
 
     # Vector Query
     logger_prompt_validator.info(f"ENCODING PROMPT: {prompt}")
-    embeddings = weaviate_client.embedding_model.encode(prompt)
+    embeddings = vector_db_client.embedding_model.encode(prompt)
 
     # Retrieve English filters
     logger_prompt_validator.info("COMPARING TO ENGLISH FILTERS")
-    english_vector_query_result = weaviate_client.vector_query(
+    english_vector_query_result = vector_db_client.vector_query(
         "EnglishFilters", embeddings
     )
 
     # Retrieve Russian filters
     logger_prompt_validator.info("COMPARING TO RUSSIAN FILTERS")
-    russian_vector_query_result = weaviate_client.vector_query(
+    russian_vector_query_result = vector_db_client.vector_query(
         "RussianFilters", embeddings
     )
 
@@ -125,4 +131,4 @@ def check_prompt_semantic(prompt: str) -> bool:
     )
     average_certainty = total_certainty / len(combined_query_results)
 
-    return average_certainty >= weaviate_client.semantic_threshold
+    return average_certainty >= vector_db_client.semantic_threshold

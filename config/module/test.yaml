@@ -1,4 +1,5 @@
 vector_database:
+  api_url: http://localhost:8080
   sentence_transformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
   semantic_threshold: 0.75
   query_limit: 10

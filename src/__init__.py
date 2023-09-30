@@ -38,5 +38,5 @@ __all__ = [
     "YamlLoader",
     "HandlerGroupType",
     "VectorDatabase",
-    "DatabaseHandler"
+    "DatabaseHandler",
 ]

@@ -26,7 +26,10 @@ if __name__ == "__main__":
     }
     std_modules = {"vector_database": VectorDatabase}
     wiki_module_path = "data/command/wiki/data.yaml"
-    module_manager = ModuleManager(tg_modules, std_modules, wiki_module_path)
+    module_config = "config/module/test.yaml"
+    module_manager = ModuleManager(
+        tg_modules, std_modules, module_config, wiki_module_path
+    )
 
     bot_config_manager = BotConfigurationManager("config/app/dev.yaml")
 

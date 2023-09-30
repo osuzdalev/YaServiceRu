@@ -1,6 +1,10 @@
+import inspect
+import logging
 from pprint import pprint
-
+from typing import Dict
 import yaml
+
+logger_data_reader = logging.getLogger(__name__)
 
 
 class DataReader:
@@ -44,8 +48,14 @@ class VectorDatabaseReader(DataReader):
     ):
         super().__init__(config, file_path)
 
-    def get_filters(self):
+    def get_filters(self) -> Dict[str, Dict]:
+        logger_data_reader.info(
+            f"{inspect.currentframe().f_code.co_name}"
+        )
         return self.data.get("filters", {})
 
-    def get_classes(self):
+    def get_classes(self) -> Dict[str, Dict]:
+        logger_data_reader.info(
+            f"{inspect.currentframe().f_code.co_name}"
+        )
         return self.data.get("classes", {})
