@@ -11,10 +11,12 @@ logger_prompt_validator = logging.getLogger(__name__)
 
 
 async def validate_prompt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Checks if the prompt is valid in three steps:
+    """
+    Checks if the prompt is valid in three steps:
     1. Check if the ChatGPT canal is open
     2. Check if the prompt is within the token limit
-    3. Check if the prompt is semantically close enough to the app's purpose"""
+    3. Check if the prompt is semantically close enough to the app's purpose
+    """
     user = update.effective_user
     logger_prompt_validator.info(
         f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
@@ -67,16 +69,17 @@ def check_conversation_tokens(
         chatgpt_config.model.limit_conversation_tokens - conversation_tokens
     )
 
-    return (
-        (True, remaining_tokens)
-        if conversation_tokens < chatgpt_config.model.limit_conversation_tokens
-        else (False, conversation_tokens)
-    )
+    if conversation_tokens < chatgpt_config.model.limit_conversation_tokens:
+        return True, remaining_tokens
+    else:
+        return False, conversation_tokens
 
 
 def check_prompt_tokens(prompt: str) -> Tuple[bool, int]:
-    """Check if the message sent size is within bounds.
-    Returns a tuple with a boolean and the amount of remaining tokens"""
+    """
+    Check if the message sent size is within bounds.
+    Returns a tuple with a boolean and the amount of remaining tokens
+    """
     logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
 
     # Calculate tokens
@@ -122,7 +125,4 @@ def check_prompt_semantic(prompt: str) -> bool:
     )
     average_certainty = total_certainty / len(combined_query_results)
 
-    if average_certainty >= weaviate_client.semantic_threshold:
-        return True
-    else:
-        return False
+    return average_certainty >= weaviate_client.semantic_threshold

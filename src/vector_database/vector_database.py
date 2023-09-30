@@ -28,18 +28,18 @@ class VectorDatabase:
         semantic_threshold: float,
         query_limit: int,
     ):
-        self.client = weaviate.Client(api_url)
+        self.vector_db_client = weaviate.Client(api_url)
         self.embedding_model = SentenceTransformer(sentence_transformer)
         self.semantic_threshold = semantic_threshold
         self.query_limit = query_limit
         self.device = get_available_device()
 
         # Ensure the Weaviate instance is ready
-        if not self.client.is_ready():
+        if not self.vector_db_client.is_ready():
             raise Exception("Weaviate is not ready!")
 
     def get_schema(self) -> Dict:
-        return self.client.schema.get()
+        return self.vector_db_client.schema.get()
 
     def delete_all(self) -> None:
         print(
@@ -48,14 +48,14 @@ class VectorDatabase:
 
         confirmation = input().lower()
         if confirmation == "y":
-            self.client.schema.delete_all()
+            self.vector_db_client.schema.delete_all()
             print("Entire schema deleted.")
         else:
             print("Schema not deleted.")
 
     def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
         try:
-            self.client.schema.create_class(class_config)
+            self.vector_db_client.schema.create_class(class_config)
             logger_vector_db.info(f"Class '{class_config['class']}' created.")
         except Exception as e:
             logger_vector_db.info(
@@ -69,13 +69,13 @@ class VectorDatabase:
 
         confirmation = input().lower()
         if confirmation == "y":
-            self.client.schema.delete_class(class_name)
+            self.vector_db_client.schema.delete_class(class_name)
             logger_vector_db.info(f"Class '{class_name}' deleted.")
         else:
             logger_vector_db.info(f"Class '{class_name}' not deleted.")
 
     def write_data_object(self, data: Dict, class_name: str) -> None:
-        self.client.data_object.create(data_object=data, class_name=class_name)
+        self.vector_db_client.data_object.create(data_object=data, class_name=class_name)
 
     def vector_query(
         self,
@@ -89,7 +89,7 @@ class VectorDatabase:
         properties = ["content"]
 
         result = (
-            self.client.query.get(collection_name, properties)
+            self.vector_db_client.query.get(collection_name, properties)
             .with_near_vector(nearVector)
             .with_additional(["certainty"])
             .with_limit(query_limit)
@@ -104,7 +104,6 @@ class VectorDatabase:
     def populate_vector_database(
         self, classes: Dict[str, Dict], filters: Dict[str, List]
     ) -> None:
-        # Delete all
         self.delete_all()
 
         # Check if the classes already exist in the schema
