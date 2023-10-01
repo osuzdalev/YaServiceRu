@@ -4,14 +4,11 @@ data/app
 data/vector_database/embeddings
 data/vector_database/filters
 
-script/test
-script/util
+scripts/test
+scripts/util
 
 venv
-
 .env
 
 .gitignore
 README.md
-docker-compose.yml
-Dockerfile

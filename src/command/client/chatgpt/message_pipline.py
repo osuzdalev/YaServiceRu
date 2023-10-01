@@ -14,7 +14,7 @@ from typing import List, TypeVar, Generic, Dict, Any
 from telegram import Update
 from telegram.ext import ContextTypes, MessageHandler, filters
 
-from script.main import BotApp
+from scripts.main import BotApp
 from src.common.global_fallback.unknown_command import ignored_texts_re
 
 # TODO: It is need to think about how we are going to test such stuff,

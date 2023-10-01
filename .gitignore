@@ -5,8 +5,8 @@ data/database
 data/app
 data/vector_database/embeddings
 
-script/test
-script/util
+scripts/test
+scripts/util
 
 .DS_Store
 .idea
