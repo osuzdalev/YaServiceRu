@@ -16,6 +16,10 @@ from yaserviceru import (
 )
 
 if __name__ == "__main__":
+    # TODO move the module names into enumerations
+    # NOTE you could make the module name part of the class, and turn these
+    # dictionaries into lists. Then, inside the module manage, you can do
+    # if module.name == ModuleType.VECTOR_DATABASE
     tg_modules = {
         "global_fallback": GlobalFallbackHandler,
         "start": StartHandler,
@@ -27,7 +31,7 @@ if __name__ == "__main__":
         "error_logging": ErrorHandler,
     }
     std_modules = {"vector_database": VectorDatabase}
-    wiki_module_path = "data/command/wiki/data.yaml"
+    wiki_module_path = "data/user/wiki/data.yaml"
     module_config = "config/module/test.yaml"
     module_manager = ModuleManager(
         tg_modules, std_modules, module_config, wiki_module_path

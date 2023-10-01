@@ -2,7 +2,7 @@ from typing import Any, List, Dict, Tuple
 import yaml
 
 from yaserviceru.app.data_reader import VectorDatabaseReader
-from yaserviceru.command.client.chatgpt.config import ChatGPTModelConfig
+from yaserviceru.user.chatgpt import ChatGPTModelConfig
 
 
 class ModuleManager:
@@ -36,6 +36,14 @@ class ModuleManager:
         - dict: A dictionary containing instances of each standard module.
         """
         for module_name, module_class in self.std_modules.items():
+            # Use enumarations to compare (but you might not need to do this if you go for a different design)
+            #
+            # TODO Check if this makes sense; the module constructors differ a lot
+            #  Investigate implementing a generic module manager:
+            #  - the manager maintains some objects
+            #  - the modules have an init method
+            #  - the manager pass all data that a module might need
+            #  - the modules take care of initializing themselves
             if module_name == "vector_database":
                 vector_database_data_reader = VectorDatabaseReader("test")
                 vector_database_object = module_class(

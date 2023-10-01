@@ -14,9 +14,7 @@ logger_vector_db = logging.getLogger(__name__)
 
 
 def get_available_device():
-    logger_vector_db.info(
-        f"{inspect.currentframe().f_code.co_name}"
-    )
+    logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
     if torch.cuda.is_available():
         return torch.device("cuda")
     elif torch.backends.mps.is_available():
@@ -46,9 +44,7 @@ class VectorDatabase:
     def populate_vector_database(
         self, classes: Dict[str, Dict], filters: Dict[str, List]
     ) -> None:
-        logger_vector_db.info(
-            f"{inspect.currentframe().f_code.co_name}"
-        )
+        logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
 
         self.delete_all()
         schema = self.get_schema()
@@ -79,9 +75,7 @@ class VectorDatabase:
         certainty: float = 0.75,
         query_limit: int = 10,
     ) -> List[Dict[str, Union[str, float]]]:
-        logger_vector_db.info(
-            f"{inspect.currentframe().f_code.co_name}"
-        )
+        logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
 
         nearVector = {"vector": vector, "certainty": certainty}
 
@@ -103,9 +97,7 @@ class VectorDatabase:
         return result["data"]["Get"][collection_name]
 
     def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
-        logger_vector_db.info(
-            f"{inspect.currentframe().f_code.co_name}"
-        )
+        logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
 
         try:
             self.vector_db_client.schema.create_class(class_config)

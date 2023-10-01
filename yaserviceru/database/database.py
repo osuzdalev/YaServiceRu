@@ -66,20 +66,20 @@ def extract_user_and_message(
 ) -> Tuple[Optional[User], Optional[Message]]:
     """Extract user and message from the update."""
 
-    user = (
-        update.message.from_user
-        if update.message
-        else update.callback_query.from_user
-        if update.callback_query
-        else None
-    )
-    message = (
-        update.effective_message
-        if update.message
-        else update.callback_query.message
-        if update.callback_query
-        else None
-    )
+    user = None
+    if update.callback_query:
+        user = (
+            update.message.from_user
+            if update.message
+            else update.callback_query.from_user
+        )
+    message = None
+    if update.callback_query:
+        message = (
+            update.effective_message
+            if update.message
+            else update.callback_query.message
+        )
 
     return user, message
 

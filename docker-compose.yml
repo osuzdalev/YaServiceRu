@@ -10,7 +10,7 @@ services:
 #    volumes:
 #      - ${DATABASE_DATA}:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
 #      - ${DATABASE_CONFIG}:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
-#    command: postgres -c config_file=/etc/postgresql/postgres.conf
+#    user: postgres -c config_file=/etc/postgresql/postgres.conf
 
   weaviate:
     image: semitechnologies/weaviate:1.9.1

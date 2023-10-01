@@ -1,4 +1,4 @@
-data/command/chatgpt/test.txt
+data/user/chatgpt/test.txt
 data/database
 data/app
 data/vector_database/embeddings

@@ -1,11 +1,5 @@
-chatgpt:
-  handler_name: ChatGptHandler
-  location: yaserviceru.command.client.chatgpt.handler
-  command:
-    - "/chat"
-    - "/chat_stop"
-    - "/pay"
-  message:
-    - "🤖Чат с подержкой"
-    - "CONFIRM_CHATGPT_PAYMENT"
-    - "DECLINE_CHATGPT_PAYMENT"
+vector_database:
+  api_url: http://localhost:8080
+  sentence_transformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  semantic_threshold: 0.75
+  query_limit: 10

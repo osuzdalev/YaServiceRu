@@ -10,8 +10,8 @@ from telegram.warnings import PTBUserWarning
 from .bot_config_manager import BotConfigurationManager
 from .module_manager import ModuleManager
 
-# from yaserviceru.command.center import orders
-# from contractor import assign, complete, command
+# from yaserviceru.user.admin import orders
+# from contractor import assign, complete, user
 
 
 class BotLauncher:

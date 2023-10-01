@@ -9,6 +9,10 @@ from typing import List, Tuple
 logger_tl_db = logging.getLogger(__name__)
 
 
+# TODO Investigate using the database modeling library to interact with the database
+# See, for example, django: https://docs.djangoproject.com/en/4.2/topics/db/
+
+
 def create_db_connection(db_auth):
     return psycopg.connect(**db_auth)
 
@@ -218,7 +222,7 @@ def check_assign(
             (old_contractor_id, order_id, new_contractor_id),
         )
 
-        return True if result.fetchone() else False
+        return bool(result.fetchone())
 
 
 def insert_message(message_id: int, user_id: int, text: str, db_auth: dict) -> None:
@@ -245,7 +249,7 @@ def insert_message(message_id: int, user_id: int, text: str, db_auth: dict) -> N
 
             # Increment the message_id
             message_id += 1
-            print(
+            logger_tl_db.debug(
                 f"UniqueViolation occurred. Retrying with incremented message_id {message_id}"
             )
 
@@ -259,9 +263,9 @@ def insert_message(message_id: int, user_id: int, text: str, db_auth: dict) -> N
                 conn.commit()
             except Exception as ex:
                 # Handle or log any exception that occurred in the second attempt
-                print(f"An error occurred during retry: {ex}")
+                logger_tl_db.debug(f"An error occurred during retry: {ex}")
 
         except Exception as ex:
             # Handle or log any other exception
-            print(f"An unexpected error occurred: {ex}")
+            logger_tl_db.debug(f"An unexpected error occurred: {ex}")
             conn.rollback()

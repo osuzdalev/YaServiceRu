@@ -7,6 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 import tiktoken
 
+# TODO Look into this fix
 from yaserviceru import common as tldb
 
 logger_helpers = logging.getLogger(__name__)
@@ -30,14 +31,14 @@ async def check_order_id_exists(
 
 
 def clearance_contractor(user_id: int) -> bool:
-    """Verify if the user sending the command is a Contractor and has clearance"""
+    """Verify if the user sending the user is a Contractor and has clearance"""
     logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
     all_contractor_id = tldb.get_all_contractor_id()
     return user_id in all_contractor_id
 
 
 def clearance_center(user_id: int, tg_id_dev) -> bool:
-    """Verify if the user sending the command is an owner of a CenterID and has clearance"""
+    """Verify if the user sending the user is an owner of a CenterID and has clearance"""
     logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
     return user_id == int(tg_id_dev)
 

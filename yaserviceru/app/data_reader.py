@@ -23,7 +23,7 @@ class DataReader:
 
 
 class ChatGPTDataReader(DataReader):
-    def __init__(self, config: str, file_path: str = "data/command/chatgpt/data.yaml"):
+    def __init__(self, config: str, file_path: str = "data/user/chatgpt/data.yaml"):
         super().__init__(config, file_path)
 
     def get_system_instructions(self):
@@ -34,7 +34,7 @@ class ChatGPTDataReader(DataReader):
 
 
 class StartReader(DataReader):
-    def __init__(self, config: str, file_path: str = "data/command/start/data.yaml"):
+    def __init__(self, config: str, file_path: str = "data/user/start/data.yaml"):
         super().__init__(config, file_path)
 
     def get_introduction_video(self):
