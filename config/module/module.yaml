@@ -1,6 +1,6 @@
 chatgpt:
   handler_name: ChatGptHandler
-  location: src.command.client.chatgpt.handler
+  location: yaserviceru.command.client.chatgpt.handler
   command:
     - "/chat"
     - "/chat_stop"

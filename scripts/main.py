@@ -1,4 +1,4 @@
-from src import (
+from yaserviceru import (
     BotLauncher,
     BotConfigurationManager,
     ModuleManager,

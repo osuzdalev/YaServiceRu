@@ -10,13 +10,13 @@ COPY .. /usr/src/yaserviceru
 
 RUN python3 -m venv /yaserviceru_venv \
     && . /yaserviceru_venv/bin/activate \
-    && pip3 install --upgrade --no-cache-dir -r /usr/src/yaserviceru/requirements.txt
+    && pip3 install --upgrade --no-cache-dir -r /usr/yaserviceru/yaserviceru/requirements.txt
 
 # NOTE Workaround until the package is properly installed
 # TODO Configure a setup.py and update the dockerfile to install the package
 # See https://godatadriven.com/blog/a-practical-guide-to-using-setup-py/
 ENV PYTHONPATH="/usr/src/yaserviceru:$PYTHONPATH"
-RUN ln -s /usr/src/yaserviceru/scripts/main.py /usr/bin/yaserviceru
+RUN ln -s /usr/yaserviceru/yaserviceru/scripts/main.py /usr/bin/yaserviceru
 
 EXPOSE 80
 
