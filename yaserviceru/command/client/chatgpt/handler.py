@@ -7,8 +7,8 @@ from telegram.ext import (
 
 from yaserviceru.command.client.chatgpt.config import ChatGPTConfig
 from yaserviceru.command.client.chatgpt.callback.handler import ChatGptCallbackHandler
-
 from yaserviceru.common.types import HandlerGroupType
+
 from .types import ChatGptCallbackType
 
 

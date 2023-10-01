@@ -4,8 +4,8 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from yaserviceru.common.markups import DEFAULT_CLIENT_MARKUP
 from yaserviceru.app.data_reader import StartReader
+from yaserviceru.common.markups import DEFAULT_CLIENT_MARKUP
 
 
 logger_start = logging.getLogger(__name__)

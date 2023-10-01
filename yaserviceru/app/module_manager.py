@@ -1,8 +1,8 @@
 from typing import Any, List, Dict, Tuple
 import yaml
 
-from yaserviceru.command.client.chatgpt.config import ChatGPTModelConfig
 from yaserviceru.app.data_reader import VectorDatabaseReader
+from yaserviceru.command.client.chatgpt.config import ChatGPTModelConfig
 
 
 class ModuleManager:

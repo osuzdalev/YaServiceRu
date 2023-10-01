@@ -1,11 +1,7 @@
-from telegram.ext import (
-    MessageHandler,
-    filters,
-)
-
-from yaserviceru.common.global_fallback.unknown_command import unknown_command
+from telegram.ext import MessageHandler, filters
 
 from yaserviceru.common.types import HandlerGroupType
+from .unknown_command import unknown_command
 
 
 class GlobalFallbackHandler:

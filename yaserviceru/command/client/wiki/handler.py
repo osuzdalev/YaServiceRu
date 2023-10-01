@@ -1,17 +1,9 @@
 import os
 
-from telegram.ext import (
-    CommandHandler,
-    ConversationHandler,
-    MessageHandler,
-    filters,
-)
-from .wiki import (
-    wiki,
-    wiki_callback,
-    cancel_command,
-)
-from .telegram_website import Website, Page
+from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, filters
+
+from yaserviceru.common.types import HandlerGroupType
+
 from .constants import (
     STATE,
     BROWSER_HISTORY_NAME,
@@ -20,7 +12,9 @@ from .constants import (
     ENTRY_PAGE_MESSAGES,
     ENTRY_PAGE_KEYBOARD,
 )
-from yaserviceru.common.types import HandlerGroupType
+
+from .telegram_website import Website, Page
+from .wiki import wiki, wiki_callback, cancel_command
 
 
 class WikiHandler:

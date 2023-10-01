@@ -1,4 +1,4 @@
-from yaserviceru.common.error_logging.error_logging import error_notification
+from .error_logging import error_notification
 
 
 class ErrorHandler:

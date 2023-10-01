@@ -1,15 +1,12 @@
 import logging
 
 from telegram import Update
-from telegram.ext import (
-    ContextTypes,
-)
+from telegram.ext import ContextTypes
 
-from yaserviceru.command.client.chatgpt.config import ChatGPTConfig
 import yaserviceru.command.client.chatgpt.callback as callbacks
-from yaserviceru.command.client.chatgpt.types import ChatGptCallbackType
-
 from yaserviceru.app.data_reader import DataReader
+from yaserviceru.command.client.chatgpt.config import ChatGPTConfig
+from yaserviceru.command.client.chatgpt.types import ChatGptCallbackType
 
 
 class ChatGptCallbackHandler:

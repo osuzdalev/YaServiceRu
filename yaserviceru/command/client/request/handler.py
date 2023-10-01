@@ -1,9 +1,4 @@
-from telegram.ext import (
-    CommandHandler,
-    CallbackQueryHandler,
-    MessageHandler,
-    filters,
-)
+from telegram.ext import CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 from yaserviceru.command.client.request.request import (
     request,

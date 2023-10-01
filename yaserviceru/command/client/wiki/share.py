@@ -6,10 +6,7 @@ from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, InlineQueryHandler
 
-from yaserviceru.command.client.wiki import (
-    get_wiki_json_dict,
-    get_answer_path,
-)
+from yaserviceru.command.client.wiki import get_wiki_json_dict, get_answer_path
 
 logger_wiki_share = logging.getLogger(__name__)
 
