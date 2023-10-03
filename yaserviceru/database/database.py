@@ -64,22 +64,35 @@ def log_callback_data(update: Update) -> None:
 def extract_user_and_message(
     update: Update,
 ) -> Tuple[Optional[User], Optional[Message]]:
-    """Extract user and message from the update."""
+    """
+    Extract the user and message from a given update.
 
-    user = (
-        update.message.from_user
-        if update.message
-        else update.callback_query.from_user
-        if update.callback_query
-        else None
-    )
-    message = (
-        update.effective_message
-        if update.message
-        else update.callback_query.message
-        if update.callback_query
-        else None
-    )
+    This function handles the extraction of the user and message from
+    an update object, which can originate from either a direct message
+    or a callback query. The function checks the type of update and
+    extracts the user and message accordingly. If neither is found,
+    it returns (None, None).
+
+    Parameters:
+    - update: The update object containing the incoming update.
+
+    Returns:
+    - A tuple containing the User object and Message object extracted
+      from the update. If no user or message is found, returns (None, None).
+
+    Example:
+    - user, message = extract_user_and_message(update)
+    """
+
+    user = None
+    message = None
+
+    if update.message:
+        user = getattr(update.message, "from_user", None)
+        message = update.effective_message
+    elif update.callback_query:
+        user = getattr(update.callback_query, "from_user", None)
+        message = getattr(update.callback_query, "message", None)
 
     return user, message
 
