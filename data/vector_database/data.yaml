@@ -6,7 +6,7 @@ classes:
     - name: content
       dataType:
         - text
-    vectorizer: text2vec-transformers,
+    vectorizer: text2vec-transformers
     moduleConfig:
       text2vec-transformers:
         poolingStrategy: masked_mean
@@ -19,7 +19,7 @@ classes:
       - name: content
         dataType:
           - text
-    vectorizer: text2vec-transformers,
+    vectorizer: text2vec-transformers
     moduleConfig:
       text2vec-transformers:
         poolingStrategy: masked_mean
@@ -32,7 +32,7 @@ classes:
       - name: content
         dataType:
           - text
-    vectorizer: text2vec-transformers,
+    vectorizer: text2vec-transformers
     moduleConfig:
       text2vec-transformers:
         poolingStrategy: masked_mean

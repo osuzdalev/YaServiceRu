@@ -2,7 +2,7 @@ data/user/chatgpt/test.txt
 data/database
 data/app
 data/vector_database/embeddings
-data/vector_database/filters
+data/vector_database/data
 
 scripts/test
 scripts/util

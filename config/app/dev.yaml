@@ -4,13 +4,13 @@ yaserviceru:
   app:
     tg_id:
       bot: 6083336654
-      call_center: 6211181238
+      admin: 6211181238
       dev: 5278871996
       contractor: 247648076
     tg_username:
       bot: YaServiceRuDevBot
     email:
-      call_center: ruyaservice@yandex.ru
+      admin: ruyaservice@yandex.ru
       dev: odsuzdalev@yandex.ru
       contractor: yanisbrothers@yandex.ru
       smtp:
@@ -32,13 +32,13 @@ database:
   dbname: postgres
   user: postgres
   port: 5432
-  data: ./data/database/pg_data
-  config: ./data/database/pg_config
+  data: ../data/database/pg_data
+  config: ../data/database/pg_config
   secret:
     password: DATABASE_POSTGRES_PASSWORD
 
 weaviate:
   api: http://localhost:8080 # local or docker
   port: 8080
-  data: ./data/vector_database/embeddings
-  persistence: ./data/vector_database/persistence
+  data: ../data/vector_database/embeddings # for the volumes
+  persistence: /var/lib/data # path inside the docker

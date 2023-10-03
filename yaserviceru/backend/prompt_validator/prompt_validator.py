@@ -54,7 +54,7 @@ async def validate_prompt(
         )
         raise ApplicationHandlerStop
 
-    return
+    print("All good, passed to ChatGPT")
 
 
 def check_conversation_tokens(
@@ -130,5 +130,7 @@ def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
         [article["_additional"]["certainty"] for article in combined_query_results]
     )
     average_certainty = total_certainty / len(combined_query_results)
+
+    print("average_certainty: ", average_certainty)
 
     return average_certainty >= vector_db_client.semantic_threshold
