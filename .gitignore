@@ -1,5 +1,7 @@
 .env
 
+config/database
+
 data/user/chatgpt/test.txt
 data/database
 data/app
@@ -12,3 +14,4 @@ scripts/util
 .DS_Store
 .idea
 __pycache__
+/scripts/init_database.sql

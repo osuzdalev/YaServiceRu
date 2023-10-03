@@ -11,6 +11,8 @@ logger_tl_db = logging.getLogger(__name__)
 
 # TODO Investigate using the database modeling library to interact with the database
 # See, for example, django: https://docs.djangoproject.com/en/4.2/topics/db/
+# other option: framework sql alchemy
+# asyncpg
 
 
 def create_db_connection(db_auth):

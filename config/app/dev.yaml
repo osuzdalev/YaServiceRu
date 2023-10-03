@@ -33,7 +33,7 @@ database:
   user: postgres
   port: 5432
   data: ../data/database/pg_data
-  config: ../data/database/pg_config
+  config: ../config/database/pg_config
   secret:
     password: DATABASE_POSTGRES_PASSWORD
 
