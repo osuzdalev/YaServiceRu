@@ -1,3 +1,7 @@
+.DS_Store
+.idea
+__pycache__
+
 .env
 
 config/database
@@ -8,10 +12,10 @@ data/app
 data/vector_database/embeddings
 data/vector_database/data
 
-scripts/test
-scripts/util
+scripts/init_database.sql
 
-.DS_Store
-.idea
-__pycache__
-/scripts/init_database.sql
+yaserviceru.egg-info/
+dist/
+
+.ruff_cache/
+.github/
