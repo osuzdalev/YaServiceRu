@@ -73,7 +73,6 @@ services:
   # TODO The dockerfile builds and the container/app is launchable. I didn't try
   # to run it with docker-compose. Checks that it works after you have loaded the
   # relevant volumes.
-  # TODO Check if you can move .dockerignore and docker-compose.yaml under docker/.
   # The images by itself builds like this: docker build --tag yaserviceru -f docker/Dockerfile .
 #  yaserviceru:
 #    build:
