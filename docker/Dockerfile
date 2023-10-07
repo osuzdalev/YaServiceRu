@@ -1,5 +1,7 @@
+# Use the specified image as the base
 FROM python:3.9
 
+# Set a non-interactive frontend
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt update && apt upgrade -y \
     && apt install -q -y --no-install-recommends \
@@ -8,17 +10,15 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 COPY .. /usr/src/yaserviceru
 
+# Create a virtual environment and activate it
 RUN python3 -m venv /yaserviceru_venv \
     && . /yaserviceru_venv/bin/activate \
-    && pip3 install --upgrade --no-cache-dir -r /usr/yaserviceru/yaserviceru/requirements.txt
-
-# NOTE Workaround until the package is properly installed
-# TODO Configure a setup.py and update the dockerfile to install the package
-# See https://godatadriven.com/blog/a-practical-guide-to-using-setup-py/
-ENV PYTHONPATH="/usr/src/yaserviceru:$PYTHONPATH"
-RUN ln -s /usr/yaserviceru/yaserviceru/scripts/main.py /usr/bin/yaserviceru
+    # Install the project package from TestPyPI and the dependencies from PyPI
+    && pip3 install --upgrade --no-cache-dir \
+        -i https://test.pypi.org/simple/ \
+        --extra-index-url https://pypi.org/simple \
+        yaserviceru==0.2.5
 
 EXPOSE 80
-
 ENTRYPOINT ["/usr/src/yaserviceru/docker/entrypoint.sh"]
 CMD ["yaserviceru"]
