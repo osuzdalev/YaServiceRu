@@ -19,8 +19,8 @@ yaserviceru:
   network:
     images: osuzdalev/yaserviceru:beta
     port: 8081
-    persistence: ./data/app/persistence
-    logs: ./data/app/logs.log
+    persistence: ../data/app/persistence
+    logs: ../data/app/logs.log
   secret:
     api_openai: API_OPENAI
     token_telegram: TOKEN_TG_DEV_BOT

@@ -1,19 +1,37 @@
+# Ignore the virtual environment directory
+venv/
+
+# Ignore source code repositories
+.git/
+.gitignore
+.svn/
+/.github/
+
+# Ignore Python byte-compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore development tools and configuration
+.idea/
+.vscode/
+
+# Ignore OS-specific files and directories
+.DS_Store
+Thumbs.db
+# ----------------------------------------------------------------------------------------------------------------------
+
 config/database
 
-data/user/chatgpt/test.txt
 data/database
-data/app
 data/vector_database/embeddings
 data/vector_database/data
 
 scripts/test
 scripts/util
 
-venv
 .env
 
-.gitignore
 README.md/scripts/init_database.sql
 /dist/
 /yaserviceru.egg-info/
-/.github/

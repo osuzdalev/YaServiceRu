@@ -21,6 +21,5 @@ RUN python3 -m venv /yaserviceru_venv \
         yaserviceru==0.2.5
 
 EXPOSE 80
-# Set the PYTHONPATH environment variable
 ENTRYPOINT ["/usr/src/yaserviceru/docker/entrypoint.sh"]
 CMD ["yaserviceru"]
