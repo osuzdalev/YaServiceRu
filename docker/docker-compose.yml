@@ -8,8 +8,8 @@ services:
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
-      - ${DATABASE_DATA}:/var/lib/postgresql/data # The database. This will increase in size with time. !!! DON'T COMMIT !!!
-      - ${DATABASE_CONFIG}:/etc/postgresql/ # The config files. !!! DON'T COMMIT !!!
+      - ${DATABASE_DATA}:/var/lib/postgresql/data # The database. This will increase in size with time. Note !!! DON'T COMMIT !!!
+      - ${DATABASE_CONFIG}:/etc/postgresql/ # The config files. Note !!! DON'T COMMIT !!!
     command: postgres -c config_file=/etc/postgresql/postgres.conf
 
   weaviate:
@@ -74,17 +74,17 @@ services:
   # to run it with docker-compose. Checks that it works after you have loaded the
   # relevant volumes.
   # The images by itself builds like this: docker build --tag yaserviceru -f docker/Dockerfile .
-#  yaserviceru:
-#    build:
-#      context: ..
-#      dockerfile: Dockerfile
-#    restart: unless-stopped
-#    ports:
-#      - "${APP_PORT}:80"
-#    volumes:
-#      - ${APP_LOGS}:/app/${APP_LOGS}
-#      - ${APP_PERSISTENCE}:/app/${APP_PERSISTENCE}
-#    depends_on:
-#      - database
-#      - weaviate
-#      - t2v-transformers
+  yaserviceru:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    # restart: unless-stopped
+    ports:
+      - "${APP_PORT}:80"
+    volumes:
+      - ${APP_LOGS}:/app/${APP_LOGS}
+      - ${APP_PERSISTENCE}:/app/${APP_PERSISTENCE}
+    depends_on:
+      - database
+      - weaviate
+      - t2v-transformers

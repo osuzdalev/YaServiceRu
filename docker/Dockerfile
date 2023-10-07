@@ -8,7 +8,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         postgresql-common python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
-COPY .. /usr/src/yaserviceru
+COPY . /usr/src/yaserviceru
+RUN chmod +x /usr/src/yaserviceru/docker/entrypoint.sh
 
 # Create a virtual environment and activate it
 RUN python3 -m venv /yaserviceru_venv \
@@ -20,5 +21,6 @@ RUN python3 -m venv /yaserviceru_venv \
         yaserviceru==0.2.5
 
 EXPOSE 80
+# Set the PYTHONPATH environment variable
 ENTRYPOINT ["/usr/src/yaserviceru/docker/entrypoint.sh"]
 CMD ["yaserviceru"]
