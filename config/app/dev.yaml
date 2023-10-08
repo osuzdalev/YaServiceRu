@@ -16,7 +16,10 @@ yaserviceru:
       smtp:
         url: smtp.yandex.ru
         port: 587
-  network:
+  local:
+    persistence: ./data/app/persistence
+    logs: ./data/app/logs.log
+  docker:
     images: osuzdalev/yaserviceru:beta
     port: 8081
     persistence: ../data/app/persistence

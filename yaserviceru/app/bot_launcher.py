@@ -52,7 +52,9 @@ class BotLauncher:
             handlers=[
                 logging.StreamHandler(sys.stdout),
                 logging.FileHandler(
-                    self.bot_config_manager.config["yaserviceru"]["network"]["logs"],
+                    self.bot_config_manager.config["yaserviceru"][
+                        self.bot_config_manager.deployment
+                    ]["logs"],
                     mode="a",
                 ),
             ],
@@ -75,9 +77,9 @@ class BotLauncher:
         self.setup_logging()
 
         persistence = PicklePersistence(
-            filepath=self.bot_config_manager.config["yaserviceru"]["network"][
-                "persistence"
-            ]
+            filepath=self.bot_config_manager.config["yaserviceru"][
+                self.bot_config_manager.deployment
+            ]["persistence"]
         )
 
         application = (

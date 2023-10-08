@@ -36,7 +36,7 @@ def generate_env_file(config_file, output_file):
         env_file.write(f"export WEAVIATE_PERSISTENCE_PATH={weaviate_persistence}\n")
 
         # Extracting yaserviceru env variables
-        yaserviceru = config["yaserviceru"]["network"]
+        yaserviceru = config["yaserviceru"]["docker"]
         app_port = yaserviceru["port"]
         app_logs = yaserviceru["logs"]
         app_persistence = yaserviceru["persistence"]

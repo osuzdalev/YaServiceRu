@@ -10,6 +10,8 @@ from weaviate.util import generate_uuid5
 from numpy import ndarray
 from torch import Tensor
 
+from yaserviceru.app.data_reader import VectorDatabaseReader
+
 logger_vector_db = logging.getLogger(__name__)
 
 
@@ -37,29 +39,37 @@ class VectorDatabase:
         self.query_limit = query_limit
         self.classes = {}
         self.device = get_available_device()
+        self.vector_database_data_reader = VectorDatabaseReader()
 
         # Ensure the vector_db_client instance is ready
         if not self.vector_db_client.is_ready():
             raise Exception("vector_db_client is not ready!")
 
+        self.populate_vector_database(
+            self.vector_database_data_reader.get_classes(),
+            self.vector_database_data_reader.get_filters(),
+        )
+
     def populate_vector_database(
-        self, classes: Dict[str, Dict], filters: Dict[str, List]
+        self, classes: Dict[str, Dict], filters: Dict[str, Dict]
     ) -> None:
         """
         Populate the vector database with specified classes and filters.
 
-        This method reinitializes the vector database with given classes if they don't already exist, then writes provided filters to the database. Each class and filter is validated before being added. If an error occurs during the process, it raises an exception and logs an error message.
+        This method reinitializes the vector database with given classes if they don't already exist, then writes
+        provided filters to the database. Each class and filter is validated before being added. If an error occurs
+        during the process, it raises an exception and logs an error message.
 
-        Parameters:
-        - classes (Dict[str, Dict]): A dictionary of class names and their configurations to be added to the vector database.
-        - filters (Dict[str, List]): A dictionary containing filter names and lists of filter strings to be added to the corresponding classes in the vector database.
+        Parameters: - classes (Dict[str, Dict]): A dictionary of class names and their configurations to be added to
+        the vector database. - filters (Dict[str, List]): A dictionary containing filter names and lists of filter
+        strings to be added to the corresponding classes in the vector database.
 
         Raises:
         - ValueError: If a filter object fails the validation.
         - AssertionError: If no objects are found in the vector database after writing.
 
-        Logs:
-        - Informational messages tracking the progress of the database population process, including classes and filters added.
+        Logs: - Informational messages tracking the progress of the database population process, including classes
+        and filters added.
         """
 
         logger_vector_db.info(

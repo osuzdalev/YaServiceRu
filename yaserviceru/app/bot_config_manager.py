@@ -6,7 +6,8 @@ load_dotenv()
 
 
 class BotConfigurationManager:
-    def __init__(self, config_file_path):
+    def __init__(self, deployment: str, config_file_path: str):
+        self.deployment = deployment
         self.config = None
         self.config_file_path = config_file_path
         self._load_config_file()

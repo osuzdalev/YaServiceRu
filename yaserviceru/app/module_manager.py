@@ -1,15 +1,17 @@
 from typing import Any, List, Dict, Tuple
 import yaml
 
-from yaserviceru.app.data_reader import VectorDatabaseReader
+from yaserviceru.vector_database import VectorDatabase
+
 from yaserviceru.user.chatgpt import ChatGPTModelConfig
+from yaserviceru.common.types import TgModuleType, StdModuleType
 
 
 class ModuleManager:
     def __init__(
         self,
         tg_modules: Dict,
-        std_modules: Dict,
+        std_modules: List,
         config_file_path: str,
         wiki_folder_path: str,
     ):
@@ -35,7 +37,7 @@ class ModuleManager:
         Returns:
         - dict: A dictionary containing instances of each standard module.
         """
-        for module_name, module_class in self.std_modules.items():
+        for module_type in self.std_modules:
             # Use enumarations to compare (but you might not need to do this if you go for a different design)
             #
             # TODO Check if this makes sense; the module constructors differ a lot
@@ -44,9 +46,8 @@ class ModuleManager:
             #  - the modules have an init method
             #  - the manager pass all data that a module might need
             #  - the modules take care of initializing themselves
-            if module_name == "vector_database":
-                vector_database_data_reader = VectorDatabaseReader("test")
-                vector_database_object = module_class(
+            if module_type == StdModuleType.VECTOR_DATABASE:
+                vector_database_object = VectorDatabase(
                     api_url=self.config["vector_database"]["api_url"],
                     sentence_transformer=self.config["vector_database"][
                         "sentence_transformer"
@@ -56,11 +57,9 @@ class ModuleManager:
                     ],
                     query_limit=self.config["vector_database"]["query_limit"],
                 )
-                vector_database_object.populate_vector_database(
-                    vector_database_data_reader.get_classes(),
-                    vector_database_data_reader.get_filters(),
-                )
-                self.std_module_objects["vector_database"] = vector_database_object
+                self.std_module_objects[
+                    StdModuleType.VECTOR_DATABASE.value
+                ] = vector_database_object
 
     def get_tg_commands_messages(self) -> Tuple[List, List]:
         """
@@ -101,19 +100,19 @@ class ModuleManager:
         commands, messages = self.get_tg_commands_messages()
 
         for module_name, module_handler in self.tg_modules.items():
-            if module_name == "error_logging":
+            if module_name == TgModuleType.ERROR_LOGGING.value:
                 error_handler = module_handler()
-            elif module_name == "global_fallback":
+            elif module_name == TgModuleType.GLOBAL_FALLBACK.value:
                 global_fallback = module_handler(commands, messages)
                 handlers.insert(0, global_fallback)
-            elif module_name == "prompt_validator":
+            elif module_name == TgModuleType.PROMPT_VALIDATOR.value:
                 prompt_validator = module_handler(
                     ChatGPTModelConfig(),
-                    self.std_module_objects["vector_database"],
+                    self.std_module_objects[StdModuleType.VECTOR_DATABASE.value],
                     global_fallback.ignore_messages_re,
                 )
                 handlers.append(prompt_validator)
-            elif module_name == "wiki":
+            elif module_name == TgModuleType.WIKI.value:
                 handlers.append(module_handler(self.wiki_folder_path))
             else:
                 handlers.append(module_handler())
