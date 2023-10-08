@@ -1,21 +1,22 @@
+import inspect
 import logging
 
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler
 
 from yaserviceru.common import helpers
-from yaserviceru.database import utils as tldb
+from yaserviceru.database import utils as tgdb
 
 logger_orders = logging.getLogger(__name__)
 
 
 async def orders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends message with all the unassigned and incomplete orders"""
-    logger_orders.info("orders()")
+    logger_orders.info(f"{inspect.currentframe().f_code.co_name}")
 
     if helpers.clearance_center(update.effective_user.id):
-        open_orders = tldb.get_open_orders()
-        assigned_orders = tldb.get_assigned_orders()
+        open_orders = tgdb.get_open_orders()
+        assigned_orders = tgdb.get_assigned_orders()
 
         text = "Open Orders:\n\n"
         for i in range(len(open_orders)):

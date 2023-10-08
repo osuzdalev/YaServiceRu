@@ -7,8 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 import tiktoken
 
-# TODO Look into this fix
-from yaserviceru import common as tldb
+from yaserviceru.database import utils as tgdb
 
 logger_helpers = logging.getLogger(__name__)
 
@@ -18,11 +17,11 @@ def get_timestamp_str() -> str:
 
 
 async def check_order_id_exists(
-    update: Update, _: ContextTypes.DEFAULT_TYPE, order_id: int
+    update: Update, _: ContextTypes.DEFAULT_TYPE, order_id: int, db_auth: dict
 ) -> Tuple:
     """Checks if given order exists"""
     logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
-    order = tldb.get_order_data(order_id)
+    order = tgdb.get_order_data(order_id, db_auth)
     if order is not None:
         return True, order
     else:
@@ -30,10 +29,10 @@ async def check_order_id_exists(
         return False, None
 
 
-def clearance_contractor(user_id: int) -> bool:
+def clearance_contractor(user_id: int, db_auth: dict) -> bool:
     """Verify if the user sending the user is a Contractor and has clearance"""
     logger_helpers.info(f"{inspect.currentframe().f_code.co_name}")
-    all_contractor_id = tldb.get_all_contractor_id()
+    all_contractor_id = tgdb.get_all_contractor_id(db_auth)
     return user_id in all_contractor_id
 
 

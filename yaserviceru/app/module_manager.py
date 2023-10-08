@@ -38,14 +38,6 @@ class ModuleManager:
         - dict: A dictionary containing instances of each standard module.
         """
         for module_type in self.std_modules:
-            # Use enumarations to compare (but you might not need to do this if you go for a different design)
-            #
-            # TODO Check if this makes sense; the module constructors differ a lot
-            #  Investigate implementing a generic module manager:
-            #  - the manager maintains some objects
-            #  - the modules have an init method
-            #  - the manager pass all data that a module might need
-            #  - the modules take care of initializing themselves
             if module_type == StdModuleType.VECTOR_DATABASE:
                 vector_database_object = VectorDatabase(
                     api_url=self.config["vector_database"]["api_url"],

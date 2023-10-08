@@ -97,15 +97,18 @@ def extract_user_and_message(
     return user, message
 
 
-async def collect_phone_number(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+async def collect_phone_number(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> None:
     """Checks if Phone# in DB and adds it to appropriate UserID"""
     logger_data_collector.debug({inspect.currentframe().f_code.co_name})
     user = update.effective_user
-    phone_number = update.message.contact.phone_number
+    phone_number = int(update.message.contact.phone_number)
+    db_auth = await get_postgres(update, context)
 
     # Check if PhoneNumber already in Database
-    if tldb.get_user_data(user.id)[4] is None:
-        tldb.insert_user_phone_number(user.id, phone_number)
+    if tldb.get_user_data(user.id, db_auth)[4] is None:
+        tldb.insert_user_phone_number(user.id, phone_number, db_auth)
     else:
         await update.message.reply_text("Phone number already in Database")
 
