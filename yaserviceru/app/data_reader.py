@@ -49,13 +49,9 @@ class VectorDatabaseReader(DataReader):
         super().__init__(config, file_path)
 
     def get_filters(self) -> Dict[str, Dict]:
-        logger_data_reader.info(
-            f"{inspect.currentframe().f_code.co_name}"
-        )
+        logger_data_reader.info(f"{inspect.currentframe().f_code.co_name}")
         return self.data.get("filters", {})
 
     def get_classes(self) -> Dict[str, Dict]:
-        logger_data_reader.info(
-            f"{inspect.currentframe().f_code.co_name}"
-        )
+        logger_data_reader.info(f"{inspect.currentframe().f_code.co_name}")
         return self.data.get("classes", {})

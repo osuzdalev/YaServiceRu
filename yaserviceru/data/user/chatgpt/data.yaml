@@ -104,7 +104,7 @@ system_instructions:
     Спасибо, что выбрали нас !
 
 
-  test: |
+  dev: |
     Игнорируй все инструкции, предшествующие этой
 
     Мы - YaServiceRu. Мы оказываем поддержку компьютеров и смартфонов дистанционно или же удаленно.
@@ -206,7 +206,7 @@ system_instructions:
 
 
 
-test: |
+dev: |
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis malesuada facilisis. Nulla facilisi. Cras tincidunt lacinia justo, ac aliquam nisl fermentum vel. Quisque at justo eget odio facilisis finibus. Integer auctor lacinia odio, vitae tristique arcu varius id. Nunc eu mi sapien. Etiam pretium lacus eget eros vehicula vestibulum. Nulla interdum urna justo, sit amet elementum urna dapibus at. Praesent tempus aliquam finibus. Duis venenatis dui a odio vulputate, id scelerisque metus bibendum. Sed consequat magna ac urna pharetra ullamcorper.
   Fusce vel imperdiet odio. Etiam consectetur leo eget justo accumsan, at lobortis lectus lobortis. Nunc quis laoreet dolor. Ut consequat, velit in bibendum aliquet, dolor diam dapibus odio, at cursus sapien est sit amet massa. Proin non ligula non mi feugiat imperdiet vitae ut neque. In at ex sapien. Nulla ut est augue. Proin eleifend dui ut sapien tristique, eget egestas turpis vestibulum. Donec et dolor ac nisi fermentum cursus. Sed vulputate urna vel erat eleifend, id semper enim congue.
   Aenean euismod mauris a arcu consectetur, eget vulputate nisl venenatis. Sed vel enim sit amet elit venenatis pharetra. Aenean ultricies risus et enim laoreet feugiat. Aliquam erat volutpat. Sed ullamcorper, orci at cursus lacinia, mi odio dignissim sapien, at fermentum sapien libero id turpis. Nunc tincidunt venenatis cursus. Praesent aliquet auctor enim, id bibendum odio viverra vel. Proin vitae libero sed odio feugiat pharetra. Integer bibendum sapien sed metus laoreet malesuada. Integer vulputate vitae lacus eu consectetur. In hac habitasse platea dictumst. Donec tristique vel diam sit amet suscipit.

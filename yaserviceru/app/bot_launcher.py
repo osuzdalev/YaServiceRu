@@ -52,9 +52,9 @@ class BotLauncher:
             handlers=[
                 logging.StreamHandler(sys.stdout),
                 logging.FileHandler(
-                    self.bot_config_manager.config["yaserviceru"][
-                        self.bot_config_manager.deployment
-                    ]["logs"],
+                    self.bot_config_manager.config["yaserviceru"]["bot_persistence"][
+                        "logs"
+                    ],
                     mode="a",
                 ),
             ],
@@ -77,11 +77,15 @@ class BotLauncher:
         self.setup_logging()
 
         persistence = PicklePersistence(
-            filepath=self.bot_config_manager.config["yaserviceru"][
-                self.bot_config_manager.deployment
-            ]["persistence"]
+            filepath=self.bot_config_manager.config["yaserviceru"]["bot_persistence"][
+                "persistence"
+            ]
         )
 
+        print(
+            "TOKEN: ",
+            self.bot_config_manager.config["yaserviceru"]["secret"]["token_telegram"],
+        )
         application = (
             Application.builder()
             .token(

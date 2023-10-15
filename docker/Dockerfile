@@ -8,9 +8,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         postgresql-common python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . /usr/src/yaserviceru
-RUN chmod +x /usr/src/yaserviceru/docker/entrypoint.sh
-
 # Create a virtual environment and activate it
 RUN python3 -m venv /yaserviceru_venv \
     && . /yaserviceru_venv/bin/activate \
@@ -18,8 +15,10 @@ RUN python3 -m venv /yaserviceru_venv \
     && pip3 install --upgrade --no-cache-dir \
         -i https://test.pypi.org/simple/ \
         --extra-index-url https://pypi.org/simple \
-        yaserviceru==0.2.5
+        yaserviceru==0.2.18
 
 EXPOSE 80
+
+COPY ./docker/entrypoint.sh /usr/src/yaserviceru/docker/entrypoint.sh
+RUN chmod +x /usr/src/yaserviceru/docker/entrypoint.sh
 ENTRYPOINT ["/usr/src/yaserviceru/docker/entrypoint.sh"]
-CMD ["yaserviceru"]

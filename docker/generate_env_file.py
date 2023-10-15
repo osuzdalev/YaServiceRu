@@ -38,11 +38,7 @@ def generate_env_file(config_file, output_file):
         # Extracting yaserviceru env variables
         yaserviceru = config["yaserviceru"]["docker"]
         app_port = yaserviceru["port"]
-        app_logs = yaserviceru["logs"]
-        app_persistence = yaserviceru["persistence"]
         env_file.write(f"export APP_PORT={app_port}\n")
-        env_file.write(f"export APP_LOGS={app_logs}\n")
-        env_file.write(f"export APP_PERSISTENCE={app_persistence}\n")
 
 
 if __name__ == "__main__":

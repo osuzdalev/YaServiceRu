@@ -13,7 +13,7 @@ from .database import collect_data, collect_phone_number, user_status
 class DatabaseHandler:
     def __init__(self):
         self.data_collection_handler = TypeHandler(Update, collect_data)
-        # TODO
+        # Note check if needs to be implemented once overall features done
         # collection_phone_number_handler = MessageHandler(filters.CONTACT, collect_phone_number)
         # user_status_handler = ChatMemberHandler(user_status, ChatMemberHandler.CHAT_MEMBER)
 

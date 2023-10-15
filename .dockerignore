@@ -35,3 +35,4 @@ scripts/util
 README.md/scripts/init_database.sql
 /dist/
 /yaserviceru.egg-info/
+/MANIFEST.in

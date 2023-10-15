@@ -2,20 +2,19 @@
 .idea
 __pycache__
 
-.env
+.ruff_cache/
+.github/
 
 config/database
 
-data/user/chatgpt/test.txt
 data/database
-data/app
-data/vector_database/embeddings
-data/vector_database/data
+data/vector_database
+
+yaserviceru/data/app
 
 scripts/init_database.sql
 
 yaserviceru.egg-info/
 dist/
 
-.ruff_cache/
-.github/
+.env

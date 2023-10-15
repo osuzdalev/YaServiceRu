@@ -4,7 +4,7 @@ from yaserviceru.app.data_reader import ChatGPTDataReader
 from yaserviceru.common.helpers import num_tokens_from_string
 
 
-data_reader = ChatGPTDataReader("test")
+data_reader = ChatGPTDataReader("dev")
 
 
 @dataclass

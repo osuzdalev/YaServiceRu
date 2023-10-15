@@ -17,16 +17,38 @@ async def validate_prompt(
     vector_db_client,
 ) -> None:
     """
-    Checks if the prompt is valid in three steps:
-    1. Check if the ChatGPT canal is open
-    2. Check if the prompt is within the token limit
-    3. Check if the prompt is semantically close enough to the app's purpose
+    Asynchronously validates the user's prompt based on specified criteria.
+
+    This function performs a three-step validation on the user's prompt to ensure that it meets
+    the requirements for processing. It first checks if the ChatGPT chat is active. If it is,
+    it then verifies that the prompt does not exceed the maximum allowed token limit. Finally,
+    it ensures that the prompt is semantically aligned with the application's purpose.
+
+    If the prompt fails any of these checks, a message is sent back to the user informing them
+    of the issue, and an ApplicationHandlerStop exception is raised to halt further processing.
+
+    Parameters:
+    - chatgpt_model_config : Configuration object containing the settings and limitations
+                             of the ChatGPT model.
+    - vector_db_client : The client interface for interacting with the vector database,
+                         used in semantic checks.
+
+    Returns:
+    - None : This function does not return any value but raises an exception to halt
+             the processing if the validation fails.
+
+    Raises:
+    - ApplicationHandlerStop : Raised to stop the application handler if the validation fails.
+
+    Usage Example:
+    await validate_prompt(update, context, chatgpt_model_config, vector_db_client)
     """
     user = update.effective_user
     logger_prompt_validator.info(
         f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
     )
 
+    # Todo UI/UX design needs to confirm this check
     if not context.user_data.get("GPT_active", False):
         await update.message.reply_text(
             "Похоже, вы не начали чат. Для этого используйте команду /chat"
@@ -54,9 +76,10 @@ async def validate_prompt(
         )
         raise ApplicationHandlerStop
 
-    print("All good, passed to ChatGPT")
+    logger_prompt_validator.info("prompt cleared and passed to other handlers")
 
 
+# Todo Should this be used in here or the ChatGPT module?
 def check_conversation_tokens(
     prompt: str, conversation: List[Dict], chatgpt_model_config
 ) -> Tuple[bool, int]:
@@ -101,6 +124,23 @@ def check_prompt_tokens(prompt: str, chatgpt_model_config) -> Tuple[bool, int]:
 
 
 def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
+    """
+    Check the semantic validity of the given prompt using vector similarity.
+
+    This function evaluates if the provided prompt is semantically valid by encoding the prompt
+    into a vector and comparing it to predefined English and Russian filters using the vector
+    database client. The function calculates the average certainty of the prompt being
+    semantically close to the filters and compares it against a predefined semantic threshold.
+
+    Parameters:
+    - prompt : str : The user's prompt or message text to be evaluated for semantic validity.
+    - vector_db_client : Object : The client interface for the vector database used for
+                                  encoding and comparing the prompt.
+
+    Returns:
+    - bool : Returns True if the average certainty of the prompt being semantically valid
+             is greater or equal to the semantic threshold; otherwise, returns False.
+    """
     logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
 
     # Vector Query
@@ -130,7 +170,5 @@ def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
         [article["_additional"]["certainty"] for article in combined_query_results]
     )
     average_certainty = total_certainty / len(combined_query_results)
-
-    print("average_certainty: ", average_certainty)
 
     return average_certainty >= vector_db_client.semantic_threshold

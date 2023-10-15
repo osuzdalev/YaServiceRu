@@ -1,4 +1,4 @@
 #!/bin/bash
 
 source /yaserviceru_venv/bin/activate
-exec "$@"
+exec python -m yaserviceru "$@"

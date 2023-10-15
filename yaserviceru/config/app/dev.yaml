@@ -16,14 +16,12 @@ yaserviceru:
       smtp:
         url: smtp.yandex.ru
         port: 587
-  local:
-    persistence: ./data/app/persistence
-    logs: ./data/app/logs.log
+  bot_persistence:
+    persistence: data/app/persistence.pkl
+    logs: data/app/logs.log
   docker:
     images: osuzdalev/yaserviceru:beta
     port: 8081
-    persistence: ../data/app/persistence
-    logs: ../data/app/logs.log
   secret:
     api_openai: API_OPENAI
     token_telegram: TOKEN_TG_DEV_BOT

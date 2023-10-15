@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Use the script like this:
-# ./run_compose.sh ../config/app/dev.yaml
+# ./run_compose.sh ../yaserviceru/config/app/dev.yaml
 
 set -e
 
