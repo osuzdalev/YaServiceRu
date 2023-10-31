@@ -70,18 +70,18 @@ services:
       - ../config/vector_database/grafana/dashboard_provider.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
       - ../config/vector_database/grafana/dashboards:/var/lib/grafana/dashboards
 
-  # TODO The dockerfile builds and the container/app is launchable. I didn't try
-  # to run it with docker-compose. Checks that it works after you have loaded the
-  # relevant volumes.
-  # The images by itself builds like this: docker build --tag yaserviceru -f docker/Dockerfile .
-  yaserviceru:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    # restart: unless-stopped
-    ports:
-      - "${APP_PORT}:80"
-    depends_on:
-      - database
-      - weaviate
-      - t2v-transformers
+#  telefix:
+#    # restart: unless-stopped
+#    build:
+#      context: ..
+#      dockerfile: docker/Dockerfile
+#    env_file:
+#      - ../.env
+#    volumes:
+#      - ${APP_LOGS}:/var/lib/postgresql/data
+#    ports:
+#      - "${APP_PORT}:80"
+#    depends_on:
+#      - database
+#      - weaviate
+#      - t2v-transformers

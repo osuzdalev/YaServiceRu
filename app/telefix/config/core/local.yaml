@@ -1,0 +1,26 @@
+name: local
+
+yaserviceru:
+  contact:
+    tg_id:
+      bot: 6083336654
+      admin: 6211181238
+      dev: 5278871996
+      contractor: 247648076
+    tg_username:
+      bot: YaServiceRuDevBot
+    email:
+      admin: ruyaservice@yandex.ru
+      dev: odsuzdalev@yandex.ru
+      contractor: yanisbrothers@yandex.ru
+      smtp:
+        url: smtp.yandex.ru
+        port: 587
+  bot_persistence:
+    persistence: data/core/persistence.pkl
+  logs: telefix/data/core/logs.log
+  secret:
+    api_openai: API_OPENAI
+    token_telegram: TOKEN_TG_DEV_BOT
+    token_payment_provider: TOKEN_PAYMENT_PROVIDER_YOOKASSA_TEST
+    password_smtp: PASSWORD_YANDEX_YASERVICERU_APP

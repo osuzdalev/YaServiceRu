@@ -35,9 +35,10 @@ def generate_env_file(config_file, output_file):
         env_file.write(f"export WEAVIATE_DATA_VOLUME_PATH={weaviate_data}\n")
         env_file.write(f"export WEAVIATE_PERSISTENCE_PATH={weaviate_persistence}\n")
 
-        # Extracting yaserviceru env variables
-        yaserviceru = config["yaserviceru"]["docker"]
-        app_port = yaserviceru["port"]
+        # Extracting telefix env variables
+        app_logs = config["telefix"]["docker"]["logs"]
+        app_port = config["telefix"]["docker"]["port"]
+        env_file.write(f"export APP_LOGS={app_logs}\n")
         env_file.write(f"export APP_PORT={app_port}\n")
 
 

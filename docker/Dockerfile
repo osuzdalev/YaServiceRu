@@ -1,5 +1,4 @@
-# Use the specified image as the base
-FROM python:3.9
+FROM python:3.9 as builder
 
 # Set a non-interactive frontend
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -8,17 +7,18 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         postgresql-common python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a virtual environment and activate it
+# Create a virtual environment, activate it and install package
+COPY ../app/dist/yaserviceru-*.tar.gz /tmp/
 RUN python3 -m venv /yaserviceru_venv \
     && . /yaserviceru_venv/bin/activate \
-    # Install the project package from TestPyPI and the dependencies from PyPI
-    && pip3 install --upgrade --no-cache-dir \
-        -i https://test.pypi.org/simple/ \
-        --extra-index-url https://pypi.org/simple \
-        yaserviceru==0.2.18
+    && python3 -m pip install /tmp/telefix-*.tar.gz
 
-EXPOSE 80
+FROM python:3.9-slim
+COPY --from=builder /yaserviceru_venv /yaserviceru_venv
+ENV PATH="/yaserviceru_venv/bin:$PATH"
 
 COPY ./docker/entrypoint.sh /usr/src/yaserviceru/docker/entrypoint.sh
-RUN chmod +x /usr/src/yaserviceru/docker/entrypoint.sh
+RUN chmod +x /usr/src/telefix/docker/core.sh
+
+EXPOSE 80
 ENTRYPOINT ["/usr/src/yaserviceru/docker/entrypoint.sh"]

@@ -27,12 +27,12 @@ data/database
 data/vector_database/embeddings
 data/vector_database/data
 
-scripts/test
-scripts/util
+app/scripts/test
+app/scripts/util
 
-.env
+app/.env
 
 README.md/scripts/init_database.sql
-/dist/
+/app/dist/
 /yaserviceru.egg-info/
-/MANIFEST.in
+/app/MANIFEST.in

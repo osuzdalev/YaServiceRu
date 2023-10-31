@@ -1,0 +1,2 @@
+[console_scripts]
+yaserviceru = yaserviceru.__main__:main

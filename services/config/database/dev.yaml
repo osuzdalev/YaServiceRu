@@ -1,0 +1,11 @@
+name: dev
+
+database:
+  host: localhost # local or docker
+  dbname: postgres
+  user: postgres
+  port: 5432
+  data: ../data/database/pg_data
+  config: ../config/database/pg_config
+  secret:
+    password: DATABASE_POSTGRES_PASSWORD
