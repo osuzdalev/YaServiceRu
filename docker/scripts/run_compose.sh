@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Use the script like this:
 # ./run_compose.sh ../telefix/config/core/dev.yaml
@@ -13,8 +13,6 @@ python3 generate_env_file.py --config $CONFIG_FILE --output $ENV_FILE
 cat $ENV_FILE
 source $ENV_FILE
 
-# Launch docker-compose
 docker-compose up -d
-
 
 echo "Docker containers started successfully!"

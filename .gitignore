@@ -15,7 +15,7 @@ app/telefix/data/core
 
 app/scripts/init_database.sql
 
-yaserviceru.egg-info/
+*.egg-info/
 app/dist/
 
 app/.env

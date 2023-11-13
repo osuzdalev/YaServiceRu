@@ -1,8 +1,9 @@
 # YaServiceRu
 Handling of repair service orders on the Telegram platform.
 
-The idea is to dispatch orders of electronic goods reparations to the appropriate and available contractor 
-within a large group/community.
+The idea is to dispatch orders of electronic goods reparations to the
+
+appropriate and available contractor within a large group/community.
 
 # Docker
 
@@ -12,10 +13,10 @@ sudo apt install postgresql-all
 ```
 
 
-## System Dependencie
+## System Dependencies
 
 ```bash
-sudo apt install postgresql-all
+sudo apt install postgresql-common
 ```
 
 ---
@@ -28,5 +29,6 @@ https://tecadmin.net/tutorial/docker-run-static-website
 
 ---
 ```shell
-pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple telefix==0.2.5
+python -m build
+python -m pip install ./dist/telefix-0.2.7.tar.gz```
 ```

@@ -1,0 +1,37 @@
+# Ignore the virtual environment directory
+venv/
+
+# Ignore source code repositories
+.git/
+.gitignore
+.svn/
+/.github/
+
+# Ignore Python byte-compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore development tools and configuration
+.idea/
+.vscode/
+
+# Ignore OS-specific files and directories
+.DS_Store
+Thumbs.db
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+app/.env
+app/MANIFEST.in
+app/LICENSE.md
+
+app/test/
+app/scripts/
+app/dist/
+app/log/
+app/*.egg-info/
+
+services/config/database/pg_config
+
+README.md

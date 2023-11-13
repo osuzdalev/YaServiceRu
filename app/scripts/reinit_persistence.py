@@ -9,9 +9,8 @@ load_dotenv()
 file_path = os.getenv("FILEPATH_PERSISTENCE")
 
 if os.path.isfile(file_path):
+    print(f"Removing existing {file_path}")
     os.remove(file_path)
-else:
-    print(f"{file_path} not found.")
 
 persistent_dict = {
     "bot_data": {},

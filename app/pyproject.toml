@@ -126,7 +126,7 @@ dependencies = [
 ]
 
 [project.scripts]
-yaserviceru = "yaserviceru.__main__:main"
+telefix = "telefix.telefix:main"
 
 [tool.setuptools.packages.find]
 where = ["telefix"]  # list of folders that contain the packages (["."] by default)

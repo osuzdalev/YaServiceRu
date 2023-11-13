@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-source /yaserviceru_venv/bin/activate
-exec python -m yaserviceru "$@"
+source /telefix_venv/bin/activate
+exec python -m telefix "$@"

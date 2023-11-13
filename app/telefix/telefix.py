@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 
-from telefix import (
+from . import (
     BotLauncher,
     BotConfigurationManager,
     ModuleManager,
@@ -14,7 +14,7 @@ from telefix import (
     GlobalFallbackHandler,
     PromptValidatorHandler,
 )
-from telefix.common.types import TgModuleType, StdModuleType
+from . import TgModuleType, StdModuleType
 
 
 def main():
@@ -50,7 +50,3 @@ def main():
 
     bot_launcher = BotLauncher(bot_config_manager, module_manager)
     bot_launcher.launch()
-
-
-if __name__ == "__main__":
-    main()
