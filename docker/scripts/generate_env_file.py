@@ -24,7 +24,7 @@ def generate_env_file(config_file, output_file):
             weaviate_data=weaviate["data"],
             weaviate_persistence=weaviate["persistence"],
             app_logs=config["telefix"]["docker"]["logs"],
-            app_port=config["telefix"]["docker"]["port"]
+            app_port=config["telefix"]["docker"]["port"],
         )
 
         FILE = """

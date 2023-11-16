@@ -2,7 +2,7 @@ import os
 
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, filters
 
-from telefix.common.types import HandlerGroupType
+from ...common.types import HandlerGroupType
 
 from .constants import (
     STATE,
@@ -18,6 +18,28 @@ from .wiki import wiki, wiki_callback, cancel_command
 
 
 class WikiHandler:
+    """
+    Manages the interaction flow for a Wiki-like feature in a Telegram bot.
+
+    This class is responsible for setting up and handling the Wiki feature, which includes
+    creating a website-like experience using the `Website` and `Page` classes, handling
+    conversation states, and managing entry and fallback commands. The Wiki feature is
+    designed to provide users with an interactive guide or reference within the Telegram bot.
+
+    Attributes:
+        folder_path (str): Path to the folder containing the Wiki's YAML configuration files.
+        commands (list of str): Commands associated with the Wiki feature.
+        messages (list of str): Trigger messages for the Wiki feature.
+        conversation_handler (ConversationHandler): Manages the conversation flow of the Wiki feature.
+
+    Methods:
+        get_handlers(): Returns the conversation handler for the Wiki feature.
+
+    The WikiHandler class utilizes the Telegram bot's ConversationHandler to manage the
+    interaction states and relies on the `Website` and `Page` classes to create a navigable
+    Wiki structure. It uses YAML files to define the layout and content of the Wiki pages.
+    """
+
     commands = ["wiki", "cancel"]
     messages = ["📖Справочник", "❌Отменить"]
 

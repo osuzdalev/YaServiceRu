@@ -6,7 +6,7 @@ from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, InlineQueryHandler
 
-from telefix.user.wiki import get_wiki_json_dict, get_answer_path
+from wiki import get_wiki_json_dict, get_answer_path
 
 logger_wiki_share = logging.getLogger(__name__)
 

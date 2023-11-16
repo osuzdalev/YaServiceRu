@@ -6,6 +6,25 @@ load_dotenv()
 
 
 class BotConfigurationManager:
+    """
+    Manages the loading and processing of configuration files for a Telegram bot.
+
+    This class is responsible for reading configuration files, processing environment
+    variables, and organizing the resulting configuration settings for use within the bot.
+
+    Attributes:
+        config (dict): Stores the processed configuration settings.
+        package_abs_path (str): Absolute path of the package.
+        files_paths (list): Paths to the configuration files.
+
+    Methods:
+        _load_config_files(): Loads and processes configuration files.
+        _merge_configs(config1, config2): Merges two configuration dictionaries.
+        _process_config(config_dict): Processes individual configuration settings.
+        _update_data_paths(data_dict): Updates paths in the configuration with absolute paths.
+        _process_env_vars(config_dict): Replaces placeholders with environment variable values.
+    """
+
     def __init__(self, base_path: str, files_paths: list):
         self.config = {}
         self.package_abs_path = base_path
@@ -21,7 +40,11 @@ class BotConfigurationManager:
 
     def _merge_configs(self, config1, config2):
         for key in config2:
-            if key in config1 and isinstance(config1[key], dict) and isinstance(config2[key], dict):
+            if (
+                key in config1
+                and isinstance(config1[key], dict)
+                and isinstance(config2[key], dict)
+            ):
                 self._merge_configs(config1[key], config2[key])
             else:
                 config1[key] = config2[key]

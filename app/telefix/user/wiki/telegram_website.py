@@ -9,7 +9,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, Labeled
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CallbackQueryHandler, ConversationHandler
 
-from telefix.common.yaml_loader import YamlLoader
+from ...common.yaml_loader import YamlLoader
 from .constants import BACK, CANCEL
 
 logger_website = logging.getLogger(__name__)
@@ -18,6 +18,27 @@ YamlLoader.add_constructor("!include", YamlLoader.include)
 
 
 class Page:
+    """
+    Represents a single page within a Telegram bot's interactive website-like interface.
+
+    This class encapsulates the properties and behaviors of a page, including its name, title,
+    associated messages, keyboard layout, invoice handling, and navigation functionality.
+
+    Attributes:
+        name (str): Identifier of the page.
+        title (str): Title of the page, displayed at the top.
+        messages (dict): Optional additional messages to be sent when the page is displayed.
+        keyboard (List[List]): Keyboard layout for the page's inline buttons.
+        invoice (optional): Information for handling invoice-related actions.
+        return_state (optional): State to return after handling the page.
+        browser_history_name (optional): Key name for storing browsing history in context.
+        handlers (List): List of Telegram's CallbackQueryHandlers for the page.
+
+    Methods:
+        handler_callback(update, context): Handles callbacks triggered by the page's buttons.
+        invoice_handler_callback(update, context): Handles invoice-related callbacks.
+    """
+
     def __init__(
         self,
         name: str,
@@ -137,15 +158,35 @@ class Page:
             title,
             description,
             payload,
-            context.bot_data["config"]["telefix"]["secret"][
-                "token_payment_provider"
-            ],
+            context.bot_data["config"]["telefix"]["secret"]["token_payment_provider"],
             currency,
             prices,
         )
 
 
 class Website:
+    """
+    Manages a collection of `Page` objects to simulate a website-like navigation experience in a Telegram bot.
+
+    This class is responsible for parsing configuration files to generate pages, handling navigation
+    between these pages, and managing state transitions within the bot's conversation handler.
+
+    Attributes:
+        browser_history_name (str): Key name for storing browsing history in user context.
+        state_name (str): The name of the state associated with the website in the conversation handler.
+        pages (dict): Dictionary of `Page` objects representing the pages of the website.
+        state (dict): State configuration for the conversation handler.
+
+    Methods:
+        format_title(title): Formats the title string for display.
+        parse(config_file): Parses a YAML configuration file to generate the website's pages.
+        cancel_callback(update, context): Handles the cancellation of the navigation.
+        add_cancel_callback(): Adds the cancel callback to the state handlers.
+        back_callback(update, context): Handles the back navigation within the website.
+        add_back_callback(): Adds the back callback to the state handlers.
+        add_page(page_name, page, callback): Adds a new page to the website.
+    """
+
     def __init__(self, state_name: str, browser_history_name: str):
         self.browser_history_name = browser_history_name
         self.state_name = state_name

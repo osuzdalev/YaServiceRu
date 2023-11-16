@@ -10,7 +10,7 @@ from weaviate.util import generate_uuid5
 from numpy import ndarray
 from torch import Tensor
 
-from telefix.core.data_reader import VectorDatabaseReader
+from ..core.data_reader import VectorDatabaseReader
 
 logger_vector_db = logging.getLogger(__name__)
 
@@ -26,6 +26,37 @@ def get_available_device():
 
 
 class VectorDatabase:
+    """
+    Manages a vector database using Weaviate, a vector search engine, for semantic search and retrieval.
+
+    This class is designed to handle the initialization, population, and querying of a vector database. It uses
+    Weaviate to store and retrieve data objects based on semantic similarity. The class also integrates sentence
+    transformers for vector representation of textual data and utilizes the most suitable computing device available
+    (CPU, CUDA, MPS).
+
+    Attributes:
+        vector_db_client (weaviate.Client): Client for interacting with Weaviate database.
+        embedding_model (SentenceTransformer): Model for generating sentence embeddings.
+        semantic_threshold (float): Threshold for semantic similarity in queries.
+        query_limit (int): Limit for the number of results returned in queries.
+        classes (dict): Dictionary of classes (schema definitions) in the database.
+        device (torch.device): The computational device used for model operations.
+        vector_database_data_reader (VectorDatabaseReader): Reader for database configurations.
+
+    Methods:
+        populate_vector_database(classes, filters): Populates the database with classes and filters.
+        vector_query(collection_name, vector, certainty, query_limit): Performs a vector similarity search.
+        create_class(class_config): Creates a new class in the vector database schema.
+        check_classes(classes): Checks if specified classes exist in the vector database.
+        get_all_objects_from_class(class_name, batch_size): Retrieves all objects from a specified class.
+        get_schema(): Retrieves the current schema of the vector database.
+        delete_all(): Deletes all classes and objects in the database.
+        delete_class(class_name): Deletes a specific class from the database.
+        write_data_object(data, class_name): Writes a data object to a specific class in the database.
+
+    This class is essential for applications involving semantic search and retrieval, such as chatbots or recommendation systems.
+    """
+
     def __init__(
         self,
         api_url: str,

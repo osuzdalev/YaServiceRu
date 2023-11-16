@@ -3,7 +3,7 @@ from telegram.ext import (
     TypeHandler,
 )
 
-from telefix.common.types import HandlerGroupType
+from ..common.types import HandlerGroupType
 from .database import collect_data
 
 

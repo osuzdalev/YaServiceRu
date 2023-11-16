@@ -17,10 +17,13 @@ logger_wiki = logging.getLogger(__name__)
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
-    """Customer user: Opens an Inline Menu to search for some information. As Buttons are pressed and going
+    """
+    Customer user: Opens an Inline Menu to search for some information. As Buttons are pressed and going
     through the decision tree, the user_data 'device_context' is updated.
+
     This Conversation first needs to check the user 'in_conversation flag' before it can start, otherwise it will ask
-    the customer to first close the previous one."""
+    the customer to first close the previous one.
+    """
     user = update.message.from_user
     logger_wiki.info(
         f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
@@ -48,8 +51,10 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
 
 
 async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    """A callback function which has the same output as the wiki user. Necessary if the user wants to browse back
-    to the first page of the wiki"""
+    """
+    A callback function which has the same output as the wiki user. Necessary if the user wants to browse back
+    to the first page of the wiki
+    """
     user = update.message.from_user
     logger_wiki.info(
         f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"

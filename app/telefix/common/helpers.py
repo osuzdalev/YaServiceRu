@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 import tiktoken
 
-from telefix.database import utils as tgdb
+from ..database import utils as tgdb
 
 logger_helpers = logging.getLogger(__name__)
 

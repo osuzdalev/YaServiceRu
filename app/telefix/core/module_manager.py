@@ -1,13 +1,35 @@
 from typing import Any, List, Dict, Tuple
 import yaml
 
-from telefix.vector_database import VectorDatabase
+from ..vector_database import VectorDatabase
 
-from telefix.user.chatbot import ChatGPTModelConfig
-from telefix.common.types import TgModuleType, StdModuleType
+from ..user.chatbot import ChatGPTModelConfig
+from ..common.types import TgModuleType, StdModuleType
 
 
 class ModuleManager:
+    """
+    Manages the modules used in a Telegram bot application.
+
+    This class is responsible for loading configuration files for modules, preparing
+    standard and Telegram-specific module instances, and aggregating commands and messages
+    associated with Telegram modules.
+
+    Attributes:
+        std_modules (list): A list of standard modules used in the application.
+        std_module_objects (dict): Instances of standard modules.
+        tg_modules (dict): Telegram-specific modules.
+        config_file_path (str): Path to the configuration file for modules.
+        config (dict): Stores the processed configuration settings for modules.
+        wiki_folder_path (str): Path to the folder containing wiki-related data.
+
+    Methods:
+        _load_config_file(): Loads the module configuration file.
+        get_prepped_std_module_objects(): Prepares and returns instances of standard modules.
+        get_tg_commands_messages(): Retrieves commands and messages for Telegram modules.
+        get_prepped_tg_module_objects(): Prepares and returns instances of Telegram modules.
+    """
+
     def __init__(
         self,
         tg_modules: Dict,

@@ -2,7 +2,7 @@ from functools import partial
 
 from telegram.ext import MessageHandler, filters
 
-from telefix.common.types import HandlerGroupType
+from ...common.types import HandlerGroupType
 from .prompt_validator import validate_prompt
 
 

@@ -5,7 +5,7 @@ from typing import List, Tuple, Dict
 from telegram import Update
 from telegram.ext import ContextTypes, ApplicationHandlerStop
 
-from telefix.common.helpers import num_tokens_from_string
+from ...common.helpers import num_tokens_from_string
 
 logger_prompt_validator = logging.getLogger(__name__)
 

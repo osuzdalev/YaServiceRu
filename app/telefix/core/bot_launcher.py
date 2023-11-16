@@ -15,6 +15,25 @@ from .module_manager import ModuleManager
 
 
 class BotLauncher:
+    """
+    Manages the initialization and launch of a Telegram bot application.
+
+    This class handles the configuration and setup of a Telegram bot application,
+    including logging setup, adding module handlers, and managing post-initialization
+    activities. It also provides functionality to restart the application if needed.
+
+    Attributes:
+        bot_config_manager (BotConfigurationManager): Manages the bot's configuration settings.
+        module_manager (ModuleManager): Manages the modules that add functionality to the bot.
+        log_level (logging.Level): Specifies the logging level for the application.
+
+    Methods:
+        add_tg_module_handlers(application): Adds Telegram module handlers to the application.
+        setup_logging(): Sets up logging with specified format and handlers.
+        post_init(application): Loads configurations into core data_reader after initialization.
+        launch(): Initializes and starts the bot application, handling restarts if necessary.
+    """
+
     def __init__(
         self,
         bot_config_manager: BotConfigurationManager,
@@ -52,9 +71,7 @@ class BotLauncher:
             handlers=[
                 logging.StreamHandler(sys.stdout),
                 logging.FileHandler(
-                    self.bot_config_manager.config["telefix"][
-                        "logs"
-                    ],
+                    self.bot_config_manager.config["telefix"]["logs"],
                     mode="a",
                 ),
             ],
@@ -89,9 +106,7 @@ class BotLauncher:
         application = (
             Application.builder()
             .token(
-                self.bot_config_manager.config["telefix"]["secret"][
-                    "token_telegram"
-                ]
+                self.bot_config_manager.config["telefix"]["secret"]["token_telegram"]
             )
             .persistence(persistence)
             .arbitrary_callback_data(True)
