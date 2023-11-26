@@ -1,9 +1,0 @@
-name: local
-
-database:
-  host: localhost
-  dbname: postgres
-  user: postgres
-  port: 5432
-  secret:
-    password: DATABASE_POSTGRES_PASSWORD

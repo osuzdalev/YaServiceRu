@@ -1,6 +1,6 @@
 from telegram.ext import MessageHandler, filters
 
-from telefix.common.types import HandlerGroupType
+from ...common.types import HandlerGroupType
 from .unknown_command import unknown_command
 
 

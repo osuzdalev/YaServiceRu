@@ -1,7 +1,0 @@
-name: dev
-
-weaviate:
-  api: http://localhost:8080 # local or docker
-  port: 8080
-  data: ../data/vector_database/embeddings # for the volumes
-  persistence: /var/lib/data # path inside the docker

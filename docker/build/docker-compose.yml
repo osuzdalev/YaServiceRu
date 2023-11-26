@@ -1,0 +1,84 @@
+version: '3.4'
+services:
+  database:
+    image: "postgres:15.3"
+    ports:
+      - "${DATABASE_IMAGE_PORT}:${DATABASE_IMAGE_PORT}"
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD}
+    volumes:
+      - ${DATABASE_LOCAL_DATA}:/var/lib/postgresql/data
+      - ${DATABASE_LOCAL_CONFIG}:/etc/postgresql/
+    command: postgres -c config_file=/etc/postgresql/postgres.conf
+    # restart: unless-stopped
+
+  weaviate:
+    image: semitechnologies/weaviate:latest
+    ports:
+      - "${VECTOR_DATABASE_IMAGE_PORT}:8080"
+    environment:
+      PROMETHEUS_MONITORING_ENABLED: 'true'
+      QUERY_DEFAULTS_LIMIT: 20
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: ${VECTOR_DATABASE_IMAGE_PERSISTENCE}
+      DEFAULT_VECTORIZER_MODULE: text2vec-transformers
+      ENABLE_MODULES: text2vec-transformers,backup-filesystem
+      BACKUP_FILESYSTEM_PATH: ${VECTOR_DATABASE_IMAGE_BACKUPS}
+      TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080
+      CLUSTER_HOSTNAME: 'node1'
+      AUTOSCHEMA_ENABLED: 'false'
+    volumes:
+      - ${VECTOR_DATABASE_LOCAL_PERSISTENCE}:${VECTOR_DATABASE_IMAGE_PERSISTENCE}
+      - ${VECTOR_DATABASE_LOCAL_BACKUPS}:${VECTOR_DATABASE_IMAGE_BACKUPS}
+    depends_on:
+      - t2v-transformers
+      - prometheus
+      - grafana
+    # restart: unless-stopped
+
+  t2v-transformers:
+    image: semitechnologies/transformers-inference:sentence-transformers-paraphrase-multilingual-MiniLM-L12-v2
+    environment:
+      ENABLE_CUDA: 0
+    # restart: unless-stopped
+    # NVIDIA_VISIBLE_DEVICES: all # enable if running with CUDA
+
+  prometheus:
+    image: prom/prometheus:v2.36.2
+    ports:
+      - "${PROMETHEUS_IMAGE_PORT}:9090"
+    volumes:
+      - ${PROMETHEUS_LOCAL_CONFIGS}:${PROMETHEUS_IMAGE_CONFIGS}
+      - ${PROMETHEUS_LOCAL_DATA}:${PROMETHEUS_IMAGE_DATA}
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+
+  grafana:
+    image: grafana/grafana-oss
+    ports:
+      - "${GRAFANA_IMAGE_PORT}:${GRAFANA_IMAGE_PORT}"
+    volumes:
+      - ${GRAFANA_LOCAL_CONFIGS}:${GRAFANA_IMAGE_CONFIGS}
+      - ${GRAFANA_LOCAL_DATASOURCE}:${GRAFANA_IMAGE_DATASOURCE}
+      - ${GRAFANA_LOCAL_DASHBOARD_PROVIDER}:${GRAFANA_IMAGE_DASHBOARD_PROVIDER}
+      - ${GRAFANA_LOCAL_DASHBOARDS}:${GRAFANA_IMAGE_DASHBOARDS}
+
+  telefix:
+    build:
+      context: ../../.
+      dockerfile: ${TELEFIX_LOCAL_DOCKERFILE}
+    ports:
+      - "${TELEFIX_IMAGE_PORT}:80"
+    env_file:
+      - ../../.env
+    volumes:
+      - ${TELEFIX_LOCAL_LOGS}:${TELEFIX_IMAGE_LOGS}
+      - ${TELEFIX_LOCAL_PERSISTENCE}:${TELEFIX_IMAGE_PERSISTENCE}
+    depends_on:
+      - database
+      - weaviate
+      - t2v-transformers
+    # restart: unless-stopped

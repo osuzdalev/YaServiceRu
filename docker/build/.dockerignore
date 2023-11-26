@@ -22,7 +22,6 @@ Thumbs.db
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-app/.env
 app/MANIFEST.in
 app/LICENSE.md
 
@@ -30,8 +29,15 @@ app/test/
 app/scripts/
 app/dist/
 app/log/
-app/*.egg-info/
+app/*.egg-info
 
-services/config/database/pg_config
+# ----------------------------------------------------------------------------------------------------------------------
 
-README.md
+docker/app/image_volumes/
+
+docker/database/
+docker/grafana/
+docker/prometheus/
+docker/build/
+
+*README.md

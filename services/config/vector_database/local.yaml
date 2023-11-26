@@ -1,4 +1,0 @@
-name: local
-
-weaviate:
-  api: http://localhost:8080

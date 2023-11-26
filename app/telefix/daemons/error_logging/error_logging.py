@@ -1,48 +1,36 @@
 import html
 import json
 import logging
-import smtplib as smtp
 import traceback
 
 from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
+from email.mime.text import MIMEText
+
 logger_error = logging.getLogger(__name__)
 
 
 async def send_email(
-    _: Update, context: ContextTypes.DEFAULT_TYPE, content: str
+    _: Update, context: ContextTypes.DEFAULT_TYPE, mail_server, mail_message: str
 ) -> None:
     """Sends an email with the logs to the developer"""
-    yaserviceru_email = context.bot_data["config"]["telefix"]["core"]["email"][
-        "call_center"
-    ]
+    email = context.bot_data["config"]["telefix"]["core"]["email"]["call_center"]
     password = context.bot_data["config"]["telefix"]["secret"]["password_smtp"]
 
-    message = "\r\n".join(
-        [
-            f"From: {yaserviceru_email}",
-            f"To: {yaserviceru_email}",
-            "Subject: YaServiceRu ERROR",
-            "",
-            content,
-        ]
-    )
+    msg = MIMEText(mail_message)
+    msg["From"] = email
+    msg["To"] = email
+    msg["Subject"] = "YaServiceRu ERROR"
 
-    server = smtp.SMTP(
-        context.bot_data["config"]["telefix"]["core"]["email"]["smtp"]["url"],
-        context.bot_data["config"]["telefix"]["core"]["email"]["smtp"]["port"],
-    )
-    server.set_debuglevel(1)
-    server.starttls()
-    server.login(yaserviceru_email, password)
-    server.sendmail(yaserviceru_email, yaserviceru_email, message.encode("utf-8"))
-    server.quit()
+    mail_server.login(email, password)
+    mail_server.send_message(msg)
+    mail_server.quit()
 
 
 async def error_notification(
-    update: object, context: ContextTypes.DEFAULT_TYPE
+    update: object, context: ContextTypes.DEFAULT_TYPE, mail_server
 ) -> None:
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
@@ -84,4 +72,4 @@ async def error_notification(
         parse_mode=ParseMode.HTML,
     )
     # and to the email
-    await send_email(update, context, mail_message)
+    await send_email(update, context, mail_server, mail_message)

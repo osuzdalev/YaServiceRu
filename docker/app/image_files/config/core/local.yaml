@@ -1,6 +1,6 @@
 name: local
 
-yaserviceru:
+telefix:
   contact:
     tg_id:
       bot: 6083336654
@@ -16,9 +16,10 @@ yaserviceru:
       smtp:
         url: smtp.yandex.ru
         port: 587
-  bot_persistence:
-    persistence: data/core/persistence.pkl
-  logs: telefix/data/core/logs.log
+  persistence: /Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_volumes/data/core/persistence.pkl
+  logs: /Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_volumes/log/logs.log
+  docker:
+    port: 8081
   secret:
     api_openai: API_OPENAI
     token_telegram: TOKEN_TG_DEV_BOT
