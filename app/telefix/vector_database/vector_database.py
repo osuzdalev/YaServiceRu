@@ -1,6 +1,7 @@
 import inspect
 import json
 import logging
+import pprint
 from typing import List, Dict, Union
 
 from sentence_transformers import SentenceTransformer
@@ -63,6 +64,8 @@ class VectorDatabase:
         sentence_transformer: str,
         semantic_threshold: float,
         query_limit: int,
+        classes_config: Dict[str, Dict],
+        filters_config: Dict[str, Dict],
     ):
         self.vector_db_client = weaviate.Client(api_url)
         self.embedding_model = SentenceTransformer(sentence_transformer)
@@ -77,12 +80,12 @@ class VectorDatabase:
             raise Exception("vector_db_client is not ready!")
 
         self.populate_vector_database(
-            self.vector_database_data_reader.get_classes(),
-            self.vector_database_data_reader.get_filters(),
+            classes_config,
+            filters_config,
         )
 
     def populate_vector_database(
-        self, classes: Dict[str, Dict], filters: Dict[str, Dict]
+        self, classes_config: Dict[str, Dict], filters_config: Dict[str, Dict]
     ) -> None:
         """
         Populate the vector database with specified classes and filters.
@@ -107,13 +110,15 @@ class VectorDatabase:
             f"Populating vector database - {inspect.currentframe().f_code.co_name}"
         )
 
+        # FIXME
+
         # Check if classes already exist
-        if self.check_classes(classes):
-            logger_vector_db.info("Classes already exist. Skipping population.")
-            return
+        # if self.check_classes(classes_config):
+        #     logger_vector_db.info("Classes already exist. Skipping population.")
+        #     return
 
         logger_vector_db.info("Reinitialising vector database")
-        self.classes = classes
+        self.classes = classes_config
         self.delete_all()
 
         # Print classes to be written to vector_db
@@ -122,19 +127,17 @@ class VectorDatabase:
             logger_vector_db.info(f"{class_name}")
 
         # Create the classes in the vector_db
-        schema = self.get_schema()
         for class_name, class_config in self.classes.items():
-            if class_name not in schema:
-                self.create_class(class_config)
-                logger_vector_db.info(f"Class '{class_name}' created")
+            self.create_class(class_config)
+            logger_vector_db.info(f"Class '{class_name}' created")
 
         # Log updated schema
-        logger_vector_db.info(f"Updated Schema: {self.get_schema()}")
+        logger_vector_db.info(f"Updated Schema: {pprint.pformat(self.get_schema())}")
 
         logger_vector_db.info("Writing filters to vector database...")
 
         # Read filters from the provided dictionary and add them to vector_db
-        for filter_name, filter_lst in filters.items():
+        for filter_name, filter_lst in filters_config.items():
             for filter_str in filter_lst:
                 filter_object = {"content": filter_str}
 
@@ -158,7 +161,7 @@ class VectorDatabase:
                 )
 
             # Ensure objects are written properly
-            if not self.get_all_objects_from_class(self.classes):
+            if not self.get_all_objects_from_class(filter_name):
                 raise AssertionError(
                     "No objects found in vector database after writing"
                 )
@@ -221,6 +224,8 @@ class VectorDatabase:
                 f"Error creating class '{class_config['class']}': {e}"
             )
 
+    # TODO did not return "False" when embeddings were empty (the volumes was not properly mounted).
+    # check why it could not tell the database was empty, there was no schema, and yet still thought everything was ok.
     def check_classes(self, classes) -> bool:
         """
         Check if the specified classes exist in the vector database.
@@ -238,6 +243,10 @@ class VectorDatabase:
         """
         logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
 
+        # Create the classes in the vector_db
+        schema = self.get_schema()
+        pprint.pp(schema)
+
         for class_name, configs in classes.items():
             try:
                 self.vector_db_client.schema.get(class_name)
@@ -248,7 +257,17 @@ class VectorDatabase:
                 )
                 return False
 
-        # Since all classes are correct assign them as attribute for this core
+        # FIXME this checks only if there are objects. Not if every class is filled.
+        try:
+            obj = self.vector_db_client.data_object.get()
+            logger_vector_db.info(f"Object retrieved in vector_db: {obj}")
+        except Exception as e:
+            logger_vector_db.info(f"Checking objects yielded the following error {e}")
+            return False
+
+        # TODO if everything is fine in the schema then its classes
+        # should be the ones used for the objects attributes, not the ones
+        # from the config file
         self.classes = classes
 
         return True
@@ -290,6 +309,31 @@ class VectorDatabase:
         logger_vector_db.info(all_objects)
 
         return all_objects
+
+    # TODO implement backup method
+    def backup(self):
+        """
+        If you check the contents of the backup directory again,
+        you should see a new directory called my-very-first-backup
+        containing the backup data files.
+        """
+        backup = self.vector_db_client.backup.create(
+            backup_id="my-very-first-backup",
+            backend="filesystem",
+        )
+
+        result = self.vector_db_client.backup.get_create_status(
+            backup_id="my-very-first-backup",
+            backend="filesystem",
+        )
+        return result
+
+    # TODO implement restore method
+    def restore(self):
+        result = self.vector_db_client.backup.restore(
+            backup_id="my-very-first-backup",
+            backend="filesystem",
+        )
 
     def get_schema(self) -> Dict:
         return self.vector_db_client.schema.get()
