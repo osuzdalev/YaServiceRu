@@ -94,15 +94,9 @@ class BotLauncher:
         self.setup_logging()
 
         persistence = PicklePersistence(
-            filepath=self.bot_config_manager.config["telefix"]["bot_persistence"][
-                "persistence"
-            ]
+            filepath=self.bot_config_manager.config["telefix"]["persistence"]
         )
 
-        print(
-            "TOKEN: ",
-            self.bot_config_manager.config["telefix"]["secret"]["token_telegram"],
-        )
         application = (
             Application.builder()
             .token(

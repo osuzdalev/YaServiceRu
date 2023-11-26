@@ -31,6 +31,8 @@ class DataReader:
     The class is intended to be extended by subclasses that can utilize the loaded data
     for specific purposes, such as fetching system instructions, loading GIFs, or
     retrieving specific information relevant to the application's functionality.
+
+    Each config (dev, main, ect ...) has its own specific data (video ID, ect ...).
     """
 
     def __init__(self, config: str, file_path: str):

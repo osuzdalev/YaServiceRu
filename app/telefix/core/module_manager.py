@@ -1,8 +1,6 @@
 from typing import Any, List, Dict, Tuple
-import yaml
 
 from ..vector_database import VectorDatabase
-
 from ..user.chatbot import ChatGPTModelConfig
 from ..common.types import TgModuleType, StdModuleType
 
@@ -19,9 +17,7 @@ class ModuleManager:
         std_modules (list): A list of standard modules used in the application.
         std_module_objects (dict): Instances of standard modules.
         tg_modules (dict): Telegram-specific modules.
-        config_file_path (str): Path to the configuration file for modules.
         config (dict): Stores the processed configuration settings for modules.
-        wiki_folder_path (str): Path to the folder containing wiki-related data.
 
     Methods:
         _load_config_file(): Loads the module configuration file.
@@ -34,20 +30,12 @@ class ModuleManager:
         self,
         tg_modules: Dict,
         std_modules: List,
-        config_file_path: str,
-        wiki_folder_path: str,
+        config: Dict,
     ):
         self.std_modules = std_modules
         self.std_module_objects = {}
         self.tg_modules = tg_modules
-        self.config_file_path = config_file_path
-        self.config = None
-        self.wiki_folder_path = wiki_folder_path
-        self._load_config_file()
-
-    def _load_config_file(self):
-        with open(self.config_file_path, "r") as config_file:
-            self.config = yaml.safe_load(config_file)
+        self.config = config
 
     def get_prepped_std_module_objects(self) -> None:
         """
@@ -70,6 +58,8 @@ class ModuleManager:
                         "semantic_threshold"
                     ],
                     query_limit=self.config["vector_database"]["query_limit"],
+                    classes_config=self.config["vector_database"]["classes"],
+                    filters_config=self.config["vector_database"]["filters"],
                 )
                 self.std_module_objects[
                     StdModuleType.VECTOR_DATABASE.value
@@ -115,7 +105,10 @@ class ModuleManager:
 
         for module_name, module_handler in self.tg_modules.items():
             if module_name == TgModuleType.ERROR_LOGGING.value:
-                error_handler = module_handler()
+                error_handler = module_handler(
+                    self.config["telefix"]["contact"]["email"]["smtp"]["url"],
+                    self.config["telefix"]["contact"]["email"]["smtp"]["port"],
+                )
             elif module_name == TgModuleType.GLOBAL_FALLBACK.value:
                 global_fallback = module_handler(commands, messages)
                 handlers.insert(0, global_fallback)
@@ -127,7 +120,7 @@ class ModuleManager:
                 )
                 handlers.append(prompt_validator)
             elif module_name == TgModuleType.WIKI.value:
-                handlers.append(module_handler(self.wiki_folder_path))
+                handlers.append(module_handler(self.config["wiki"]))
             else:
                 handlers.append(module_handler())
 
