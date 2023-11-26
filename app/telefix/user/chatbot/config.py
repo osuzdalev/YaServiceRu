@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from telefix.core.data_reader import ChatGPTDataReader
-from telefix.common.helpers import num_tokens_from_string
+from ...core.data_reader import ChatGPTDataReader
+from ...common.helpers import num_tokens_from_string
 
 
 data_reader = ChatGPTDataReader("dev")

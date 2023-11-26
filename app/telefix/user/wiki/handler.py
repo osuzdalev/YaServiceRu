@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, filters
 
@@ -43,17 +44,14 @@ class WikiHandler:
     commands = ["wiki", "cancel"]
     messages = ["📖Справочник", "❌Отменить"]
 
-    def __init__(self, folder_path: str):
-        self.folder_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), folder_path
-        )
+    def __init__(self, wiki_data_dict: Dict):
         self.commands = WikiHandler.commands
         self.messages = WikiHandler.messages
 
         # Generating the telegram_website object from yaml database file
         website = Website(STATE, BROWSER_HISTORY_NAME)
         # Parse the yaml file
-        website.parse(folder_path)
+        website.parse(wiki_data_dict)
         # Adding the first page to website
         entry_page = Page(
             ENTRY_PAGE_NAME,

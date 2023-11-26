@@ -5,18 +5,16 @@ __pycache__
 .ruff_cache/
 .github/
 
-services/data/app
-services/data/database
-services/data/vector_database
+*.egg-info/
 
-services/config/database/pg_config
-
-app/telefix/data/core
-
+app/dist
 app/scripts/init_database.sql
 
-*.egg-info/
-app/dist/
+docker/app/image_files/config/core
 
-app/.env
-/app/log/logs.log
+docker/app/image_volumes/data
+docker/app/image_volumes/log/logs.log
+
+docker/database
+
+.env

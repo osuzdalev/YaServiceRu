@@ -12,7 +12,8 @@ class ErrorHandler:
 
     def init_mail_server(self, smtp_url, smtp_port):
         server = smtp.SMTP(smtp_url, smtp_port)
-        server.set_debuglevel(1)
+        # TODO use the  loguru loglevel as argument here
+        server.set_debuglevel(0)
         server.starttls()
 
         return server

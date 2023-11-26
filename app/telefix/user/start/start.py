@@ -4,8 +4,8 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from telefix.core.data_reader import StartReader
-from telefix.common.markups import DEFAULT_CLIENT_MARKUP
+from ...core.data_reader import StartReader
+from ...common.markups import DEFAULT_CLIENT_MARKUP
 
 
 logger_start = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 import inspect
 import re
 import logging
-from typing import List
+from typing import List, Dict
 
 import yaml
 
@@ -198,13 +198,11 @@ class Website:
     def format_title(self, title: str) -> str:
         return "__*" + title + "*__"
 
-    def parse(self, config_file):
-        """Parses a YAML file and generates the pages of the website from the data"""
-        with open(config_file, mode="rb") as fp:
-            config = yaml.load(fp, Loader=YamlLoader)
+    def parse(self, wiki_data_dict: Dict):
+        """Generates the pages of the website from the provided configuration dictionary"""
 
         # Generates the pages from the yaml file
-        for name, info in config.items():
+        for name, info in wiki_data_dict.items():
             back_button = InlineKeyboardButton(text=BACK, callback_data=BACK)
             cancel_button = InlineKeyboardButton(text=CANCEL, callback_data=CANCEL)
             # Check if there are buttons on the page and parse them accordingly

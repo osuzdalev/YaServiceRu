@@ -1,6 +1,6 @@
 from telegram.ext import CommandHandler
 
-from telefix.common.types import HandlerGroupType
+from ...common.types import HandlerGroupType
 from .start import start
 
 

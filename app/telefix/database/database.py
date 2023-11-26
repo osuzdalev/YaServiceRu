@@ -9,7 +9,7 @@ from telegram.ext import (
     ContextTypes,
 )
 
-import utils as tldb
+from . import utils as tldb
 
 logger_data_collector = logging.getLogger(__name__)
 
