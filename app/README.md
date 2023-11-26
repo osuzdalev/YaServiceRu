@@ -12,13 +12,6 @@ First launch the other docker services, then run
 python -m app.scripts.local
 ```
 
-# Docker
-
-```bash
-cd docker
-sudo apt install postgresql-all
-```
-
 ## System Dependencies
 
 ```bash
@@ -35,7 +28,8 @@ https://tecadmin.net/tutorial/docker-run-static-website
 
 ---
 
+# Install package locally
 ```shell
 python -m build
-python -m pip install ./dist/telefix-0.2.7.tar.gz
+python -m pip install ./dist/telefix-0.{x}.{x}.tar.gz
 ```

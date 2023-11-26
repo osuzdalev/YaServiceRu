@@ -6,10 +6,10 @@ from .unknown_command import unknown_command
 
 class GlobalFallbackHandler:
     def __init__(self, commands=None, messages=None):
-        self.commands = commands if commands else []
-        self.messages = messages if messages else []
+        self.commands = commands or []
+        self.messages = messages or []
         self.ignore_commands_re = (
-            r"^(" + "|".join("\\" + "/" + command for command in self.commands) + ")$"
+            r"^(" + "|".join(rf"\/{command}" for command in self.commands) + ")$"
         )
         self.ignore_messages_re = (
             r"^(" + "|".join(message for message in self.messages) + ")$"

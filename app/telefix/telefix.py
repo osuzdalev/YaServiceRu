@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
 from . import (
-    BotLauncher,
     BotConfigurationManager,
-    ModuleManager,
-    StartHandler,
-    RestartHandler,
-    WikiHandler,
-    RequestHandler,
+    BotLauncher,
     DatabaseHandler,
     ErrorHandler,
     GlobalFallbackHandler,
+    ModuleManager,
     PromptValidatorHandler,
+    RequestHandler,
+    RestartHandler,
+    StartHandler,
+    WikiHandler,
 )
 from . import TgModuleType, StdModuleType
 

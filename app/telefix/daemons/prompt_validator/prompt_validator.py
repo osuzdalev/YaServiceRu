@@ -116,11 +116,10 @@ def check_prompt_tokens(prompt: str, chatgpt_model_config) -> Tuple[bool, int]:
     remaining_tokens = chatgpt_model_config.max_prompt_tokens - prompt_tokens
     logger_prompt_validator.info(f"PROMPT TOKEN SIZE: {prompt_tokens}")
 
-    return (
-        (True, remaining_tokens)
-        if prompt_tokens < chatgpt_model_config.max_prompt_tokens
-        else (False, prompt_tokens)
-    )
+    if prompt_tokens < chatgpt_model_config.max_prompt_tokens:
+        return True, remaining_tokens
+    else:
+        return False, prompt_tokens
 
 
 def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
