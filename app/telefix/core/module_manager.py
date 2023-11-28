@@ -28,12 +28,12 @@ class ModuleManager:
 
     def __init__(
         self,
-        tg_modules: Dict,
+        tg_modules: List,
         std_modules: List,
         config: Dict,
     ):
         self.std_modules = std_modules
-        self.std_module_objects = {}
+        self.std_module_instances = {}
         self.tg_modules = tg_modules
         self.config = config
 
@@ -47,9 +47,9 @@ class ModuleManager:
         Returns:
         - dict: A dictionary containing instances of each standard module.
         """
-        for module_type in self.std_modules:
-            if module_type == StdModuleType.VECTOR_DATABASE:
-                vector_database_object = VectorDatabase(
+        for module in self.std_modules:
+            if module.name == StdModuleType.VECTOR_DATABASE:
+                vector_database_instance = VectorDatabase(
                     api_url=self.config["vector_database"]["api_url"],
                     sentence_transformer=self.config["vector_database"][
                         "sentence_transformer"
@@ -61,9 +61,9 @@ class ModuleManager:
                     classes_config=self.config["vector_database"]["classes"],
                     filters_config=self.config["vector_database"]["filters"],
                 )
-                self.std_module_objects[
-                    StdModuleType.VECTOR_DATABASE.value
-                ] = vector_database_object
+                self.std_module_instances[
+                    StdModuleType.VECTOR_DATABASE
+                ] = vector_database_instance
 
     def get_tg_commands_messages(self) -> Tuple[List, List]:
         """
@@ -79,9 +79,9 @@ class ModuleManager:
         """
         all_commands = []
         all_messages = []
-        for module_name, module_handler in self.tg_modules.items():
-            all_commands.extend(getattr(module_handler, "commands", []))
-            all_messages.extend(getattr(module_handler, "messages", []))
+        for module in self.tg_modules:
+            all_commands.extend(getattr(module, "commands", []))
+            all_messages.extend(getattr(module, "messages", []))
 
         return all_commands, all_messages
 
@@ -103,25 +103,25 @@ class ModuleManager:
         error_handler = None
         commands, messages = self.get_tg_commands_messages()
 
-        for module_name, module_handler in self.tg_modules.items():
-            if module_name == TgModuleType.ERROR_LOGGING.value:
-                error_handler = module_handler(
+        for module in self.tg_modules:
+            if module.name == TgModuleType.ERROR_LOGGING:
+                error_handler = module(
                     self.config["telefix"]["contact"]["email"]["smtp"]["url"],
                     self.config["telefix"]["contact"]["email"]["smtp"]["port"],
                 )
-            elif module_name == TgModuleType.GLOBAL_FALLBACK.value:
-                global_fallback = module_handler(commands, messages)
+            elif module.name == TgModuleType.GLOBAL_FALLBACK:
+                global_fallback = module(commands, messages)
                 handlers.insert(0, global_fallback)
-            elif module_name == TgModuleType.PROMPT_VALIDATOR.value:
-                prompt_validator = module_handler(
+            elif module.name == TgModuleType.PROMPT_VALIDATOR:
+                prompt_validator = module(
                     ChatGPTModelConfig(),
-                    self.std_module_objects[StdModuleType.VECTOR_DATABASE.value],
+                    self.std_module_instances[StdModuleType.VECTOR_DATABASE],
                     global_fallback.ignore_messages_re,
                 )
                 handlers.append(prompt_validator)
-            elif module_name == TgModuleType.WIKI.value:
-                handlers.append(module_handler(self.config["wiki"]))
+            elif module.name == TgModuleType.WIKI:
+                handlers.append(module(self.config["wiki"]))
             else:
-                handlers.append(module_handler())
+                handlers.append(module())
 
         return handlers, error_handler

@@ -1,10 +1,12 @@
 from telegram.ext import MessageHandler, filters
 
-from ...common.types import HandlerGroupType
+from ...common.types import HandlerGroupType, TgModuleType
 from .unknown_command import unknown_command
 
 
 class GlobalFallbackHandler:
+    name = TgModuleType.GLOBAL_FALLBACK
+
     def __init__(self, commands=None, messages=None):
         self.commands = commands or []
         self.messages = messages or []

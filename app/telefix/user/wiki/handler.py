@@ -3,7 +3,7 @@ from typing import Dict
 
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, filters
 
-from ...common.types import HandlerGroupType
+from ...common.types import HandlerGroupType, TgModuleType
 
 from .constants import (
     STATE,
@@ -41,6 +41,7 @@ class WikiHandler:
     Wiki structure. It uses YAML files to define the layout and content of the Wiki pages.
     """
 
+    name = TgModuleType.WIKI
     commands = ["wiki", "cancel"]
     messages = ["📖Справочник", "❌Отменить"]
 

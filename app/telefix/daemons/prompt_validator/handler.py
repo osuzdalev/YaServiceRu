@@ -2,11 +2,13 @@ from functools import partial
 
 from telegram.ext import MessageHandler, filters
 
-from ...common.types import HandlerGroupType
+from ...common.types import HandlerGroupType, TgModuleType
 from .prompt_validator import validate_prompt
 
 
 class PromptValidatorHandler:
+    name = TgModuleType.PROMPT_VALIDATOR
+
     def __init__(self, chatgpt_model_config, vector_db_client, ignore_messages_re):
         self.chatgpt_model_config = chatgpt_model_config
         self.vector_db_client = vector_db_client

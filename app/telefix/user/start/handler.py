@@ -1,10 +1,11 @@
 from telegram.ext import CommandHandler
 
-from ...common.types import HandlerGroupType
+from ...common.types import HandlerGroupType, TgModuleType
 from .start import start
 
 
 class StartHandler:
+    name = TgModuleType.START
     commands = ["start"]
 
     def __init__(self):

@@ -5,14 +5,16 @@ from telegram.ext import (
     PreCheckoutQueryHandler,
 )
 
-from telefix.user.chatbot.config import ChatGPTConfig
-from telefix.user.chatbot.callback.handler import ChatGptCallbackHandler
-from telefix.common.types import HandlerGroupType
+from .config import ChatGPTConfig
+from .callback.handler import ChatGptCallbackHandler
+from ...common.types import HandlerGroupType, TgModuleType
 
 from .types import ChatGptCallbackType
 
 
 class ChatGptHandler:
+    name = TgModuleType.CHATBOT
+
     def __init__(self, ignored_texts_re):
         config = ChatGPTConfig()
         callback_handler = ChatGptCallbackHandler(config)

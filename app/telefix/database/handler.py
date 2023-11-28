@@ -3,11 +3,13 @@ from telegram.ext import (
     TypeHandler,
 )
 
-from ..common.types import HandlerGroupType
+from ..common.types import HandlerGroupType, TgModuleType
 from .database import collect_data
 
 
 class DatabaseHandler:
+    name = TgModuleType.DATABASE
+
     def __init__(self):
         self.data_collection_handler = TypeHandler(Update, collect_data)
         # Note check if needs to be implemented once overall features done

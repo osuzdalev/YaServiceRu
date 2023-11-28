@@ -11,6 +11,7 @@ from weaviate.util import generate_uuid5
 from numpy import ndarray
 from torch import Tensor
 
+from ..common.types import StdModuleType
 from ..core.data_reader import VectorDatabaseReader
 
 logger_vector_db = logging.getLogger(__name__)
@@ -57,6 +58,8 @@ class VectorDatabase:
 
     This class is essential for applications involving semantic search and retrieval, such as chatbots or recommendation systems.
     """
+
+    name = StdModuleType.VECTOR_DATABASE
 
     def __init__(
         self,
@@ -113,9 +116,9 @@ class VectorDatabase:
         # FIXME
 
         # Check if classes already exist
-        # if self.check_classes(classes_config):
-        #     logger_vector_db.info("Classes already exist. Skipping population.")
-        #     return
+        if self.check_classes(classes_config):
+            logger_vector_db.info("Classes already exist. Skipping population.")
+            return
 
         logger_vector_db.info("Reinitialising vector database")
         self.classes = classes_config

@@ -5,10 +5,11 @@ from ...user.request.request import (
     confirm_request,
     cancel_request,
 )
-from ...common.types import HandlerGroupType
+from ...common.types import HandlerGroupType, TgModuleType
 
 
 class RequestHandler:
+    name = TgModuleType.REQUEST
     commands = ["request"]
     messages = ["🤓Специалист", "❌Отменить"]
 

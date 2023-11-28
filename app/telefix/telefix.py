@@ -10,10 +10,10 @@ from . import (
     PromptValidatorHandler,
     RequestHandler,
     RestartHandler,
+    VectorDatabase,
     StartHandler,
     WikiHandler,
 )
-from . import TgModuleType, StdModuleType
 
 
 def main(deployment: str = "local"):
@@ -36,20 +36,17 @@ def main(deployment: str = "local"):
     ]
     bot_config_manager = BotConfigurationManager(file_paths)
 
-    # NOTE you could make the module name part of the class, and turn these
-    # dictionaries into lists. Then, inside the module manage, you can do
-    # if module.name == TgModuleType.VECTOR_DATABASE
-    tg_modules = {
-        TgModuleType.GLOBAL_FALLBACK.value: GlobalFallbackHandler,
-        TgModuleType.START.value: StartHandler,
-        TgModuleType.RESTART.value: RestartHandler,
-        TgModuleType.WIKI.value: WikiHandler,
-        TgModuleType.REQUEST.value: RequestHandler,
-        TgModuleType.PROMPT_VALIDATOR.value: PromptValidatorHandler,
-        TgModuleType.DATABASE.value: DatabaseHandler,
-        TgModuleType.ERROR_LOGGING.value: ErrorHandler,
-    }
-    std_modules = [StdModuleType.VECTOR_DATABASE]
+    tg_modules = [
+        GlobalFallbackHandler,
+        StartHandler,
+        RestartHandler,
+        WikiHandler,
+        RequestHandler,
+        PromptValidatorHandler,
+        DatabaseHandler,
+        ErrorHandler,
+    ]
+    std_modules = [VectorDatabase]
     module_manager = ModuleManager(tg_modules, std_modules, bot_config_manager.config)
 
     bot_launcher = BotLauncher(bot_config_manager, module_manager)

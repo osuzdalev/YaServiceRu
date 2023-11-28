@@ -14,15 +14,16 @@ class HandlerGroupType(Enum):
 
 
 class TgModuleType(Enum):
-    GLOBAL_FALLBACK = "global_fallback"
-    START = "start"
-    RESTART = "restart"
-    WIKI = "wiki"
-    REQUEST = "request"
-    PROMPT_VALIDATOR = "prompt_validator"
-    DATABASE = "database"
-    ERROR_LOGGING = "error_logging"
+    GLOBAL_FALLBACK = 0
+    START = 1
+    RESTART = 2
+    WIKI = 3
+    REQUEST = 4
+    PROMPT_VALIDATOR = 5
+    DATABASE = 6
+    ERROR_LOGGING = 7
+    CHATBOT = 8
 
 
 class StdModuleType(Enum):
-    VECTOR_DATABASE = "vector_database"
+    VECTOR_DATABASE = 0
