@@ -29,6 +29,7 @@ def generate_env_file(config_file, output_file, dotenv_file):
     export TELEFIX_IMAGE_LOGS={params['TELEFIX_IMAGE_LOGS']}
     export TELEFIX_LOCAL_DOCKERFILE={params['TELEFIX_LOCAL_DOCKERFILE']}
     export TELEFIX_IMAGE_PORT={params['TELEFIX_IMAGE_PORT']}
+    export TELEFIX_IMAGE_COMMAND={params['TELEFIX_IMAGE_COMMAND']}
     export DATABASE_LOCAL_DATA={params['DATABASE_LOCAL_DATA']}
     export DATABASE_IMAGE_DATA={params['DATABASE_IMAGE_DATA']}
     export DATABASE_LOCAL_CONFIG={params['DATABASE_LOCAL_CONFIG']}

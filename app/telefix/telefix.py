@@ -17,10 +17,16 @@ from . import TgModuleType, StdModuleType
 
 
 def main(deployment: str = "local"):
-    core_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/core/{deployment}.yaml"
-    database_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/database/{deployment}.yaml"
-    vector_database_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/vector_database/{deployment}.yaml"
-    wiki_module_path = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/wiki/data.yaml"
+    if deployment == "local":
+        core_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/core/{deployment}.yaml"
+        database_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/database/{deployment}.yaml"
+        vector_database_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/vector_database/{deployment}.yaml"
+        wiki_module_path = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/wiki/data.yaml"
+    else:
+        core_config = f"/var/lib/config/core/{deployment}.yaml"
+        database_config = f"/var/lib/config/database/{deployment}.yaml"
+        vector_database_config = f"/var/lib/config/vector_database/{deployment}.yaml"
+        wiki_module_path = "/var/lib/data/user/wiki/data.yaml"
 
     file_paths = [
         core_config,
