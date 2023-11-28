@@ -20,6 +20,8 @@ messages:
 
   2:
     - picture
+    # FIXME all paths need to be changed...
+    # needs to be more programmatic
     - data/user/wiki/Apple/Mac/1_Slowing_Bugging/Reset_CMOS_NVRAM/CMOS.jpg
 
   3:

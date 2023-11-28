@@ -1,7 +1,7 @@
 """Collection of silent functions gathering database about every user that interacts with the core"""
 
 import inspect
-import logging
+from loguru import logger
 from typing import Tuple, Optional
 
 from telegram import Update, User, Message
@@ -10,8 +10,6 @@ from telegram.ext import (
 )
 
 from . import utils as tldb
-
-logger_data_collector = logging.getLogger(__name__)
 
 
 async def get_postgres(_: Update, context: ContextTypes.DEFAULT_TYPE) -> dict:
@@ -34,9 +32,7 @@ async def collect_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
     # Log user details if user exists
     if user:
-        logger_data_collector.info(
-            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
     # Log the callback data if it exists
     log_callback_data(update)
@@ -49,16 +45,16 @@ async def collect_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         )
         tldb.insert_message(message.message_id, user.id, message.text, db_auth)
     else:
-        logger_data_collector.info("Update cannot be collected")
+        logger.info("Update cannot be collected")
 
 
 def log_callback_data(update: Update) -> None:
     """Log the callback data if it exists."""
     try:
         callback_data = update.callback_query.data
-        logger_data_collector.info(f"CALLBACK_DATA: {callback_data}")
+        logger.info(f"CALLBACK_DATA: {callback_data}")
     except (AttributeError, TypeError):
-        logger_data_collector.info("NO CALLBACK DATA")
+        logger.info("NO CALLBACK DATA")
 
 
 def extract_user_and_message(
@@ -101,7 +97,7 @@ async def collect_phone_number(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
     """Checks if Phone# in DB and adds it to appropriate UserID"""
-    logger_data_collector.debug({inspect.currentframe().f_code.co_name})
+    logger.debug({inspect.currentframe().f_code.co_name})
     user = update.effective_user
     phone_number = int(update.message.contact.phone_number)
     db_auth = await get_postgres(update, context)
@@ -115,8 +111,8 @@ async def collect_phone_number(
 
 async def user_status(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Keeps track of users interacting with the core or blocking it and updates flag in DB"""
-    logger_data_collector.info({inspect.currentframe().f_code.co_name})
-    logger_data_collector.info(
+    logger.info({inspect.currentframe().f_code.co_name})
+    logger.info(
         "update.my_chat_member.new_chat_member.status: {}".format(
             update.my_chat_member.new_chat_member.status
         )

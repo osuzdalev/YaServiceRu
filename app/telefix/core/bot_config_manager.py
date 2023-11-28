@@ -2,6 +2,8 @@ import yaml
 import os
 from dotenv import load_dotenv
 
+from loguru import logger
+
 from ..common.yaml_loader import YamlLoader
 
 load_dotenv()
@@ -34,7 +36,7 @@ class BotConfigurationManager:
     def _load_config_files(self, files_paths: list):
         for file_path in files_paths:
             if file_path.endswith("wiki/data.yaml"):
-                print("Processing wiki config")
+                logger.info("Loading wiki configs")
                 with open(file_path, mode="rb") as fp:
                     config = yaml.load(fp, Loader=YamlLoader)
                     config = {"wiki": config}

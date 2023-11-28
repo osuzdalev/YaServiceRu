@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 
 from telegram import (
     Update,
@@ -17,8 +17,6 @@ from telegram.ext import (
 
 from telefix.common import helpers
 from telefix.database import utils as tldb
-
-logger_assign = logging.getLogger(__name__)
 
 constants = ConfigParser()
 constants.read("constants.ini")

@@ -26,9 +26,7 @@ class CheckRemainingTokensCallback:
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self.__class__.__qualname__}"
-        )
+        self._logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         event = self.get_event(update, context)
         await self._event_callbacks[event](update, context)

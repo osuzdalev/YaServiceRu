@@ -1,29 +1,29 @@
 import inspect
 import json
-import logging
-import pprint
+from pprint import pformat
 from typing import List, Dict, Union
 
-from sentence_transformers import SentenceTransformer
+from loguru import logger
+
+from numpy import ndarray
 import torch
+from torch import Tensor
+from sentence_transformers import SentenceTransformer
 import weaviate
 from weaviate.util import generate_uuid5
-from numpy import ndarray
-from torch import Tensor
 
 from ..common.types import StdModuleType
-from ..core.data_reader import VectorDatabaseReader
-
-logger_vector_db = logging.getLogger(__name__)
 
 
 def get_available_device():
-    logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
+    logger.info(f" ")
     if torch.cuda.is_available():
         return torch.device("cuda")
     elif torch.backends.mps.is_available():
+        logger.info("Torch using MPS")
         return torch.device("mps")
     else:
+        logger.info("Torch using CPU")
         return torch.device("cpu")
 
 
@@ -43,7 +43,6 @@ class VectorDatabase:
         query_limit (int): Limit for the number of results returned in queries.
         classes (dict): Dictionary of classes (schema definitions) in the database.
         device (torch.device): The computational device used for model operations.
-        vector_database_data_reader (VectorDatabaseReader): Reader for database configurations.
 
     Methods:
         populate_vector_database(classes, filters): Populates the database with classes and filters.
@@ -76,7 +75,6 @@ class VectorDatabase:
         self.query_limit = query_limit
         self.classes = {}
         self.device = get_available_device()
-        self.vector_database_data_reader = VectorDatabaseReader()
 
         # Ensure the vector_db_client instance is ready
         if not self.vector_db_client.is_ready():
@@ -109,35 +107,33 @@ class VectorDatabase:
         and filters added.
         """
 
-        logger_vector_db.info(
-            f"Populating vector database - {inspect.currentframe().f_code.co_name}"
-        )
+        logger.info(f" ")
 
         # FIXME
 
         # Check if classes already exist
         if self.check_classes(classes_config):
-            logger_vector_db.info("Classes already exist. Skipping population.")
+            logger.info("Classes already exist. Skipping population.")
             return
 
-        logger_vector_db.info("Reinitialising vector database")
+        logger.info("Reinitialising vector database")
         self.classes = classes_config
         self.delete_all()
 
         # Print classes to be written to vector_db
-        logger_vector_db.info("Classes to be written to vector_db:")
+        logger.info("Classes to be written to vector_db:")
         for class_name, class_config in self.classes.items():
-            logger_vector_db.info(f"{class_name}")
+            logger.info(f"{class_name}")
 
         # Create the classes in the vector_db
         for class_name, class_config in self.classes.items():
             self.create_class(class_config)
-            logger_vector_db.info(f"Class '{class_name}' created")
+            logger.info(f"Class '{class_name}' created")
 
         # Log updated schema
-        logger_vector_db.info(f"Updated Schema: {pprint.pformat(self.get_schema())}")
+        logger.info(f"Updated Schema: {pformat(self.get_schema())}")
 
-        logger_vector_db.info("Writing filters to vector database...")
+        logger.info("Writing filters to vector database...")
 
         # Read filters from the provided dictionary and add them to vector_db
         for filter_name, filter_lst in filters_config.items():
@@ -153,15 +149,11 @@ class VectorDatabase:
 
                 # Log validation errors if any, else write data object to vector_db
                 if not valid_filter_object["valid"]:
-                    logger_vector_db.error(
-                        json.dumps(valid_filter_object["error"], indent=2)
-                    )
+                    logger.error(json.dumps(valid_filter_object["error"], indent=2))
                     raise ValueError("Vector Database object format not valid")
 
                 self.write_data_object(filter_object, filter_name)
-                logger_vector_db.info(
-                    f"Filter '{filter_str}' added to class '{filter_name}'"
-                )
+                logger.info(f"Filter '{filter_str}' added to class '{filter_name}'")
 
             # Ensure objects are written properly
             if not self.get_all_objects_from_class(filter_name):
@@ -169,7 +161,7 @@ class VectorDatabase:
                     "No objects found in vector database after writing"
                 )
 
-        logger_vector_db.info("Vector database populated successfully")
+        logger.info("Vector database populated successfully")
 
     def vector_query(
         self,
@@ -195,7 +187,7 @@ class VectorDatabase:
         Raises:
         - Exception: If an error occurs during the query execution.
         """
-        logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
+        logger.info(f" ")
 
         nearVector = {"vector": vector, "certainty": certainty}
 
@@ -209,7 +201,14 @@ class VectorDatabase:
             .do()
         )
 
-        print(json.dumps(result, indent=4))
+        try:
+            max_certainty = result["data"]["Get"][collection_name][0]["_additional"][
+                "certainty"
+            ]
+            content = result["data"]["Get"][collection_name][0]["content"]
+            logger.info(f"Max certainty: {max_certainty}\nContent: {content}")
+        except IndexError:
+            logger.warning("Semantic query yielded NULL")
 
         if "errors" in result:
             raise Exception(result["errors"][0]["message"])
@@ -217,15 +216,13 @@ class VectorDatabase:
         return result["data"]["Get"][collection_name]
 
     def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
-        logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
+        logger.info(f" ")
 
         try:
             self.vector_db_client.schema.create_class(class_config)
-            logger_vector_db.info(f"Class '{class_config['class']}' created.")
+            logger.info(f"Class '{class_config['class']}' created.")
         except Exception as e:
-            logger_vector_db.info(
-                f"Error creating class '{class_config['class']}': {e}"
-            )
+            logger.info(f"Error creating class '{class_config['class']}': {e}")
 
     # TODO did not return "False" when embeddings were empty (the volumes was not properly mounted).
     # check why it could not tell the database was empty, there was no schema, and yet still thought everything was ok.
@@ -244,28 +241,22 @@ class VectorDatabase:
         Logs:
         - Informational messages about the presence or absence of classes.
         """
-        logger_vector_db.info(f"{inspect.currentframe().f_code.co_name}")
-
-        # Create the classes in the vector_db
-        schema = self.get_schema()
-        pprint.pp(schema)
+        logger.info(f" ")
 
         for class_name, configs in classes.items():
             try:
                 self.vector_db_client.schema.get(class_name)
-                logger_vector_db.info(f"Class {class_name} in vector database")
+                logger.info(f"Class {class_name} in vector database")
             except weaviate.exceptions.UnexpectedStatusCodeException:
-                logger_vector_db.info(
-                    f"Class {class_name} not found in vector database"
-                )
+                logger.info(f"Class {class_name} not found in vector database")
                 return False
 
         # FIXME this checks only if there are objects. Not if every class is filled.
         try:
             obj = self.vector_db_client.data_object.get()
-            logger_vector_db.info(f"Object retrieved in vector_db: {obj}")
+            logger.info(f"Objects found in vector_db: {obj['totalResults']}")
         except Exception as e:
-            logger_vector_db.info(f"Checking objects yielded the following error {e}")
+            logger.info(f"Checking objects yielded the following error {e}")
             return False
 
         # TODO if everything is fine in the schema then its classes
@@ -308,8 +299,8 @@ class VectorDatabase:
             all_objects.extend(objects)
             cursor = objects[-1]["_additional"]["id"]
 
-        logger_vector_db.info(f"All objects from {class_name}:")
-        logger_vector_db.info(all_objects)
+        logger.info(f"All objects from {class_name}:")
+        logger.info(all_objects)
 
         return all_objects
 
@@ -347,7 +338,7 @@ class VectorDatabase:
 
     def delete_class(self, class_name: str) -> None:
         self.vector_db_client.schema.delete_class(class_name)
-        logger_vector_db.info(f"Class '{class_name}' deleted.")
+        logger.info(f"Class '{class_name}' deleted.")
 
     def write_data_object(self, data: Dict, class_name: str) -> None:
         self.vector_db_client.data_object.create(

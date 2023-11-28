@@ -1,11 +1,9 @@
-import logging
+from loguru import logger
 
 from telegram import Update
 from telegram.ext import ContextTypes, CommandHandler
 
 from telefix.common import helpers
-
-logger_assign = logging.getLogger(__name__)
 
 constants = ConfigParser()
 constants.read("constants.ini")

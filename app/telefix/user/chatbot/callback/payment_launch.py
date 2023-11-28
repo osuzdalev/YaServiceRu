@@ -1,6 +1,8 @@
 import os
 from enum import Enum
 
+from loguru import logger
+
 from telegram import Update, LabeledPrice
 from telegram.ext import ContextTypes
 
@@ -10,8 +12,7 @@ class PaymentLaunchCallbackEventType(Enum):
 
 
 class PaymentLaunchCallback:
-    def __init__(self, logger, config):
-        self._logger = logger
+    def __init__(self, config):
         self._config = config
         self._event_callbacks = {
             PaymentLaunchCallbackEventType.PAYMENT_LAUNCH: self._payment_launch_callback,
@@ -25,9 +26,7 @@ class PaymentLaunchCallback:
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self.__class__.__qualname__}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         event = self.get_event(update, context)
         await self._event_callbacks[event](update, context)
@@ -37,9 +36,7 @@ class PaymentLaunchCallback:
     ) -> None:
         """Handles user's response to pay for more interactions."""
         user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self._payment_launch_callback.__qualname__}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         chat_id = update.message.chat_id
         title = "YaService-GPT Premium"

@@ -1,6 +1,6 @@
-import inspect
-import logging
 from typing import Union
+
+from loguru import logger
 
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
@@ -13,8 +13,6 @@ from .constants import (
     STATE,
 )
 
-logger_wiki = logging.getLogger(__name__)
-
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str, int]:
     """
@@ -25,9 +23,7 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
     the customer to first close the previous one.
     """
     user = update.message.from_user
-    logger_wiki.info(
-        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-    )
+    logger.info(f"({user.id}, {user.name}, {user.first_name})")
     # Context history for the user's session
     context.user_data["Device_Context"] = []
     context.user_data["Annexe_Messages"] = []
@@ -56,9 +52,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
     to the first page of the wiki
     """
     user = update.message.from_user
-    logger_wiki.info(
-        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-    )
+    logger.info(f"({user.id}, {user.name}, {user.first_name})")
     context.user_data[BROWSER_HISTORY_NAME].append(ENTRY_PAGE_NAME)
 
     query = update.callback_query
@@ -71,9 +65,7 @@ async def wiki_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
 
 async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    logger_wiki.info(
-        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-    )
+    logger.info(f"({user.id}, {user.name}, {user.first_name})")
     context.user_data["in_conversation"] = ""
     context.user_data["Annexe_Messages"] = []
     return ConversationHandler.END

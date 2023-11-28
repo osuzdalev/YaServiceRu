@@ -1,5 +1,7 @@
 from enum import Enum
 
+from loguru import logger
+
 from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
@@ -12,8 +14,7 @@ class StartCallbackEventType(Enum):
 
 
 class StartCallback:
-    def __init__(self, logger, config):
-        self._logger = logger
+    def __init__(self, config):
         self._config = config
         self._event_callbacks = {
             StartCallbackEventType.FIRST_TIME_USER: self._first_time_user_cb,
@@ -42,9 +43,7 @@ class StartCallback:
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self.__class__.__qualname__}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         event = self.get_event(update, context)
         await self._event_callbacks[event](update, context)

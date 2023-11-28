@@ -1,14 +1,12 @@
 from contextlib import closing
 import inspect
 import os
-import logging
-from pprint import pprint
+from loguru import logger
+from pprint import pformat
 
 import psycopg
 
 from typing import List, Tuple
-
-logger_tgdb = logging.getLogger(__name__)
 
 
 # TODO Investigate using the database modeling library to interact with the database
@@ -44,7 +42,7 @@ def insert_new_user(
     Raises:
     - psycopg.Error: Raised when there is an error executing the database commands.
     """
-    logger_tgdb.info(f"{inspect.currentframe().f_code.co_name}")
+    logger.info(f" ")
     try:
         with create_db_connection(db_auth) as conn:
             cursor = conn.cursor()
@@ -58,14 +56,14 @@ def insert_new_user(
                 )
                 conn.commit()
             else:
-                logger_tgdb.debug("Customer already in Database")
+                logger.debug("Customer already in Database")
     except psycopg.Error as e:
-        logger_tgdb.error(e)
+        logger.error(e)
 
 
 def get_user_data(user_id: int, db_auth: dict) -> None:
     """Stuff"""
-    logger_tgdb.info(f"{inspect.currentframe().f_code.co_name}")
+    logger.info(f" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from users where user_id = %s", (user_id,))
@@ -73,7 +71,7 @@ def get_user_data(user_id: int, db_auth: dict) -> None:
 
 
 def insert_user_phone_number(user_id: int, phone_number: int, db_auth: dict) -> None:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -81,11 +79,11 @@ def insert_user_phone_number(user_id: int, phone_number: int, db_auth: dict) -> 
             (phone_number, user_id),
         )
         conn.commit()
-        logger_tgdb.info("Phone number added into Database")
+        logger.info("Phone number added into Database")
 
 
 def get_customer_data(user_id: int, db_auth: dict) -> List:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -104,7 +102,7 @@ def get_customer_data(user_id: int, db_auth: dict) -> List:
 
 
 def get_customer_last_order_id(user_id: int, contractor_id: int, db_auth: dict) -> int:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -112,7 +110,7 @@ def get_customer_last_order_id(user_id: int, contractor_id: int, db_auth: dict) 
             (user_id, contractor_id),
         )
         orders = result.fetchall()
-        logger_tgdb.debug(f"orders: {orders}")
+        logger.debug(f"orders: {orders}")
 
         return orders[-1][0]
 
@@ -120,7 +118,7 @@ def get_customer_last_order_id(user_id: int, contractor_id: int, db_auth: dict) 
 def insert_new_order(
     user_id: int, device_context: List, default_contractor_id: int, db_auth: dict
 ) -> None:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
 
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
@@ -140,7 +138,7 @@ def insert_new_order(
 
 
 def get_order_data(order_id: int, db_auth: dict) -> List:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from orders where order_id = %s", (order_id,))
@@ -149,7 +147,7 @@ def get_order_data(order_id: int, db_auth: dict) -> List:
 
 
 def get_open_orders(db_auth: dict) -> List[Tuple]:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -159,7 +157,7 @@ def get_open_orders(db_auth: dict) -> List[Tuple]:
 
 
 def get_assigned_orders(db_auth: dict) -> List[Tuple]:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -169,7 +167,7 @@ def get_assigned_orders(db_auth: dict) -> List[Tuple]:
 
 
 def update_order_Complete(order_id: int, timestamp: str, db_auth: dict) -> None:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -180,7 +178,7 @@ def update_order_Complete(order_id: int, timestamp: str, db_auth: dict) -> None:
 
 
 def get_contractor_data(user_id: int, db_auth: dict) -> List:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -198,7 +196,7 @@ def get_contractor_data(user_id: int, db_auth: dict) -> List:
 
 
 def get_all_contractor_id(db_auth: dict) -> List:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select contractor_id from contractors")
@@ -210,7 +208,7 @@ def get_all_contractor_id(db_auth: dict) -> List:
 def update_order_contractor_id(
     order_id: int, new_contractor_id: int, db_auth: dict
 ) -> None:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -223,7 +221,7 @@ def update_order_contractor_id(
 def insert_assign(
     old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict
 ) -> None:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -237,7 +235,7 @@ def insert_assign(
 def check_assign(
     old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict
 ) -> bool:
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -274,11 +272,11 @@ def insert_message(message_id: int, user_id: int, text: str, db_auth: dict) -> N
         or not isinstance(user_id, int)
         or not isinstance(text, str)
     ):
-        logger_tgdb.error("Invalid parameters")
+        logger.error("Invalid parameters")
         return
 
-    logger_tgdb.debug(f"{inspect.currentframe().f_code.co_name}")
-    logger_tgdb.debug(f"inserting: {message_id}, {user_id}, {text}")
+    logger.debug(f"{inspect.currentframe().f_code.co_name}")
+    logger.debug(f"inserting: {message_id}, {user_id}, {text}")
 
     with closing(create_db_connection(db_auth)) as conn:
         cursor = conn.cursor()
@@ -299,7 +297,7 @@ def insert_message(message_id: int, user_id: int, text: str, db_auth: dict) -> N
 
             # Increment the message_id
             message_id += 1
-            logger_tgdb.debug(
+            logger.debug(
                 f"UniqueViolation occurred. Retrying with incremented message_id {message_id}"
             )
 
@@ -313,9 +311,9 @@ def insert_message(message_id: int, user_id: int, text: str, db_auth: dict) -> N
                 conn.commit()
             except Exception as ex:
                 # Handle or log any exception that occurred in the second attempt
-                logger_tgdb.debug(f"An error occurred during retry: {ex}")
+                logger.debug(f"An error occurred during retry: {ex}")
 
         except Exception as ex:
             # Handle or log any other exception
-            logger_tgdb.debug(f"An unexpected error occurred: {ex}")
+            logger.debug(f"An unexpected error occurred: {ex}")
             conn.rollback()

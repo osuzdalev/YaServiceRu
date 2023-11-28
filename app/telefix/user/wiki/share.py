@@ -1,4 +1,4 @@
-import logging
+from loguru import logger
 from uuid import uuid4
 from typing import Union
 
@@ -7,8 +7,6 @@ from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, ConversationHandler, InlineQueryHandler
 
 from wiki import get_wiki_json_dict, get_answer_path
-
-logger_wiki_share = logging.getLogger(__name__)
 
 WIKI_DATA_DICT = get_wiki_json_dict()
 

@@ -1,13 +1,12 @@
 import inspect
-import logging
 from typing import List, Tuple, Dict
+
+from loguru import logger
 
 from telegram import Update
 from telegram.ext import ContextTypes, ApplicationHandlerStop
 
 from ...common.helpers import num_tokens_from_string
-
-logger_prompt_validator = logging.getLogger(__name__)
 
 
 async def validate_prompt(
@@ -44,9 +43,7 @@ async def validate_prompt(
     await validate_prompt(update, context, chatgpt_model_config, vector_db_client)
     """
     user = update.effective_user
-    logger_prompt_validator.info(
-        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-    )
+    logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
     # Todo UI/UX design needs to confirm this check
     if not context.user_data.get("GPT_active", False):
@@ -63,9 +60,7 @@ async def validate_prompt(
                 prompt_tokens, chatgpt_model_config.max_prompt_tokens
             )
         )
-        logger_prompt_validator.info(
-            f"({user.id}, {user.name}, {user.first_name}) - prompt too long"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name}) - prompt too long")
         raise ApplicationHandlerStop
 
     if not check_prompt_semantic(prompt, vector_db_client):
@@ -76,7 +71,7 @@ async def validate_prompt(
         )
         raise ApplicationHandlerStop
 
-    logger_prompt_validator.info("prompt cleared and passed to other handlers")
+    logger.info("prompt cleared and passed to other handlers")
 
 
 # Todo Should this be used in here or the ChatGPT module?
@@ -87,7 +82,7 @@ def check_conversation_tokens(
     Checks if the conversation size, including the provided prompt, is within the token limit.
     Accounts for the minimum response token size that needs to be left after processing the user's message.
     """
-    logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
+    logger.info(f" ")
 
     # Calculate tokens
     conversation_tokens = sum(
@@ -109,12 +104,12 @@ def check_prompt_tokens(prompt: str, chatgpt_model_config) -> Tuple[bool, int]:
     Check if the message sent size is within bounds.
     Returns a tuple with a boolean and the amount of remaining tokens
     """
-    logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
+    logger.info(f" ")
 
     # Calculate tokens
     prompt_tokens = num_tokens_from_string(prompt, chatgpt_model_config.name)
     remaining_tokens = chatgpt_model_config.max_prompt_tokens - prompt_tokens
-    logger_prompt_validator.info(f"PROMPT TOKEN SIZE: {prompt_tokens}")
+    logger.info(f"PROMPT TOKEN SIZE: {prompt_tokens}")
 
     if prompt_tokens < chatgpt_model_config.max_prompt_tokens:
         return True, remaining_tokens
@@ -140,20 +135,20 @@ def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
     - bool : Returns True if the average certainty of the prompt being semantically valid
              is greater or equal to the semantic threshold; otherwise, returns False.
     """
-    logger_prompt_validator.info(f"{inspect.currentframe().f_code.co_name}")
+    logger.info(f" ")
 
     # Vector Query
-    logger_prompt_validator.info(f"ENCODING PROMPT: {prompt}")
+    logger.info(f"ENCODING PROMPT: {prompt}")
     embeddings = vector_db_client.embedding_model.encode(prompt)
 
     # Retrieve English filters
-    logger_prompt_validator.info("COMPARING TO ENGLISH FILTERS")
+    logger.info("COMPARING TO ENGLISH FILTERS")
     english_vector_query_result = vector_db_client.vector_query(
         "EnglishFilters", embeddings
     )
 
     # Retrieve Russian filters
-    logger_prompt_validator.info("COMPARING TO RUSSIAN FILTERS")
+    logger.info("COMPARING TO RUSSIAN FILTERS")
     russian_vector_query_result = vector_db_client.vector_query(
         "RussianFilters", embeddings
     )

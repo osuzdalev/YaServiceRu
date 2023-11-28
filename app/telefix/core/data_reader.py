@@ -1,11 +1,10 @@
 import inspect
 import os
-import logging
 from pprint import pprint
 from typing import Dict
 import yaml
 
-logger_data_reader = logging.getLogger(__name__)
+from loguru import logger
 
 
 class DataReader:
@@ -60,7 +59,9 @@ class ChatGPTDataReader(DataReader):
     """
 
     def __init__(
-        self, config: str, file_path: str = "telefix/data/user/chatbot/data.yaml"
+        self,
+        config: str,
+        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/chatbot/data.yaml",
     ):
         super().__init__(config, file_path)
 
@@ -98,50 +99,12 @@ class StartReader(DataReader):
     """
 
     def __init__(
-        self, config: str, file_path: str = "telefix/data/user/start/data.yaml"
+        self,
+        config: str,
+        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/start/data.yaml",
     ):
         super().__init__(config, file_path)
 
     def get_introduction_video(self):
         # Fetch the video ID based on the config value
         return self.data.get("video", {}).get(self.config, "").strip()
-
-
-class VectorDatabaseReader(DataReader):
-    """
-    The VectorDatabaseReader class extends DataReader to handle data related to
-    vector databases, specifically for managing classes and filters.
-
-    This class is specialized for reading YAML files that define classes and filters
-    used in a vector database context. It processes data for different types of filters
-    (like EnglishFilters, RussianFilters, SpecialSubjectFilters), each with its
-    specific configurations, descriptions, properties, and vectorization strategies.
-
-    Attributes:
-        Inherits all attributes from the DataReader class.
-
-    Methods:
-        get_filters: Returns a dictionary of filter data, with keys as filter names
-                     and values as lists of filter strings.
-        get_classes: Returns a dictionary of class data, where each key is a class
-                     name, and the value is a dictionary containing class details
-                     like descriptions, properties, vectorizers, and module configurations.
-
-    This class is crucial for initializing and configuring components that handle
-    vectorized data processing in various language and domain-specific contexts.
-    """
-
-    def __init__(
-        self,
-        config: str = None,
-        file_path: str = "telefix/data/vector_database/data.yaml",
-    ):
-        super().__init__(config, file_path)
-
-    def get_filters(self) -> Dict[str, Dict]:
-        logger_data_reader.info(f"{inspect.currentframe().f_code.co_name}")
-        return self.data.get("filters", {})
-
-    def get_classes(self) -> Dict[str, Dict]:
-        logger_data_reader.info(f"{inspect.currentframe().f_code.co_name}")
-        return self.data.get("classes", {})

@@ -1,5 +1,5 @@
 import inspect
-import logging
+from loguru import logger
 
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -8,16 +8,11 @@ from ...core.data_reader import StartReader
 from ...common.markups import DEFAULT_CLIENT_MARKUP
 
 
-logger_start = logging.getLogger(__name__)
-
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Needs to be used first after every reboot of the Bot."""
     # Get the name of the current function
     user = update.message.from_user
-    logger_start.info(
-        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-    )
+    logger_start.info(f"({user.id}, {user.name}, {user.first_name})")
 
     context.user_data["in_conversation"] = ""
     context.user_data["Device_Context"] = []

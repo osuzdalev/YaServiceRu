@@ -2,6 +2,8 @@ import logging
 import os
 import sys
 
+from loguru import logger
+
 from telegram import Update
 from telegram.ext import Application, PicklePersistence
 from warnings import filterwarnings
@@ -9,6 +11,8 @@ from telegram.warnings import PTBUserWarning
 
 from .bot_config_manager import BotConfigurationManager
 from .module_manager import ModuleManager
+
+from ..common.logging_setup import InterceptHandler
 
 # from telefix.user.admin import orders
 # from contractor import assign, complete, user
@@ -38,7 +42,7 @@ class BotLauncher:
         self,
         bot_config_manager: BotConfigurationManager,
         module_manager: ModuleManager,
-        log_level=logging.INFO,
+        log_level: str = "INFO",
     ):
         self.bot_config_manager = bot_config_manager
         self.module_manager = module_manager
@@ -65,16 +69,42 @@ class BotLauncher:
             application.add_handlers(handlers=handler.get_handlers())
 
     def setup_logging(self):
+        """
+        Set up the logging for the application. Both the standard library and the loguru. Loguru intercepts the logs
+        from the standard one and reformats them accordingly.
+        That is necessary because the PTB is written using the standard lib.
+
+        This method configures the logging for the application by:
+        1. Setting up a file logger with a specified file path derived from the application's configurations.
+        2. Configuring the push notifications for logging errors using both Pushover and Telegram.
+
+        Attributes Utilized:
+            log_level (str): The desired logging level (e.g., DEBUG, INFO).
+            app_path (str): Base directory path of the application.
+            bot_config_manager (ConfigManager): Manager holding the app and bot configurations.
+
+        Note:
+            The logging is set up using an external logging library.
+            Ensure the library is properly installed and imported before calling this method.
+        """
+
+        # Loguru file logger
+        logger.add(
+            self.bot_config_manager.config["telefix"]["logs"],
+            level=f"{self.log_level}",
+            colorize=False,
+            serialize=False,
+            format="[<green>{time:YYYY-MM-DD HH:mm:ss}</green>] [<level>{level}</level>] [<bold>{name}</bold> | {function}() | line {line}] <level>{message}</level>",
+        )
+
+        # Initialize the standard logging
+        log_format = "[%(asctime)s] [%(levelname)s] [%(name)s | %(funcName)s() | line %(lineno)d] %(levelname)s - %(message)s"
+        date_format = "%Y-%m-%d %H:%M:%S"
         logging.basicConfig(
-            format="[%(asctime)s] {%(name)s:%(lineno)d} %(levelname)s - %(message)s",
+            format=log_format,
+            datefmt=date_format,
             level=self.log_level,
-            handlers=[
-                logging.StreamHandler(sys.stdout),
-                logging.FileHandler(
-                    self.bot_config_manager.config["telefix"]["logs"],
-                    mode="a",
-                ),
-            ],
+            handlers=[InterceptHandler()],
         )
 
     async def post_init(self, application: Application) -> None:

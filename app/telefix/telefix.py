@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+from loguru import logger
+
+from .common.logging_setup import setup_logging
+
 from . import (
     BotConfigurationManager,
     BotLauncher,
@@ -17,6 +21,9 @@ from . import (
 
 
 def main(deployment: str = "local"):
+    log_level = "INFO"
+    setup_logging(log_level)
+
     if deployment == "local":
         core_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/core/{deployment}.yaml"
         database_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/database/{deployment}.yaml"
@@ -49,5 +56,5 @@ def main(deployment: str = "local"):
     std_modules = [VectorDatabase]
     module_manager = ModuleManager(tg_modules, std_modules, bot_config_manager.config)
 
-    bot_launcher = BotLauncher(bot_config_manager, module_manager)
+    bot_launcher = BotLauncher(bot_config_manager, module_manager, log_level)
     bot_launcher.launch()

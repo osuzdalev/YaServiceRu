@@ -1,19 +1,15 @@
-import inspect
-import logging
 from typing import Any, List, Tuple
+
+from loguru import logger
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
-
-logger_req = logging.getLogger(__name__)
 
 
 async def request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Sends an Inline message to confirm the call"""
     user = update.effective_user
-    logger_req.info(
-        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-    )
+    logger.info(f"({user.id}, {user.name}, {user.first_name})")
     context.user_data.setdefault("Request_temp_messages", [])
     keyboard = [
         [
@@ -37,9 +33,7 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     query = update.callback_query
     user = query.from_user
     user_data = [user.id, user.name, user.first_name, user.last_name]
-    logger_req.info(
-        f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-    )
+    logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
     device_context = context.user_data.get("Device_Context", [])
 
@@ -49,7 +43,7 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     order_message_str = get_order_message_str(0000, user_data, device_context)
 
     await context.bot.sendMessage(
-        context.bot_data["config"]["telefix"]["core"]["tg_id"]["dev"],
+        context.bot_data["config"]["telefix"]["contact"]["tg_id"]["dev"],
         order_message_str,
     )
     await query.answer(text="Служба поддержки свяжется с вами.", show_alert=True)
@@ -64,7 +58,7 @@ def get_order_message_str(
     order_id: int, user_data: Any, device_context: Any, phone_number: int = None
 ) -> str:
     """Creates a nice string with all the relevant database of an Order to be sent as a message to Contractor"""
-    logger_req.info(f"{inspect.currentframe().f_code.co_name}")
+    logger.info(f" ")
     user_info = ""
     if isinstance(user_data, List):
         user_info = [
@@ -91,7 +85,7 @@ def get_order_message_str(
         )
 
     device_info = "\n".join(device_context)
-    logger_req.debug(f"device_context: {device_context}")
+    logger.debug(f"device_context: {device_context}")
 
     order_message_str = "\n\n".join(
         [
@@ -110,14 +104,10 @@ async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     query = update.callback_query
     try:
         user = query.from_user
-        logger_req.info(
-            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
     except AttributeError:
         user = update.effective_user
-        logger_req.info(
-            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
     # cleaning
     for message in context.user_data["Request_temp_messages"]:

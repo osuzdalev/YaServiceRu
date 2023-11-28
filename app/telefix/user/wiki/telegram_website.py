@@ -1,6 +1,6 @@
 import inspect
 import re
-import logging
+from loguru import logger
 from typing import List, Dict
 
 import yaml
@@ -11,8 +11,6 @@ from telegram.ext import ContextTypes, CallbackQueryHandler, ConversationHandler
 
 from ...common.yaml_loader import YamlLoader
 from .constants import BACK, CANCEL
-
-logger_website = logging.getLogger(__name__)
 
 YamlLoader.add_constructor("!include", YamlLoader.include)
 
@@ -75,16 +73,14 @@ class Page:
         query = update.callback_query
         await query.answer()
 
-        logger_website.debug(f"This is the handler callback for the page {self.name}")
-        logger_website.debug(
-            f"I'm listening to the callback_data {update.callback_query.data}"
-        )
-        logger_website.debug(f"My buttons are: {self.keyboard}")
+        logger.debug(f"This is the handler callback for the page {self.name}")
+        logger.debug(f"I'm listening to the callback_data {update.callback_query.data}")
+        logger.debug(f"My buttons are: {self.keyboard}")
 
         # Save the current page in browsing history
         browser_history = context.user_data[self.browser_history_name]
         browser_history.append(self.name)
-        logger_website.debug(browser_history)
+        logger.debug(browser_history)
 
         # Save the context for request_module message to expert
         pattern = r"[_*]+"
@@ -124,15 +120,13 @@ class Page:
         """Sends an invoice without shipping-payment."""
         query = update.callback_query
         user = query.from_user
-        logger_website.info(
-            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
         await query.answer()
 
-        logger_website.debug(
+        logger.debug(
             f"This is the invoice_handler_callback for the page {self.page.name}"
         )
-        logger_website.debug(f"My buttons are: {self.page.keyboard}")
+        logger.debug(f"My buttons are: {self.page.keyboard}")
 
         chat_id = update.effective_chat.id
         title = self.invoice["title"]
@@ -244,9 +238,7 @@ class Website:
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> int:
         user = update.effective_user
-        logger_website.info(
-            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         query = update.callback_query
         await query.answer()
@@ -268,9 +260,7 @@ class Website:
         and calls the appropriate callback function. Updates the browsing history accordingly.
         """
         user = update.effective_user
-        logger_website.info(
-            f"({user.id}, {user.name}, {user.first_name}) {inspect.currentframe().f_code.co_name}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         query = update.callback_query
         await query.answer()
@@ -280,7 +270,7 @@ class Website:
         # Delete previous page in history
         browser_history.pop()
         context.user_data["Device_Context"].pop()
-        logger_website.debug(browser_history)
+        logger.debug(browser_history)
         # Determine where clients wants to go
         target_handler_callback = browser_history[-1]
         # Delete the messages from the answer to avoid clutter

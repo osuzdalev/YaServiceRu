@@ -1,33 +1,30 @@
-import logging
+from loguru import logger
 
 from telegram import Update
 from telegram.ext import ContextTypes
 
 from app import telefix as callbacks
-from telefix.core.data_reader import DataReader
-from telefix.user.chatbot.config import ChatGPTConfig
-from telefix.user.chatbot.types import ChatGptCallbackType
+from ....core.data_reader import DataReader
+from ..config import ChatGPTConfig
+from ..types import ChatGptCallbackType
 
 
 class ChatGptCallbackHandler:
     def __init__(self, config: ChatGPTConfig = None, data_reader: DataReader = None):
         self._config = config or ChatGPTConfig()
-        self._logger = logging.getLogger(__name__)
         self._data_reader = data_reader or DataReader()
 
         self._callbacks = {
-            ChatGptCallbackType.START: callbacks.StartCallback(
-                self._logger, self._config
-            ),
-            ChatGptCallbackType.STOP: callbacks.StopCallback(self._logger),
+            ChatGptCallbackType.START: callbacks.StartCallback(self._config),
+            ChatGptCallbackType.STOP: callbacks.StopCallback(logger),
             ChatGptCallbackType.REQUEST: callbacks.RequestCallback(
-                self._logger, self._config, self._data_reader
+                self._config, self._data_reader
             ),
             ChatGptCallbackType.PAYMENT_LAUNCH: callbacks.PaymentLaunchCallback(
-                self._logger, self._config
+                self._config
             ),
             ChatGptCallbackType.CHECK_REMAINING_TOKENS: callbacks.CheckRemainingTokensCallback(
-                self._logger, self._config
+                self._config
             ),
         }
 
@@ -41,10 +38,10 @@ class ChatGptCallbackHandler:
         query = update.pre_checkout_query
         # check the payload, is it from this core and about this service?
         if query.invoice_payload == self._config.checkout_variables.extended_payload:
-            self._logger.info(
+            logger.info(
                 f"EXTENDED_PAYLOAD: {self._config.checkout_variables.extended_payload}"
             )
-            self._logger.info(f"{self.precheckout_callback.__qualname__}")
+            logger.info(f" ")
             await query.answer(ok=True)
 
     async def successful_payment_callback(
@@ -52,9 +49,7 @@ class ChatGptCallbackHandler:
     ) -> None:
         """Handle the successful payment. Set the user to Premium category and update conversation database"""
         user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self.successful_payment_callback.__qualname__}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         # update.message.successful_payment.invoice_payload == ?
 

@@ -1,5 +1,7 @@
 from enum import Enum
 
+from loguru import logger
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
@@ -9,8 +11,7 @@ class StopCallbackEventType(Enum):
 
 
 class StopCallback:
-    def __init__(self, logger):
-        self._logger = logger
+    def __init__(self):
         self._event_callbacks = {
             StopCallbackEventType.CHATGPT_ACTIVATED: self._chatgpt_activated_callback,
         }
@@ -23,9 +24,7 @@ class StopCallback:
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         user = update.message.from_user
-        self._logger.info(
-            f"({user.id}, {user.name}, {user.first_name}) {self.__class__.__qualname__}"
-        )
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         event = self.get_event(update, context)
         await self._event_callbacks[event](update, context)

@@ -1,15 +1,14 @@
 import html
 import json
-import logging
 import traceback
+
+from loguru import logger
 
 from telegram import Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
 from email.mime.text import MIMEText
-
-logger_error = logging.getLogger(__name__)
 
 
 async def send_email(
@@ -34,9 +33,7 @@ async def error_notification(
 ) -> None:
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
-    logger_error.error(
-        msg="Exception while handling an update:", exc_info=context.error
-    )
+    logger.error("Exception while handling an update:")
 
     # traceback.format_exception returns the usual python message about an exception, but as a
     # list of strings rather than a single string, so we have to join them together.
