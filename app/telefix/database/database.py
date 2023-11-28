@@ -1,6 +1,6 @@
 """Collection of silent functions gathering database about every user that interacts with the core"""
 
-import inspect
+
 from loguru import logger
 from typing import Tuple, Optional
 
@@ -97,7 +97,7 @@ async def collect_phone_number(
     update: Update, context: ContextTypes.DEFAULT_TYPE
 ) -> None:
     """Checks if Phone# in DB and adds it to appropriate UserID"""
-    logger.debug({inspect.currentframe().f_code.co_name})
+    logger.debug(" ")
     user = update.effective_user
     phone_number = int(update.message.contact.phone_number)
     db_auth = await get_postgres(update, context)
@@ -111,7 +111,7 @@ async def collect_phone_number(
 
 async def user_status(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Keeps track of users interacting with the core or blocking it and updates flag in DB"""
-    logger.info({inspect.currentframe().f_code.co_name})
+    logger.info(" ")
     logger.info(
         "update.my_chat_member.new_chat_member.status: {}".format(
             update.my_chat_member.new_chat_member.status

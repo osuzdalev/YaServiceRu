@@ -1,4 +1,3 @@
-import inspect
 from loguru import logger
 
 from telegram import Update
