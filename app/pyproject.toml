@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "telefix"
-version = "0.2.7"
+version = "0.0.1"
 description = "Yaserviceru is a bot application"
 readme = "README.md"
 authors = [{name = "Oleg Souzdalev", email = "odsuzdalev@gmail.com"}]
 # homepage = "https://github.com/osuzdalev/yaserviceru"
-requires-python = "==3.9"
+requires-python = "~=3.9"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -52,6 +52,7 @@ dependencies = [
     "Jinja2",
     "joblib",
     "keyring",
+    "loguru",
     "markdown-it-py",
     "MarkupSafe",
     "mccabe",
@@ -73,9 +74,6 @@ dependencies = [
     "pkginfo",
     "platformdirs",
     "psycopg",
-    "psycopg-binary",
-    "psycopg-c",
-    "psycopg-pool",
     "pyaes",
     "pyasn1",
     "pycparser",
@@ -127,8 +125,3 @@ dependencies = [
 
 [project.scripts]
 telefix = "telefix.telefix:main"
-
-[tool.setuptools.packages.find]
-where = ["telefix"]  # list of folders that contain the packages (["."] by default)
-include = ["telefix.data*"]  # package names should match these glob patterns (["*"] by default)
-exclude = ["test", "scripts", "log", "dist"]  # exclude packages matching these glob patterns (empty by default)

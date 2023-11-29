@@ -12,7 +12,7 @@ services:
     command: postgres -c config_file=/etc/postgresql/postgres.conf
     # restart: unless-stopped
 
-  weaviate:
+  vector_database:
     image: semitechnologies/weaviate:latest
     ports:
       - "${VECTOR_DATABASE_IMAGE_PORT}:8080"
@@ -67,19 +67,24 @@ services:
       - ${GRAFANA_LOCAL_DASHBOARDS}:${GRAFANA_IMAGE_DASHBOARDS}
 
   telefix:
+    image: telefix
     build:
       context: ../../.
       dockerfile: ${TELEFIX_LOCAL_DOCKERFILE}
     ports:
       - "${TELEFIX_IMAGE_PORT}:80"
-    env_file:
-      - ../../.env
+    environment:
+      - API_OPENAI=${API_OPENAI}
+      - TOKEN_TG_DEV_BOT=${TOKEN_TG_DEV_BOT}
+      - TOKEN_PAYMENT_PROVIDER_YOOKASSA=${TOKEN_PAYMENT_PROVIDER_YOOKASSA}
+      - PASSWORD_YANDEX_YASERVICERU_APP=${PASSWORD_YANDEX_YASERVICERU_APP}
+      - DATABASE_POSTGRES_PASSWORD=${DATABASE_POSTGRES_PASSWORD}
     volumes:
       - ${TELEFIX_LOCAL_LOGS}:${TELEFIX_IMAGE_LOGS}
       - ${TELEFIX_LOCAL_PERSISTENCE}:${TELEFIX_IMAGE_PERSISTENCE}
     depends_on:
       - database
-      - weaviate
+      - vector_database
       - t2v-transformers
-    command: ["telefix", "${TELEFIX_IMAGE_COMMAND}"]
+    entrypoint: "/entrypoint.sh ${TELEFIX_IMAGE_COMMAND}"
     # restart: unless-stopped

@@ -15,11 +15,12 @@ CONFIG_FILE=$1
 # Autogenerate the environment variables and write them to a file
 ENV_FILE=$(mktemp)
 python3 docker/build/generate_env_file.py --config $CONFIG_FILE --output $ENV_FILE --dotenv .env
+echo "ENV file created"
 cat $ENV_FILE
 source $ENV_FILE
 echo "$ENV_FILE sourced"
 
-docker-compose -f docker/build/docker-compose.yml up -d
+docker-compose -f ./docker/build/docker-compose.yml up -d
 
 echo "Docker containers started successfully!"
 

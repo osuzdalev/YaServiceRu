@@ -19,10 +19,22 @@ def generate_env_file(config_file, output_file, dotenv_file):
             env_name = f"{section_formatted}_{key.upper()}"
             params[env_name] = value
 
-    postgres_password = os.getenv("DATABASE_POSTGRES_PASSWORD")
-    params["DATABASE_POSTGRES_PASSWORD"] = postgres_password
+    # FIXME how to avoid leaking the secrets?
+    params["DATABASE_POSTGRES_PASSWORD"] = os.getenv("DATABASE_POSTGRES_PASSWORD")
+    params["API_OPENAI"] = os.getenv("API_OPENAI")
+    params["TOKEN_TG_DEV_BOT"] = os.getenv("TOKEN_TG_DEV_BOT")
+    params["TOKEN_PAYMENT_PROVIDER_YOOKASSA"] = os.getenv(
+        "TOKEN_PAYMENT_PROVIDER_YOOKASSA"
+    )
+    params["PASSWORD_YANDEX_YASERVICERU_APP"] = os.getenv(
+        "PASSWORD_YANDEX_YASERVICERU_APP"
+    )
 
     env_content = f"""
+    export API_OPENAI={params['API_OPENAI']}
+    export TOKEN_TG_DEV_BOT={params['TOKEN_TG_DEV_BOT']}
+    export TOKEN_PAYMENT_PROVIDER_YOOKASSA={params['TOKEN_PAYMENT_PROVIDER_YOOKASSA']}
+    export PASSWORD_YANDEX_YASERVICERU_APP={params['PASSWORD_YANDEX_YASERVICERU_APP']}
     export TELEFIX_LOCAL_PERSISTENCE={params['TELEFIX_LOCAL_PERSISTENCE']}
     export TELEFIX_IMAGE_PERSISTENCE={params['TELEFIX_IMAGE_PERSISTENCE']}
     export TELEFIX_LOCAL_LOGS={params['TELEFIX_LOCAL_LOGS']}

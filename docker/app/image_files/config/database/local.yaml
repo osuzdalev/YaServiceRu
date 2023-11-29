@@ -5,7 +5,5 @@ database:
   dbname: postgres
   user: postgres
   port: 5432
-  data: /Users/osuz/PycharmProjects/YaServiceRu/docker/image_volumes/data/database/pg_data
-  config: /Users/osuz/PycharmProjects/YaServiceRu/docker/image_files/config/database/pg_config
   secret:
     password: DATABASE_POSTGRES_PASSWORD

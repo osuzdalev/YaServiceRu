@@ -37,7 +37,7 @@ class VectorDatabase:
 
     Attributes:
         vector_db_client (weaviate.Client): Client for interacting with Weaviate database.
-        embedding_model (SentenceTransformer): Model for generating sentence embeddings.
+        embedding_model (SentenceTransformer): Model for generating sentence data.
         semantic_threshold (float): Threshold for semantic similarity in queries.
         query_limit (int): Limit for the number of results returned in queries.
         classes (dict): Dictionary of classes (schema definitions) in the database.
@@ -223,7 +223,7 @@ class VectorDatabase:
         except Exception as e:
             logger.info(f"Error creating class '{class_config['class']}': {e}")
 
-    # TODO did not return "False" when embeddings were empty (the volumes was not properly mounted).
+    # TODO did not return "False" when data were empty (the volumes was not properly mounted).
     # check why it could not tell the database was empty, there was no schema, and yet still thought everything was ok.
     def check_classes(self, classes) -> bool:
         """

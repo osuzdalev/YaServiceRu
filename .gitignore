@@ -10,11 +10,11 @@ __pycache__
 app/dist
 app/scripts/init_database.sql
 
-docker/app/image_files/config/core
+docker/app/image_files/config/core/
+docker/app/image_volumes/
 
-docker/app/image_volumes/data
-docker/app/image_volumes/log/logs.log
-
-docker/database
+docker/database/
+docker/vector_database/
+docker/prometheus/data/
 
 .env

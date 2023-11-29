@@ -127,6 +127,9 @@ class BotLauncher:
             filepath=self.bot_config_manager.config["telefix"]["persistence"]
         )
 
+        logger.info(
+            f"TOKEN: {self.bot_config_manager.config['telefix']['secret']['token_telegram']}"
+        )
         application = (
             Application.builder()
             .token(

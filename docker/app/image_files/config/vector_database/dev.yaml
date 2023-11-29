@@ -1,10 +1,7 @@
 name: dev
 
 vector_database:
-  api_url: http://localhost:8080 # local or docker
-  port: 8080
-  data: /Users/osuz/PycharmProjects/YaServiceRu/docker/image_volumes/data/vector_database/embeddings # for the volumes
-  persistence: /var/lib/data # path inside the docker
+  api_url: http://vector_database:8080 # to access other docker (not localhost)
   sentence_transformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
   semantic_threshold: 0.75
   query_limit: 10

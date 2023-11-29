@@ -35,9 +35,10 @@ app/*.egg-info
 
 docker/app/image_volumes/
 
+docker/build/
 docker/database/
 docker/grafana/
 docker/prometheus/
-docker/build/
+docker/vector_database/
 
 *README.md

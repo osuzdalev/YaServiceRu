@@ -1,7 +1,7 @@
 name: dev
 
-yaserviceru:
-  app:
+telefix:
+  contact:
     tg_id:
       bot: 6083336654
       admin: 6211181238
@@ -16,11 +16,9 @@ yaserviceru:
       smtp:
         url: smtp.yandex.ru
         port: 587
-  bot_persistence:
-    persistence: data/core/persistence.pkl
-
+  persistence: /mnt/telefix/persistence.pkl
+  logs: /mnt/log/logs.log
   docker:
-    logs: ../data/core/logs.log
     port: 8081
   secret:
     api_openai: API_OPENAI

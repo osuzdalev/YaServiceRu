@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import argparse
+
 from loguru import logger
 
 from .common.logging_setup import setup_logging
@@ -20,9 +22,19 @@ from . import (
 )
 
 
-def main(deployment: str = "local"):
+def main():
     log_level = "INFO"
     setup_logging(log_level)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "deployment", help="Deployment environment", default="local", nargs="?"
+    )
+    args = parser.parse_args()
+
+    deployment = args.deployment
+
+    logger.info(f"deployment: {deployment}")
 
     if deployment == "local":
         core_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/core/{deployment}.yaml"

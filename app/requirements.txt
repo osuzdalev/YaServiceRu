@@ -33,6 +33,7 @@ jaraco.classes
 Jinja2
 joblib
 keyring
+loguru
 markdown-it-py
 MarkupSafe
 mccabe
@@ -53,7 +54,7 @@ pathspec
 Pillow
 pkginfo
 platformdirs
-psycopg-binary
+psycopg
 pyaes
 pyasn1
 pycparser

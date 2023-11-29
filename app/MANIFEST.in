@@ -1,15 +1,1 @@
-include telefix/config/app/*.yaml
-include telefix/config/module/*.yaml
-
-include telefix/data/app/*.log
-include telefix/data/app/*.pkl
-
-include telefix/data/user/start/*.yaml
-include telefix/data/user/start/*.mp4
-
-include telefix/data/user/wiki/*.yaml
-recursive-include telefix/data/user/wiki/ *.yaml
-recursive-include telefix/data/user/wiki/ *.jpg
-recursive-include telefix/data/user/wiki/ *.png
-
-include telefix/data/vector_database/*.yaml
+recursive-include telefix *
