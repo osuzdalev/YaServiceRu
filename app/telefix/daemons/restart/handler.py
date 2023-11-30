@@ -1,16 +1,15 @@
 from telegram.ext import CommandHandler
 
 from .restart import restart
-from ...common.types import HandlerGroupType, TgModuleType
+from ...common.types import TgHandlerPriority, TgModuleType
 
 
 class RestartHandler:
-    name = TgModuleType.RESTART
-    commands = ["restart"]
+    TYPE = TgModuleType.RESTART
+    COMMANDS = ["restart"]
 
     def __init__(self):
-        self.commands = RestartHandler.commands
-        self.restart_handler = CommandHandler(self.commands[0], restart)
+        self.restart_handler = CommandHandler(self.COMMANDS[0], restart)
 
     def get_handlers(self):
-        return {HandlerGroupType.RESTART.value: [self.restart_handler]}
+        return {TgHandlerPriority.RESTART: [self.restart_handler]}

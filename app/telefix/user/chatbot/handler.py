@@ -7,22 +7,24 @@ from telegram.ext import (
 
 from .config import ChatGPTConfig
 from .callback.handler import ChatGptCallbackHandler
-from ...common.types import HandlerGroupType, TgModuleType
+from ...common.types import TgHandlerPriority, TgModuleType
 
 from .types import ChatGptCallbackType
 
 
 class ChatGptHandler:
-    name = TgModuleType.CHATBOT
+    TYPE = TgModuleType.CHATBOT
+    COMMANDS = ["chat", "chat_stop"]
+    _MESSAGES = ["🤖Чат с подержкой", "❌Отменить"]
 
     def __init__(self, ignored_texts_re):
         config = ChatGPTConfig()
         callback_handler = ChatGptCallbackHandler(config)
 
         callback_start = callback_handler.get_callback(ChatGptCallbackType.START)
-        self.handler_command = CommandHandler("chat", callback_start)
+        self.handler_command = CommandHandler(self.COMMANDS[0], callback_start)
         self.handler_message = MessageHandler(
-            filters.Regex(r"^🤖Чат с подержкой$"), callback_start
+            filters.Regex(rf"^({self._MESSAGES[0]})$"), callback_start
         )
 
         callback_request = callback_handler.get_callback(ChatGptCallbackType.REQUEST)
@@ -47,9 +49,9 @@ class ChatGptHandler:
         )
 
         callback_stop = callback_handler.get_callback(ChatGptCallbackType.STOP)
-        self.stop_handler_command = CommandHandler("chat_stop", callback_stop)
+        self.stop_handler_command = CommandHandler(self.COMMANDS[1], callback_stop)
         self.stop_handler_message = MessageHandler(
-            filters.Regex(r"^❌Отменить$"), callback_stop
+            filters.Regex(rf"^({self._MESSAGES[1]})$"), callback_stop
         )
 
         callback_check_remaining_tokens = callback_handler.get_callback(
@@ -61,7 +63,7 @@ class ChatGptHandler:
 
     def get_handlers(self):
         return {
-            HandlerGroupType.CLIENT_BASIC.value: [
+            TgHandlerPriority.CLIENT_BASIC: [
                 self.handler_command,
                 self.handler_message,
                 self.request_handler,
@@ -69,7 +71,7 @@ class ChatGptHandler:
                 self.stop_handler_message,
                 self.get_remaining_tokens_handler,
             ],
-            HandlerGroupType.CLIENT_PAY.value: [
+            TgHandlerPriority.CLIENT_PAY: [
                 self.payment_yes_handler,
                 self.precheckout_handler,
                 self.successful_payment_handler,

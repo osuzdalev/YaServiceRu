@@ -7,12 +7,12 @@ __pycache__
 
 *.egg-info/
 
-app/config/core/dev/*
-app/config/core/local/*
-app/config/core/main/*
+app/config/dev/*
+app/config/local/*
+app/config/main/*
 
-app/storage/persistence.pkl
-app/log/logs.log
+app/storage/*
+app/log/*
 
 app/dist/*
 app/scripts/init_database.sql

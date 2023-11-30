@@ -1,11 +1,11 @@
 from telegram.ext import MessageHandler, filters
 
-from ...common.types import HandlerGroupType, TgModuleType
+from ...common.types import TgHandlerPriority, TgModuleType
 from .unknown_command import unknown_command
 
 
 class GlobalFallbackHandler:
-    name = TgModuleType.GLOBAL_FALLBACK
+    TYPE = TgModuleType.GLOBAL_FALLBACK
 
     def __init__(self, commands=None, messages=None):
         self.commands = commands or []
@@ -23,5 +23,5 @@ class GlobalFallbackHandler:
 
     def get_handlers(self):
         return {
-            HandlerGroupType.GLOBAL_FALLBACK.value: [self.global_fallback_handler],
+            TgHandlerPriority.GLOBAL_FALLBACK: [self.global_fallback_handler],
         }

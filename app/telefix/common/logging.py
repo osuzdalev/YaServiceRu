@@ -6,6 +6,14 @@ from typing import Union
 from loguru import logger
 
 
+logging_format = (
+    "[<green>{time:YYYY-MM-DD HH:mm:ss}</green>] "
+    "[<level>{level}</level>] "
+    "[<bold>{name}</bold> | {function}() | line {line}] "
+    "<level>{message}</level>"
+)
+
+
 class InterceptHandler(logging.Handler):
     def emit(self, record: logging.LogRecord) -> None:
         # Get corresponding Loguru level if it exists.
@@ -15,7 +23,7 @@ class InterceptHandler(logging.Handler):
         except ValueError:
             level = record.levelno
 
-        # Find caller from where originated the logged message.
+        # Find caller from where originated the logged message
         frame, depth = inspect.currentframe(), 0
         while frame and (depth == 0 or frame.f_code.co_filename == logging.__file__):
             frame = frame.f_back
@@ -56,7 +64,6 @@ def setup_logging(log_level: str):
         sys.stdout,
         level=f"{log_level}",
         colorize=True,
-        format="[<green>{time:YYYY-MM-DD HH:mm:ss}</green>] [<level>{level}</level>] [<bold>{name}</bold> | {"
-        "function}() | line {line}] <level>{message}</level>",
+        format=logging_format,
     )
     logger.debug("Loguru setup done")

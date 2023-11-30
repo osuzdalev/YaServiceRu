@@ -62,7 +62,6 @@ def insert_new_user(
 
 
 def get_user_data(user_id: int, db_auth: dict) -> None:
-    """Stuff"""
     logger.info(f" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()

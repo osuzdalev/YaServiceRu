@@ -4,11 +4,11 @@ from ...core.data_reader import ChatGPTDataReader
 from ...common.helpers import num_tokens_from_string
 
 
-data_reader = ChatGPTDataReader("dev")
-
-
 @dataclass
 class ChatGPTModelConfig:
+    # FIXME passing the deployment argument deep into the code
+    # reformat the DataReader class
+    __DATA_READER = ChatGPTDataReader("dev")
     name: str = "gpt-3.5-turbo"
     temperature: float = 0.6
     max_response_tokens: int = 350
@@ -20,7 +20,7 @@ class ChatGPTModelConfig:
     # Amount of tokens in a conversation to at least get a minimum response
     limit_conversation_tokens: int = max_conversation_tokens - max_response_tokens
     instructions_tokens: int = num_tokens_from_string(
-        data_reader.get_system_instructions(), name
+        __DATA_READER.get_system_instructions(), name
     )
     max_sum_response_tokens: int = free_prompt_limit * max_response_tokens
     # max size prompt to at least get one answer
@@ -28,7 +28,7 @@ class ChatGPTModelConfig:
         max_conversation_tokens - instructions_tokens - max_response_tokens
     )
     conversation_init = [
-        {"role": "system", "content": data_reader.get_system_instructions()}
+        {"role": "system", "content": __DATA_READER.get_system_instructions()}
     ]
 
 

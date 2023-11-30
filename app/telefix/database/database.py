@@ -1,13 +1,13 @@
-"""Collection of silent functions gathering database about every user that interacts with the core"""
+"""
+Collection of silent functions gathering database about every user that interacts with the core
+"""
 
 
 from loguru import logger
 from typing import Tuple, Optional
 
 from telegram import Update, User, Message
-from telegram.ext import (
-    ContextTypes,
-)
+from telegram.ext import ContextTypes
 
 from . import utils as tldb
 
@@ -112,8 +112,5 @@ async def collect_phone_number(
 async def user_status(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     """Keeps track of users interacting with the core or blocking it and updates flag in DB"""
     logger.info(" ")
-    logger.info(
-        "update.my_chat_member.new_chat_member.status: {}".format(
-            update.my_chat_member.new_chat_member.status
-        )
-    )
+    status = update.my_chat_member.new_chat_member.status
+    logger.info(f"update.my_chat_member.new_chat_member.status: {status}")

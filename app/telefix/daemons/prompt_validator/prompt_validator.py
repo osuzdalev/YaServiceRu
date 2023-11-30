@@ -70,7 +70,7 @@ async def validate_prompt(
         )
         raise ApplicationHandlerStop
 
-    logger.info("prompt cleared and passed to other handlers")
+    logger.info("Prompt cleared and passed to other handlers")
 
 
 # Todo Should this be used in here or the ChatGPT module?

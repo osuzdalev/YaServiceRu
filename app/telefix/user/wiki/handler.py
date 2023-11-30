@@ -3,8 +3,7 @@ from typing import Dict
 
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, filters
 
-from ...common.types import HandlerGroupType, TgModuleType
-
+from ...common.types import TgHandlerPriority, TgModuleType
 from .constants import (
     STATE,
     BROWSER_HISTORY_NAME,
@@ -41,14 +40,11 @@ class WikiHandler:
     Wiki structure. It uses YAML files to define the layout and content of the Wiki pages.
     """
 
-    name = TgModuleType.WIKI
-    commands = ["wiki", "cancel"]
-    messages = ["📖Справочник", "❌Отменить"]
+    TYPE = TgModuleType.WIKI
+    COMMANDS = ["wiki", "cancel"]
+    _MESSAGES = ["📖Справочник", "❌Отменить"]
 
     def __init__(self, wiki_data_dict: Dict):
-        self.commands = WikiHandler.commands
-        self.messages = WikiHandler.messages
-
         # Generating the telegram_website object from yaml database file
         website = Website(STATE, BROWSER_HISTORY_NAME)
         # Parse the yaml file
@@ -67,14 +63,14 @@ class WikiHandler:
 
         self.conversation_handler = ConversationHandler(
             entry_points=[
-                CommandHandler(self.commands[0], wiki),
-                MessageHandler(filters.Regex(rf"^({self.messages[0]})$"), wiki),
+                CommandHandler(self.COMMANDS[0], wiki),
+                MessageHandler(filters.Regex(rf"^({self._MESSAGES[0]})$"), wiki),
             ],
             states=website.state,
             fallbacks=[
-                CommandHandler(self.commands[1], cancel_command),
+                CommandHandler(self.COMMANDS[1], cancel_command),
                 MessageHandler(
-                    filters.Regex(rf"^({self.messages[1]})$"), cancel_command
+                    filters.Regex(rf"^({self._MESSAGES[1]})$"), cancel_command
                 ),
             ],
             allow_reentry=True,
@@ -83,5 +79,5 @@ class WikiHandler:
 
     def get_handlers(self):
         return {
-            HandlerGroupType.CLIENT_WIKI.value: [self.conversation_handler],
+            TgHandlerPriority.CLIENT_WIKI: [self.conversation_handler],
         }

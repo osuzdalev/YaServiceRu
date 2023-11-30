@@ -3,11 +3,11 @@
 Handling of repair service orders on the Telegram platform.
 
 The idea is to dispatch orders of electronic goods reparations to the
-
 appropriate and available contractor within a large group/community.
 
 # Run on local machine
 First launch the other docker services, then run
+
 ```bash
 python -m app.scripts.local
 ```
@@ -29,7 +29,8 @@ https://tecadmin.net/tutorial/docker-run-static-website
 ---
 
 # Install package locally
-```shell
+
+```bash
 python -m build
 python -m pip install ./dist/telefix-0.{x}.{x}.tar.gz
 ```

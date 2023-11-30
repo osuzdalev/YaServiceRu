@@ -1,5 +1,3 @@
 from .handler import RestartHandler
 
-__all__ = [
-    "RestartHandler",
-]
+__all__ = ["RestartHandler"]

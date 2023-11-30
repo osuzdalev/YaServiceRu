@@ -2,10 +2,13 @@
 
 import argparse
 import pathlib
+from warnings import filterwarnings
 
 from loguru import logger
 
-from .common.logging_setup import setup_logging
+from telegram.warnings import PTBUserWarning
+
+from .common.logging import setup_logging
 
 from . import (
     BotConfigurationManager,
@@ -63,6 +66,11 @@ def main():
     ]
     std_modules = [VectorDatabase]
     module_manager = ModuleManager(tg_modules, std_modules, bot_config_manager.config)
+
+    # Ignore "per_message=False" ConversationHandler warning message
+    filterwarnings(
+        action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning
+    )
 
     bot_launcher = BotLauncher(bot_config_manager, module_manager, args.log_level)
     bot_launcher.launch()

@@ -35,6 +35,8 @@ class VectorDatabase:
     transformers for vector representation of textual data and utilizes the most suitable computing device available
     (CPU, CUDA, MPS).
 
+    This class is essential for applications involving semantic search and retrieval, such as chatbots or recommendation systems.
+
     Attributes:
         vector_db_client (weaviate.Client): Client for interacting with Weaviate database.
         embedding_model (SentenceTransformer): Model for generating sentence data.
@@ -53,11 +55,9 @@ class VectorDatabase:
         delete_all(): Deletes all classes and objects in the database.
         delete_class(class_name): Deletes a specific class from the database.
         write_data_object(data, class_name): Writes a data object to a specific class in the database.
-
-    This class is essential for applications involving semantic search and retrieval, such as chatbots or recommendation systems.
     """
 
-    name = StdModuleType.VECTOR_DATABASE
+    TYPE = StdModuleType.VECTOR_DATABASE
 
     def __init__(
         self,
@@ -79,10 +79,7 @@ class VectorDatabase:
         if not self.vector_db_client.is_ready():
             raise Exception("vector_db_client is not ready!")
 
-        self.populate_vector_database(
-            classes_config,
-            filters_config,
-        )
+        self.populate_vector_database(classes_config, filters_config)
 
     def populate_vector_database(
         self, classes_config: Dict[str, Dict], filters_config: Dict[str, Dict]
@@ -94,16 +91,15 @@ class VectorDatabase:
         provided filters to the database. Each class and filter is validated before being added. If an error occurs
         during the process, it raises an exception and logs an error message.
 
-        Parameters: - classes (Dict[str, Dict]): A dictionary of class names and their configurations to be added to
-        the vector database. - filters (Dict[str, List]): A dictionary containing filter names and lists of filter
-        strings to be added to the corresponding classes in the vector database.
+        Parameters:
+            - classes (Dict[str, Dict]): A dictionary of class names and their configurations to be added to
+            the vector database.
+            - filters (Dict[str, List]): A dictionary containing filter names and lists of filter
+            strings to be added to the corresponding classes in the vector database.
 
         Raises:
-        - ValueError: If a filter object fails the validation.
-        - AssertionError: If no objects are found in the vector database after writing.
-
-        Logs: - Informational messages tracking the progress of the database population process, including classes
-        and filters added.
+            - ValueError: If a filter object fails the validation.
+            - AssertionError: If no objects are found in the vector database after writing.
         """
 
         logger.info(f" ")
@@ -236,9 +232,6 @@ class VectorDatabase:
 
         Returns:
         - bool: True if all classes are in the vector database, False otherwise.
-
-        Logs:
-        - Informational messages about the presence or absence of classes.
         """
         logger.info(f" ")
 

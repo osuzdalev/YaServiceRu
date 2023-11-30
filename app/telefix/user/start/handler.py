@@ -1,18 +1,17 @@
 from telegram.ext import CommandHandler
 
-from ...common.types import HandlerGroupType, TgModuleType
+from ...common.types import TgHandlerPriority, TgModuleType
 from .start import start
 
 
 class StartHandler:
-    name = TgModuleType.START
-    commands = ["start"]
+    TYPE = TgModuleType.START
+    COMMANDS = ["start"]
 
     def __init__(self):
-        self.commands = StartHandler.commands
-        self.start_handler = CommandHandler(self.commands[0], start)
+        self.start_handler = CommandHandler(self.COMMANDS[0], start)
 
     def get_handlers(self):
         return {
-            HandlerGroupType.CLIENT_BASIC.value: [self.start_handler],
+            TgHandlerPriority.CLIENT_BASIC: [self.start_handler],
         }

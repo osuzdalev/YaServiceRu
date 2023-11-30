@@ -2,6 +2,12 @@ import yaml
 import os
 
 
+def add_constructors(yaml_loader):
+    yaml_loader.add_constructor("!include", yaml_loader.include)
+    return yaml_loader
+
+
+@add_constructors
 class YamlLoader(yaml.SafeLoader):
     """Special class that enables parsing the '!include' tag in the yaml files"""
 

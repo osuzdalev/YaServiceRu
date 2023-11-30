@@ -6,13 +6,11 @@ from loguru import logger
 
 from telegram import Update
 from telegram.ext import Application, PicklePersistence
-from warnings import filterwarnings
-from telegram.warnings import PTBUserWarning
 
 from .bot_config_manager import BotConfigurationManager
 from .module_manager import ModuleManager
 
-from ..common.logging_setup import InterceptHandler
+from ..common.logging import InterceptHandler, logging_format
 
 # from telefix.user.admin import orders
 # from contractor import assign, complete, user
@@ -48,7 +46,7 @@ class BotLauncher:
         self.module_manager = module_manager
         self.log_level = log_level
 
-    def add_tg_module_handlers(self, application):
+    def add_tg_module_handlers(self, application: Application) -> None:
         """
         Adds Telegram module handlers to the given application.
 
@@ -57,12 +55,12 @@ class BotLauncher:
         error handler.
 
         Parameters:
-        - application (object): The target application to which the handlers will be added.
+            - application (object): The target telegram application to which the handlers will be added.
 
         Returns:
-        - None
+            - None
         """
-        handlers, error_handler = self.module_manager.get_prepped_tg_module_objects()
+        handlers, error_handler = self.module_manager.get_tg_module_handlers()
 
         application.add_error_handler(error_handler.get_handler())
         for handler in handlers:
@@ -78,11 +76,6 @@ class BotLauncher:
         1. Setting up a file logger with a specified file path derived from the application's configurations.
         2. Configuring the push notifications for logging errors using both Pushover and Telegram.
 
-        Attributes Utilized:
-            log_level (str): The desired logging level (e.g., DEBUG, INFO).
-            app_path (str): Base directory path of the application.
-            bot_config_manager (ConfigManager): Manager holding the app and bot configurations.
-
         Note:
             The logging is set up using an external logging library.
             Ensure the library is properly installed and imported before calling this method.
@@ -94,15 +87,13 @@ class BotLauncher:
             level=f"{self.log_level}",
             colorize=False,
             serialize=False,
-            format="[<green>{time:YYYY-MM-DD HH:mm:ss}</green>] [<level>{level}</level>] [<bold>{name}</bold> | {function}() | line {line}] <level>{message}</level>",
+            format=logging_format,
         )
 
         # Initialize the standard logging
-        log_format = "[%(asctime)s] [%(levelname)s] [%(name)s | %(funcName)s() | line %(lineno)d] %(levelname)s - %(message)s"
-        date_format = "%Y-%m-%d %H:%M:%S"
         logging.basicConfig(
-            format=log_format,
-            datefmt=date_format,
+            format="[%(asctime)s] [%(levelname)s] [%(name)s | %(funcName)s() | line %(lineno)d] %(levelname)s - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
             level=self.log_level,
             handlers=[InterceptHandler()],
         )
@@ -111,25 +102,18 @@ class BotLauncher:
         """
         Loading the configs into the core data_reader. This is done just after the init but before the run_polling()
         of the application.
-        The configs in dict form is now accessible codebase wide.
+        The configs in dict form are now accessible codebase wide.
         """
         application.bot_data["config"] = self.bot_config_manager.config
         application.bot_data["restart"] = False
 
     def launch(self):
-        # Ignore "per_message=False" ConversationHandler warning message
-        filterwarnings(
-            action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning
-        )
         self.setup_logging()
 
         persistence = PicklePersistence(
             filepath=self.bot_config_manager.config["telefix"]["persistence"]
         )
 
-        logger.info(
-            f"TOKEN: {self.bot_config_manager.config['telefix']['secret']['token_telegram']}"
-        )
         application = (
             Application.builder()
             .token(

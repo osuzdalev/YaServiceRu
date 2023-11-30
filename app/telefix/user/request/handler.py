@@ -5,18 +5,18 @@ from ...user.request.request import (
     confirm_request,
     cancel_request,
 )
-from ...common.types import HandlerGroupType, TgModuleType
+from ...common.types import TgHandlerPriority, TgModuleType
 
 
 class RequestHandler:
-    name = TgModuleType.REQUEST
-    commands = ["request"]
-    messages = ["🤓Специалист", "❌Отменить"]
+    TYPE = TgModuleType.REQUEST
+    COMMANDS = ["request"]
+    _MESSAGES = ["🤓Специалист", "❌Отменить"]
 
     def __init__(self):
-        self.request_command_handler = CommandHandler(self.commands[0], request)
+        self.request_command_handler = CommandHandler(self.COMMANDS[0], request)
         self.request_replykeyboard_handler = MessageHandler(
-            filters.Regex(rf"^({self.messages[0]})$"), request
+            filters.Regex(rf"^({self._MESSAGES[0]})$"), request
         )
         self.request_callback_handler = CallbackQueryHandler(
             request, pattern="REQUEST_COMMAND"
@@ -29,12 +29,12 @@ class RequestHandler:
             cancel_request, pattern="REQUEST_CALL_CANCEL"
         )
         self.cancel_request_handler_message = MessageHandler(
-            filters.Regex(rf"^({self.messages[1]})$"), cancel_request
+            filters.Regex(rf"^({self._MESSAGES[1]})$"), cancel_request
         )
 
     def get_handlers(self):
         return {
-            HandlerGroupType.CLIENT_BASIC.value: [
+            TgHandlerPriority.CLIENT_BASIC: [
                 self.request_command_handler,
                 self.request_replykeyboard_handler,
                 self.confirm_request_handler,

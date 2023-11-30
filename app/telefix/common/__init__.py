@@ -1,4 +1,4 @@
 from .yaml_loader import YamlLoader
-from .types import HandlerGroupType, StdModuleType, TgModuleType
+from .types import TgHandlerPriority, StdModuleType, TgModuleType
 
-__all__ = ["YamlLoader", "HandlerGroupType", "StdModuleType", "TgModuleType"]
+__all__ = ["YamlLoader", "TgHandlerPriority", "StdModuleType", "TgModuleType"]

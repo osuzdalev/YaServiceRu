@@ -1,14 +1,12 @@
 from telegram import Update
-from telegram.ext import (
-    TypeHandler,
-)
+from telegram.ext import TypeHandler
 
-from ..common.types import HandlerGroupType, TgModuleType
+from ..common.types import TgHandlerPriority, TgModuleType
 from .database import collect_data
 
 
 class DatabaseHandler:
-    name = TgModuleType.DATABASE
+    TYPE = TgModuleType.DATABASE
 
     def __init__(self):
         self.data_collection_handler = TypeHandler(Update, collect_data)
@@ -17,6 +15,4 @@ class DatabaseHandler:
         # user_status_handler = ChatMemberHandler(user_status, ChatMemberHandler.CHAT_MEMBER)
 
     def get_handlers(self):
-        return {
-            HandlerGroupType.DB_MESSAGE_COLLECTION.value: [self.data_collection_handler]
-        }
+        return {TgHandlerPriority.DB_MESSAGE_COLLECTION: [self.data_collection_handler]}

@@ -16,16 +16,6 @@ class DataReader:
     needed for reading data from YAML files, handling errors, and providing access to
     the data contents.
 
-    Attributes:
-        config (str): A configuration identifier used to specify different modes or
-                      setups for reading data.
-        file_path (str): The path to the YAML file that contains the data.
-        data (dict): A dictionary holding the data loaded from the YAML file.
-
-    Methods:
-        _load_data: A private method to load data from the specified YAML file. It handles
-                    file not found and YAML parsing errors gracefully.
-
     The class is intended to be extended by subclasses that can utilize the loaded data
     for specific purposes, such as fetching system instructions, loading GIFs, or
     retrieving specific information relevant to the application's functionality.
@@ -34,17 +24,23 @@ class DataReader:
     """
 
     def __init__(self, config: str, file_path: str):
+        """
+        Loads data from the specified YAML file.
+        Handles file not found and YAML parsing errors gracefully.
+        The `data` dict holds the data that are loaded from the YAML file.
+        Params:
+            - config (str): A configuration identifier used to specify different modes or
+                            setups for reading data.
+            - file_path (str): The path to the YAML file that contains the data.
+        """
         self.config = config
-        self.file_path = file_path
-        self.data = self._load_data()
 
-    def _load_data(self):
         try:
-            with open(self.file_path, "r") as file:
-                return yaml.safe_load(file)
+            with open(file_path, "r") as file:
+                self.data = yaml.safe_load(file)
         except (FileNotFoundError, yaml.YAMLError) as e:
-            logger.error(f"Error loading data from {self.file_path}: {e}")
-            return {}
+            logger.error(f"Error loading data from {file_path}: {e}")
+            self.data = {}
 
 
 class ChatGPTDataReader(DataReader):
