@@ -333,7 +333,7 @@ class VectorDatabase:
 
     def delete_all(self) -> None:
         self.vector_db_client.schema.delete_all()
-        print("Entire schema deleted.")
+        logger.info("Entire schema deleted.")
 
     def delete_class(self, class_name: str) -> None:
         self.vector_db_client.schema.delete_class(class_name)

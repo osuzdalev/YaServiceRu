@@ -1,7 +1,5 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-DATA_PATH = "../../../../docker/app/image_files/data/user/wiki/data.yaml"
-
 CANCEL = "❌ЗАКРЫТЬ"
 BACK = "<< НАЗАД"
 

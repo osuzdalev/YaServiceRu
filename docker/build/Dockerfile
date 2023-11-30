@@ -9,10 +9,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY ./docker/app/image_files/config /var/lib/config
-COPY ./docker/app/image_files/data /var/lib/data
+COPY ./app/config /app/telefix/config
+COPY ./app/media /app/telefix/media
 
 COPY ./app/dist/telefix-*.whl /tmp/
 RUN python3 -m pip install /tmp/telefix-*.whl
 
-COPY ./docker/app/image_files/entrypoint.sh /entrypoint.sh
+COPY ./docker/build/entrypoint.sh /entrypoint.sh

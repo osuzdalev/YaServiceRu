@@ -125,3 +125,6 @@ dependencies = [
 
 [project.scripts]
 telefix = "telefix.telefix:main"
+
+[tool.setuptools]
+packages = ["telefix"]

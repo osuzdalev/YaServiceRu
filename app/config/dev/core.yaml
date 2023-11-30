@@ -16,8 +16,8 @@ telefix:
       smtp:
         url: smtp.yandex.ru
         port: 587
-  persistence: /mnt/telefix/persistence.pkl
-  logs: /mnt/log/logs.log
+  persistence: /app/telefix/storage/persistence.pkl
+  logs: /app/telefix/log/logs.log
   docker:
     port: 8081
   secret:

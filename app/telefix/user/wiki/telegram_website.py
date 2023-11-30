@@ -2,8 +2,6 @@ import re
 from loguru import logger
 from typing import List, Dict
 
-import yaml
-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, LabeledPrice
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CallbackQueryHandler, ConversationHandler

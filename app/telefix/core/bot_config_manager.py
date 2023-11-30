@@ -29,13 +29,11 @@ class BotConfigurationManager:
         _process_env_vars(config_dict): Replaces placeholders with environment variable values.
     """
 
-    def __init__(self, files_paths: list):
+    def __init__(self, **kwargs):
         self.config = {}
-        self._load_config_files(files_paths)
 
-    def _load_config_files(self, files_paths: list):
-        for file_path in files_paths:
-            if file_path.endswith("wiki/data.yaml"):
+        for config_type, file_path in kwargs.items():
+            if config_type == "wiki":
                 logger.info("Loading wiki configs")
                 with open(file_path, mode="rb") as fp:
                     config = yaml.load(fp, Loader=YamlLoader)

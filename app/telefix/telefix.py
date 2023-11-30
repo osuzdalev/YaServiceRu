@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import pathlib
 
 from loguru import logger
 
@@ -23,37 +24,32 @@ from . import (
 
 
 def main():
-    log_level = "INFO"
-    setup_logging(log_level)
-
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "deployment", help="Deployment environment", default="local", nargs="?"
+        "-c",
+        "--app_config_path",
+        help="Application base configuration path",
+        default="/app/telefix/config/dev",
     )
+    parser.add_argument("-l", "--log_level", help="Logging level", default="INFO")
     args = parser.parse_args()
 
-    deployment = args.deployment
+    setup_logging(args.log_level)
 
-    logger.info(f"deployment: {deployment}")
+    app_config_path = pathlib.Path(args.app_config_path)
+    logger.info(f"Application config path: {app_config_path}")
 
-    if deployment == "local":
-        core_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/core/{deployment}.yaml"
-        database_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/database/{deployment}.yaml"
-        vector_database_config = f"/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/config/vector_database/{deployment}.yaml"
-        wiki_module_path = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/wiki/data.yaml"
-    else:
-        core_config = f"/var/lib/config/core/{deployment}.yaml"
-        database_config = f"/var/lib/config/database/{deployment}.yaml"
-        vector_database_config = f"/var/lib/config/vector_database/{deployment}.yaml"
-        wiki_module_path = "/var/lib/data/user/wiki/data.yaml"
+    core_config = app_config_path / "core.yaml"
+    database_config = app_config_path / "database.yaml"
+    vector_database_config = app_config_path / "vector_database.yaml"
+    wiki_module_path = app_config_path / "wiki.yaml"
 
-    file_paths = [
-        core_config,
-        database_config,
-        vector_database_config,
-        wiki_module_path,
-    ]
-    bot_config_manager = BotConfigurationManager(file_paths)
+    bot_config_manager = BotConfigurationManager(
+        core=core_config,
+        database=database_config,
+        vector_database=vector_database_config,
+        wiki=wiki_module_path,
+    )
 
     tg_modules = [
         GlobalFallbackHandler,
@@ -68,5 +64,5 @@ def main():
     std_modules = [VectorDatabase]
     module_manager = ModuleManager(tg_modules, std_modules, bot_config_manager.config)
 
-    bot_launcher = BotLauncher(bot_config_manager, module_manager, log_level)
+    bot_launcher = BotLauncher(bot_config_manager, module_manager, args.log_level)
     bot_launcher.launch()

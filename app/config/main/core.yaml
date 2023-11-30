@@ -15,7 +15,7 @@ common:
 
 technical:
   filepath:
-    persistence: data_reader/core/persistence.pkl
+    persistence: data_reader/core/storage.pkl
     logger: data_reader/core/logs.log
   api_weaviate: http://localhost:8080 # local or docker
   database_postgres:

@@ -16,8 +16,8 @@ telefix:
       smtp:
         url: smtp.yandex.ru
         port: 587
-  persistence: /Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_volumes/data/core/persistence.pkl
-  logs: /Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_volumes/log/logs.log
+  persistence: /Users/osuz/PycharmProjects/YaServiceRu/app/storage/storage.pkl
+  logs: /Users/osuz/PycharmProjects/YaServiceRu/app/log/logs.log
   docker:
     port: 8081
   secret:

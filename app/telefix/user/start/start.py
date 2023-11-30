@@ -11,7 +11,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Needs to be used first after every reboot of the Bot."""
     # Get the name of the current function
     user = update.message.from_user
-    logger_start.info(f"({user.id}, {user.name}, {user.first_name})")
+    logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
     context.user_data["in_conversation"] = ""
     context.user_data["Device_Context"] = []

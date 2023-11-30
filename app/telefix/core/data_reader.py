@@ -43,7 +43,7 @@ class DataReader:
             with open(self.file_path, "r") as file:
                 return yaml.safe_load(file)
         except (FileNotFoundError, yaml.YAMLError) as e:
-            print(f"Error loading data from {self.file_path}: {e}")
+            logger.error(f"Error loading data from {self.file_path}: {e}")
             return {}
 
 
@@ -60,7 +60,7 @@ class ChatGPTDataReader(DataReader):
     def __init__(
         self,
         config: str,
-        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/chatbot/data.yaml",
+        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/chatbot/wiki.yaml",
     ):
         super().__init__(config, file_path)
 
@@ -100,7 +100,7 @@ class StartReader(DataReader):
     def __init__(
         self,
         config: str,
-        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/start/data.yaml",
+        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/start/wiki.yaml",
     ):
         super().__init__(config, file_path)
 

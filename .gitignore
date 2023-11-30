@@ -7,14 +7,21 @@ __pycache__
 
 *.egg-info/
 
-app/dist
+app/config/core/dev/*
+app/config/core/local/*
+app/config/core/main/*
+
+app/storage/persistence.pkl
+app/log/logs.log
+
+app/dist/*
 app/scripts/init_database.sql
 
-docker/app/image_files/config/core/
-docker/app/image_volumes/
-
-docker/database/
-docker/vector_database/
-docker/prometheus/data/
+docker/database/config/*
+docker/database/data/*
+docker/vector_database/backups/*
+docker/vector_database/data/*
+docker/grafana/dashboards/*
+docker/prometheus/data/*
 
 .env

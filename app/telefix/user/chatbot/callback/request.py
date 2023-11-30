@@ -118,7 +118,7 @@ class RequestCallback:
         )
         # Check for conversation token size
         if conversation_size_check:
-            print("CONVERSATION_TOKENS: ", conversation_tokens)
+            logger.info("CONVERSATION_TOKENS: ", conversation_tokens)
             # get the response
             response = self._generate_response(prompt, conversation)
             context.user_data["GPT_messages_sent"] += 1
@@ -149,7 +149,7 @@ class RequestCallback:
         )
         # Check for conversation token size
         if conversation_size_check:
-            print("CONVERSATION_TOKENS: ", conversation_tokens)
+            logger.info("CONVERSATION_TOKENS: ", conversation_tokens)
             # get the response
             response = self._generate_response(prompt, conversation)
             context.user_data["GPT_messages_sent"] += 1

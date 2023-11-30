@@ -86,5 +86,5 @@ services:
       - database
       - vector_database
       - t2v-transformers
-    entrypoint: "/entrypoint.sh ${TELEFIX_IMAGE_COMMAND}"
+    entrypoint: "/entrypoint.sh"
     # restart: unless-stopped
