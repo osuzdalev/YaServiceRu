@@ -1,4 +1,7 @@
 import json
+import sys
+import time
+import traceback
 from pprint import pformat
 from typing import List, Dict, Union
 
@@ -68,18 +71,27 @@ class VectorDatabase:
         classes_config: Dict[str, Dict],
         filters_config: Dict[str, Dict],
     ):
-        self.vector_db_client = weaviate.Client(api_url)
-        self.embedding_model = SentenceTransformer(sentence_transformer)
+        try:
+            self.vector_db_client = weaviate.Client(api_url)
+        except Exception as e:
+            logger.exception(f"Failed to initialize Weaviate client: {e}")
+            sys.exit(1)
+        try:
+            self.embedding_model = SentenceTransformer(sentence_transformer)
+        except Exception as e:
+            logger.exception(f"Failed to load SentenceTransformer model: {e}")
+            sys.exit(1)
+
         self.semantic_threshold = semantic_threshold
         self.query_limit = query_limit
         self.classes = {}
         self.device = get_available_device()
 
-        # Ensure the vector_db_client instance is ready
-        if not self.vector_db_client.is_ready():
-            raise Exception("vector_db_client is not ready!")
-
-        self.populate_vector_database(classes_config, filters_config)
+        try:
+            self.populate_vector_database(classes_config, filters_config)
+        except Exception as e:
+            logger.exception(f"Error while populating vector database: {e}")
+            sys.exit(1)
 
     def populate_vector_database(
         self, classes_config: Dict[str, Dict], filters_config: Dict[str, Dict]
