@@ -134,4 +134,5 @@ class BotLauncher:
 
         application.add_error_handler(error_handler.get_handler())
         for handler in handlers:
+            logger.info(f"Adding {handler.TYPE}")
             application.add_handlers(handlers=handler.get_handlers())

@@ -27,7 +27,7 @@ messages:
 
   3:
     - picture
-    - data/user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/1_об_этом_мак.png
+    - user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/1_об_этом_мак.png
 
   4:
     - text
@@ -35,7 +35,7 @@ messages:
 
   5:
     - picture
-    - data/user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/2_хранилище.png
+    - user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/2_хранилище.png
 
   6:
     - text
@@ -43,7 +43,7 @@ messages:
 
   7:
     - picture
-    - data/user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/3_удаление_мусора.png
+    - user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/3_удаление_мусора.png
 
   8:
     - text
@@ -51,7 +51,7 @@ messages:
 
   9:
     - picture
-    - data/user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/4_выбрать_и_удалить.png
+    - user/wiki/Apple/Mac/6_Saving_Data/Free_Storage/4_выбрать_и_удалить.png
 
 
 buttons:

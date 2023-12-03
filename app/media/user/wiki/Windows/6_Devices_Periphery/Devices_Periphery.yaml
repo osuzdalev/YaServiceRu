@@ -35,7 +35,7 @@ messages:
 
   3:
     - picture
-    - data/user/wiki/Windows/6_Devices_Periphery/1_звук.png
+    - user/wiki/Windows/6_Devices_Periphery/1_звук.png
 
   4:
     - text
@@ -61,7 +61,7 @@ messages:
 
   5:
     - picture
-    - data/user/wiki/Windows/6_Devices_Periphery/2_вебкамера.png
+    - user/wiki/Windows/6_Devices_Periphery/2_вебкамера.png
 
 buttons:
 - - - Oбратиться к специалисту

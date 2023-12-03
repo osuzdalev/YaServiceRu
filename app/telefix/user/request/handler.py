@@ -11,12 +11,12 @@ from ...common.types import TgHandlerPriority, TgModuleType
 class RequestHandler:
     TYPE = TgModuleType.REQUEST
     COMMANDS = ["request"]
-    _MESSAGES = ["🤓Специалист", "❌Отменить"]
+    MESSAGES = ["🤓Специалист", "❌Отменить"]
 
     def __init__(self):
         self.request_command_handler = CommandHandler(self.COMMANDS[0], request)
         self.request_replykeyboard_handler = MessageHandler(
-            filters.Regex(rf"^({self._MESSAGES[0]})$"), request
+            filters.Regex(rf"^({self.MESSAGES[0]})$"), request
         )
         self.request_callback_handler = CallbackQueryHandler(
             request, pattern="REQUEST_COMMAND"
@@ -29,7 +29,7 @@ class RequestHandler:
             cancel_request, pattern="REQUEST_CALL_CANCEL"
         )
         self.cancel_request_handler_message = MessageHandler(
-            filters.Regex(rf"^({self._MESSAGES[1]})$"), cancel_request
+            filters.Regex(rf"^({self.MESSAGES[1]})$"), cancel_request
         )
 
     def get_handlers(self):

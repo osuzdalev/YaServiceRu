@@ -1,6 +1,8 @@
 import pathlib
 from typing import Any, List, Dict, Tuple
 
+from loguru import logger
+
 from ..vector_database import VectorDatabase
 from ..user.chatbot import ChatGPTModelConfig
 from ..common.types import TgModuleType, StdModuleType
@@ -78,8 +80,10 @@ class ModuleManager:
         all_commands = []
         all_messages = []
         for module in self.tg_modules:
-            all_commands.extend(getattr(module, "commands", []))
-            all_messages.extend(getattr(module, "messages", []))
+            all_commands.extend(getattr(module, "COMMANDS", []))
+            all_messages.extend(getattr(module, "MESSAGES", []))
+        logger.info(f"COMMANDS: {all_commands}")
+        logger.info(f"MESSAGES: {all_messages}")
 
         return all_commands, all_messages
 
@@ -124,7 +128,13 @@ class ModuleManager:
                     )
                 )
             elif module.TYPE == TgModuleType.WIKI:
-                handlers.append(module(self.config["wiki"]))
+                logger.warning(f"Media path: {self.config['telefix']['media']}")
+                handlers.append(
+                    module(
+                        self.config["wiki"],
+                        pathlib.Path(self.config["telefix"]["media"]),
+                    )
+                )
             elif module.TYPE == TgModuleType.CHATBOT:
                 handlers.append(
                     module(

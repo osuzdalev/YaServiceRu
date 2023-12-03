@@ -19,7 +19,7 @@ messages:
 
   3:
     - picture
-    - data/user/wiki/Apple/Mac/4_Devices_Periphery/Flash_Drive/1_дисковая_утилита.png
+    - user/wiki/Apple/Mac/4_Devices_Periphery/Flash_Drive/1_дисковая_утилита.png
 
   4:
     - text
@@ -27,7 +27,7 @@ messages:
 
   5:
     - picture
-    - data/user/wiki/Apple/Mac/4_Devices_Periphery/Flash_Drive/2_выбор_накопителя_и_стереть.png
+    - user/wiki/Apple/Mac/4_Devices_Periphery/Flash_Drive/2_выбор_накопителя_и_стереть.png
 
   6:
     - text
@@ -35,7 +35,7 @@ messages:
 
   7:
     - picture
-    - data/user/wiki/Apple/Mac/4_Devices_Periphery/Flash_Drive/3_MS_DOS_FAT.png
+    - user/wiki/Apple/Mac/4_Devices_Periphery/Flash_Drive/3_MS_DOS_FAT.png
 
 buttons:
 - - - Oбратиться к специалисту

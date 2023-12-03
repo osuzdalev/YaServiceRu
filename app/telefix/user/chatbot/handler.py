@@ -15,7 +15,7 @@ from .types import ChatGptCallbackType
 class ChatGptHandler:
     TYPE = TgModuleType.CHATBOT
     COMMANDS = ["chat", "chat_stop"]
-    _MESSAGES = ["🤖Чат с подержкой", "❌Отменить"]
+    MESSAGES = ["🤖Чат с подержкой", "❌Отменить"]
 
     def __init__(self, deployment: str, media: str, ignored_texts_re):
         config = ChatGPTConfig(deployment, media)
@@ -24,7 +24,7 @@ class ChatGptHandler:
         callback_start = callback_handler.get_callback(ChatGptCallbackType.START)
         self.handler_command = CommandHandler(self.COMMANDS[0], callback_start)
         self.handler_message = MessageHandler(
-            filters.Regex(rf"^({self._MESSAGES[0]})$"), callback_start
+            filters.Regex(rf"^({self.MESSAGES[0]})$"), callback_start
         )
 
         callback_request = callback_handler.get_callback(ChatGptCallbackType.REQUEST)
@@ -51,7 +51,7 @@ class ChatGptHandler:
         callback_stop = callback_handler.get_callback(ChatGptCallbackType.STOP)
         self.stop_handler_command = CommandHandler(self.COMMANDS[1], callback_stop)
         self.stop_handler_message = MessageHandler(
-            filters.Regex(rf"^({self._MESSAGES[1]})$"), callback_stop
+            filters.Regex(rf"^({self.MESSAGES[1]})$"), callback_stop
         )
 
         callback_check_remaining_tokens = callback_handler.get_callback(

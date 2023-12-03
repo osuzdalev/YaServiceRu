@@ -13,7 +13,7 @@ messages:
 
   2:
     - picture
-    - data/user/wiki/Apple/Mac/2_Installation_Recovery/Update_MacOS/1_настройки.png
+    - user/wiki/Apple/Mac/2_Installation_Recovery/Update_MacOS/1_настройки.png
 
   3:
     - text
@@ -28,7 +28,7 @@ messages:
 
   4:
     - picture
-    - data/user/wiki/Apple/Mac/2_Installation_Recovery/Update_MacOS/2_проверить_обновления.png
+    - user/wiki/Apple/Mac/2_Installation_Recovery/Update_MacOS/2_проверить_обновления.png
 
   5:
     - text
@@ -45,7 +45,7 @@ messages:
 
   6:
     - picture
-    - data/user/wiki/Apple/Mac/2_Installation_Recovery/Update_MacOS/3_об_этом_мак.png
+    - user/wiki/Apple/Mac/2_Installation_Recovery/Update_MacOS/3_об_этом_мак.png
 
   7:
     - text

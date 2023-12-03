@@ -1,4 +1,5 @@
 import os
+import pathlib
 from typing import Dict
 
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, filters
@@ -42,11 +43,11 @@ class WikiHandler:
 
     TYPE = TgModuleType.WIKI
     COMMANDS = ["wiki", "cancel"]
-    _MESSAGES = ["📖Справочник", "❌Отменить"]
+    MESSAGES = ["📖Справочник", "❌Отменить"]
 
-    def __init__(self, wiki_data_dict: Dict):
+    def __init__(self, wiki_data_dict: Dict, media_path: pathlib):
         # Generating the telegram_website object from yaml database file
-        website = Website(STATE, BROWSER_HISTORY_NAME)
+        website = Website(STATE, BROWSER_HISTORY_NAME, media_path)
         # Parse the yaml file
         website.parse(wiki_data_dict)
         # Adding the first page to website
@@ -64,13 +65,13 @@ class WikiHandler:
         self.conversation_handler = ConversationHandler(
             entry_points=[
                 CommandHandler(self.COMMANDS[0], wiki),
-                MessageHandler(filters.Regex(rf"^({self._MESSAGES[0]})$"), wiki),
+                MessageHandler(filters.Regex(rf"^({self.MESSAGES[0]})$"), wiki),
             ],
             states=website.state,
             fallbacks=[
                 CommandHandler(self.COMMANDS[1], cancel_command),
                 MessageHandler(
-                    filters.Regex(rf"^({self._MESSAGES[1]})$"), cancel_command
+                    filters.Regex(rf"^({self.MESSAGES[1]})$"), cancel_command
                 ),
             ],
             allow_reentry=True,
