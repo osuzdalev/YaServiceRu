@@ -3,27 +3,27 @@ from loguru import logger
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from app import telefix as callbacks
-from ....core.data_reader import DataReader
+from . import (
+    StartCallback,
+    StopCallback,
+    RequestCallback,
+    PaymentLaunchCallback,
+    CheckRemainingTokensCallback,
+)
 from ..config import ChatGPTConfig
 from ..types import ChatGptCallbackType
 
 
 class ChatGptCallbackHandler:
-    def __init__(self, config: ChatGPTConfig = None, data_reader: DataReader = None):
-        self._config = config or ChatGPTConfig()
-        self._data_reader = data_reader or DataReader()
+    def __init__(self, config: ChatGPTConfig = None):
+        self._config = config
 
         self._callbacks = {
-            ChatGptCallbackType.START: callbacks.StartCallback(self._config),
-            ChatGptCallbackType.STOP: callbacks.StopCallback(logger),
-            ChatGptCallbackType.REQUEST: callbacks.RequestCallback(
-                self._config, self._data_reader
-            ),
-            ChatGptCallbackType.PAYMENT_LAUNCH: callbacks.PaymentLaunchCallback(
-                self._config
-            ),
-            ChatGptCallbackType.CHECK_REMAINING_TOKENS: callbacks.CheckRemainingTokensCallback(
+            ChatGptCallbackType.START: StartCallback(self._config),
+            ChatGptCallbackType.STOP: StopCallback(),
+            ChatGptCallbackType.REQUEST: RequestCallback(self._config),
+            ChatGptCallbackType.PAYMENT_LAUNCH: PaymentLaunchCallback(self._config),
+            ChatGptCallbackType.CHECK_REMAINING_TOKENS: CheckRemainingTokensCallback(
                 self._config
             ),
         }

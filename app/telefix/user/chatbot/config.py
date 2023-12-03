@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+import pathlib
+from dataclasses import dataclass, field
+from typing import List
 
 from ...core.data_reader import ChatGPTDataReader
 from ...common.helpers import num_tokens_from_string
@@ -6,9 +8,16 @@ from ...common.helpers import num_tokens_from_string
 
 @dataclass
 class ChatGPTModelConfig:
+    deployment: str
+    path: pathlib
     # FIXME passing the deployment argument deep into the code
     # reformat the DataReader class
-    __DATA_READER = ChatGPTDataReader("dev")
+    __DATA_READER: ChatGPTDataReader = field(init=False)
+    instructions_tokens: int = field(init=False)
+    # max size prompt to at least get one answer
+    max_prompt_tokens: int = field(init=False)
+    conversation_init: List[dict] = field(init=False)
+
     name: str = "gpt-3.5-turbo"
     temperature: float = 0.6
     max_response_tokens: int = 350
@@ -19,17 +28,21 @@ class ChatGPTModelConfig:
     max_conversation_tokens: int = 4096
     # Amount of tokens in a conversation to at least get a minimum response
     limit_conversation_tokens: int = max_conversation_tokens - max_response_tokens
-    instructions_tokens: int = num_tokens_from_string(
-        __DATA_READER.get_system_instructions(), name
-    )
     max_sum_response_tokens: int = free_prompt_limit * max_response_tokens
-    # max size prompt to at least get one answer
-    max_prompt_tokens: int = (
-        max_conversation_tokens - instructions_tokens - max_response_tokens
-    )
-    conversation_init = [
-        {"role": "system", "content": __DATA_READER.get_system_instructions()}
-    ]
+
+    def __post_init__(self):
+        self.__DATA_READER = ChatGPTDataReader(self.deployment, self.path)
+        self.instructions_tokens = num_tokens_from_string(
+            self.__DATA_READER.get_system_instructions(), self.name
+        )
+        self.max_prompt_tokens = (
+            self.max_conversation_tokens
+            - self.instructions_tokens
+            - self.max_response_tokens
+        )
+        self.conversation_init = [
+            {"role": "system", "content": self.__DATA_READER.get_system_instructions()}
+        ]
 
 
 @dataclass
@@ -55,6 +68,11 @@ class ChatGPTCheckoutVariables:
 
 @dataclass
 class ChatGPTConfig:
-    model: ChatGPTModelConfig = ChatGPTModelConfig()
+    deployment: str
+    path: pathlib
+    model: ChatGPTModelConfig = field(init=False)
     messages: ChatGPTMessagesConfig = ChatGPTMessagesConfig()
     checkout_variables: ChatGPTCheckoutVariables = ChatGPTCheckoutVariables()
+
+    def __post_init__(self):
+        self.model = ChatGPTModelConfig(deployment=self.deployment, path=self.path)

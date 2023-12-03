@@ -46,25 +46,34 @@ class BotLauncher:
         self.module_manager = module_manager
         self.log_level = log_level
 
-    def add_tg_module_handlers(self, application: Application) -> None:
-        """
-        Adds Telegram module handlers to the given application.
+    def launch(self):
+        self.setup_logging()
 
-        This method fetches the prepared handlers from the ModuleManager and appropriately adds
-        them to the application. It handles the addition of normal handlers as well as the special
-        error handler.
+        persistence = PicklePersistence(
+            filepath=self.bot_config_manager.config["telefix"]["persistence"]
+        )
 
-        Parameters:
-            - application (object): The target telegram application to which the handlers will be added.
+        application = (
+            Application.builder()
+            .token(
+                self.bot_config_manager.config["telefix"]["secret"]["token_telegram"]
+            )
+            .persistence(persistence)
+            .arbitrary_callback_data(True)
+            .post_init(self.post_init)
+            .build()
+        )
 
-        Returns:
-            - None
-        """
-        handlers, error_handler = self.module_manager.get_tg_module_handlers()
+        # Call the method to add module handlers
+        self.add_tg_module_handlers(application)
 
-        application.add_error_handler(error_handler.get_handler())
-        for handler in handlers:
-            application.add_handlers(handlers=handler.get_handlers())
+        # TODO make the wiki objects compatible with inline queries
+        # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
+
+        application.run_polling(allowed_updates=Update.ALL_TYPES)
+
+        if application.bot_data["restart"]:
+            os.execl(sys.executable, sys.executable, *sys.argv)
 
     def setup_logging(self):
         """
@@ -107,31 +116,22 @@ class BotLauncher:
         application.bot_data["config"] = self.bot_config_manager.config
         application.bot_data["restart"] = False
 
-    def launch(self):
-        self.setup_logging()
+    def add_tg_module_handlers(self, application: Application) -> None:
+        """
+        Adds Telegram module handlers to the given application.
 
-        persistence = PicklePersistence(
-            filepath=self.bot_config_manager.config["telefix"]["persistence"]
-        )
+        This method fetches the prepared handlers from the ModuleManager and appropriately adds
+        them to the application. It handles the addition of normal handlers as well as the special
+        error handler.
 
-        application = (
-            Application.builder()
-            .token(
-                self.bot_config_manager.config["telefix"]["secret"]["token_telegram"]
-            )
-            .persistence(persistence)
-            .arbitrary_callback_data(True)
-            .post_init(self.post_init)
-            .build()
-        )
+        Parameters:
+            - application (object): The target telegram application to which the handlers will be added.
 
-        # Call the method to add module handlers
-        self.add_tg_module_handlers(application)
+        Returns:
+            - None
+        """
+        handlers, error_handler = self.module_manager.get_tg_module_handlers()
 
-        # TODO make the wiki objects compatible with inline queries
-        # application.add_handler(wiki_share.share_inline_query_handler, CLIENT_WIKI)
-
-        application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-        if application.bot_data["restart"]:
-            os.execl(sys.executable, sys.executable, *sys.argv)
+        application.add_error_handler(error_handler.get_handler())
+        for handler in handlers:
+            application.add_handlers(handlers=handler.get_handlers())

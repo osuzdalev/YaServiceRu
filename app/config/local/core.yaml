@@ -1,4 +1,4 @@
-name: local
+deployment: local
 
 telefix:
   contact:
@@ -16,6 +16,7 @@ telefix:
       smtp:
         url: smtp.yandex.ru
         port: 587
+  media: /Users/osuz/PycharmProjects/YaServiceRu/app/media
   persistence: /Users/osuz/PycharmProjects/YaServiceRu/app/storage/local.pkl
   logs: /Users/osuz/PycharmProjects/YaServiceRu/app/log/local.log
   secret:

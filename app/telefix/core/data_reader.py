@@ -1,4 +1,5 @@
 import os
+import pathlib
 from pprint import pprint
 from typing import Dict
 import yaml
@@ -38,7 +39,7 @@ class DataReader:
         try:
             with open(file_path, "r") as file:
                 self.data = yaml.safe_load(file)
-        except (FileNotFoundError, yaml.YAMLError) as e:
+        except (FileNotFoundError, IsADirectoryError, yaml.YAMLError) as e:
             logger.error(f"Error loading data from {file_path}: {e}")
             self.data = {}
 
@@ -53,18 +54,15 @@ class ChatGPTDataReader(DataReader):
     URLs for loading GIFs.
     """
 
-    def __init__(
-        self,
-        config: str,
-        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/chatbot/wiki.yaml",
-    ):
+    def __init__(self, config: str, dir_path: pathlib):
+        file_path = dir_path / "user/chatbot/data.yaml"
         super().__init__(config, file_path)
 
     def get_system_instructions(self):
-        return self.data.get("system_instructions", {}).get(self.config, "").strip()
+        return self.data.get("system_instructions", {}).strip()
 
     def get_loading_gif(self):
-        return self.data.get("loading_gif", {}).get(self.config, "").strip()
+        return self.data.get("loading_gif", {}).strip()
 
 
 class StartReader(DataReader):
@@ -93,11 +91,8 @@ class StartReader(DataReader):
     where each environment (dev, main) has its own specific video ID.
     """
 
-    def __init__(
-        self,
-        config: str,
-        file_path: str = "/Users/osuz/PycharmProjects/YaServiceRu/docker/app/image_files/data/user/start/wiki.yaml",
-    ):
+    def __init__(self, config: str, dir_path: pathlib):
+        file_path = dir_path / "user/start/data.yaml"
         super().__init__(config, file_path)
 
     def get_introduction_video(self):

@@ -17,8 +17,8 @@ class ChatGptHandler:
     COMMANDS = ["chat", "chat_stop"]
     _MESSAGES = ["🤖Чат с подержкой", "❌Отменить"]
 
-    def __init__(self, ignored_texts_re):
-        config = ChatGPTConfig()
+    def __init__(self, deployment: str, media: str, ignored_texts_re):
+        config = ChatGPTConfig(deployment, media)
         callback_handler = ChatGptCallbackHandler(config)
 
         callback_start = callback_handler.get_callback(ChatGptCallbackType.START)

@@ -1,4 +1,4 @@
-name: core
+deployment: core
 
 telefix:
   contact:
@@ -16,6 +16,7 @@ telefix:
       smtp:
         url: smtp.yandex.ru
         port: 587
+  media: /app/telefix/media
   persistence: /Users/osuz/PycharmProjects/YaServiceRu/app/storage/main.pkl
   logs: /Users/osuz/PycharmProjects/YaServiceRu/app/log/main.log
   docker:

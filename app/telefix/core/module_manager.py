@@ -1,3 +1,4 @@
+import pathlib
 from typing import Any, List, Dict, Tuple
 
 from ..vector_database import VectorDatabase
@@ -100,26 +101,45 @@ class ModuleManager:
 
         handlers = []
         error_handler = None
+        global_fallback = None
         commands, messages = self._get_tg_commands_and_messages()
 
         for module in self.tg_modules:
-            if module.TYPE == TgModuleType.ERROR_LOGGING:
-                error_handler = module(
-                    self.config["telefix"]["contact"]["email"]["smtp"]["url"],
-                    self.config["telefix"]["contact"]["email"]["smtp"]["port"],
-                )
-            elif module.TYPE == TgModuleType.GLOBAL_FALLBACK:
+            if module.TYPE == TgModuleType.GLOBAL_FALLBACK:
                 global_fallback = module(commands, messages)
                 handlers.insert(0, global_fallback)
             elif module.TYPE == TgModuleType.PROMPT_VALIDATOR:
                 prompt_validator = module(
-                    ChatGPTModelConfig(),
+                    ChatGPTModelConfig(
+                        self.config["deployment"],
+                        pathlib.Path(self.config["telefix"]["media"]),
+                    ),
                     self.std_module_instances[StdModuleType.VECTOR_DATABASE],
                     global_fallback.ignore_messages_re,
                 )
                 handlers.append(prompt_validator)
+            elif module.TYPE == TgModuleType.START:
+                handlers.append(
+                    module(
+                        self.config["deployment"],
+                        pathlib.Path(self.config["telefix"]["media"]),
+                    )
+                )
             elif module.TYPE == TgModuleType.WIKI:
                 handlers.append(module(self.config["wiki"]))
+            elif module.TYPE == TgModuleType.CHATBOT:
+                handlers.append(
+                    module(
+                        self.config["deployment"],
+                        pathlib.Path(self.config["telefix"]["media"]),
+                        global_fallback.ignore_messages_re,
+                    )
+                )
+            elif module.TYPE == TgModuleType.ERROR_LOGGING:
+                error_handler = module(
+                    self.config["telefix"]["contact"]["email"]["smtp"]["url"],
+                    self.config["telefix"]["contact"]["email"]["smtp"]["port"],
+                )
             else:
                 handlers.append(module())
 

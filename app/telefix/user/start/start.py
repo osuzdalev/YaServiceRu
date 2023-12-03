@@ -7,9 +7,12 @@ from ...core.data_reader import StartReader
 from ...common.markups import DEFAULT_CLIENT_MARKUP
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Needs to be used first after every reboot of the Bot."""
-    # Get the name of the current function
+async def start(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, start_reader: StartReader
+) -> None:
+    """
+    # Note: Needs to be used first by user/admin after every reboot of the Bot.
+    """
     user = update.message.from_user
     logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
@@ -20,6 +23,4 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "Добро пожаловать!", reply_markup=DEFAULT_CLIENT_MARKUP
     )
     # Send introduction video
-    await update.message.reply_video(
-        StartReader(context.bot_data["config"]["name"]).get_introduction_video()
-    )
+    await update.message.reply_video(start_reader.get_introduction_video())

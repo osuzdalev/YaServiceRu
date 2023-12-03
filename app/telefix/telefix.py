@@ -54,6 +54,8 @@ def main():
         wiki=wiki_module_path,
     )
 
+    # Note GlobalFallbackHandler needs to be first
+    #  in order to be processed first in ModuleManager.get_tg_module_handlers()
     tg_modules = [
         GlobalFallbackHandler,
         StartHandler,

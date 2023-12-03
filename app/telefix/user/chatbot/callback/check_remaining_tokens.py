@@ -1,9 +1,11 @@
 from enum import Enum
 
+from loguru import logger
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from telefix.common.helpers import num_tokens_from_string
+from ....common.helpers import num_tokens_from_string
 
 
 class CheckRemainingTokensCallbackEventType(Enum):
@@ -11,8 +13,7 @@ class CheckRemainingTokensCallbackEventType(Enum):
 
 
 class CheckRemainingTokensCallback:
-    def __init__(self, logger, config):
-        self._logger = logger
+    def __init__(self, config):
         self._config = config
         self._event_callbacks = {
             CheckRemainingTokensCallbackEventType.CHECK: self._check_remaining_tokens_callback,
@@ -26,7 +27,7 @@ class CheckRemainingTokensCallback:
         self, update: Update, context: ContextTypes.DEFAULT_TYPE
     ) -> None:
         user = update.message.from_user
-        self._logger.info(f"({user.id}, {user.name}, {user.first_name})")
+        logger.info(f"({user.id}, {user.name}, {user.first_name})")
 
         event = self.get_event(update, context)
         await self._event_callbacks[event](update, context)

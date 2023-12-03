@@ -25,9 +25,8 @@ class RequestCallbackEventType(Enum):
 
 
 class RequestCallback:
-    def __init__(self, config, data_reader):
+    def __init__(self, config):
         self._config = config
-        self._data_reader = data_reader
         self._reply_request_inline_markup = InlineKeyboardMarkup(
             [
                 [
@@ -96,7 +95,7 @@ class RequestCallback:
 
         # Send a gif to let the user know the prompt is being handled
         loading_gif = await update.message.reply_video(
-            self._data_reader.chatgpt.get_loading_gif()
+            self._config.model.__DATA_READER.get_loading_gif()
         )
 
         event = self.get_event(update, context, user_level, is_premium)

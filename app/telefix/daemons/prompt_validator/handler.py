@@ -14,6 +14,7 @@ class PromptValidatorHandler:
         self.vector_db_client = vector_db_client
 
         self.ignore_messages_re = ignore_messages_re
+        # Pass additional arguments to the coroutine validate_prompt()
         self.validate_prompt_handler = MessageHandler(
             ~filters.COMMAND & ~filters.Regex(self.ignore_messages_re),
             partial(
