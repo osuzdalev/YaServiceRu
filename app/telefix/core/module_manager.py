@@ -21,10 +21,7 @@ class ModuleManager:
     """
 
     def __init__(
-        self,
-        tg_modules: List,
-        std_modules: List,
-        config: Dict,
+        self, tg_modules: List, std_modules: List, config: Dict, log_level: str
     ):
         """
         Params:
@@ -36,6 +33,7 @@ class ModuleManager:
         self.std_module_instances = {}
         self.tg_modules = tg_modules
         self.config = config
+        self.log_level = log_level
 
     def _init_std_module_objects(self) -> None:
         """
@@ -139,6 +137,7 @@ class ModuleManager:
                 error_handler = module(
                     self.config["telefix"]["contact"]["email"]["smtp"]["url"],
                     self.config["telefix"]["contact"]["email"]["smtp"]["port"],
+                    self.log_level,
                 )
             else:
                 handlers.append(module())

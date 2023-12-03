@@ -67,7 +67,9 @@ def main():
         ErrorHandler,
     ]
     std_modules = [VectorDatabase]
-    module_manager = ModuleManager(tg_modules, std_modules, bot_config_manager.config)
+    module_manager = ModuleManager(
+        tg_modules, std_modules, bot_config_manager.config, args.log_level
+    )
 
     # Ignore "per_message=False" ConversationHandler warning message
     filterwarnings(

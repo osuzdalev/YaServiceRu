@@ -9,7 +9,7 @@ appropriate and available contractor within a large group/community.
 First launch the other docker services, then run
 
 ```bash
-python -m app.scripts.local
+python -m app.scripts.run_telefix 
 ```
 
 ## System Dependencies
@@ -32,5 +32,5 @@ https://tecadmin.net/tutorial/docker-run-static-website
 
 ```bash
 python -m build
-python -m pip install ./dist/telefix-0.{x}.{x}.tar.gz
+python -m pip install ./dist/telefix-*.whl
 ```

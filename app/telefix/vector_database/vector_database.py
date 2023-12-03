@@ -72,6 +72,7 @@ class VectorDatabase:
         filters_config: Dict[str, Dict],
     ):
         try:
+            logger.info("Connecting to vector database client...")
             self.vector_db_client = weaviate.Client(api_url)
         except Exception as e:
             logger.exception(f"Failed to initialize Weaviate client: {e}")

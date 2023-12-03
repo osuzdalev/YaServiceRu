@@ -40,6 +40,19 @@ http://localhost:8090/v1/backups/filesystem/my-very-first-backup/restore
 curl http://localhost:8090/v1/backups/filesystem/my-very-first-backup/restore
 ```
 
+# Sentence Transformer MPS usage
+If running on Macs M# chips, edit the following code in the "SentenceTransformers" class
+```python
+if device is None:
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
+    logger.info("Use pytorch device: {}".format(device))
+```
+
 ### Open Grafana in the browser
 * Open your Browser at `localhost:3000`
 * Log into the Grafana instance using weaviate/weaviate. 
