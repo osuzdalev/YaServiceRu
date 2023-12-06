@@ -44,7 +44,7 @@ class Website:
         self.add_cancel_callback()
 
     def format_title(self, title: str) -> str:
-        return "__*" + title + "*__"
+        return f"__*{title}*__"
 
     def parse(self, wiki_data_dict: Dict):
         """Generates the pages of the website from the provided configuration dictionary"""

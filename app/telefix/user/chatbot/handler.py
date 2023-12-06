@@ -37,7 +37,7 @@ class ChatGptHandler:
             ChatGptCallbackType.PAYMENT_LAUNCH
         )
         self.payment_yes_handler = MessageHandler(
-            filters.Regex(r"^{}$".format(config.messages.confirm_payment)),
+            filters.Regex(f"^{config.messages.confirm_payment}$"),
             callback_payment_launch,
         )
         self.precheckout_handler = PreCheckoutQueryHandler(

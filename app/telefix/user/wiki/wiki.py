@@ -33,7 +33,7 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Union[str,
 
     # Check if user already in Conversation
     in_conversation = context.user_data.get("in_conversation", "")
-    if not (in_conversation == "" or in_conversation == "wiki"):
+    if in_conversation not in ["", "wiki"]:
         await update.message.reply_text(
             "Please press /cancel\n"
             "or push the 'CANCEL' button in the previous menu before proceeding"

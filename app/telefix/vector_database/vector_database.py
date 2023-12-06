@@ -1,7 +1,5 @@
 import json
 import sys
-import time
-import traceback
 from pprint import pformat
 from typing import List, Dict, Union
 
@@ -18,7 +16,7 @@ from ..common.types import StdModuleType
 
 
 def get_available_device():
-    logger.info(f" ")
+    logger.info(" ")
     if torch.cuda.is_available():
         return torch.device("cuda")
     elif torch.backends.mps.is_available():
@@ -115,7 +113,7 @@ class VectorDatabase:
             - AssertionError: If no objects are found in the vector database after writing.
         """
 
-        logger.info(f" ")
+        logger.info(" ")
 
         # FIXME
 
@@ -130,7 +128,7 @@ class VectorDatabase:
 
         # Print classes to be written to vector_db
         logger.info("Classes to be written to vector_db:")
-        for class_name, class_config in self.classes.items():
+        for class_name in self.classes:
             logger.info(f"{class_name}")
 
         # Create the classes in the vector_db
@@ -195,7 +193,7 @@ class VectorDatabase:
         Raises:
         - Exception: If an error occurs during the query execution.
         """
-        logger.info(f" ")
+        logger.info(" ")
 
         nearVector = {"vector": vector, "certainty": certainty}
 
@@ -219,12 +217,12 @@ class VectorDatabase:
             logger.warning("Semantic query yielded NULL")
 
         if "errors" in result:
-            raise Exception(result["errors"][0]["message"])
+            raise RuntimeError(result["errors"][0]["message"])
 
         return result["data"]["Get"][collection_name]
 
     def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
-        logger.info(f" ")
+        logger.info(" ")
 
         try:
             self.vector_db_client.schema.create_class(class_config)
@@ -246,7 +244,7 @@ class VectorDatabase:
         Returns:
         - bool: True if all classes are in the vector database, False otherwise.
         """
-        logger.info(f" ")
+        logger.info(" ")
 
         for class_name, configs in classes.items():
             try:
@@ -321,11 +319,10 @@ class VectorDatabase:
             backend="filesystem",
         )
 
-        result = self.vector_db_client.backup.get_create_status(
+        return self.vector_db_client.backup.get_create_status(
             backup_id="my-very-first-backup",
             backend="filesystem",
         )
-        return result
 
     # TODO implement restore method
     def restore(self):

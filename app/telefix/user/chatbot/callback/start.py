@@ -61,10 +61,7 @@ class StartCallback:
         ] = self._config.gpt_conversation_start
 
         await update.message.reply_text(
-            "Чат с ChatGPT начат. Вы можете отправить еще {} сообщений в чат."
-            "\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop".format(
-                self._config.free_prompt_limit - context.user_data["GPT_messages_sent"]
-            )
+            f'Чат с ChatGPT начат. Вы можете отправить еще {self._config.free_prompt_limit - context.user_data["GPT_messages_sent"]} сообщений в чат.\n\nЧтобы остановить ChatGPT, просто отправьте /chat_stop'
         )
 
     async def _existing_user_cb(

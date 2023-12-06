@@ -55,9 +55,7 @@ async def validate_prompt(
     prompt_size_check, prompt_tokens = check_prompt_tokens(prompt, chatgpt_model_config)
     if not prompt_size_check:
         await update.message.reply_text(
-            "Текст запроса слишком длинный: {} токенов (максимум {})".format(
-                prompt_tokens, chatgpt_model_config.max_prompt_tokens
-            )
+            f"Текст запроса слишком длинный: {prompt_tokens} токенов (максимум {chatgpt_model_config.max_prompt_tokens})"
         )
         logger.info(f"({user.id}, {user.name}, {user.first_name}) - prompt too long")
         raise ApplicationHandlerStop
@@ -81,7 +79,7 @@ def check_conversation_tokens(
     Checks if the conversation size, including the provided prompt, is within the token limit.
     Accounts for the minimum response token size that needs to be left after processing the user's message.
     """
-    logger.info(f" ")
+    logger.info(" ")
 
     # Calculate tokens
     conversation_tokens = sum(
@@ -103,7 +101,7 @@ def check_prompt_tokens(prompt: str, chatgpt_model_config) -> Tuple[bool, int]:
     Check if the message sent size is within bounds.
     Returns a tuple with a boolean and the amount of remaining tokens
     """
-    logger.info(f" ")
+    logger.info(" ")
 
     # Calculate tokens
     prompt_tokens = num_tokens_from_string(prompt, chatgpt_model_config.name)
@@ -134,7 +132,7 @@ def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
     - bool : Returns True if the average certainty of the prompt being semantically valid
              is greater or equal to the semantic threshold; otherwise, returns False.
     """
-    logger.info(f" ")
+    logger.info(" ")
 
     # Vector Query
     logger.info(f"ENCODING PROMPT: {prompt}")
@@ -160,7 +158,8 @@ def check_prompt_semantic(prompt: str, vector_db_client) -> bool:
 
     # Calculate average certainty
     total_certainty = sum(
-        [article["_additional"]["certainty"] for article in combined_query_results]
+        article["_additional"]["certainty"]
+        for article in combined_query_results
     )
     average_certainty = total_certainty / len(combined_query_results)
 

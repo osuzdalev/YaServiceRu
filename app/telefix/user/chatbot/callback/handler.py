@@ -41,7 +41,7 @@ class ChatGptCallbackHandler:
             logger.info(
                 f"EXTENDED_PAYLOAD: {self._config.checkout_variables.extended_payload}"
             )
-            logger.info(f" ")
+            logger.info(" ")
             await query.answer(ok=True)
 
     async def successful_payment_callback(

@@ -42,7 +42,7 @@ def insert_new_user(
     Raises:
     - psycopg.Error: Raised when there is an error executing the database commands.
     """
-    logger.info(f" ")
+    logger.info(" ")
     try:
         with create_db_connection(db_auth) as conn:
             cursor = conn.cursor()
@@ -62,7 +62,7 @@ def insert_new_user(
 
 
 def get_user_data(user_id: int, db_auth: dict) -> None:
-    logger.info(f" ")
+    logger.info(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from users where user_id = %s", (user_id,))
@@ -70,7 +70,7 @@ def get_user_data(user_id: int, db_auth: dict) -> None:
 
 
 def insert_user_phone_number(user_id: int, phone_number: int, db_auth: dict) -> None:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -82,7 +82,7 @@ def insert_user_phone_number(user_id: int, phone_number: int, db_auth: dict) -> 
 
 
 def get_customer_data(user_id: int, db_auth: dict) -> List:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -101,7 +101,7 @@ def get_customer_data(user_id: int, db_auth: dict) -> List:
 
 
 def get_customer_last_order_id(user_id: int, contractor_id: int, db_auth: dict) -> int:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -117,13 +117,13 @@ def get_customer_last_order_id(user_id: int, contractor_id: int, db_auth: dict) 
 def insert_new_order(
     user_id: int, device_context: List, default_contractor_id: int, db_auth: dict
 ) -> None:
-    logger.debug(f" ")
+    logger.debug(" ")
 
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
 
         # Check the length of device_context and assign default values if necessary
-        os = device_context[0] if len(device_context) > 0 else None
+        os_ = device_context[0] if len(device_context) > 0 else None
         device = device_context[1] if len(device_context) > 1 else None
         category = device_context[2] if len(device_context) > 2 else None
         problem = device_context[-1] if len(device_context) > 3 else None
@@ -131,13 +131,13 @@ def insert_new_order(
         cursor.execute(
             "insert into orders (customer_id, contractor_id, os, device, category, problem) "
             "values (%s, %s, %s, %s, %s, %s);",
-            (user_id, default_contractor_id, os, device, category, problem),
+            (user_id, default_contractor_id, os_, device, category, problem),
         )
         conn.commit()
 
 
 def get_order_data(order_id: int, db_auth: dict) -> List:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select * from orders where order_id = %s", (order_id,))
@@ -146,7 +146,7 @@ def get_order_data(order_id: int, db_auth: dict) -> List:
 
 
 def get_open_orders(db_auth: dict) -> List[Tuple]:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -156,7 +156,7 @@ def get_open_orders(db_auth: dict) -> List[Tuple]:
 
 
 def get_assigned_orders(db_auth: dict) -> List[Tuple]:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -166,7 +166,7 @@ def get_assigned_orders(db_auth: dict) -> List[Tuple]:
 
 
 def update_order_Complete(order_id: int, timestamp: str, db_auth: dict) -> None:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -177,7 +177,7 @@ def update_order_Complete(order_id: int, timestamp: str, db_auth: dict) -> None:
 
 
 def get_contractor_data(user_id: int, db_auth: dict) -> List:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(
@@ -195,19 +195,17 @@ def get_contractor_data(user_id: int, db_auth: dict) -> List:
 
 
 def get_all_contractor_id(db_auth: dict) -> List:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute("select contractor_id from contractors")
-        contractor_ids = [i[0] for i in result.fetchall()]
-
-        return contractor_ids
+        return [i[0] for i in result.fetchall()]
 
 
 def update_order_contractor_id(
     order_id: int, new_contractor_id: int, db_auth: dict
 ) -> None:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -220,7 +218,7 @@ def update_order_contractor_id(
 def insert_assign(
     old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict
 ) -> None:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -234,7 +232,7 @@ def insert_assign(
 def check_assign(
     old_contractor_id: int, order_id: int, new_contractor_id: int, db_auth: dict
 ) -> bool:
-    logger.debug(f" ")
+    logger.debug(" ")
     with create_db_connection(db_auth) as conn:
         cursor = conn.cursor()
         result = cursor.execute(

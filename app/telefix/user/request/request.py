@@ -58,7 +58,7 @@ def get_order_message_str(
     order_id: int, user_data: Any, device_context: Any, phone_number: int = None
 ) -> str:
     """Creates a nice string with all the relevant database of an Order to be sent as a message to Contractor"""
-    logger.info(f" ")
+    logger.info(" ")
     user_info = ""
     if isinstance(user_data, List):
         user_info = [
@@ -71,8 +71,7 @@ def get_order_message_str(
         user_info = "\n".join(user_info)
     elif isinstance(user_data, Tuple):
         user_info = (
-            "@"
-            + user_data[1]
+            f"@{user_data[1]}"
             + "\n"
             + user_data[2]
             + "\n"
@@ -87,16 +86,14 @@ def get_order_message_str(
     device_info = "\n".join(device_context)
     logger.debug(f"device_context: {device_context}")
 
-    order_message_str = "\n\n".join(
+    return "\n\n".join(
         [
             "Customer service required",
-            f"Order# {str(order_id)}",
+            f"Order# {order_id}",
             user_info,
             device_info,
         ]
     )
-
-    return order_message_str
 
 
 async def cancel_request(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

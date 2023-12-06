@@ -13,7 +13,7 @@ WIKI_DATA_DICT = get_wiki_json_dict()
 
 async def share(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Union[int, None]:
     """Handle the inline query. This is run when you type: @YaServiceRuBot <query>"""
-    logger_wiki_share.info("share()")
+    logger.info("share()")
     query_text = update.inline_query.query
 
     results = []

@@ -15,9 +15,7 @@ class GlobalFallbackHandler:
         self.ignore_commands_re = (
             r"^(" + "|".join(rf"\/{command}" for command in self.COMMANDS) + ")$"
         )
-        self.ignore_messages_re = (
-            r"^(" + "|".join(message for message in self.MESSAGES) + ")$"
-        )
+        self.ignore_messages_re = r"^(" + "|".join(self.MESSAGES) + ")$"
 
         self.global_fallback_handler = MessageHandler(
             filters.COMMAND & (~filters.Regex(self.ignore_commands_re)), unknown_command

@@ -1,5 +1,4 @@
 # All the different addresses / URL
-# TODO Investigate using a database to structure and manage the data (wiki or otherwise)
 
 Apple: !include /app/telefix/media/user/wiki/Apple/Apple.yaml
 
