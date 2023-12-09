@@ -3,14 +3,14 @@ from pydantic import BaseModel, SecretStr
 
 
 class TgIdConfig(BaseModel):
-    bot: Optional[int]
-    admin: Optional[int]
-    dev: Optional[int]
-    contractor: Optional[int]
+    bot: int
+    admin: int
+    dev: int
+    contractor: int
 
 
 class TgUsernameConfig(BaseModel):
-    bot: Optional[str]
+    bot: str
 
 
 class SmtpConfig(BaseModel):
@@ -19,16 +19,16 @@ class SmtpConfig(BaseModel):
 
 
 class EmailConfig(BaseModel):
-    admin: Optional[str]
-    dev: Optional[str]
-    contractor: Optional[str]
-    smtp: Optional[SmtpConfig]
+    admin: str
+    dev: str
+    contractor: str
+    smtp: SmtpConfig
 
 
 class ContactInfo(BaseModel):
-    tg_id: Optional[TgIdConfig]
-    tg_username: Optional[TgUsernameConfig]
-    email: Optional[EmailConfig]
+    tg_id: TgIdConfig
+    tg_username: TgUsernameConfig
+    email: EmailConfig
 
 
 class DockerConfig(BaseModel):
@@ -60,7 +60,7 @@ class DatabaseConfig(BaseModel):
     dbname: str
     user: str
     port: int
-    secret: Optional[DatabaseSecretConfig]
+    secret: DatabaseSecretConfig
 
 
 class ModuleConfig(BaseModel):
