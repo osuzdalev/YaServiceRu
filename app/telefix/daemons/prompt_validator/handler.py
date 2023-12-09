@@ -2,7 +2,7 @@ from functools import partial
 
 from telegram.ext import MessageHandler, filters
 
-from ...common.types import TgHandlerPriority, TgModuleType
+from app.telefix.common.types import TgHandlerPriority, TgModuleType
 from .prompt_validator import validate_prompt
 
 

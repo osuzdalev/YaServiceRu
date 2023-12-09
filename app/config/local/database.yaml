@@ -1,5 +1,3 @@
-name: local
-
 database:
   host: localhost
   dbname: postgres

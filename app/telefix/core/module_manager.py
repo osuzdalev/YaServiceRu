@@ -3,6 +3,8 @@ from typing import Any, List, Dict, Tuple
 
 from loguru import logger
 
+from .bot_config_manager import AppConfig
+
 from ..vector_database import VectorDatabase
 from ..user.chatbot import ChatGPTModelConfig
 from ..common.types import TgModuleType, StdModuleType
@@ -15,15 +17,10 @@ class ModuleManager:
     This class is responsible for loading configuration files for modules, preparing
     standard and Telegram-specific module instances, and aggregating commands and messages
     associated with Telegram modules.
-
-    Methods:
-        _init_std_module_objects(): Prepares and returns instances of standard modules.
-        _get_tg_commands_and_messages(): Retrieves commands and messages for Telegram modules.
-        get_tg_module_handlers(): Prepares and returns instances of Telegram modules.
     """
 
     def __init__(
-        self, tg_modules: List, std_modules: List, config: Dict, log_level: str
+        self, tg_modules: List, std_modules: List, config: AppConfig, log_level: str
     ):
         """
         Params:
@@ -49,17 +46,14 @@ class ModuleManager:
         """
         for module in self.std_modules:
             if module.TYPE == StdModuleType.VECTOR_DATABASE:
+                vector_database_config = self.config.vector_database
                 vector_database_instance = VectorDatabase(
-                    api_url=self.config["vector_database"]["api_url"],
-                    sentence_transformer=self.config["vector_database"][
-                        "sentence_transformer"
-                    ],
-                    semantic_threshold=self.config["vector_database"][
-                        "semantic_threshold"
-                    ],
-                    query_limit=self.config["vector_database"]["query_limit"],
-                    classes_config=self.config["vector_database"]["classes"],
-                    filters_config=self.config["vector_database"]["filters"],
+                    api_url=vector_database_config.api_url,
+                    sentence_transformer=vector_database_config.sentence_transformer,
+                    semantic_threshold=vector_database_config.semantic_threshold,
+                    query_limit=vector_database_config.query_limit,
+                    classes_config=vector_database_config.classes,
+                    filters_config=vector_database_config.filters,
                 )
                 self.std_module_instances[
                     StdModuleType.VECTOR_DATABASE
@@ -98,23 +92,27 @@ class ModuleManager:
         Returns:
         - tuple: A tuple containing a list of normal instances and the special error handler.
         """
-        # Prepare the std_modules object instances
         self._init_std_module_objects()
-
-        handlers = []
-        error_handler = None
-        global_fallback = None
         commands, messages = self._get_tg_commands_and_messages()
+        tg_modules = {module.TYPE: module for module in self.tg_modules}
 
-        for module in self.tg_modules:
-            if module.TYPE == TgModuleType.GLOBAL_FALLBACK:
-                global_fallback = module(commands, messages)
-                handlers.insert(0, global_fallback)
-            elif module.TYPE == TgModuleType.PROMPT_VALIDATOR:
+        error_handler_type = tg_modules.pop(TgModuleType.ERROR_LOGGING)
+        error_handler = error_handler_type(
+            self.config.core.contact.email.smtp.url,
+            self.config.core.contact.email.smtp.port,
+            self.log_level,
+        )
+
+        global_fallback_type = tg_modules.pop(TgModuleType.GLOBAL_FALLBACK)
+        global_fallback = global_fallback_type(commands, messages)
+        handlers = [global_fallback]
+
+        for module in tg_modules.values():
+            if module.TYPE == TgModuleType.PROMPT_VALIDATOR:
                 prompt_validator = module(
                     ChatGPTModelConfig(
-                        self.config["deployment"],
-                        pathlib.Path(self.config["telefix"]["media"]),
+                        self.config.deployment,
+                        pathlib.Path(self.config.core.media),
                     ),
                     self.std_module_instances[StdModuleType.VECTOR_DATABASE],
                     global_fallback.ignore_messages_re,
@@ -123,31 +121,25 @@ class ModuleManager:
             elif module.TYPE == TgModuleType.START:
                 handlers.append(
                     module(
-                        self.config["deployment"],
-                        pathlib.Path(self.config["telefix"]["media"]),
+                        self.config.deployment,
+                        pathlib.Path(self.config.core.media),
                     )
                 )
             elif module.TYPE == TgModuleType.WIKI:
-                logger.warning(f"Media path: {self.config['telefix']['media']}")
+                logger.warning(f"Media path: {self.config.core.media}")
                 handlers.append(
                     module(
-                        self.config["wiki"],
-                        pathlib.Path(self.config["telefix"]["media"]),
+                        self.config.wiki,
+                        pathlib.Path(self.config.core.media),
                     )
                 )
             elif module.TYPE == TgModuleType.CHATBOT:
                 handlers.append(
                     module(
-                        self.config["deployment"],
-                        pathlib.Path(self.config["telefix"]["media"]),
+                        self.config.deployment,
+                        pathlib.Path(self.config.core.media),
                         global_fallback.ignore_messages_re,
                     )
-                )
-            elif module.TYPE == TgModuleType.ERROR_LOGGING:
-                error_handler = module(
-                    self.config["telefix"]["contact"]["email"]["smtp"]["url"],
-                    self.config["telefix"]["contact"]["email"]["smtp"]["port"],
-                    self.log_level,
                 )
             else:
                 handlers.append(module())

@@ -43,7 +43,7 @@ async def confirm_request(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     order_message_str = get_order_message_str(0000, user_data, device_context)
 
     await context.bot.sendMessage(
-        context.bot_data["config"]["telefix"]["contact"]["tg_id"]["dev"],
+        context.bot_data["config"].core.contact.tg_id.dev,
         order_message_str,
     )
     await query.answer(text="Служба поддержки свяжется с вами.", show_alert=True)

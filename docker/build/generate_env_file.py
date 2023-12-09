@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import configparser
 import argparse
-from dotenv import load_dotenv
+import configparser
 import os
+from dotenv import load_dotenv
 
 
 def generate_env_file(config_file, output_file, dotenv_file):

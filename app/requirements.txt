@@ -58,6 +58,7 @@ psycopg
 pyaes
 pyasn1
 pycparser
+pydantic
 Pygments
 pylint
 pyproject_hooks

@@ -2,7 +2,7 @@ from typing import List
 
 from telegram.ext import MessageHandler, filters
 
-from ...common.types import TgHandlerPriority, TgModuleType
+from app.telefix.common.types import TgHandlerPriority, TgModuleType
 from .unknown_command import unknown_command
 
 

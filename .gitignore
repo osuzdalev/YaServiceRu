@@ -11,7 +11,7 @@ app/config/dev/*
 app/config/local/*
 app/config/main/*
 
-app/storage/*
+app/persistence/*
 app/log/*
 
 app/dist/*

@@ -1,6 +1,6 @@
 deployment: dev
 
-telefix:
+core:
   contact:
     tg_id:
       bot: 6083336654
@@ -17,7 +17,7 @@ telefix:
         url: smtp.yandex.ru
         port: 587
   media: /app/telefix/media
-  persistence: /app/telefix/storage/dev.pkl
+  persistence: /app/telefix/persistence/dev.pkl
   logs: /app/telefix/log/dev.log
   docker:
     port: 8081

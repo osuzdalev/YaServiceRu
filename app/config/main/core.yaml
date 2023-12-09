@@ -1,6 +1,6 @@
 deployment: core
 
-telefix:
+core:
   contact:
     tg_id:
       bot: 5854999777
@@ -17,7 +17,7 @@ telefix:
         url: smtp.yandex.ru
         port: 587
   media: /app/telefix/media
-  persistence: /Users/osuz/PycharmProjects/YaServiceRu/app/storage/main.pkl
+  persistence: /Users/osuz/PycharmProjects/YaServiceRu/app/persistence/main.pkl
   logs: /Users/osuz/PycharmProjects/YaServiceRu/app/log/main.log
   docker:
     port: 8081

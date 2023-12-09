@@ -1,5 +1,3 @@
-name: dev
-
 database:
   host: database # to access other docker (not localhost)
   dbname: postgres

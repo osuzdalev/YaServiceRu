@@ -7,10 +7,10 @@ from loguru import logger
 from telegram import Update
 from telegram.ext import Application, PicklePersistence
 
-from .bot_config_manager import BotConfigurationManager
+from .bot_config_manager import AppConfig
 from .module_manager import ModuleManager
 
-from ..common.logging import InterceptHandler, logging_format
+from ..common.logging import InterceptHandler, LOGGING_FORMAT
 
 # from telefix.user.admin import orders
 # from contractor import assign, complete, user
@@ -25,7 +25,7 @@ class BotLauncher:
     activities. It also provides functionality to restart the application if needed.
 
     Attributes:
-        bot_config_manager (BotConfigurationManager): Manages the bot's configuration settings.
+        config (BotConfigurationManager): Manages the bot's configuration settings.
         module_manager (ModuleManager): Manages the modules that add functionality to the bot.
         log_level (logging.Level): Specifies the logging level for the application.
 
@@ -38,11 +38,11 @@ class BotLauncher:
 
     def __init__(
         self,
-        bot_config_manager: BotConfigurationManager,
+        config: AppConfig,
         module_manager: ModuleManager,
         log_level: str = "INFO",
     ):
-        self.bot_config_manager = bot_config_manager
+        self.config = config
         self.module_manager = module_manager
         self.log_level = log_level
 
@@ -50,13 +50,13 @@ class BotLauncher:
         self.setup_logging()
 
         persistence = PicklePersistence(
-            filepath=self.bot_config_manager.config["telefix"]["persistence"]
+            filepath=self.config.core.persistence
         )
 
         application = (
             Application.builder()
             .token(
-                self.bot_config_manager.config["telefix"]["secret"]["token_telegram"]
+                self.config.core.secret.token_telegram.get_secret_value()
             )
             .persistence(persistence)
             .arbitrary_callback_data(True)
@@ -92,11 +92,11 @@ class BotLauncher:
 
         # Loguru file logger
         logger.add(
-            self.bot_config_manager.config["telefix"]["logs"],
+            self.config.core.logs,
             level=f"{self.log_level}",
             colorize=False,
             serialize=False,
-            format=logging_format,
+            format=LOGGING_FORMAT,
         )
 
         # Initialize the standard logging
@@ -113,7 +113,7 @@ class BotLauncher:
         of the application.
         The configs in dict form are now accessible codebase wide.
         """
-        application.bot_data["config"] = self.bot_config_manager.config
+        application.bot_data["config"] = self.config
         application.bot_data["restart"] = False
 
     def add_tg_module_handlers(self, application: Application) -> None:

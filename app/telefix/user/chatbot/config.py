@@ -2,8 +2,8 @@ import pathlib
 from dataclasses import dataclass, field
 from typing import List
 
-from ...core.data_reader import ChatGPTDataReader
-from ...common.helpers import num_tokens_from_string
+from app.telefix.core.data_reader import ChatGPTDataReader
+from app.telefix.common.helpers import num_tokens_from_string
 
 
 @dataclass

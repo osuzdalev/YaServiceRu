@@ -1,11 +1,7 @@
 from telegram.ext import CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
-from ...user.request.request import (
-    request,
-    confirm_request,
-    cancel_request,
-)
-from ...common.types import TgHandlerPriority, TgModuleType
+from app.telefix.user.request.request import request, confirm_request, cancel_request
+from app.telefix.common.types import TgHandlerPriority, TgModuleType
 
 
 class RequestHandler:

@@ -15,8 +15,8 @@ async def send_email(
     _: Update, context: ContextTypes.DEFAULT_TYPE, mail_server, mail_message: str
 ) -> None:
     """Sends an email with the logs to the developer"""
-    email = context.bot_data["config"]["telefix"]["contact"]["email"]["dev"]
-    password = context.bot_data["config"]["telefix"]["secret"]["password_smtp"]
+    email = context.bot_data["config"].core.contact.email.dev
+    password = context.bot_data["config"].core.secret.password_smtp
 
     msg = MIMEText(mail_message)
     msg["From"] = email
@@ -64,7 +64,7 @@ async def error_notification(
 
     # Finally, send the message via telegram
     await context.bot.send_message(
-        chat_id=context.bot_data["config"]["telefix"]["contact"]["tg_id"]["dev"],
+        chat_id=context.bot_data["config"].core.contact.tg_id.dev,
         text=tg_message,
         parse_mode=ParseMode.HTML,
     )

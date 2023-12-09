@@ -2,6 +2,7 @@
 
 import argparse
 import pathlib
+import sys
 from warnings import filterwarnings
 
 from loguru import logger
@@ -11,11 +12,11 @@ from telegram.warnings import PTBUserWarning
 from .common.logging import setup_logging
 
 from . import (
-    BotConfigurationManager,
     BotLauncher,
     DatabaseHandler,
     ErrorHandler,
     GlobalFallbackHandler,
+    load_config,
     ModuleManager,
     PromptValidatorHandler,
     RequestHandler,
@@ -26,7 +27,7 @@ from . import (
 )
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-c",
@@ -35,7 +36,7 @@ def main():
         default="/app/telefix/config/dev",
     )
     parser.add_argument("-l", "--log_level", help="Logging level", default="INFO")
-    args = parser.parse_args()
+    args = parser.parse_args(argv or sys.argv)
 
     setup_logging(args.log_level)
 
@@ -47,15 +48,13 @@ def main():
     vector_database_config = app_config_path / "vector_database.yaml"
     wiki_module_path = app_config_path / "wiki.yaml"
 
-    bot_config_manager = BotConfigurationManager(
+    bot_config = load_config(
         core=core_config,
         database=database_config,
         vector_database=vector_database_config,
         wiki=wiki_module_path,
     )
 
-    # Note GlobalFallbackHandler needs to be first
-    #  in order to be processed first in ModuleManager.get_tg_module_handlers()
     tg_modules = [
         GlobalFallbackHandler,
         StartHandler,
@@ -68,7 +67,7 @@ def main():
     ]
     std_modules = [VectorDatabase]
     module_manager = ModuleManager(
-        tg_modules, std_modules, bot_config_manager.config, args.log_level
+        tg_modules, std_modules, bot_config, args.log_level
     )
 
     # Ignore "per_message=False" ConversationHandler warning message
@@ -76,5 +75,5 @@ def main():
         action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning
     )
 
-    bot_launcher = BotLauncher(bot_config_manager, module_manager, args.log_level)
+    bot_launcher = BotLauncher(bot_config, module_manager, args.log_level)
     bot_launcher.launch()

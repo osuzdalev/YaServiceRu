@@ -2,7 +2,7 @@ from functools import partial
 import smtplib as smtp
 
 from .error_logging import error_notification
-from ...common.types import TgModuleType
+from app.telefix.common.types import TgModuleType
 
 
 class ErrorHandler:
@@ -17,10 +17,7 @@ class ErrorHandler:
     def _init_mail_server(smtp_url: str, smtp_port: int, log_level: str):
         server = smtp.SMTP(smtp_url, smtp_port)
         # INFO == 0, DEBUG == 1+
-        if log_level == "INFO":
-            server.set_debuglevel(0)
-        else:
-            server.set_debuglevel(1)
+        server.set_debuglevel(int(log_level != "INFO"))
         server.starttls()
 
         return server

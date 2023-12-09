@@ -21,20 +21,20 @@ class DataReader:
     for specific purposes, such as fetching system instructions, loading GIFs, or
     retrieving specific information relevant to the application's functionality.
 
-    Each config (dev, main, ect ...) has its own specific data (video ID, ect ...).
+    Each deployment (dev, main, ect ...) has its own specific data (video ID, ect ...).
     """
 
-    def __init__(self, config: str, file_path: str):
+    def __init__(self, deployment: str, file_path: pathlib.Path):
         """
         Loads data from the specified YAML file.
         Handles file not found and YAML parsing errors gracefully.
         The `data` dict holds the data that are loaded from the YAML file.
         Params:
-            - config (str): A configuration identifier used to specify different modes or
+            - deployment (str): A configuration identifier used to specify different modes or
                             setups for reading data.
             - file_path (str): The path to the YAML file that contains the data.
         """
-        self.config = config
+        self.deployment = deployment
 
         try:
             with open(file_path, "r") as file:
@@ -54,9 +54,9 @@ class ChatGPTDataReader(DataReader):
     URLs for loading GIFs.
     """
 
-    def __init__(self, config: str, dir_path: pathlib):
-        file_path = dir_path / "user/chatbot/data.yaml"
-        super().__init__(config, file_path)
+    def __init__(self, deployment: str, dir_path: pathlib.Path):
+        file_path = dir_path / "user" / "chatbot" / "data.yaml"
+        super().__init__(deployment, file_path)
 
     def get_system_instructions(self):
         return self.data.get("system_instructions", {}).strip()
@@ -81,7 +81,7 @@ class StartReader(DataReader):
     get_introduction_video: Retrieves the introduction video ID based on the
     current configuration value. The method looks up
     the 'video' key in the loaded data and returns the
-    corresponding video ID for the given config.
+    corresponding video ID for the given deployment.
 
     The YAML file structure expected by this class is as follows:
         video:
@@ -91,10 +91,10 @@ class StartReader(DataReader):
     where each environment (dev, main) has its own specific video ID.
     """
 
-    def __init__(self, config: str, dir_path: pathlib):
-        file_path = dir_path / "user/start/data.yaml"
-        super().__init__(config, file_path)
+    def __init__(self, deployment: str, dir_path: pathlib.Path):
+        file_path = dir_path / "user" / "start" / "data.yaml"
+        super().__init__(deployment, file_path)
 
     def get_introduction_video(self):
-        # Fetch the video ID based on the config value
-        return self.data.get("video", {}).get(self.config, "").strip()
+        # Fetch the video ID based on the deployment value
+        return self.data.get("video", {}).get(self.deployment, "").strip()

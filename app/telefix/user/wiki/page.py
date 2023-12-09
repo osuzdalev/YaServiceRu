@@ -149,7 +149,7 @@ class Page:
             title,
             description,
             payload,
-            context.bot_data["config"]["telefix"]["secret"]["token_payment_provider"],
+            context.bot_data["config"].core.secret.token_payment_provider,
             currency,
             prices,
         )

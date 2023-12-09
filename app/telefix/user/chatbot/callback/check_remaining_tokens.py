@@ -5,7 +5,7 @@ from loguru import logger
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from ....common.helpers import num_tokens_from_string
+from app.telefix.common.helpers import num_tokens_from_string
 
 
 class CheckRemainingTokensCallbackEventType(Enum):

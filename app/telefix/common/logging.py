@@ -6,7 +6,7 @@ from typing import Union
 from loguru import logger
 
 
-logging_format = (
+LOGGING_FORMAT = (
     "[<green>{time:YYYY-MM-DD HH:mm:ss}</green>] "
     "[<level>{level}</level>] "
     "[<bold>{name}</bold> | {function}() | line {line}] "
@@ -64,6 +64,6 @@ def setup_logging(log_level: str):
         sys.stdout,
         level=f"{log_level}",
         colorize=True,
-        format=logging_format,
+        format=LOGGING_FORMAT,
     )
     logger.debug("Loguru setup done")

@@ -7,7 +7,7 @@ from telegram.ext import (
 
 from .config import ChatGPTConfig
 from .callback.handler import ChatGptCallbackHandler
-from ...common.types import TgHandlerPriority, TgModuleType
+from app.telefix.common.types import TgHandlerPriority, TgModuleType
 
 from .types import ChatGptCallbackType
 

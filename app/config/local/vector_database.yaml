@@ -1,5 +1,3 @@
-name: local
-
 vector_database:
   api_url: http://localhost:8080 # local or docker
   sentence_transformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
@@ -8,7 +6,7 @@ vector_database:
 
   classes:
     EnglishFilters:
-      class: EnglishFilters
+      class_name: EnglishFilters
       description: Sentences in English about our theme/business/domain to compare with incoming user prompts for filtering
       properties:
         - name: content
@@ -21,7 +19,7 @@ vector_database:
           vectorizeClassName: False
 
     RussianFilters:
-      class: RussianFilters
+      class_name: RussianFilters
       description: Sentences in Russian about our theme/business/domain to compare with incoming user prompts for filtering
       properties:
         - name: content
@@ -34,7 +32,7 @@ vector_database:
           vectorizeClassName: False
 
     SpecialSubjectFilters:
-      class: SpecialSubjectFilters
+      class_name: SpecialSubjectFilters
       description: Sentences about particular subjects to compare with incoming user prompts, triggering a special logic/response when close enough
       properties:
         - name: content

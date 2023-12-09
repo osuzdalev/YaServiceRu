@@ -5,8 +5,7 @@ EXPOSE 80
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt update && apt upgrade -y \
     && apt install -q -y --no-install-recommends \
-        postgresql-common \
-        libpq-dev \
+        postgresql-common libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./app/config /app/telefix/config

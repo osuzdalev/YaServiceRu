@@ -1,6 +1,7 @@
 In order to view metrics on the dashboards, you need to create some usage. Ideally you will use Weaviate as you would normally use it in this step.
 
 # Bash commands
+
 ```bash
 curl http://localhost:8080/v1/schema
 curl http://localhost:8080/v1/objects
@@ -41,6 +42,7 @@ curl http://localhost:8090/v1/backups/filesystem/my-very-first-backup/restore
 ```
 
 # Sentence Transformer MPS usage
+
 If running on Macs M# chips, edit the following code in the "SentenceTransformers" class
 ```python
 if device is None:
@@ -54,6 +56,7 @@ if device is None:
 ```
 
 ### Open Grafana in the browser
+
 * Open your Browser at `localhost:3000`
 * Log into the Grafana instance using weaviate/weaviate. 
 * Select one of the sample dashboards, such as "Importing Data Into Weaviate".

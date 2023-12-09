@@ -1,7 +1,7 @@
 from telegram.ext import CommandHandler
 
 from .restart import restart
-from ...common.types import TgHandlerPriority, TgModuleType
+from app.telefix.common.types import TgHandlerPriority, TgModuleType
 
 
 class RestartHandler:

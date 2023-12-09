@@ -13,6 +13,7 @@ import weaviate
 from weaviate.util import generate_uuid5
 
 from ..common.types import StdModuleType
+from ..core.config_template import ClassConfig
 
 
 def get_available_device():
@@ -66,8 +67,8 @@ class VectorDatabase:
         sentence_transformer: str,
         semantic_threshold: float,
         query_limit: int,
-        classes_config: Dict[str, Dict],
-        filters_config: Dict[str, Dict],
+        classes_config: dict[str, ClassConfig],
+        filters_config: Dict[str, List[str]],
     ):
         try:
             logger.info("Connecting to vector database client...")
@@ -93,7 +94,7 @@ class VectorDatabase:
             sys.exit(1)
 
     def populate_vector_database(
-        self, classes_config: Dict[str, Dict], filters_config: Dict[str, Dict]
+            self, classes_config: dict[str, ClassConfig], filters_config: Dict[str, List[str]]
     ) -> None:
         """
         Populate the vector database with specified classes and filters.
@@ -221,14 +222,14 @@ class VectorDatabase:
 
         return result["data"]["Get"][collection_name]
 
-    def create_class(self, class_config: Dict[str, Union[str, Dict]]) -> None:
+    def create_class(self, class_config: ClassConfig) -> None:
         logger.info(" ")
 
         try:
             self.vector_db_client.schema.create_class(class_config)
-            logger.info(f"Class '{class_config['class']}' created.")
+            logger.info(f"Class '{class_config['class_name']}' created.")
         except Exception as e:
-            logger.info(f"Error creating class '{class_config['class']}': {e}")
+            logger.info(f"Error creating class '{class_config['class_name']}': {e}")
 
     # TODO did not return "False" when data were empty (the volumes was not properly mounted).
     # check why it could not tell the database was empty, there was no schema, and yet still thought everything was ok.

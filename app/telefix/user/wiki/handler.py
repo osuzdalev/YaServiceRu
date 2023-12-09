@@ -4,7 +4,7 @@ from typing import Dict
 
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, filters
 
-from ...common.types import TgHandlerPriority, TgModuleType
+from app.telefix.common.types import TgHandlerPriority, TgModuleType
 from .constants import (
     STATE,
     BROWSER_HISTORY_NAME,

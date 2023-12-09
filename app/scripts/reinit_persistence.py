@@ -3,10 +3,7 @@
 import pickle
 import os
 
-from dotenv import load_dotenv
-
-load_dotenv()
-file_path = os.getenv("FILEPATH_PERSISTENCE")
+file_path = "/Users/osuz/PycharmProjects/YaServiceRu/app/persistence/local.pkl"
 
 if os.path.isfile(file_path):
     print(f"Removing existing {file_path}")

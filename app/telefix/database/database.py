@@ -14,13 +14,11 @@ from . import utils as tldb
 
 async def get_postgres(_: Update, context: ContextTypes.DEFAULT_TYPE) -> dict:
     return {
-        "host": context.bot_data["config"]["database"]["host"],
-        "dbname": context.bot_data["config"]["database"]["dbname"],
-        "user": context.bot_data["config"]["database"]["user"],
-        "port": context.bot_data["config"]["database"]["port"],
-        "password": context.bot_data["config"]["database"]["secret"][
-            "password"
-        ],
+        "host": context.bot_data["config"].database.host,
+        "dbname": context.bot_data["config"].database.dbname,
+        "user": context.bot_data["config"].database.user,
+        "port": context.bot_data["config"].database.port,
+        "password": context.bot_data["config"].database.secret.password.get_secret_value(),
     }
 
 
