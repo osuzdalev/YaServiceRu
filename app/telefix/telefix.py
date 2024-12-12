@@ -33,7 +33,7 @@ def main(argv=None):
         "-c",
         "--app_config_path",
         help="Application base configuration path",
-        default="/app/telefix/config/dev",
+        default="/app/config/dev",
     )
     parser.add_argument("-l", "--log_level", help="Logging level", default="INFO")
     args = parser.parse_args(argv or sys.argv)

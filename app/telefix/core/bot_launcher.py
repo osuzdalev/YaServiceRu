@@ -10,7 +10,7 @@ from telegram.ext import Application, PicklePersistence
 from .bot_config_manager import AppConfig
 from .module_manager import ModuleManager
 
-from ..common.logging import InterceptHandler, LOGGING_FORMAT
+from ..common.logging import InterceptHandler, LOGGING_FORMAT, setup_logging
 
 # from telefix.user.admin import orders
 # from contractor import assign, complete, user
@@ -90,22 +90,7 @@ class BotLauncher:
             Ensure the library is properly installed and imported before calling this method.
         """
 
-        # Loguru file logger
-        logger.add(
-            self.config.core.logs,
-            level=f"{self.log_level}",
-            colorize=False,
-            serialize=False,
-            format=LOGGING_FORMAT,
-        )
-
-        # Initialize the standard logging
-        logging.basicConfig(
-            format="[%(asctime)s] [%(levelname)s] [%(name)s | %(funcName)s() | line %(lineno)d] %(levelname)s - %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S",
-            level=self.log_level,
-            handlers=[InterceptHandler()],
-        )
+        setup_logging(self.log_level, self.config.core.logs)
 
     async def post_init(self, application: Application) -> None:
         """

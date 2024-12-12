@@ -34,7 +34,7 @@ class InterceptHandler(logging.Handler):
         )
 
 
-def setup_logging(log_level: str):
+def setup_logging(log_level: str, log_file: str):
     """
     Configures and sets up the logging for the application.
 
@@ -67,3 +67,20 @@ def setup_logging(log_level: str):
         format=LOGGING_FORMAT,
     )
     logger.debug("Loguru setup done")
+
+    # Loguru file logger
+    logger.add(
+        log_file,
+        level=f"{log_level}",
+        colorize=False,
+        serialize=False,
+        format=LOGGING_FORMAT,
+    )
+
+    # Initialize the standard logging
+    logging.basicConfig(
+        format="[%(asctime)s] [%(levelname)s] [%(name)s | %(funcName)s() | line %(lineno)d] %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        level=log_level,
+        handlers=[InterceptHandler()],
+    )
