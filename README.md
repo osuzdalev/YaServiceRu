@@ -1,5 +1,5 @@
-Todo
+# YaServiceRu
+Handling of repair service orders on the Telegram platform.
 
-Leverage ai to solve people's phone problems at home
-
-Meet a partner to talk over some aspects of my project
+The idea is to dispatch orders of electronic goods reparations to the appropriate and available contractor 
+within a large group/community.
